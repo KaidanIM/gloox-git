@@ -9,7 +9,7 @@ noinst_PROGRAMS = mucroommuc_test
 mucroommuc_test_SOURCES = mucroommuc_test.cpp
 mucroommuc_test_LDADD =../../connectiontcpclient.o ../../connectiontcpbase.o \
                         ../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
-                        ../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
+                        ../../md5.o ../../tlsgnutlsclient.o ../../tlsopensslclient.o ../../tlsopensslbase.o ../../tlsopensslserver.o ../../tlsschannel.o \
                         ../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
                         ../../dns.o ../../stanzaextensionfactory.o ../../eventdispatcher.o \
                         ../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \

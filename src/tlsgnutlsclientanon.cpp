@@ -37,7 +37,9 @@ namespace gloox
     init();
   }
 
-  bool GnuTLSClientAnon::init()
+  bool GnuTLSClientAnon::init( const std::string&,
+                               const std::string&,
+                               const StringList& )
   {
     const int protocolPriority[] = { GNUTLS_TLS1, 0 };
     const int kxPriority[]       = { GNUTLS_KX_ANON_DH, 0 };

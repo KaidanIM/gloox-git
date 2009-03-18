@@ -178,13 +178,6 @@ namespace gloox
     if( !m_encryption )
       m_encryption = getDefaultEncryption();
 
-    if( m_encryption )
-    {
-      m_encryption->setCACerts( m_cacerts );
-      m_encryption->setClientCert( m_clientKey, m_clientCerts );
-//       m_encryption->setCredentials();
-    }
-
     if( !m_compression )
       m_compression = getDefaultCompression();
 
@@ -1476,7 +1469,7 @@ namespace gloox
       return 0;
 
     TLSDefault* tls = new TLSDefault( this, m_server );
-    if( tls->init() )
+    if( tls->init( m_clientKey, m_clientCerts, m_cacerts ) )
       return tls;
     else
     {

@@ -12,8 +12,8 @@
 
 
 
-#ifndef TLSGNUTLSSERVERANON_H__
-#define TLSGNUTLSSERVERANON_H__
+#ifndef TLSGNUTLSSERVER_H__
+#define TLSGNUTLSSERVER_H__
 
 #include "tlsgnutlsbase.h"
 
@@ -39,21 +39,21 @@ namespace gloox
    * You should not need to use this class directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.9
+   * @since 1.0
    */
-  class GnuTLSServerAnon : public GnuTLSBase
+  class GnuTLSServer : public GnuTLSBase
   {
     public:
       /**
        * Constructor.
        * @param th The TLSHandler to handle TLS-related events.
        */
-      GnuTLSServerAnon( TLSHandler* th );
+      GnuTLSServer( TLSHandler* th );
 
       /**
        * Virtual destructor.
        */
-      virtual ~GnuTLSServerAnon();
+      virtual ~GnuTLSServer();
 
       // reimplemented from TLSBase
       virtual bool init( const std::string& clientKey = EmptyString,
@@ -64,12 +64,20 @@ namespace gloox
       virtual void cleanup();
 
     private:
+      // reimplemented from TLSBase
+      virtual void setCACerts( const StringList& cacerts );
+
+      // reimplemented from TLSBase
+      virtual void setClientCert( const std::string& clientKey,
+                                  const std::string& clientCerts );
+
       virtual void getCertInfo();
       void generateDH();
 
-      gnutls_anon_server_credentials_t m_anoncred;
+      gnutls_certificate_credentials_t m_x509cred;
+//       gnutls_priority_t m_priorityCache;
       gnutls_dh_params_t m_dhParams;
-
+      gnutls_rsa_params_t m_rsaParams;
       const int m_dhBits;
 
   };
@@ -78,4 +86,4 @@ namespace gloox
 
 #endif // HAVE_GNUTLS
 
-#endif // TLSGNUTLSSERVERANON_H__
+#endif // TLSGNUTLSSERVER_H__

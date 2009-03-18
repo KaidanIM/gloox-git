@@ -38,7 +38,7 @@ namespace gloox
   /**
    * This class implements a TLS backend using SChannel.
    *
-   * @author Jakob Schröter <js@camaya.net>
+   * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
   class SChannel : public TLSBase
@@ -57,7 +57,10 @@ namespace gloox
       virtual ~SChannel();
 
       // reimplemented from TLSBase
-      virtual bool init() { return true; }
+      virtual bool init( const std::string& clientKey = EmptyString,
+                         const std::string& clientCerts = EmptyString,
+                         const StringList& cacerts = StringList() )
+        { return true; }
 
       // reimplemented from TLSBase
       virtual bool encrypt( const std::string& data );

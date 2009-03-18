@@ -56,7 +56,9 @@ namespace gloox
       virtual ~GnuTLSClientAnon();
 
       // reimplemented from TLSBase
-      virtual bool init();
+      virtual bool init( const std::string& clientKey = EmptyString,
+                         const std::string& clientCerts = EmptyString,
+                         const StringList& cacerts = StringList() );
 
       // reimplemented from TLSBase
       virtual void cleanup();
