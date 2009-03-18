@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2009 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -12,8 +12,8 @@
 
 
 
-#ifndef TLSOPENSSL_H__
-#define TLSOPENSSL_H__
+#ifndef TLSOPENSSLBASE_H__
+#define TLSOPENSSLBASE_H__
 
 #include "tlsbase.h"
 
@@ -33,12 +33,13 @@ namespace gloox
 {
 
   /**
-   * This class implements a TLS backend using OpenSSL.
+   * This is a common base class for client and server-side TLS
+   * stream encryption implementations using OpenSSL.
    *
-   * @author Jakob Schröter <js@camaya.net>
-   * @since 0.9
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 1.0
    */
-  class OpenSSL : public TLSBase
+  class OpenSSLBase : public TLSBase
   {
     public:
       /**
@@ -46,15 +47,17 @@ namespace gloox
        * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
        */
-      OpenSSL( TLSHandler* th, const std::string& server );
+      OpenSSLBase( TLSHandler* th, const std::string& server = EmptyString );
 
       /**
        * Virtual destructor.
        */
-      virtual ~OpenSSL();
+      virtual ~OpenSSLBase();
 
       // reimplemented from TLSBase
-      virtual bool init();
+      virtual bool init( const std::string& clientKey = EmptyString,
+                         const std::string& clientCerts = EmptyString,
+                         const StringList& cacerts = StringList() );
 
       // reimplemented from TLSBase
       virtual bool encrypt( const std::string& data );
@@ -74,8 +77,18 @@ namespace gloox
       // reimplemented from TLSBase
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
+    protected:
+      virtual bool setType() = 0;
+      virtual int handshakeFunction() = 0;
+
+      SSL* m_ssl;
+      SSL_CTX* m_ctx;
+      BIO* m_ibio;
+      BIO* m_nbio;
+
     private:
       void pushFunc();
+      virtual bool privateInit() { return true; }
 
       enum TLSOperation
       {
@@ -87,18 +100,15 @@ namespace gloox
       void doTLSOperation( TLSOperation op );
       int openSSLTime2UnixTime( const char* time_string );
 
-      SSL* m_ssl;
-      SSL_CTX* m_ctx;
-      BIO* m_ibio;
-      BIO* m_nbio;
       std::string m_recvBuffer;
       std::string m_sendBuffer;
       char* m_buf;
       const int m_bufsize;
+
   };
 
 }
 
 #endif // HAVE_OPENSSL
 
-#endif // TLSOPENSSL_H__
+#endif // TLSOPENSSLBASE_H__

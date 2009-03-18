@@ -12,7 +12,7 @@
 
 
 
-#include "tlsgnutlsserveranon.h"
+#include "tlsgnutlsserver.h"
 
 #ifdef HAVE_GNUTLS
 
@@ -21,29 +21,33 @@
 namespace gloox
 {
 
-  GnuTLSServerAnon::GnuTLSServerAnon( TLSHandler* th )
+  GnuTLSServer::GnuTLSServer( TLSHandler* th )
     : GnuTLSBase( th ), m_dhBits( 1024 )
   {
   }
 
-  GnuTLSServerAnon::~GnuTLSServerAnon()
+  GnuTLSServer::~GnuTLSServer()
   {
-    gnutls_anon_free_server_credentials( m_anoncred );
+    gnutls_certificate_free_credentials( m_x509cred );
     gnutls_dh_params_deinit( m_dhParams );
   }
 
-  void GnuTLSServerAnon::cleanup()
+  void GnuTLSServer::cleanup()
   {
     GnuTLSBase::cleanup();
     init();
   }
 
-  bool GnuTLSServerAnon::init( const std::string&,
-                               const std::string&,
-                               const StringList& )
+  bool GnuTLSServer::init( const std::string& clientKey,
+                           const std::string& clientCerts,
+                           const StringList& cacerts )
   {
-    const int protocolPriority[] = { GNUTLS_TLS1, 0 };
-    const int kxPriority[]       = { GNUTLS_KX_ANON_DH, 0 };
+    const int protocolPriority[] = {
+#ifdef GNUTLS_TLS1_2
+       GNUTLS_TLS1_2,
+#endif
+      GNUTLS_TLS1_1, GNUTLS_TLS1, 0 };
+    const int kxPriority[]       = { GNUTLS_KX_RSA, GNUTLS_KX_DHE_RSA, GNUTLS_KX_DHE_DSS, 0 };
     const int cipherPriority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
                                      GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR, 0 };
     const int compPriority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
@@ -52,21 +56,29 @@ namespace gloox
     if( m_initLib && gnutls_global_init() != 0 )
       return false;
 
-    if( gnutls_anon_allocate_server_credentials( &m_anoncred ) < 0 )
+    if( gnutls_certificate_allocate_credentials( &m_x509cred ) < 0 )
       return false;
 
+    setClientCert( clientKey, clientCerts );
+    setCACerts( cacerts );
+
     generateDH();
-    gnutls_anon_set_server_dh_params( m_anoncred, m_dhParams );
+    gnutls_certificate_set_dh_params( m_x509cred, m_dhParams );
+    gnutls_certificate_set_rsa_export_params( m_x509cred, m_rsaParams);
+//     gnutls_priority_init( &m_priorityCache, "NORMAL", 0 );
 
     if( gnutls_init( m_session, GNUTLS_SERVER ) != 0 )
       return false;
 
+//     gnutls_priority_set( m_session, m_priorityCache );
     gnutls_protocol_set_priority( *m_session, protocolPriority );
     gnutls_cipher_set_priority( *m_session, cipherPriority );
     gnutls_compression_set_priority( *m_session, compPriority );
     gnutls_kx_set_priority( *m_session, kxPriority );
     gnutls_mac_set_priority( *m_session, macPriority );
-    gnutls_credentials_set( *m_session, GNUTLS_CRD_ANON, m_anoncred );
+    gnutls_credentials_set( *m_session, GNUTLS_CRD_CERTIFICATE, m_x509cred );
+
+    gnutls_certificate_server_set_request( *m_session, GNUTLS_CERT_REQUEST );
 
     gnutls_dh_set_prime_bits( *m_session, m_dhBits );
 
@@ -78,13 +90,39 @@ namespace gloox
     return true;
   }
 
-  void GnuTLSServerAnon::generateDH()
+  void GnuTLSServer::setCACerts( const StringList& cacerts )
+  {
+    m_cacerts = cacerts;
+
+    StringList::const_iterator it = m_cacerts.begin();
+    for( ; it != m_cacerts.end(); ++it )
+      gnutls_certificate_set_x509_trust_file( m_x509cred, (*it).c_str(), GNUTLS_X509_FMT_PEM );
+  }
+
+  void GnuTLSServer::setClientCert( const std::string& clientKey, const std::string& clientCerts )
+  {
+    m_clientKey = clientKey;
+    m_clientCerts = clientCerts;
+
+    if( !m_clientKey.empty() && !m_clientCerts.empty() )
+    {
+      gnutls_certificate_set_x509_key_file( m_x509cred,
+                                            m_clientCerts.c_str(),
+                                            m_clientKey.c_str(),
+                                            GNUTLS_X509_FMT_PEM );
+    }
+  }
+
+
+  void GnuTLSServer::generateDH()
   {
     gnutls_dh_params_init( &m_dhParams );
     gnutls_dh_params_generate2( m_dhParams, m_dhBits );
+    gnutls_rsa_params_init( &m_rsaParams );
+    gnutls_rsa_params_generate2( m_rsaParams, 512 );
   }
 
-  void GnuTLSServerAnon::getCertInfo()
+  void GnuTLSServer::getCertInfo()
   {
     m_certInfo.status = CertOk;
 

@@ -92,7 +92,7 @@ namespace gloox
          *
          * XEP Version: 0.25
          * @author Jakob Schroeter <js@camaya.net>
-         * @since 1.1
+         * @since 1.0
          */
         class Jingle : public StanzaExtension
         {
