@@ -748,9 +748,6 @@ namespace gloox
    */
   enum StreamError
   {
-    StreamErrorUndefined,           /**< An undefined/unknown error occured. Also used if a diconnect was
-                                     * user-initiated. Also set before and during a established connection
-                                     * (where obviously no error occured). */
     StreamErrorBadFormat,           /**< The entity has sent XML that cannot be processed;
                                      * this error MAY be used instead of the more specific XML-related
                                      * errors, such as &lt;bad-namespace-prefix/&gt;, &lt;invalid-xml/&gt;,
@@ -821,8 +818,11 @@ namespace gloox
                                      * entity in the stream header specifies a version of XMPP that is not
                                      * supported by the server; the server MAY specify the version(s) it
                                      * supports in the &lt;text/&gt; element. */
-    StreamErrorXmlNotWellFormed     /**< The initiating entity has sent XML that is not well-formed as
+    StreamErrorXmlNotWellFormed,    /**< The initiating entity has sent XML that is not well-formed as
                                      * defined by [XML]. */
+    StreamErrorUndefined            /**< An undefined/unknown error occured. Also used if a diconnect was
+                                     * user-initiated. Also set before and during a established connection
+                                     * (where obviously no error occured). */
   };
 
   /**
