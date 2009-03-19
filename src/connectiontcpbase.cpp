@@ -25,6 +25,7 @@
 #endif
 
 #if !defined( WIN32 ) && !defined( _WIN32_WCE )
+# include <arpa/inet.h>
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <sys/select.h>
@@ -163,6 +164,30 @@ namespace gloox
     m_cancel = true;
     m_totalBytesIn = 0;
     m_totalBytesOut = 0;
+  }
+
+  int ConnectionTCPBase::localPort() const
+  {
+    struct sockaddr local;
+    socklen_t len = sizeof( local );
+    if( getsockname ( m_socket, &local, &len ) < 0 )
+      return -1;
+    else
+      return ntohs( ((struct sockaddr_in *)&local)->sin_port );
+  }
+
+  const std::string ConnectionTCPBase::localInterface() const
+  {
+    struct sockaddr_in local;
+    socklen_t len = sizeof( local );
+    if( getsockname ( m_socket, (reinterpret_cast<struct sockaddr*>( &local )), &len ) < 0 )
+      return EmptyString;
+    else
+    {
+//       char addr[INET_ADDRSTRLEN];
+//       return inet_ntop( AF_INET, &(local.sin_addr), addr, sizeof( addr ) ); //FIXME is this portable?
+      return inet_ntoa( local.sin_addr );
+    }
   }
 
 }

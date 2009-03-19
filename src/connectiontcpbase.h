@@ -98,6 +98,18 @@ namespace gloox
        */
       void setSocket( int socket ) { m_cancel = false; m_state = StateConnected; m_socket = socket; }
 
+      /**
+       * Returns the local port.
+       * @return The local port.
+       */
+      virtual int localPort() const;
+
+      /**
+       * Returns the locally bound IP address.
+       * @return The locally bound IP address.
+       */
+      virtual const std::string localInterface() const;
+
     protected:
       ConnectionTCPBase &operator=( const ConnectionTCPBase & );
       void init( const std::string& server, int port );
