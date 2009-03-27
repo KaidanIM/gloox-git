@@ -55,6 +55,7 @@
 #include "event.h"
 
 #include <cstdlib>
+#include <cstdio>
 #include <string>
 #include <map>
 #include <list>
