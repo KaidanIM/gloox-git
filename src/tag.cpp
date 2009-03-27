@@ -14,8 +14,6 @@
 #include "tag.h"
 #include "util.h"
 
-#include <stdlib.h>
-
 #ifdef _WIN32_WCE
 # include <cmath>
 #else
@@ -23,6 +21,8 @@
 #endif
 
 #include <algorithm>
+#include <cstdio>
+#include <cstdlib>
 
 namespace gloox
 {

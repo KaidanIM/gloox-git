@@ -371,7 +371,7 @@ namespace gloox
                                            const std::string& data )
   {
     m_buffer += data;
-    printf( "!!!!!!buffer\n\n%s\n\n", m_buffer.c_str() );
+//     printf( "!!!!!!buffer\n\n%s\n\n", m_buffer.c_str() );
     std::string::size_type headerLength = 0;
     while( ( headerLength = m_buffer.find( "\r\n\r\n" ) ) != std::string::npos )
     {

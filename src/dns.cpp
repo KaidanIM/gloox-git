@@ -142,7 +142,10 @@ namespace gloox
       name srvname;
 
       if( ns_name_ntop( srv[cnt] + SRV_SERVER, (char*)srvname, NS_MAXDNAME ) < 0 )
-        printf( "handle this error!\n" );
+      {
+        //FIXME do we need to handle this? How? Can it actually happen at all?
+//         printf( "handle this error!\n" );
+      }
 
       unsigned char* c = srv[cnt] + SRV_PORT;
 
