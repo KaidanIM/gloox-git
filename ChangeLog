@@ -2,6 +2,7 @@ v0.9.9.8 -- xx yyy 2009
 -----------------------
 - support tls zlib compresion with openssl (wrong magic number used)
 - fixed setting client cert/key in gnutls
+- properly exported InstantMUCRoom and UniqueMUCRoom (GLOOX_API)
 
 
 v0.9.9.7 -- 07 Mar 2009
