@@ -126,7 +126,7 @@ namespace gloox
     return ret;
   }
 
-  Disco::ItemList Capabilities::handleDiscoNodeItems( const JID&, const std::string& )
+  Disco::ItemList Capabilities::handleDiscoNodeItems( const JID&, const JID&, const std::string& )
   {
     return Disco::ItemList();
   }

@@ -344,7 +344,7 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                ItemList il = (*in)->handleDiscoNodeItems( iq.from(), items->node() );
+                ItemList il = (*in)->handleDiscoNodeItems( iq.from(), iq.to(), items->node() );
                 itemlist.merge( il );
               }
               i->setItems( itemlist );
