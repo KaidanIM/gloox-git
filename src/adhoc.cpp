@@ -202,7 +202,7 @@ namespace gloox
 //    return StringList( 1, XMLNS_ADHOC_COMMANDS );
   }
 
-  Disco::ItemList Adhoc::handleDiscoNodeItems( const JID& from, const std::string& node )
+  Disco::ItemList Adhoc::handleDiscoNodeItems( const JID& from, const JID& to, const std::string& node )
   {
     Disco::ItemList l;
     if( node.empty() )
