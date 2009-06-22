@@ -183,7 +183,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
 			inbandbytestream.h \
 			instantmucroom.h \
 			iq.h \
-			iq.h \
 			iqhandler.h \
 			jid.h \
 			jinglecontent.h \
