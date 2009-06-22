@@ -4,7 +4,7 @@
 using namespace gloox;
 
 #include <string>
-
+#include <cstdio> // [s]print[f]
 
 static const JID jid( "aaa@bbb.ccc" );
 static const std::string node( "node" );

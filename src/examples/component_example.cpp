@@ -9,6 +9,8 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+#include <cstdio> // [s]print[f]
+
 class ComponentTest : public DiscoHandler, ConnectionListener, LogHandler
 {
   public:

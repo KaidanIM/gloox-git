@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+#include <cstdio> // [s]print[f]
 
 int g_test = 0;
 

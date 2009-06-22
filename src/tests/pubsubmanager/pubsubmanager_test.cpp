@@ -1,6 +1,8 @@
 #include "../../pubsubmanager.h"
 #include "../../pubsubresulthandler.h"
 
+#include <cstdio> // [s]print[f]
+
 using namespace gloox;
 
 class RH : public PubSub::ResultHandler
