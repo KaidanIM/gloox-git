@@ -203,8 +203,11 @@ namespace gloox
            * @param node The node (command) to perform the action on.
            * @param sessionid The session ID of an already running adhoc command session.
            * @param action The action to perform.
+           * @param form An optional DataForm to include in the request. Will be deleted in Command's
+           * destructor.
            */
-          Command( const std::string& node, const std::string& sessionid, Action action );
+          Command( const std::string& node, const std::string& sessionid, Action action,
+                   DataForm* form = 0 );
 
           /**
            * Creates a Command object that can be used to perform the provided Action.
@@ -220,12 +223,29 @@ namespace gloox
 
           /**
            * Creates a Command object that can be used to perform the provided Action.
+           * This constructor is used best to reply to a multi stage command that is not yet completed
+           * (for which the session ID must be known).
+           * @param node The node (command) to perform the action on.
+           * @param sessionid The (possibly newly created) session ID of the adhoc command session.
+           * @param status The execution status.
+           * @param form An optional DataForm to include in the reply. Will be deleted in Command's
+           * destructor.
+           */
+          Command( const std::string& node, const std::string& sessionid, Status status,
+                   Action executeAction, int allowedActions = Complete,
+                   DataForm* form = 0 );
+
+          /**
+           * Creates a Command object that can be used to perform the provided Action.
            * This constructor is used best to execute the initial step of a command
            * (single or multi stage).
            * @param node The node (command) to perform the action on.
            * @param action The action to perform.
+           * @param form An optional DataForm to include in the request. Will be deleted in Command's
+           * destructor.
            */
-          Command( const std::string& node, Action action );
+          Command( const std::string& node, Action action,
+                   DataForm* form = 0 );
 
           /**
            * Creates a Command object from the given Tag.
@@ -312,7 +332,7 @@ namespace gloox
 
             c->m_node = m_node;
             c->m_sessionid = m_sessionid;
-            c->m_form = m_form ? new DataForm( *m_form ) : 0;
+            c->m_form = m_form ? static_cast<DataForm*>( m_form->clone() ) : 0;
             c->m_action = m_action;
             c->m_status = m_status;
             c->m_actions = m_actions;

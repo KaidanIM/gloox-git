@@ -23,19 +23,19 @@ namespace gloox
 
   DataForm::DataForm( FormType type, const StringList& instructions, const std::string& title )
     : StanzaExtension( ExtDataForm ),
-      m_type( type ), m_instructions( instructions ), m_title( title )
+      m_type( type ), m_instructions( instructions ), m_title( title ), m_reported( 0 )
   {
   }
 
   DataForm::DataForm( FormType type, const std::string& title )
     : StanzaExtension( ExtDataForm ),
-      m_type( type ), m_title( title )
+      m_type( type ), m_title( title ), m_reported( 0 )
   {
   }
 
   DataForm::DataForm( const Tag* tag )
     : StanzaExtension( ExtDataForm ),
-      m_type( TypeInvalid )
+      m_type( TypeInvalid ), m_reported( 0 )
   {
     parse( tag );
   }
@@ -43,13 +43,15 @@ namespace gloox
   DataForm::DataForm( const DataForm& form )
     : StanzaExtension( ExtDataForm ), DataFormFieldContainer( form ),
       m_type( form.m_type ), m_instructions( form.m_instructions ),
-      m_title( form.m_title ), m_reported( form.m_reported )
+      m_title( form.m_title ), m_reported( form.m_reported ? new DataFormReported( form.m_reported->tag() ) : 0 )
   {
   }
 
   DataForm::~DataForm()
   {
     util::clearList( m_items );
+    delete m_reported;
+    m_reported = NULL;
   }
 
   static const char* dfTypeValues[] =
@@ -82,10 +84,14 @@ namespace gloox
         m_instructions.push_back( (*it)->cdata() );
       else if( (*it)->name() == "field" )
         m_fields.push_back( new DataFormField( (*it) ) );
+      else if( (*it)->name() == "reported" )
+      {
+        if( m_reported == NULL )
+          m_reported = new DataFormReported( (*it) );
+        // else - Invalid data form - only one "reported" is allowed
+      }
       else if( (*it)->name() == "item" )
         m_items.push_back( new DataFormItem( (*it) ) );
-      else if( (*it)->name() == "reported" )
-        m_reported.push_back( new DataFormReported( (*it) ) );
     }
 
     return true;
@@ -115,6 +121,11 @@ namespace gloox
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )
       x->addChild( (*it)->tag() );
+
+    if( m_reported != NULL )
+    {
+      x->addChild( m_reported->tag() );
+    }
 
     ItemList::const_iterator iti = m_items.begin();
     for( ; iti != m_items.end(); ++iti )

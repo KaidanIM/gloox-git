@@ -32,6 +32,7 @@
 # include <unistd.h>
 #else
 # include <winsock.h>
+typedef int socklen_t;
 #endif
 
 #include <time.h>
@@ -128,13 +129,13 @@ namespace gloox
     for( size_t num = 0, len = data.length(); sent != -1 && num < len; num += sent )
     {
 #ifdef SKYOS
-      sent = ::send( m_socket, (unsigned char*)(data.c_str()+num), len - num, 0 );
+      sent = ::send( m_socket, (unsigned char*)(data.c_str()+num), (int)(len - num), 0 );
 #else
-      sent = ::send( m_socket, (data.c_str()+num), len - num, 0 );
+      sent = ::send( m_socket, (data.c_str()+num), (int)(len - num), 0 );
 #endif
     }
 
-    m_totalBytesOut += data.length();
+    m_totalBytesOut += (int)data.length();
 
     m_sendMutex.unlock();
 
@@ -169,7 +170,7 @@ namespace gloox
   int ConnectionTCPBase::localPort() const
   {
     struct sockaddr local;
-    socklen_t len = sizeof( local );
+    socklen_t len = (socklen_t)sizeof( local );
     if( getsockname ( m_socket, &local, &len ) < 0 )
       return -1;
     else
@@ -179,7 +180,7 @@ namespace gloox
   const std::string ConnectionTCPBase::localInterface() const
   {
     struct sockaddr_in local;
-    socklen_t len = sizeof( local );
+    socklen_t len = (socklen_t)sizeof( local );
     if( getsockname ( m_socket, (reinterpret_cast<struct sockaddr*>( &local )), &len ) < 0 )
       return EmptyString;
     else
