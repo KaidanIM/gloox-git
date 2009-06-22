@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+#include <cstdio> // [s]print[f]
 
 const std::string& g_dir = "test.dir";
 const std::string& g_inst = "the instructions";

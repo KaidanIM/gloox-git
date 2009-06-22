@@ -15,6 +15,8 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+#include <cstdio> // [s]print[f]
+
 class FlexOffTest : public MessageHandler, ConnectionListener, FlexibleOfflineHandler,
                            LogHandler
 {

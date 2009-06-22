@@ -11,6 +11,7 @@ using namespace gloox;
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+#include <cstdio> // [s]print[f]
 
 #define MUCROOM_TEST
 #include "../../mucroom.cpp"

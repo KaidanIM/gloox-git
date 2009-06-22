@@ -10,6 +10,7 @@ using namespace gloox;
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+#include <cstdio> // [s]print[f]
 
 Tag* t1 = 0;
 Tag* t2 = 0;

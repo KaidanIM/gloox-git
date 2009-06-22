@@ -11,6 +11,7 @@ using namespace gloox;
 #include <cstdlib>
 #include <string>
 #include <sys/time.h>
+#include <cstdio> // [s]print[f]
 
 #ifdef HAVE_ZLIB
 

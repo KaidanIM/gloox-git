@@ -74,6 +74,8 @@
 #include <cstdio>
 #include <string.h>
 
+#include <cstdio> // [s]print[f]
+
 namespace gloox
 {
 // #undef BYTE_ORDER	/* 1 = big-endian, -1 = little-endian, 0 = unknown */

@@ -7,6 +7,7 @@ using namespace gloox;
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+#include <cstdio> // [s]print[f]
 
 #ifdef WIN32
 # include "../../config.h.win"
