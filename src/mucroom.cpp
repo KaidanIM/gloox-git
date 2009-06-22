@@ -1278,7 +1278,8 @@ namespace gloox
     return Disco::IdentityList();
   }
 
-  Disco::ItemList MUCRoom::handleDiscoNodeItems( const JID& /*from*/, const std::string& node )
+  Disco::ItemList MUCRoom::handleDiscoNodeItems( const JID& /*from*/, const JID& /*to*/,
+                                                 const std::string& node )
   {
     Disco::ItemList l;
     if( node == XMLNS_MUC_ROOMS && m_publish )
