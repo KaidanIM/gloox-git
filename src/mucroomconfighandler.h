@@ -139,6 +139,7 @@ namespace gloox
     CreateInstantRoom,              /**< Create an instant room. */
     CancelRoomCreation,             /**< Cancel room creation process. */
     RequestRoomConfig,              /**< Request room configuration form. */
+    SendRoomConfig,                 /**< Send room configuration */
     DestroyRoom,                    /**< Destroy room. */
     GetRoomInfo,                    /**< Fetch room info. */
     GetRoomItems,                   /**< Fetch room items (e.g., current occupants). */
@@ -192,8 +193,9 @@ namespace gloox
 
       /**
        * This function is called when the room's configuration form arrives. This usually happens
-       * after a call to MUCRoom::requestRoomConfig(). Use MUCRoom::sendDataForm()
-       * to have a Tag created that you can use to send the configuration to the room.
+       * after a call to MUCRoom::requestRoomConfig(). Use
+       * MUCRoom::setRoomConfig() to send the configuration back to the
+       * room.
        * @param room The room for which the config form arrived.
        * @param form The configuration form.
        */
