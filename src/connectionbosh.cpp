@@ -22,7 +22,6 @@
 #include <sstream>
 
 #include <cstdlib>
-#include <ctime>
 #include <cctype>
 #include <algorithm>
 
@@ -228,8 +227,8 @@ namespace gloox
 
     if( m_sendBuffer.empty() )
     {
-      int now = time( 0 );
-      unsigned int delta = now - m_lastRequestTime;
+      time_t now = time( 0 );
+      unsigned int delta = (int)(now - m_lastRequestTime);
       if( delta < m_minTimePerRequest && m_openRequests > 0 )
       {
         m_logInstance.dbg( LogAreaClassConnectionBOSH, "Too little time between requests: " + util::int2string( delta ) + " seconds" );

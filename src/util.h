@@ -42,7 +42,7 @@ namespace gloox
      * @param size The array's size.
      * @return The associated enum code.
      */
-    unsigned _lookup( const std::string& str, const char* values[],
+    GLOOX_API unsigned _lookup( const std::string& str, const char* values[],
                       unsigned size, int def = -1 );
 
     /**
@@ -52,7 +52,7 @@ namespace gloox
      * @param size The array's size.
      * @return The associated string (empty in case there's no match).
      */
-    const std::string _lookup( unsigned code, const char* values[],
+    GLOOX_API const std::string _lookup( unsigned code, const char* values[],
                                unsigned size, const std::string& def = EmptyString );
 
     /**
@@ -62,7 +62,7 @@ namespace gloox
      * @param size The array's size.
      * @return The associated enum code.
      */
-    unsigned _lookup2( const std::string& str, const char* values[],
+    GLOOX_API unsigned _lookup2( const std::string& str, const char* values[],
                               unsigned size, int def = -1 );
 
     /**
@@ -72,7 +72,7 @@ namespace gloox
      * @param size The array's size.
      * @return The associated string (empty in case there's no match).
      */
-    const std::string _lookup2( unsigned code, const char* values[],
+    GLOOX_API const std::string _lookup2( unsigned code, const char* values[],
                                 unsigned size, const std::string& def = EmptyString );
 
     /**
@@ -189,21 +189,21 @@ namespace gloox
      * @param what A string to escape.
      * @return The escaped string.
      */
-    const std::string escape( std::string what );
+    GLOOX_API const std::string escape( std::string what );
 
     /**
      * Checks whether the given input is valid UTF-8.
      * @param data The data to check for validity.
      * @return @@b True if the input is valid UTF-8, @b false otherwise.
      */
-    bool checkValidXMLChars( const std::string& data );
+    GLOOX_API bool checkValidXMLChars( const std::string& data );
 
     /**
      * Custom log2() implementation.
      * @param n Figure to take the logarithm from.
      * @return The logarithm to the basis of 2.
      */
-    int log2( unsigned int n );
+    GLOOX_API int log2( unsigned int n );
 
     /**
      * Replace all instances of one substring of arbitrary length
@@ -214,7 +214,7 @@ namespace gloox
      * @param replace The sub-string to substitute for the find string.
      * @todo Look into merging with util::escape() and Parser::decode().
      */
-    void replaceAll( std::string& target, const std::string& find, const std::string& replace );
+    GLOOX_API void replaceAll( std::string& target, const std::string& find, const std::string& replace );
 
     /**
      * Converts a long int to its string representation.

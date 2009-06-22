@@ -345,7 +345,11 @@ namespace gloox
 
   int DNS::getSocket( int af, int socktype, int proto )
   {
+#ifdef _WIN32
+    SOCKET fd;
+#else
     int fd;
+#endif
     if( ( fd = socket( af, socktype, proto ) ) == -1 )
     {
       cleanup();
@@ -358,7 +362,7 @@ namespace gloox
     setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, (char*)&timeout, sizeof( timeout ) );
 #endif
 
-    return fd;
+    return (int)fd;
   }
 
   int DNS::connect( const std::string& host, int port, const LogSink& logInstance )
@@ -376,7 +380,7 @@ namespace gloox
 
     struct sockaddr_in target;
     target.sin_family = AF_INET;
-    target.sin_port = htons( port );
+    target.sin_port = htons( (u_short)port );
 
     if( h->h_length != sizeof( struct in_addr ) )
     {

@@ -62,11 +62,6 @@ namespace gloox
       typedef std::list<DataFormItem*> ItemList;
 
       /**
-       * A list of DataFormReported.
-       */
-      typedef std::list<DataFormReported*> ReportedList;
-
-      /**
        * Constructs a new, empty form.
        * @param type The form type.
        * @param instructions Natural-language instructions for filling out the form. Should not contain
@@ -130,16 +125,16 @@ namespace gloox
       void setInstructions( const StringList& instructions ) { m_instructions = instructions; }
 
       /**
+       * Returns the reported field list in a DataForm.
+       * @return The reported section, containing 0..n fields.
+       */
+      const DataFormReported* reported() const { return m_reported; }
+
+      /**
        * Returns a list of items in a DataForm.
        * @return A list of items.
        */
       const ItemList& items() const { return m_items; }
-
-      /**
-       * Returns a list of reported in a DataForm.
-       * @return A list of reported.
-       */
-      const ReportedList& reported() const { return m_reported; }
 
       /**
        * Returns the form's type.
@@ -192,8 +187,8 @@ namespace gloox
       StringList m_instructions;
 
       std::string m_title;
+      DataFormReported* m_reported;
       ItemList m_items;
-      ReportedList m_reported;
 
   };
 

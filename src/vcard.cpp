@@ -281,11 +281,11 @@ namespace gloox
 
     Email item;
     item.userid = userid;
-    item.internet = type & AddrTypeInet;
-    item.x400 = type & AddrTypeX400;
-    item.work = type & AddrTypeWork;
-    item.home = type & AddrTypeHome;
-    item.pref = type & AddrTypePref;
+    item.internet = ((type & AddrTypeInet) == AddrTypeInet);
+    item.x400 = ((type & AddrTypeX400) == AddrTypeX400);
+    item.work = ((type & AddrTypeWork) == AddrTypeWork);
+    item.home = ((type & AddrTypeHome) == AddrTypeHome);
+    item.pref = ((type & AddrTypePref) == AddrTypePref);
 
     m_emailList.push_back( item );
   }
@@ -307,13 +307,13 @@ namespace gloox
     item.region = region;
     item.pcode = pcode;
     item.ctry = ctry;
-    item.home = type & AddrTypeHome;
-    item.work = type & AddrTypeWork;
-    item.parcel = type & AddrTypeParcel;
-    item.postal = type & AddrTypePostal;
-    item.dom = type & AddrTypeDom;
-    item.intl = !item.dom && type & AddrTypeIntl;
-    item.pref = type & AddrTypePref;
+    item.home = ((type & AddrTypeHome) == AddrTypeHome);
+    item.work = ((type & AddrTypeWork) == AddrTypeWork);
+    item.parcel = ((type & AddrTypeParcel) == AddrTypeParcel);
+    item.postal = ((type & AddrTypePostal) == AddrTypePostal);
+    item.dom = ((type & AddrTypeDom) == AddrTypeDom);
+    item.intl = !item.dom && ((type & AddrTypeIntl) == AddrTypeIntl);
+    item.pref = ((type & AddrTypePref) == AddrTypePref);
 
     m_addressList.push_back( item );
   }
@@ -325,13 +325,13 @@ namespace gloox
 
     Label item;
     item.lines = lines;
-    item.work = type & AddrTypeWork;
-    item.home = type & AddrTypeHome;
-    item.postal = type & AddrTypePostal;
-    item.parcel = type & AddrTypeParcel;
-    item.pref = type & AddrTypePref;
-    item.dom = type & AddrTypeDom;
-    item.intl = !item.dom && type & AddrTypeIntl;
+    item.work = ((type & AddrTypeWork) == AddrTypeWork);
+    item.home = ((type & AddrTypeHome) == AddrTypeHome);
+    item.postal = ((type & AddrTypePostal) == AddrTypePostal);
+    item.parcel = ((type & AddrTypeParcel) == AddrTypeParcel);
+    item.pref = ((type & AddrTypePref) == AddrTypePref);
+    item.dom = ((type & AddrTypeDom) == AddrTypeDom);
+    item.intl = !item.dom && ((type & AddrTypeIntl) == AddrTypeIntl);
 
     m_labelList.push_back( item );
   }
@@ -343,19 +343,19 @@ namespace gloox
 
     Telephone item;
     item.number = number;
-    item.work = type & AddrTypeWork;
-    item.home = type & AddrTypeHome;
-    item.voice = type & AddrTypeVoice;
-    item.fax = type & AddrTypeFax;
-    item.pager = type & AddrTypePager;
-    item.msg = type & AddrTypeMsg;
-    item.cell = type & AddrTypeCell;
-    item.video = type & AddrTypeVideo;
-    item.bbs = type & AddrTypeBbs;
-    item.modem = type & AddrTypeModem;
-    item.isdn = type & AddrTypeIsdn;
-    item.pcs = type & AddrTypePcs;
-    item.pref = type & AddrTypePref;
+    item.work = ((type & AddrTypeWork) == AddrTypeWork);
+    item.home = ((type & AddrTypeHome) == AddrTypeHome);
+    item.voice = ((type & AddrTypeVoice) == AddrTypeVoice);
+    item.fax = ((type & AddrTypeFax) == AddrTypeFax);
+    item.pager = ((type & AddrTypePager) == AddrTypePager);
+    item.msg = ((type & AddrTypeMsg) == AddrTypeMsg);
+    item.cell = ((type & AddrTypeCell) == AddrTypeCell);
+    item.video = ((type & AddrTypeVideo) == AddrTypeVideo);
+    item.bbs = ((type & AddrTypeBbs) == AddrTypeBbs);
+    item.modem = ((type & AddrTypeModem) == AddrTypeModem);
+    item.isdn = ((type & AddrTypeIsdn) == AddrTypeIsdn);
+    item.pcs = ((type & AddrTypePcs) == AddrTypePcs);
+    item.pref = ((type & AddrTypePref) == AddrTypePref);
 
     m_telephoneList.push_back( item );
   }

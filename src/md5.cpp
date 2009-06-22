@@ -377,7 +377,7 @@ namespace gloox
 
   void MD5::feed( const std::string& data )
   {
-    feed( (const unsigned char*)data.c_str(), data.length() );
+    feed( (const unsigned char*)data.c_str(), (int)data.length() );
   }
 
   void MD5::feed( const unsigned char* data, int bytes )

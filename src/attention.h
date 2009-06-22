@@ -49,7 +49,7 @@ namespace gloox
       virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
-      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      virtual StanzaExtension* newInstance( const Tag* /*tag*/ ) const
       {
         return new Attention();
       }

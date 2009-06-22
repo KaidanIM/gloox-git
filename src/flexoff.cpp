@@ -22,7 +22,7 @@ namespace gloox
 {
 
   // ---- FlexibleOffline::Offline ----
-  FlexibleOffline::Offline::Offline( const Tag* tag )
+  FlexibleOffline::Offline::Offline( const Tag* /*tag*/ )
     : StanzaExtension( ExtFlexOffline )
   {
     // FIXME what to do here?
