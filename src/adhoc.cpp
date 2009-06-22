@@ -77,8 +77,9 @@ namespace gloox
   // ---- ~Adhoc::Command::Note ----
 
   // ---- Adhoc::Command ----
-  Adhoc::Command::Command( const std::string& node, Adhoc::Command::Action action )
-    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_form( 0 ), m_action( action ),
+  Adhoc::Command::Command( const std::string& node, Adhoc::Command::Action action,
+                           DataForm* form )
+    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_form( form ), m_action( action ),
       m_status( InvalidStatus ), m_actions( 0 )
   {
   }
@@ -91,9 +92,18 @@ namespace gloox
   }
 
   Adhoc::Command::Command( const std::string& node, const std::string& sessionid,
-                           Adhoc::Command::Action action )
+                           Adhoc::Command::Action action,
+                           DataForm* form )
     : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_sessionid( sessionid ),
-      m_form( 0 ), m_action( action ), m_actions( 0 )
+      m_form( form ), m_action( action ), m_actions( 0 )
+  {
+  }
+
+  Adhoc::Command::Command( const std::string& node, const std::string& sessionid, Status status,
+                           Action executeAction, int allowedActions,
+                           DataForm* form )
+    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_sessionid( sessionid ),
+      m_form( form ), m_action( executeAction ), m_status( status ), m_actions( allowedActions )
   {
   }
 
@@ -105,18 +115,23 @@ namespace gloox
 
     m_node = tag->findAttribute( "node" );
     m_sessionid = tag->findAttribute( "sessionid" );
-    m_action = (Action)util::deflookup2( tag->findAttribute( "action" ), cmdActionStringValues, Execute );
     m_status = (Status)util::lookup( tag->findAttribute( "status" ), cmdStatusStringValues );
 
     Tag* a = tag->findChild( "actions" );
     if( a )
     {
+      // Multi-stage response
+      m_action = (Action)util::deflookup2( a->findAttribute( "action" ), cmdActionStringValues, Complete );
       if( a->hasChild( "prev" ) )
         m_actions |= Previous;
       if( a->hasChild( "next" ) )
         m_actions |= Next;
       if( a->hasChild( "complete" ) )
         m_actions |= Complete;
+    }
+    else
+    {
+      m_action = (Action)util::deflookup2( tag->findAttribute( "action" ), cmdActionStringValues, Execute );
     }
 
     const ConstTagList& l = tag->findTagList( "/command/note" );
@@ -149,10 +164,39 @@ namespace gloox
     Tag* c = new Tag( "command" );
     c->setXmlns( XMLNS_ADHOC_COMMANDS );
     c->addAttribute( "node", m_node );
-    if( m_action != InvalidAction )
-      c->addAttribute( "action", actionString( m_action ) );
-    if( m_status != InvalidStatus )
-      c->addAttribute( "status", statusString( m_status ) );
+    if( m_actions != 0 )
+    {
+      // Multi-stage command response
+
+      if( m_status != InvalidStatus )
+        c->addAttribute( "status", statusString( m_status ) );
+      else
+        c->addAttribute( "status", statusString( Executing ) );
+
+      Tag* actions = new Tag( c, "actions" );
+
+      if( m_action != InvalidAction )
+        c->addAttribute( "execute", actionString( m_action ) );
+      else
+        c->addAttribute( "execute", actionString( Complete ) );
+
+      if( ( m_actions & Previous ) == Previous )
+        new Tag( actions, "prev" );
+      if( ( m_actions & Next ) == Next )
+        new Tag( actions, "next" );
+      if( ( m_actions & Complete ) == Complete )
+        new Tag( actions, "complete" );
+    }
+    else
+    {
+      // Single-stage command request/response or Multi-stage command request
+
+      if( m_action != InvalidAction )
+        c->addAttribute( "action", actionString( m_action ) );
+      if( m_status != InvalidStatus )
+        c->addAttribute( "status", statusString( m_status ) );
+    }
+
     if ( !m_sessionid.empty() )
       c->addAttribute( "sessionid", m_sessionid );
 

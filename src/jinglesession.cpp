@@ -142,7 +142,7 @@ namespace gloox
         m_plugins.push_back( plugin );
     }
 
-    Session::Jingle::Jingle( const Tag* tag )
+    Session::Jingle::Jingle( const Tag* /*tag*/ )
       : StanzaExtension( ExtJingle ), m_action( InvalidAction )
     {
       if( !tag || tag->name() != "jingle" )
@@ -213,7 +213,7 @@ namespace gloox
     // ---- ~Session::Jingle ----
 
     // ---- Session ----
-    Session::Session( ClientBase* parent, const JID& callee, SessionHandler* jsh )
+    Session::Session( ClientBase* parent, const JID& /*callee*/, SessionHandler* jsh )
       : m_parent( parent ), m_state( Ended ), m_callee( callee ),
         m_handler( jsh ), m_valid( false )
     {

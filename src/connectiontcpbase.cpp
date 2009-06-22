@@ -31,6 +31,7 @@
 # include <unistd.h>
 #else
 # include <winsock.h>
+typedef int socklen_t;
 #endif
 
 #include <time.h>
@@ -127,13 +128,13 @@ namespace gloox
     for( size_t num = 0, len = data.length(); sent != -1 && num < len; num += sent )
     {
 #ifdef SKYOS
-      sent = ::send( m_socket, (unsigned char*)(data.c_str()+num), len - num, 0 );
+      sent = ::send( m_socket, (unsigned char*)(data.c_str()+num), (int)(len - num), 0 );
 #else
-      sent = ::send( m_socket, (data.c_str()+num), len - num, 0 );
+      sent = ::send( m_socket, (data.c_str()+num), (int)(len - num), 0 );
 #endif
     }
 
-    m_totalBytesOut += data.length();
+    m_totalBytesOut += (int)data.length();
 
     m_sendMutex.unlock();
 

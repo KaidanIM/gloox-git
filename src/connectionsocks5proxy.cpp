@@ -206,12 +206,12 @@ namespace gloox
                              "authenticating to socks5 proxy as user " + m_proxyUser );
           m_s5state = S5StateAuthenticating;
           char* d = new char[3 + m_proxyUser.length() + m_proxyPwd.length()];
-          int pos = 0;
+          size_t pos = 0;
           d[pos++] = 0x01;
-          d[pos++] = m_proxyUser.length();
+          d[pos++] = (char)m_proxyUser.length();
           strncpy( d + pos, m_proxyUser.c_str(), m_proxyUser.length() );
           pos += m_proxyUser.length();
-          d[pos++] = m_proxyPwd.length();
+          d[pos++] = (char)m_proxyPwd.length();
           strncpy( d + pos, m_proxyPwd.c_str(), m_proxyPwd.length() );
           pos += m_proxyPwd.length();
 
@@ -224,7 +224,7 @@ namespace gloox
         }
         else
         {
-          if( data[1] == (char)0xFF && !m_proxyUser.empty() && !m_proxyPwd.empty() )
+          if( data[1] == (char)(unsigned char)0xFF && !m_proxyUser.empty() && !m_proxyPwd.empty() )
             connError = ConnProxyNoSupportedAuth;
           else
             connError = ConnProxyAuthRequired;
@@ -270,7 +270,7 @@ namespace gloox
   {
     m_s5state = S5StateNegotiating;
     char* d = new char[m_ip ? 10 : 6 + m_server.length() + 1];
-    int pos = 0;
+    size_t pos = 0;
     d[pos++] = 0x05; // SOCKS version 5
     d[pos++] = 0x01; // command CONNECT
     d[pos++] = 0x00; // reserved
@@ -280,9 +280,9 @@ namespace gloox
     {
       d[pos++] = 0x01; // IPv4 address
       std::string s;
-      const int j = server.length();
-      int l = 0;
-      for( int k = 0; k < j && l < 4; ++k )
+      const size_t j = server.length();
+      size_t l = 0;
+      for( size_t k = 0; k < j && l < 4; ++k )
       {
         if( server[k] != '.' )
           s += server[k];
@@ -308,13 +308,13 @@ namespace gloox
         }
       }
       d[pos++] = 0x03; // hostname
-      d[pos++] = m_server.length();
+      d[pos++] = (char)m_server.length();
       strncpy( d + pos, m_server.c_str(), m_server.length() );
       pos += m_server.length();
     }
-    int nport = htons( port );
-    d[pos++] = nport;
-    d[pos++] = nport >> 8;
+    int nport = htons( (u_short)port );
+    d[pos++] = (char)nport;
+    d[pos++] = (char)(nport >> 8);
 
 #ifndef _WIN32_WCE
     std::ostringstream oss;

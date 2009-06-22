@@ -617,10 +617,10 @@ namespace gloox
   GLOOX_API extern const std::string GLOOX_CAPS_NODE;
 
   /** A string containing "xmlns". */
-  extern const std::string XMLNS;
+  GLOOX_API extern const std::string XMLNS;
 
   /** A string containing "type". */
-  extern const std::string TYPE;
+  GLOOX_API extern const std::string TYPE;
 
   /** An empty string. */
   GLOOX_API extern const std::string EmptyString;

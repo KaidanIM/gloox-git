@@ -308,7 +308,6 @@ namespace gloox
         return false;
       }
     }
-    return true;
   }
 
   void SChannel::handshakeStage( const std::string& data )
@@ -435,9 +434,9 @@ namespace gloox
     while( true );
   }
 
-  void SChannel::setCACerts( const StringList& cacerts ) {}
+  void SChannel::setCACerts( const StringList& /*cacerts*/ ) {}
 
-  void SChannel::setClientCert( const std::string& clientKey, const std::string& clientCerts ) {}
+  void SChannel::setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {}
 
   void SChannel::setSizes()
   {
@@ -465,10 +464,10 @@ namespace gloox
     ts.tm_min = stUTC.wMinute;
     ts.tm_sec = stUTC.wSecond;
 
-    int unixtime;
+    time_t unixtime;
     if ( (unixtime = mktime(&ts)) == -1 )
       unixtime = 0;
-    return unixtime;
+    return (int)unixtime;
   }
 
   void SChannel::validateCert()

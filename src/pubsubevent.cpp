@@ -196,7 +196,7 @@ namespace gloox
           child->addAttribute( "node", m_node );
           if( m_itemOperations )
           {
-            Tag* item;
+//            Tag* item;
             ItemOperation* op;
             ItemOperationList::const_iterator itt = m_itemOperations->begin();
             for( ; itt != m_itemOperations->end(); ++itt )

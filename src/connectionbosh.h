@@ -21,6 +21,7 @@
 
 #include <string>
 #include <list>
+#include <ctime>
 
 namespace gloox
 {
@@ -203,7 +204,7 @@ namespace gloox
 
       bool m_streamRestart;   // Set to true if we are waiting for an acknowledgement of a stream restart
 
-      unsigned long m_lastRequestTime;
+      time_t m_lastRequestTime;
       unsigned long m_minTimePerRequest;
 
       std::string m_buffer;   // Buffer of received data

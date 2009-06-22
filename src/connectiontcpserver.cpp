@@ -88,7 +88,7 @@ namespace gloox
 
     struct sockaddr_in local;
     local.sin_family = AF_INET;
-    local.sin_port = htons( m_port );
+    local.sin_port = htons( (u_short)m_port );
     local.sin_addr.s_addr = m_server.empty() ? INADDR_ANY : inet_addr( m_server.c_str() );
     memset( local.sin_zero, '\0', 8 );
 
@@ -121,7 +121,7 @@ namespace gloox
     struct sockaddr_in they;
     int sin_size = sizeof( struct sockaddr_in );
 #ifdef _WIN32
-    int newfd = accept( m_socket, (struct sockaddr*)&they, &sin_size );
+    int newfd = accept( (SOCKET)m_socket, (struct sockaddr*)&they, &sin_size );
 #else
     int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&sin_size );
 #endif
