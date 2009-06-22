@@ -34,7 +34,7 @@ class ZlibTest : public CompressionDataHandler
 };
 
 static const double divider = 1000000;
-static const int num = 250;
+static const int num = 5000000;
 static double t;
 
 static void printTime ( const char * testName, struct timeval tv1, struct timeval tv2 )
