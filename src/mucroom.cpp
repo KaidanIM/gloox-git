@@ -705,6 +705,23 @@ namespace gloox
       m_creationInProgress = false;
   }
 
+  void MUCRoom::setRoomConfig( DataForm* form )
+  {
+    if( !m_parent || !m_joined )
+      return;
+
+    JID j( m_nick.bare() );
+    const std::string& id = m_parent->getID();
+    Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_OWNER, form->tag() );
+    delete form;
+
+    m_parent->trackID( this, id, SendRoomConfig );
+    m_parent->send( iq );
+
+    if( m_creationInProgress )
+      m_creationInProgress = false;
+  }
+
   void MUCRoom::setNonAnonymous()
   {
     m_flags |= FlagNonAnonymous;

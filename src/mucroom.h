@@ -391,6 +391,15 @@ namespace gloox
       void requestRoomConfig();
 
       /**
+       * After requesting (using requestRoomConfig()) and
+       * editing/filling in the room's configuration,
+       * use this function to send it back to the server.
+       * @param form The form to send. The function will delete the
+       * object pointed to.
+       */
+      void setRoomConfig( DataForm* form );
+
+      /**
        * Use this function to accept the room's default configuration. This function is useful
        * only after MUCRoomHandler::handleMUCRoomCreation() was called. This is a NOOP at
        * any other time.

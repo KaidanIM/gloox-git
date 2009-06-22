@@ -55,6 +55,7 @@ namespace gloox
     CreateInstantRoom,              /**< Create an instant room. */
     CancelRoomCreation,             /**< Cancel room creation process. */
     RequestRoomConfig,              /**< Request room configuration form. */
+    SendRoomConfig,                 /**< Send room configuration */
     DestroyRoom,                    /**< Destroy room. */
     GetRoomInfo,                    /**< Fetch room info. */
     GetRoomItems,                   /**< Fetch room items (e.g., current occupants). */
