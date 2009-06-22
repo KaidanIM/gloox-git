@@ -129,7 +129,7 @@ namespace gloox
       {
         char c[2];
         c[0] = 0x05;
-        c[1] = (char)0xFF;
+        c[1] = (char)(unsigned char)0xFF;
         (*it).second.state = StateDisconnected;
 
         if( data.length() >= 3 && data[0] == 0x05 )

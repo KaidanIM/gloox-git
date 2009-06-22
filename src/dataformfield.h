@@ -186,7 +186,7 @@ namespace gloox
        * Use this function to retrieve the value of this field.
        * @return The value of this field.
        */
-      const std::string& value() const { return m_values.front(); }
+	  const std::string& value() const { return ( m_values.size() > 0 ) ? m_values.front() : EmptyString; }
 
       /**
        * Use this function to set the value of this field.

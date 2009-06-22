@@ -63,7 +63,7 @@ namespace gloox
 
     const std::string escape( std::string what )
     {
-      for( unsigned val, i = 0; i < what.length(); ++i )
+      for( size_t val, i = 0; i < what.length(); ++i )
       {
         for( val = 0; val < escape_size; ++val )
         {

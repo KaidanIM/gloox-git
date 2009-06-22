@@ -162,7 +162,7 @@ namespace gloox
        * @return @b True if binding of multiple resources is supported by the server,
        * @b false otherwise.
        */
-      bool hasResourceBind() const { return m_streamFeatures & StreamFeatureUnbind; }
+      bool hasResourceBind() const { return ((m_streamFeatures & StreamFeatureUnbind) == StreamFeatureUnbind); }
 
       /**
        * Use this function to unbind a resource identifier that has been bound

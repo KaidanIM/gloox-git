@@ -17,7 +17,6 @@
 #include "logsink.h"
 #include "connectionbase.h"
 #include "connectiontls.h"
-#include "connectiondatahandler.h"
 #include "tlsdefault.h"
 #include "tlshandler.h"
 
@@ -31,12 +30,11 @@ namespace gloox
   /**
    * @brief This is an implementation of the server-side of a TLS/SSL connection.
    *
-   * You should not need to use this function directly.
+   * You should not need to use this class directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-
   class GLOOX_API ConnectionTLSServer : public ConnectionTLS
   {
     public:
@@ -48,9 +46,7 @@ namespace gloox
        * ConnectionTLSServer will own the transport connection and delete it in its destructor.
        * @param log The log target. Obtain it from ClientBase::logInstance().
        */
-      ConnectionTLSServer( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log )
-        : ConnectionTLS( cdh, conn, log )
-      {}
+      ConnectionTLSServer( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log );
 
       /**
        * Constructs a new ConnectionTLSServer object.
@@ -59,23 +55,18 @@ namespace gloox
        * ConnectionTLSServer will own the transport connection and delete it in its destructor.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        */
-      ConnectionTLSServer( ConnectionBase* conn, const LogSink& log )
-        : ConnectionTLS( conn, log )
-      {}
+      ConnectionTLSServer( ConnectionBase* conn, const LogSink& log );
 
       /**
        * Virtual Destructor.
        */
-      virtual ~ConnectionTLSServer() {}
+      virtual ~ConnectionTLSServer();
 
       /**
        * Returns a TLS server.
        * @return A  TLS server.
        */
-      virtual TLSBase* getTLSBase( TLSHandler* th, const std::string server )
-      {
-        return new TLSDefault( th, server, TLSDefault::VerifyingServer );
-      }
+      virtual TLSBase* getTLSBase( TLSHandler* th, const std::string server );
 
   };
 

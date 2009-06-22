@@ -206,8 +206,8 @@ namespace gloox
     if( !m_open || !m_clientbase )
       return false;
 
-    int pos = 0;
-    int len = data.length();
+    size_t pos = 0;
+    size_t len = data.length();
     do
     {
       const std::string& id = m_clientbase->getID();
