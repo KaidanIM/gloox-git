@@ -542,12 +542,13 @@ namespace gloox
       void setRequestHistory( const std::string& since );
 
       /**
-       * This static function allows to formally decline a MUC invitation received via the
-       * MUCInvitationListener.
+       * This static function allows to formally decline a MUC
+       * invitation received via the MUCInvitationListener.
        * @param room The JID of the room the invitation came from.
        * @param invitor The JID of the invitor.
        * @param reason An optional reason for the decline.
-       * @return A pointer to a Message.
+       * @return A pointer to a Message. You will have to send (and
+       * possibly delete) this Message manually.
        */
       static Message* declineInvitation( const JID& room, const JID& invitor,
                                      const std::string& reason = EmptyString);
@@ -640,9 +641,21 @@ namespace gloox
        * It can be used either after MUCRoomHandler::handleMUCRoomCreation() was called,
        * or at any later time.
        *
-       * Usually owner privileges are required for this action to succeed.
+       * Usually owner privileges are required for this action to
+       * succeed.
+       *
+       * Use setRoomConfig() to send the modified room config back.
        */
       void requestRoomConfig();
+
+      /**
+       * After requesting (using requestRoomConfig()) and
+       * editing/filling in the room's configuration,
+       * use this function to send it back to the server.
+       * @param form The form to send. The function will delete the
+       * object pointed to.
+       */
+      void setRoomConfig( DataForm* form );
 
       /**
        * Use this function to accept the room's default configuration. This function is useful

@@ -987,6 +987,17 @@ namespace gloox
       m_creationInProgress = false;
   }
 
+  void MUCRoom::setRoomConfig( DataForm* form )
+  {
+    if( !m_parent || !m_joined )
+      return;
+
+    IQ iq( IQ::Set, m_nick.bareJID() );
+    iq.addExtension( new MUCOwner( MUCOwner::TypeSendConfig, form ) );
+
+    m_parent->send( iq, this, SendRoomConfig );
+  }
+
   void MUCRoom::setNonAnonymous()
   {
     m_flags |= FlagNonAnonymous;
