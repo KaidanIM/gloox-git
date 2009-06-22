@@ -440,7 +440,7 @@ namespace gloox
        * @param ih The IqHandler to receive notifications.
        * @param id The id to track.
        * @param context A value that allows for restoring context.
-       * @deprecated Will be removed for 1.0. Use send( const IQ&, IqHandler*, int, bool ) instead.
+       * @deprecated Will be removed for 1.0. Use @link send( const IQ&, IqHandler*, int, bool ) send() @endlink instead.
        */
       GLOOX_DEPRECATED void trackID( IqHandler* ih, const std::string& id, int context );
 
