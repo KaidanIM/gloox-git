@@ -7,6 +7,7 @@ using namespace gloox;
 #include <locale.h>
 #include <cstdlib>
 #include <string>
+#include <cstdio> // [s]print[f]
 
 #include <sys/time.h>
 

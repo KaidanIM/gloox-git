@@ -4,6 +4,8 @@ using namespace gloox;
 #include <string>
 #include <iostream>
 
+#include <cstdio> // [s]print[f]
+
 int main( int /*argc*/, char** /*argv*/ )
 {
   std::string test = "OLD\\Administrator";

@@ -7,10 +7,11 @@ using namespace gloox;
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+#include <cstdio> // [s]print[f]
 
-             gloox::JID g_jid( "foof" );
+gloox::JID g_jid( "foof" );
 
-         namespace gloox
+namespace gloox
 {
   class Disco;
 

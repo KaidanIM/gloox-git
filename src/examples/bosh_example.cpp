@@ -23,6 +23,8 @@ using namespace gloox;
 #include <stdio.h>
 #include <string>
 
+#include <cstdio> // [s]print[f]
+
 #if defined( WIN32 ) || defined( _WIN32 )
 # include <windows.h>
 #endif
