@@ -34,7 +34,8 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         jingledescription.cpp jingletransport.cpp \
                         shim.cpp softwareversion.cpp attention.cpp \
                         tlsopensslclient.cpp tlsopensslbase.cpp \
-                        tlsopensslserver.cpp compressiondefault.cpp
+                        tlsopensslserver.cpp compressiondefault.cpp \
+                        connectiontlsserver.cpp
 
 libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -80,7 +81,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             connectiontcpserver.h     amp.h                   pubsubmanager.h \
                             iq.h                      pubsub.h                \
                             pubsubresulthandler.h     error.h                 chatstate.h \
-                            connectionhandler.h     iq.h \
+                            connectionhandler.h \
                             message.h                 presence.h              subscription.h \
                             bytestream.h              bytestreamdatahandler.h bytestreamhandler.h \
                             capabilities.h            connectionbosh.h        featureneg.h \
