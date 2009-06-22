@@ -1,6 +1,8 @@
 #include "../../pubsubevent.h"
 #include "../../tag.h"
 
+#include <cstdio> // [s]print[f]
+
 static int failed = 0;
 
 using namespace gloox;

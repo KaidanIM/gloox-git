@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <cstdio> // [s]print[f]
 
 namespace gloox
 {

@@ -14,6 +14,8 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+#include <cstdio> // [s]print[f]
+
 class VCardTest : public ConnectionListener, LogHandler, VCardHandler
 {
   public:

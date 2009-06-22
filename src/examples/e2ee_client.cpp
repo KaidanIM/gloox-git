@@ -16,6 +16,8 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+#include <cstdio> // [s]print[f]
+
 #ifdef WIN32
 #include <windows.h>
 #endif

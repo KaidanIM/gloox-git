@@ -11,6 +11,7 @@ using namespace gloox;
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+#include <cstdio> // [s]print[f]
 
 class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
 {

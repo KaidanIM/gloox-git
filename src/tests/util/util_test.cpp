@@ -1,6 +1,7 @@
 #include "../../util.h"
 
 #include <string>
+#include <cstdio> // [s]print[f]
 
 using namespace gloox;
 

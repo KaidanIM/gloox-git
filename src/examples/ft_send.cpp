@@ -19,6 +19,8 @@ using namespace gloox;
 #include <fstream>
 #include <ios>
 
+#include <cstdio> // [s]print[f]
+
 #if defined( WIN32 ) || defined( _WIN32 )
 # include <windows.h>
 #endif
