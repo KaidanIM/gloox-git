@@ -303,10 +303,13 @@ namespace gloox
         {
           const std::string& node = (*it)->findAttribute( "node" );
           const std::string& sub  = (*it)->findAttribute( "subscription" );
+          const std::string& subid = (*it)->findAttribute( "subid" );
           SubscriptionInfo si;
           si.jid.setJID( (*it)->findAttribute( "jid" ) );
           si.type = subscriptionType( sub );
-          m_subscriptionMap[node] = si;
+          si.subid = subid;
+          SubscriptionList& lst = m_subscriptionMap[node];
+          lst.push_back( si );
         }
         return;
       }
@@ -354,7 +357,8 @@ namespace gloox
         si.jid.setJID( su->findAttribute( "jid" ) );
         si.subid = su->findAttribute( "subid" );
         si.type = subscriptionType( su->findAttribute( "type" ) );
-        m_subscriptionMap[su->findAttribute( "node" )] = si;
+        SubscriptionList& lst = m_subscriptionMap[su->findAttribute( "node" )];
+        lst.push_back( si );
         return;
       }
       const Tag* i = tag->findTag( "pubsub/items" );
@@ -430,10 +434,16 @@ namespace gloox
         SubscriptionMap::const_iterator it = m_subscriptionMap.begin();
         for( ; it != m_subscriptionMap.end(); ++it )
         {
-          Tag* s = new Tag( sub, "subscription" );
-          s->addAttribute( "node", (*it).first );
-          s->addAttribute( "jid", (*it).second.jid );
-          s->addAttribute( "subscription", subscriptionValue( (*it).second.type ) );
+          const SubscriptionList& lst = (*it).second;
+          SubscriptionList::const_iterator it2 = lst.begin();
+          for( ; it2 != lst.end(); ++it2 )
+          {
+            Tag* s = new Tag( sub, "subscription" );
+            s->addAttribute( "node", (*it).first );
+            s->addAttribute( "jid", (*it2).jid );
+            s->addAttribute( "subscription", subscriptionValue( (*it2).type ) );
+            s->addAttribute( "sid", (*it2).subid );
+          }
         }
       }
       else if( m_ctx == GetAffiliationList )
@@ -579,7 +589,9 @@ namespace gloox
                                           ResultHandler* handler,
                                           const JID& jid,
                                           SubscriptionObject type,
-                                          int depth )
+                                          int depth,
+                                          const std::string& expire
+                                          )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
@@ -605,6 +617,13 @@ namespace gloox
           else
            field->setValue( util::int2string( depth ) );
         }
+
+        if( !expire.empty() )
+        {
+          DataFormField* field = df->addField( DataFormField::TypeNone, "pubsub#expire" );
+          field->setValue( expire );
+        }
+
         ps->setJID( jid );
         ps->setOptions( node, df );
       }
@@ -978,11 +997,13 @@ namespace gloox
               if( !sm.empty() )
               {
                 SubscriptionMap::const_iterator it = sm.begin();
-                rh->handleSubscriptionResult( id, service, (*it).first,
-                                              (*it).second.subid,
-                                              (*it).second.jid,
-                                              (*it).second.type,
-                                              error );
+                const SubscriptionList& lst = (*it).second;
+                if( lst.size() == 1 )
+                {
+                  SubscriptionList::const_iterator it2 = lst.begin();
+                  rh->handleSubscriptionResult( id, service, (*it).first, (*it2).subid, (*it2).jid,
+                                                (*it2).type, error );
+                }
               }
               break;
             }
