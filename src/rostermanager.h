@@ -19,7 +19,6 @@
 #include "iqhandler.h"
 #include "presencehandler.h"
 #include "rosterlistener.h"
-#include "rosteritemdata.h"
 
 #include <map>
 #include <string>
