@@ -265,6 +265,7 @@ namespace gloox
       case IQ::Get:
       {
         IQ re( IQ::Result, iq.from(), iq.id() );
+        re.setFrom( iq.to() );
 
         const SoftwareVersion* sv = iq.findExtension<SoftwareVersion>( ExtVersion );
         if( sv )

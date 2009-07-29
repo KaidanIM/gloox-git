@@ -110,7 +110,8 @@ namespace gloox
   }
 
   const std::string SIManager::requestSI( SIHandler* sih, const JID& to, const std::string& profile,
-                                          Tag* child1, Tag* child2, const std::string& mimetype )
+                                          Tag* child1, Tag* child2, const std::string& mimetype,
+                                          const JID& from )
   {
     if( !m_parent || !sih )
       return EmptyString;
@@ -120,6 +121,8 @@ namespace gloox
 
     IQ iq( IQ::Set, to, id );
     iq.addExtension( new SI( child1, child2, id2, mimetype, profile ) );
+    if( from )
+      iq.setFrom( from );
 
     TrackStruct t;
     t.sid = id2;
@@ -131,10 +134,13 @@ namespace gloox
     return id2;
   }
 
-  void SIManager::acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2 )
+  void SIManager::acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2, const JID& from )
   {
     IQ iq( IQ::Result, to, id );
     iq.addExtension( new SI( child1, child2 ) );
+    if( from )
+      iq.setFrom( from );
+
     m_parent->send( iq );
   }
 
@@ -197,8 +203,7 @@ namespace gloox
     HandlerMap::const_iterator it = m_handlers.find( si->profile() );
     if( it != m_handlers.end() && (*it).second )
     {
-      // FIXME: don't pass si->tag()!
-      (*it).second->handleSIRequest( iq.from(), iq.id(), *si );
+      (*it).second->handleSIRequest( iq.from(), iq.to(), iq.id(), *si );
       return true;
     }
 
@@ -230,7 +235,7 @@ namespace gloox
 
             // FIXME: remove above commented code and
             // check corectness of last 3 params!
-            (*it).second.sih->handleSIRequestResult( iq.from(), (*it).second.sid, *si );
+            (*it).second.sih->handleSIRequestResult( iq.from(), iq.to(), (*it).second.sid, *si );
             m_track.erase( it );
           }
         }

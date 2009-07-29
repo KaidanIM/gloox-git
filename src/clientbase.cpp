@@ -1294,13 +1294,15 @@ namespace gloox
     bool res = false;
 
     // FIXME remove for 1.1
-//     typedef IqHandlerMapXmlns::const_iterator IQciXmlns;
-//     std::pair<IQciXmlns, IQciXmlns> g = m_iqNSHandlers.equal_range( iq.xmlns() );
+//     typedef IqHandlerMapXmlns::const_iterator IQciXmlns
+//     Tag *tag = iq.tag()->xmlns();
+//     std::pair<IQciXmlns, IQciXmlns> g = m_iqNSHandlers.equal_range( tag->xmlns() );
 //     for( IQciXmlns it = g.first; it != g.second; ++it )
 //     {
 //       if( (*it).second->handleIq( iq ) )
 //         res = true;
 //     }
+//     delete tag;
 
     typedef IqHandlerMap::const_iterator IQci;
     const StanzaExtensionList& sel = iq.extensions();
