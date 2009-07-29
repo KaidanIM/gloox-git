@@ -48,11 +48,12 @@ namespace gloox
        * a stream to send a file to you. You should use either SIManager::acceptSI() or
        * SIManager::declineSI() to accept or reject the request, respectively.
        * @param from The SI requestor.
+       * @param to The SI recipient, usually oneself. Used in component scenario.
        * @param id The request's id (@b not the stream's id). This id MUST be supplied to either
        * SIManager::acceptSI() or SIManager::declineSI().
        * @param si The request's complete SI.
        */
-      virtual void handleSIRequest( const JID& from, const std::string& id, const SIManager::SI& si ) = 0;
+      virtual void handleSIRequest( const JID& from, const JID& to, const std::string& id, const SIManager::SI& si ) = 0;
 
   };
 

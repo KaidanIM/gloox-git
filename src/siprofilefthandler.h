@@ -47,6 +47,7 @@ namespace gloox
        * to send a file to you. You should use either SIProfileFT::acceptFT() or
        * SIProfileFT::declineFT() to accept or reject the request, respectively.
        * @param from The file transfer requestor.
+       * @param to The file transfer recipient. Usuall oneself. Used in component scenario.
        * @param sid The requested stream's ID. This sid MUST be supplied to SIProfileFT::acceptFT()
        * and SIProfileFT::declineFT(), respectively.
        * @param name The file name.
@@ -61,7 +62,7 @@ namespace gloox
        * @param length The number of bytes to send, starting from the given offset. A value of -1
        * indicates that the entire file is to be transmitted (taking the offset into account).
        */
-      virtual void handleFTRequest( const JID& from, const std::string& sid,
+      virtual void handleFTRequest( const JID& from, const JID& to, const std::string& sid,
                                     const std::string& name, long size, const std::string& hash,
                                     const std::string& date, const std::string& mimetype,
                                     const std::string& desc, int stypes, long offset, long length ) = 0;
@@ -92,11 +93,12 @@ namespace gloox
 
       /**
        * This function is called if the contact chose OOB as the mechanism.
-       * @param from The conatct's JID.
+       * @param from The remote contact's JID.
+       * @param to The local recipient's JID. Usually oneself. Used in component scenario.
        * @param sid The stream's ID.
        * @return The file's URL.
        */
-      virtual const std::string handleOOBRequestResult( const JID& from, const std::string& sid ) = 0;
+      virtual const std::string handleOOBRequestResult( const JID& from, const JID& to, const std::string& sid ) = 0;
 
   };
 

@@ -154,12 +154,15 @@ namespace gloox
        * @param child2 The second of the two allowed children of the SI offer. See
        * XEP-0095 for more info. Defaults to 0.
        * @param mimetype The stream's/file's mime-type. Defaults to 'binary/octet-stream'.
+       * @param from An optional 'from' address to stamp outgoing requests with.
+       * Used in component scenario only. Defaults to empty JID.
        * @return The requested stream's ID (SID). Empty if SIHandler or ClientBase are invalid.
        * @note The SIManager claims ownership of the Tags supplied to this function, and will
        * delete them after use.
        */
       const std::string requestSI( SIHandler* sih, const JID& to, const std::string& profile, Tag* child1,
-                                   Tag* child2 = 0, const std::string& mimetype = "binary/octet-stream" );
+                                   Tag* child2 = 0, const std::string& mimetype = "binary/octet-stream",
+                                   const JID& from = JID() );
 
       /**
        * Call this function to accept an SI request previously announced by means of
@@ -169,10 +172,12 @@ namespace gloox
        * @param child1 The &lt;feature/&gt; child of the SI request. See XEP-0095 for details.
        * @param child2 The profile-specific child of the SI request. May be 0. See XEP-0095
        * for details.
+       * @param from An optional 'from' address to stamp outgoing stanzas with.
+       * Used in component scenario only. Defaults to empty JID.
        * @note The SIManager claims ownership of the Tags supplied to this function, and will
        * delete them after use.
        */
-      void acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2 = 0 );
+      void acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2 = 0, const JID& from = JID() );
 
       /**
        * Call this function to decline an SI request previously announced by means of
