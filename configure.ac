@@ -104,12 +104,12 @@ if test "$ssl" == "no"; then
         gnutls=$withval, gnutls=yes)
   if test "$gnutls" != "no"; then
     if test "$gnutls" != "yes"; then
-      LDFLAGS="${LDFLAGS} -L$gnutls/lib"
-      CPPFLAGS="${CPPFLAGS} -I$gnutls/include"
+      LDFLAGS="${LDFLAGS} `pkg-config gnutls --libs-only-L`"
+      CPPFLAGS="${CPPFLAGS} `pkg-config gnutls --cflags`"
     fi
     AC_CHECK_HEADER(gnutls/gnutls.h,
     AC_CHECK_LIB(gnutls, gnutls_check_version,
-            [gnutls=yes LIBS="${LIBS} `libgnutls-config --libs`"], gnutls=no),
+            [gnutls=yes LIBS="${LIBS} `pkg-config gnutls --libs`"], gnutls=no),
             gnutls=no)
   fi
   if test "$gnutls" != "no" ; then
