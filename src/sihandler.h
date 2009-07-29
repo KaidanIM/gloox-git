@@ -48,11 +48,12 @@ namespace gloox
       /**
        * This function is called to handle results of outgoing SI requests, i.e. you requested a stream
        * (using SIManager::requestSI()) to send a file to a remote entity.
-       * @param from The SI receiver.
+       * @param from The remote SI receiver.
+       * @param to The SI requestor. Usually oneself. Used in component scenario.
        * @param sid The stream ID.
        * @param si The request's complete SI.
        */
-      virtual void handleSIRequestResult( const JID& from, const std::string& sid,
+      virtual void handleSIRequestResult( const JID& from, const JID& to, const std::string& sid,
                                           const SIManager::SI& si ) = 0;
 
       /**
