@@ -101,12 +101,14 @@ namespace gloox
        * without waiting for success.
        * @param to The recipient of the requested bytestream.
        * @param mode The desired transport layer protocol.
-       * @param sid The bytestreakm's stream ID, if previously negotiated e.g. using SI (XEP-0095).
+       * @param sid The bytestream's stream ID, if previously negotiated e.g. using SI (XEP-0095).
+       * @param from An optional 'from' address to stamp outgoing
+       * requests with. Only useful in component scenarios. Defaults to empty JID.
        * @return @b False in case of an error, @b true otherwise. A return value of @b true does
        * @b not indicate that the bytestream has been opened. This is announced by means of the
        * BytestreamHandler.
        */
-      bool requestSOCKS5Bytestream( const JID& to, S5BMode mode, const std::string& sid = EmptyString );
+      bool requestSOCKS5Bytestream( const JID& to, S5BMode mode, const std::string& sid = EmptyString, const JID& from = JID() );
 
       /**
        * To get rid of a bytestream (i.e., close and delete it), call this function. You
@@ -281,6 +283,7 @@ namespace gloox
       struct AsyncS5BItem
       {
         JID from;
+        JID to;
         std::string id;
         StreamHostList sHosts;
         bool incoming;

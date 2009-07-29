@@ -176,7 +176,8 @@ namespace gloox
   }
 
   bool SOCKS5BytestreamManager::requestSOCKS5Bytestream( const JID& to, S5BMode mode,
-                                                         const std::string& sid )
+                                                         const std::string& sid,
+                                                         const JID& from )
   {
     if( !m_parent )
       return false;
@@ -192,12 +193,17 @@ namespace gloox
     const std::string& id = m_parent->getID();
     IQ iq( IQ::Set, to, id );
     iq.addExtension( new Query( msid, mode, m_hosts ) );
+    if( from )
+      iq.setFrom( from );
 
     if( m_server )
     {
       SHA sha;
       sha.feed( msid );
-      sha.feed( m_parent->jid().full() );
+      if( from )
+        sha.feed( from.full() );
+      else
+        sha.feed( m_parent->jid().full() );
       sha.feed( to.full() );
       m_server->registerHash( sha.hex() );
     }
@@ -206,6 +212,7 @@ namespace gloox
     asi.sHosts = m_hosts;
     asi.id = id;
     asi.from = to;
+    asi.to = from ? from : m_parent->jid();
     asi.incoming = false;
     m_asyncTrackMap[msid] = asi;
 
@@ -229,6 +236,9 @@ namespace gloox
     if( item.incoming )
     {
       iq = new IQ( IQ::Result, item.from.full(), item.id );
+      if( item.to )
+        iq->setFrom( item.to );
+
       if( success )
         iq->addExtension( new Query( jid, sid, false ) );
       else
@@ -274,6 +284,7 @@ namespace gloox
         asi.sHosts = q->hosts();
         asi.id = iq.id();
         asi.from = iq.from();
+        asi.to = iq.to();
         asi.incoming = true;
         m_asyncTrackMap[sid] = asi;
         m_socks5BytestreamHandler->handleIncomingBytestreamRequest( sid, iq.from() );
@@ -330,7 +341,7 @@ namespace gloox
 
     SOCKS5Bytestream* s5b = new SOCKS5Bytestream( this, m_parent->connectionImpl()->newInstance(),
                                                   m_parent->logInstance(),
-                                                  (*it).second.from, m_parent->jid(), sid );
+                                                  (*it).second.from, (*it).second.to, sid );
     s5b->setStreamHosts( (*it).second.sHosts );
     m_s5bMap[sid] = s5b;
     m_socks5BytestreamHandler->handleIncomingBytestream( s5b );
@@ -414,18 +425,18 @@ namespace gloox
                 {
                   SHA sha;
                   sha.feed( (*it).second );
-                  sha.feed( m_parent->jid().full() );
+                  sha.feed( iq.to().full() );
                   sha.feed( iq.from().full() );
                   s5b = new SOCKS5Bytestream( this, m_server->getConnection( sha.hex() ),
                                               m_parent->logInstance(),
-                                                  m_parent->jid(), iq.from(),
+                                                  iq.to(), iq.from(),
                                                       (*it).second );
                 }
                 else
                 {
                   s5b = new SOCKS5Bytestream( this, m_parent->connectionImpl()->newInstance(),
                                               m_parent->logInstance(),
-                                                  m_parent->jid(), iq.from(),
+                                                  iq.to(), iq.from(),
                                                       (*it).second );
                   s5b->setStreamHosts( StreamHostList( 1, *sh ) );
                 }

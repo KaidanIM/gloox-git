@@ -193,6 +193,8 @@ namespace gloox
        * @param date The file's last modification date/time. See XEP-0082 for details.
        * @param mimetype The file's mime-type. Defaults to 'binary/octet-stream' if empty.
        * @param streamTypes ORed StreamType that can be used for this transfer.
+       * @param from An optional 'from' address to stamp outgoing requests with.
+       * Used in component scenario only. Defaults to empty JID.
        * @return The requested stream's ID (SID). Empty if conditions above (file name, size)
        * are not met.
        */
@@ -201,7 +203,8 @@ namespace gloox
                                    const std::string& desc = EmptyString,
                                    const std::string& date = EmptyString,
                                    const std::string& mimetype = EmptyString,
-                                   int streamTypes = FTTypeAll );
+                                   int streamTypes = FTTypeAll,
+                                   const JID& from = JID() );
 
       /**
        * Call this function to accept a file transfer request previously announced by means of
@@ -210,9 +213,11 @@ namespace gloox
        * @param sid The request's sid, as passed to SIProfileHandler::handleFTRequest().
        * @param type The desired stream type to use for this file transfer. Defaults to
        * SOCKS5 Bytestream. You should not use @c FTTypeAll here.
+       * @param from An optional 'from' address to stamp outgoing stanzas with.
+       * Used in component scenario only. Defaults to empty JID.
        */
       void acceptFT( const JID& to, const std::string& sid,
-                     StreamType type = FTTypeS5B );
+                     StreamType type = FTTypeS5B, const JID& from = JID() );
 
       /**
        * Call this function to decline a FT request previously announced by means of
@@ -282,11 +287,11 @@ namespace gloox
         { if( m_socks5Manager ) m_socks5Manager->removeSOCKS5BytestreamServer(); }
 
       // reimplemented from SIProfileHandler
-      virtual void handleSIRequest( const JID& from, const std::string& id,
+      virtual void handleSIRequest( const JID& from, const JID& to, const std::string& id,
                                     const SIManager::SI& si );
 
       // reimplemented from SIHandler
-      virtual void handleSIRequestResult( const JID& from, const std::string& sid,
+      virtual void handleSIRequestResult( const JID& from, const JID& to, const std::string& sid,
                                           const SIManager::SI& si );
 
       // reimplemented from SIHandler

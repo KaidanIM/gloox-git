@@ -48,10 +48,10 @@ namespace gloox
       void registerStanzaExtension( StanzaExtension* ext );
       void removeStanzaExtension( int ext );
       void removeIDHandler( IqHandler* ) {}
-      virtual void handleSIRequestResult( const JID& from, const std::string& sid,
+      virtual void handleSIRequestResult( const JID& from, const JID& to, const std::string& sid,
                                           const SIManager::SI& si );
       virtual void handleSIRequestError( const IQ& iq, const std::string& /*sid*/ );
-      virtual void handleSIRequest( const JID& from, const std::string& id, const SIManager::SI& si );
+      virtual void handleSIRequest( const JID& from, const JID& to, const std::string& id, const SIManager::SI& si );
       void setTest( int test );
       bool ok();
     private:
@@ -85,10 +85,10 @@ namespace gloox
   void ClientBase::registerIqHandler( IqHandler*, int ) {}
   void ClientBase::registerStanzaExtension( StanzaExtension* se ) { delete se; }
   void ClientBase::removeStanzaExtension( int ) {}
-  void ClientBase::handleSIRequestResult( const JID& /*from*/, const std::string& /*sid*/,
+  void ClientBase::handleSIRequestResult( const JID& /*from*/, const JID& /*to*/, const std::string& /*sid*/,
                                           const SIManager::SI& /*si*/ ) {}
   void ClientBase::handleSIRequestError( const IQ& /*iq*/, const std::string& /*sid*/ ) {}
-  void ClientBase::handleSIRequest( const JID& /*from*/, const std::string& /*id*/,
+  void ClientBase::handleSIRequest( const JID& /*from*/, const JID& /*to*/, const std::string& /*id*/,
                                     const SIManager::SI& /*si*/ ) {}
   void ClientBase::setTest( int test ) { m_test = test; }
   bool ClientBase::ok() { bool t = m_ok; m_ok = false; return t; }

@@ -63,7 +63,7 @@ namespace gloox
   const std::string SIProfileFT::requestFT( const JID& to, const std::string& name, long size,
                                             const std::string& hash, const std::string& desc,
                                             const std::string& date, const std::string& mimetype,
-                                            int streamTypes )
+                                            int streamTypes, const JID& from )
   {
     if( name.empty() || size <= 0 || !m_manager )
       return EmptyString;
@@ -93,10 +93,10 @@ namespace gloox
     dff->setOptions( sm );
     feature->addChild( df.tag() );
 
-    return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );
+    return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype, from );
   }
 
-  void SIProfileFT::acceptFT( const JID& to, const std::string& sid, StreamType type )
+  void SIProfileFT::acceptFT( const JID& to, const std::string& sid, StreamType type, const JID& from )
   {
     if( !m_manager )
       return;
@@ -119,7 +119,7 @@ namespace gloox
         if( m_handler )
         {
           InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(), to,
-                                                        m_parent->jid(), sid );
+                                                        from ? from : m_parent->jid(), sid );
           m_handler->handleFTBytestream( ibb );
         }
         break;
@@ -131,7 +131,7 @@ namespace gloox
     df.addField( dff );
     feature->addChild( df.tag() );
 
-    m_manager->acceptSI( to, id, 0, feature );
+    m_manager->acceptSI( to, id, 0, feature, from );
   }
 
   void SIProfileFT::declineFT( const JID& to, const std::string& sid, SIManager::SIError reason,
@@ -166,7 +166,7 @@ namespace gloox
       m_socks5Manager->addStreamHost( jid, host, port );
   }
 
-  void SIProfileFT::handleSIRequest( const JID& from, const std::string& id,
+  void SIProfileFT::handleSIRequest( const JID& from, const JID& to, const std::string& id,
                                      const SIManager::SI& si )
   {
     if( si.profile() != XMLNS_SI_FT || !si.tag1() )
@@ -214,7 +214,7 @@ namespace gloox
 
       const std::string& sid = si.id();
       m_id2sid[sid] = id;
-      m_handler->handleFTRequest( from, sid, si.tag1()->findAttribute( "name" ),
+      m_handler->handleFTRequest( from, to, sid, si.tag1()->findAttribute( "name" ),
                                   atol( si.tag1()->findAttribute( "size" ).c_str() ),
                                         si.tag1()->findAttribute( "hash" ),
                                             si.tag1()->findAttribute( "date" ),
@@ -223,7 +223,7 @@ namespace gloox
     }
   }
 
-  void SIProfileFT::handleSIRequestResult( const JID& from, const std::string& sid,
+  void SIProfileFT::handleSIRequestResult( const JID& from, const JID& to, const std::string& sid,
                                            const SIManager::SI& si )
   {
     if( si.tag2() )
@@ -236,24 +236,27 @@ namespace gloox
         if( m_socks5Manager && dff->value() == XMLNS_BYTESTREAMS )
         {
           // check return value:
-          m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
+          m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid, to );
         }
         else if( m_handler )
         {
           if( dff->value() == XMLNS_IBB )
           {
             InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(),
-                                                          m_parent->jid(), from, sid );
+                to ? to : m_parent->jid(), from, sid );
 
             m_handler->handleFTBytestream( ibb );
           }
           else if( dff->value() == XMLNS_IQ_OOB )
           {
-            const std::string& url = m_handler->handleOOBRequestResult( from, sid );
+            const std::string& url = m_handler->handleOOBRequestResult( from, to, sid );
             if( !url.empty() )
             {
               const std::string& id = m_parent->getID();
               IQ iq( IQ::Set, from, id );
+              if( to )
+                iq.setFrom( to );
+
               iq.addExtension( new OOB( url, EmptyString, true ) );
               m_parent->send( iq, this, OOBSent );
             }
