@@ -67,10 +67,11 @@ namespace gloox
        * matches the one registered for this handler. If node is empty, items for the
        * root node (no node) shall be returned.
        * @param from The sender of the request.
+       * @param to The receiving JID (useful for transports).
        * @param node The node this handler is supposed to handle.
        * @return A list of items supported by this node.
        */
-      virtual Disco::ItemList handleDiscoNodeItems( const JID& from,
+      virtual Disco::ItemList handleDiscoNodeItems( const JID& from, const JID& to,
                                                     const std::string& node = EmptyString ) = 0;
 
   };

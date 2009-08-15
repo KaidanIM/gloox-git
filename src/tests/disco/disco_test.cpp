@@ -76,7 +76,7 @@ class DiscoTest : public ClientBase, public DiscoHandler, public DiscoNodeHandle
       return dil;
     }
     virtual Disco::ItemList handleDiscoNodeItems( const JID&,
-        const std::string& = EmptyString )
+        const JID&, const std::string& = EmptyString )
     {
       Disco::ItemList dil;
       if( m_test == 7 )

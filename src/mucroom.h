@@ -761,7 +761,7 @@ namespace gloox
                                                              const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual Disco::ItemList handleDiscoNodeItems( const JID& from,
+      virtual Disco::ItemList handleDiscoNodeItems( const JID& from, const JID& to,
                                                     const std::string& node = EmptyString );
 
     protected:
