@@ -60,17 +60,13 @@
 # define T_SRV 33
 #endif
 
+#ifndef DNS_RECORD
+# include "windns_copy.h"
+#endif
+
 // mingw
 #ifndef DNS_TYPE_SRV
 # define DNS_TYPE_SRV 33
-#endif
-
-#ifndef DNS_RECORD
-# define DNS_RECORD 00464
-#endif
-
-#ifndef DNS_RECORDA
-#define DNS_RECORDA 00464
 #endif
 
 #ifndef NS_CMPRSFLGS
