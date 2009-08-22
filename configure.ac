@@ -323,6 +323,7 @@ src/tests/adhoccommandnote/Makefile
 src/tests/amprule/Makefile
 src/tests/amp/Makefile
 src/tests/base64/Makefile
+src/tests/capabilities/Makefile
 src/tests/chatstatefilter/Makefile
 src/tests/client/Makefile
 src/tests/clientbase/Makefile
