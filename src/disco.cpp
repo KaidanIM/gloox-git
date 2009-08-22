@@ -494,4 +494,15 @@ namespace gloox
     }
   }
 
+  const StringList Disco::features( bool defaultFeatures ) const
+  {
+    StringList f = m_features;
+    if( defaultFeatures )
+    {
+      f.push_back( XMLNS_DISCO_INFO );
+      f.push_back( XMLNS_DISCO_ITEMS );
+    }
+    return f;
+  }
+
 }

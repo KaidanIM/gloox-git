@@ -413,9 +413,10 @@ namespace gloox
 
       /**
        * Lets you retrieve the features this Disco instance supports.
-       * @return A list of disco items.
+       * @param defaultFeatures Include default features. Defaults to @b false.
+       * @return A list of supported features/namespaces.
        */
-      const StringList& features() const { return m_features; }
+      const StringList features( bool defaultFeatures = false ) const;
 
       /**
        * Queries the given JID for general infomation according to
