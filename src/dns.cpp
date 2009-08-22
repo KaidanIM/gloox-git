@@ -65,6 +65,10 @@
 # define DNS_TYPE_SRV 33
 #endif
 
+#ifndef NS_CMPRSFLGS
+# define NS_CMPRSFLGS 0xc0
+#endif
+
 #ifndef C_IN
 # define C_IN 1
 #endif

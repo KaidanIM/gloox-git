@@ -3,7 +3,8 @@
 ##
 
 SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
-          chatstatefilter client clientbase connectionbosh dataform dataformfield \
+          capabilities chatstatefilter client clientbase connectionbosh \
+          dataform dataformfield \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
           error \
           featureneg flexoffline flexofflineoffline \
