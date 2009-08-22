@@ -75,7 +75,7 @@ namespace gloox
       s += '<';
     }
 
-    StringList f = m_disco->features();
+    StringList f = m_disco->features( true );
     f.sort();
     it2 = f.begin();
     for( ; it2 != f.end(); ++it2 )
