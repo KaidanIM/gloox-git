@@ -19,7 +19,7 @@ namespace gloox
   namespace util
   {
 
-    int log2( unsigned int n )
+    int internalLog2( unsigned int n )
     {
       int pos = 0;
       if ( n >= 1<<16 ) { n >>= 16; pos += 16; }
@@ -46,12 +46,12 @@ namespace gloox
     unsigned _lookup2( const std::string& str, const char* values[],
                        unsigned size, int def )
     {
-      return 1 << _lookup( str, values, size, def <= 0 ? def : (int)log2( def ) );
+      return 1 << _lookup( str, values, size, def <= 0 ? def : (int)internalLog2( def ) );
     }
 
     const std::string _lookup2( unsigned code, const char* values[], unsigned size, const std::string& def )
     {
-      const unsigned i = (unsigned)log2( code );
+      const unsigned i = (unsigned)internalLog2( code );
       return i < size ? std::string( values[i] ) : def;
     }
 

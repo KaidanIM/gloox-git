@@ -203,7 +203,7 @@ namespace gloox
      * @param n Figure to take the logarithm from.
      * @return The logarithm to the basis of 2.
      */
-    GLOOX_API int log2( unsigned int n );
+    GLOOX_API int internalLog2( unsigned int n );
 
     /**
      * Replace all instances of one substring of arbitrary length
