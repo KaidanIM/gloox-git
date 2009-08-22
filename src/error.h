@@ -88,10 +88,22 @@ namespace gloox
        * a xml:lang attribute) will be returned.
        * @param lang The language identifier for the desired language. It must
        * conform to section 2.12 of the XML specification and RFC 3066. If
-       * empty, the default subject will be returned, if any.
+       * empty, the default text will be returned, if any.
        * @return The text of an error stanza.
        */
-      const std::string& text( const std::string& lang = "default" ) const;
+      const std::string& text( const std::string& lang = EmptyString ) const;
+
+      /**
+       * Sets the text of a error stanza for the given language.
+       * @param text The error text to set.
+       * @param lang The language identifier for the desired language. It must
+       * conform to section 2.12 of the XML specification and RFC 3066. If
+       * empty, the default text will be set.
+       */
+      void setText( const std::string& text, const std::string& lang = EmptyString )
+      {
+        m_text[lang] = text;
+      }
 
       // reimplemented from StanzaExtension
       virtual const std::string& filterString() const;
