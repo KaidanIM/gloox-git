@@ -16,7 +16,7 @@ int main( int /*argc*/, char** /*argv*/ )
   error->addAttribute( "type", "auth" );
   new Tag( error, "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS );
   Tag * text = new Tag( error, "text", "xmlns", XMLNS_XMPP_STANZAS );
-  text->addAttribute( "xml:lang", "default" );
+  text->addAttribute( "xml:lang", "" );
   text->setCData( "shit happens" );
   Tag * appErr = new Tag( error, "unsupported", "xmlns", "errorNS" );
   appErr->addAttribute( "feature", "f" );
