@@ -48,6 +48,9 @@
 
 #ifdef HAVE_WINDNS_H
 # include <windns.h>
+# ifndef DNS_RECORD
+#  include "windns_copy.h"
+# endif
 #endif
 
 #define SRV_COST    (RRFIXEDSZ+0)
@@ -58,10 +61,6 @@
 
 #ifndef T_SRV
 # define T_SRV 33
-#endif
-
-#ifndef DNS_RECORD
-# include "windns_copy.h"
 #endif
 
 // mingw
