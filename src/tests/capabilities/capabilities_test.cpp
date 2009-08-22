@@ -64,8 +64,6 @@ int main( int /*argc*/, char** /*argv*/ )
   d.setIdentity( "client", "pc", "Exodus 0.9.1");
   d.removeFeature( "jabber:iq:version" );
   d.addFeature( "http://jabber.org/protocol/muc");
-  d.addFeature( "http://jabber.org/protocol/disco#info" );
-  d.addFeature( "http://jabber.org/protocol/disco#items" );
   d.addFeature( "http://jabber.org/protocol/caps" );
   if( c.ver() != "QgayPKawpkPSDYmwT/WM94uAlu0=" )
   {
