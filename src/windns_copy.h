@@ -1,5 +1,5 @@
-#ifndef _WINDNS_H
-#define _WINDNS_H
+#ifndef _WINDNS_COPY_H
+#define _WINDNS_COPY_H
 #if __GNUC__ >= 3
 #pragma GCC system_header
 #endif
@@ -440,4 +440,4 @@ typedef struct _DnsRRSet {
 }
 #endif
 
-#endif /* _WINDNS_H */
+#endif /* _WINDNS_COPY_H */
