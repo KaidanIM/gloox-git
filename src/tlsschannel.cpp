@@ -410,6 +410,11 @@ namespace gloox
         if( ibuf[1].BufferType == SECBUFFER_EXTRA )
         {
           m_buffer.erase( 0, m_buffer.size() - ibuf[1].cbBuffer );
+          // Call again if we aren't sending anything (otherwise the server will not send anything back
+          // and this function won't get called again to finish the processing).  This is needed for
+          // NT4.0 which does not seem to process the entire buffer the first time around
+          if( obuf[0].cbBuffer == 0 )
+            handshakeStage( EmptyString );
         }
         else
         {
