@@ -80,7 +80,7 @@ dnl schannel
 AC_ARG_WITH(schannel, AC_HELP_STRING([--with-schannel],
       [Support Stream Encryption (win32 only)]),
       schannel=yes, schannel=no)
-if test "$schannel" == "yes"; then
+if test "$schannel" = "yes"; then
   ssl=yes
   case "$host_os" in
     *mingw*)
@@ -96,7 +96,7 @@ if test "$schannel" == "yes"; then
 fi
 
 dnl GnuTLS
-if test "$ssl" == "no"; then
+if test "$ssl" = "no"; then
   AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
         [Support Stream Encryption (needs GnuTLS)]),
         gnutls=$withval, gnutls=yes)
@@ -121,7 +121,7 @@ if test "$ssl" == "no"; then
 fi
 
 dnl OpenSSL
-if test "$ssl" == "no"; then
+if test "$ssl" = "no"; then
   AC_ARG_WITH(openssl, AC_HELP_STRING([--with-openssl=[DIR]],
         [Support Stream Encryption (needs OpenSSL)]),
         openssl=$withval, openssl=yes)
