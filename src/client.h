@@ -242,7 +242,7 @@ namespace gloox
 
       /**
        * Initiates a login attempt (currently SASL External not supported).
-       * This is useful after registering a new account. Simply use setUsername() and setPassword,
+       * This is useful after registering a new account. Simply use setUsername() and setPassword(),
        * and call login().
        * @return @b True if a login attempt could be started, @b false otherwise. A return
        * value of @b true does not indicate that login was successful.

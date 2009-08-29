@@ -131,24 +131,7 @@ namespace gloox
         }
         else if( m_doAuth && !username().empty() && !password().empty() )
         {
-          if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
-              && !m_forceNonSasl )
-          {
-            notifyStreamEvent( StreamEventAuthentication );
-            startSASL( SaslMechDigestMd5 );
-          }
-          else if( m_streamFeatures & SaslMechPlain && m_availableSaslMechs & SaslMechPlain
-                   && !m_forceNonSasl )
-          {
-            notifyStreamEvent( StreamEventAuthentication );
-            startSASL( SaslMechPlain );
-          }
-          else if( m_streamFeatures & StreamFeatureIqAuth || m_forceNonSasl )
-          {
-            notifyStreamEvent( StreamEventAuthentication );
-            nonSaslLogin();
-          }
-          else
+          if( !login() )
           {
             logInstance().log( LogLevelError, LogAreaClassClient,
                                      "the server doesn't support any auth mechanisms we know about" );
@@ -332,23 +315,25 @@ namespace gloox
     return meths;
   }
 
-  bool Client::login() // FIXME this is c'n'p from above
+  bool Client::login()
   {
     bool retval = true;
-    notifyStreamEvent( StreamEventAuthentication );
 
     if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
         && !m_forceNonSasl )
     {
+      notifyStreamEvent( StreamEventAuthentication );
       startSASL( SaslMechDigestMd5 );
     }
     else if( m_streamFeatures & SaslMechPlain && m_availableSaslMechs & SaslMechPlain
              && !m_forceNonSasl )
     {
+      notifyStreamEvent( StreamEventAuthentication );
       startSASL( SaslMechPlain );
     }
     else if( m_streamFeatures & StreamFeatureIqAuth || m_forceNonSasl )
     {
+      notifyStreamEvent( StreamEventAuthentication );
       nonSaslLogin();
     }
     else
