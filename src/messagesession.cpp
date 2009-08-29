@@ -59,7 +59,7 @@ namespace gloox
       m_messageHandler->handleMessage( msg, this );
   }
 
-  void MessageSession::send( const std::string& message, const std::string& subject )
+  void MessageSession::send( const std::string& message, const std::string& subject, const StanzaExtensionList& sel )
   {
     if( !m_hadMessages )
     {
@@ -70,6 +70,14 @@ namespace gloox
     Message m( Message::Chat, m_target.full(), message, subject, m_thread );
     m.setID( m_parent->getID() );
     decorate( m );
+
+    if( sel.size() )
+    {
+      StanzaExtensionList::const_iterator it = sel.begin();
+      for( ; it != sel.end(); ++it )
+        m.addExtension( (*it));
+    }
+
     m_parent->send( m );
   }
 

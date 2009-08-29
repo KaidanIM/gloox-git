@@ -224,8 +224,11 @@ namespace gloox
        * the preferred way to send a message from a MessageSession.
        * @param message The message to send.
        * @param subject The optional subject to send.
+       * @param sel An optional list of StanzaExtensions. The extensions will be owned by the message-to-be-sent;
+       * do not attempt to re-use or delete them.
        */
-      virtual void send( const std::string& message, const std::string& subject = EmptyString );
+      virtual void send( const std::string& message, const std::string& subject = EmptyString,
+                         const StanzaExtensionList& sel = StanzaExtensionList() );
 
       /**
        * Use this function to hook a new MessageFilter into a MessageSession.
