@@ -34,6 +34,7 @@ general changes and additions:
 - Tag: check input for XML conformance
 - Tag: made findTag(), findTagList(), findCData() const
 - RosterItem: SubscriptionEnum moved to gloox namespace; renamed to SubscriptionType
+- MessageSession::send(): added StanzaExtensionList parameter
 
 deprecated:
 - MUCRoomHandler::handleMUCMessage( MUCRoom*, string, string, bool, string, bool ),
