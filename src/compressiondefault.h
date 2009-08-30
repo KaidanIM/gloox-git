@@ -34,18 +34,18 @@ namespace gloox
       /**
        * Supported ctypes.
        */
-      enum Type
+      enum Method
       {
-        TypeZlib   =  1,            /**< Zlib compression. */
-        TypeLZW    =  2             /**< LZW compression. */
+        MethodZlib   =  1,          /**< Zlib compression. */
+        MethodLZW    =  2           /**< LZW compression. */
       };
 
       /**
        * Constructs a new compression wrapper.
-       * @param th The CompressionDataHandler to handle de/compressed data.
-       * @param
+       * @param cdh The CompressionDataHandler to handle de/compressed data.
+       * @param method The desired compression method.
        */
-      CompressionDefault( CompressionDataHandler* cdh, Type type = TypeZlib );
+      CompressionDefault( CompressionDataHandler* cdh, Method method = MethodZlib );
 
       /**
        * Virtual Destructor.

@@ -951,20 +951,6 @@ namespace gloox
     }
   }
 
-  void ClientBase::trackID( IqHandler* ih, const std::string& id, int context )
-  {
-    if( ih && !id.empty() )
-    {
-      TrackStruct track;
-      track.ih = ih;
-      track.context = context;
-      track.del = false;
-      m_iqHandlerMapMutex.lock();
-      m_iqIDHandlers[id] = track;
-      m_iqHandlerMapMutex.unlock();
-    }
-  }
-
   void ClientBase::removeIDHandler( IqHandler* ih )
   {
     IqTrackMap::iterator t;
@@ -979,20 +965,6 @@ namespace gloox
     m_iqHandlerMapMutex.unlock();
   }
 
-  void ClientBase::registerIqHandler( IqHandler* ih, const std::string& xmlns )
-  {
-    if( !ih || xmlns.empty() )
-      return;
-
-    typedef IqHandlerMapXmlns::const_iterator IQci;
-    std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( xmlns );
-    for( IQci it = g.first; it != g.second; ++it )
-      if( (*it).second == ih )
-        return;
-
-    m_iqNSHandlers.insert( std::make_pair( xmlns, ih ) );
-  }
-
   void ClientBase::registerIqHandler( IqHandler* ih, int exttype )
   {
     if( !ih )
@@ -1005,23 +977,6 @@ namespace gloox
         return;
 
     m_iqExtHandlers.insert( std::make_pair( exttype, ih ) );
-  }
-
-  void ClientBase::removeIqHandler( IqHandler* ih, const std::string& xmlns )
-  {
-    if( !ih || xmlns.empty() )
-      return;
-
-    typedef IqHandlerMapXmlns::iterator IQi;
-    std::pair<IQi, IQi> g = m_iqNSHandlers.equal_range( xmlns );
-    IQi it2;
-    IQi it = g.first;
-    while( it != g.second )
-    {
-      it2 = it++;
-      if( (*it2).second == ih )
-        m_iqNSHandlers.erase( it2 );
-    }
   }
 
   void ClientBase::removeIqHandler( IqHandler* ih, int exttype )
