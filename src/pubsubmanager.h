@@ -96,10 +96,12 @@ namespace gloox
          *
          * @param service Service hosting the node.
          * @param node ID of the node to subscribe to.
+         * @param handler The ResultHandler.
          * @param jid JID to subscribe. If empty, the client's JID will be used
          *        (ie self subscription).
          * @param type SubscriptionType of the subscription (Collections only).
          * @param depth Subscription depth. For 'all', use 0 (Collections only!).
+         * @param expire Subscription expiry. Defaults to the empty string.
          * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleSubscriptionResult
@@ -282,7 +284,6 @@ namespace gloox
         /**
          * Creates a new node.
          *
-         * @param type The type of the new node.
          * @param service Service where to create the new node.
          * @param node The ID of the new node.
          * @param config An optional DataForm that holds the node configuration.
@@ -362,7 +363,8 @@ namespace gloox
          *
          * @param service Service to query.
          * @param node Node ID of the node.
-         * @param list ResultHandler.
+         * @param list The subscriber list.
+         * @param handler The ResultHandler.
          * @return The ID used in the request.
          *
          * @see ResultHandler::handleSubscribers
@@ -397,6 +399,7 @@ namespace gloox
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param list ResultHandler.
+         * @param handler ResultHandler.
          * @return The ID used in the request.
          *
          * @see ResultHandler::handleAffiliatesResult
@@ -428,6 +431,7 @@ namespace gloox
          *
          * @param service Service to query.
          * @param node Node ID of the node.
+         * @param config The node's configuration DataForm.
          * @param handler ResultHandler responsible to handle the request result.
          * @return The ID used in the request.
          *

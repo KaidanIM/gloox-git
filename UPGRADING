@@ -80,7 +80,7 @@
  *
  * The functionality provided by this function really makes sense only for IQ stanzas of type
  * get or set. As a result, there is a new function
- * @link gloox::ClientBase::send( const IQ&, IqHandler*, int, bool ) ClientBase::send( const IQ&, IqHandler*, int ) @endlink
+ * @link gloox::ClientBase::send( IQ&, IqHandler*, int, bool ) ClientBase::send( IQ&, IqHandler*, int ) @endlink
  * that combines trackID()'s and send()'s functionality.
  *
  * Old code:
