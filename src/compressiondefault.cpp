@@ -69,10 +69,10 @@ namespace gloox
   {
     int types = 0;
 #ifdef HAVE_ZLIB
-    types |= TypeZlib;
+    types |= MethodZlib;
 #endif
 #ifdef HAVE_LZW
-    types |= TypeLZW;
+    types |= MethodLZW;
 #endif
     return types;
   }
