@@ -68,6 +68,7 @@ namespace gloox
         /**
          * Receives the list of Items for a node.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the queried node.
          * @param node ID of the queried node (empty for the root node).
          * @param itemList List of contained items.
@@ -84,6 +85,7 @@ namespace gloox
         /**
          * Receives the result for an item publication.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the queried node.
          * @param node ID of the queried node. If empty, the root node has been queried.
          * @param itemList List of contained items.
@@ -94,12 +96,13 @@ namespace gloox
         virtual void handleItemPublication( const std::string& id,
                                             const JID& service,
                                             const std::string& node,
-                                            const ItemList& item,
+                                            const ItemList& itemList,
                                             const Error* error = 0 ) = 0;
 
         /**
          * Receives the result of an item removal.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the queried node.
          * @param node ID of the queried node. If empty, the root node has been queried.
          * @param itemList List of contained items.
@@ -117,9 +120,11 @@ namespace gloox
          * Receives the subscription results. In case a problem occured, the
          * Subscription ID and SubscriptionType becomes irrelevant.
          *
+         * @param id The reply IQ's id.
          * @param service PubSub service asked for subscription.
          * @param node Node asked for subscription.
          * @param sid Subscription ID.
+         * @param jid Subscribed entity.
          * @param subType Type of the subscription.
          * @param error Subscription Error.
          *
@@ -137,9 +142,11 @@ namespace gloox
          * Receives the unsubscription results. In case a problem occured, the
          * subscription ID becomes irrelevant.
          *
+         * @param id The reply IQ's id.
          * @param service PubSub service.
          * @param node Node to unsubscribe from.
          * @param sid Subscription ID.
+         * @param jid Subscribed entity.
          * @param error Unsubscription Error.
          *
          * @see Manager::unsubscribe
@@ -154,6 +161,7 @@ namespace gloox
         /**
          * Receives the subscription options for a node.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the queried node.
          * @param jid Subscribed entity.
          * @param node ID of the node.
@@ -172,6 +180,7 @@ namespace gloox
         /**
          * Receives the result for a subscription options modification.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the queried node.
          * @param jid Subscribed entity.
          * @param node ID of the queried node.
@@ -189,6 +198,7 @@ namespace gloox
         /**
          * Receives the list of subscribers to a node.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the queried node.
          * @param list Subscriber list.
@@ -205,8 +215,10 @@ namespace gloox
         /**
          * Receives the result of a subscriber list modification.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the queried node.
+         * @param list Subscriber list.
          * @param error Subscriber list modification Error.
          *
          * @see Manager::setSubscribers
@@ -220,6 +232,7 @@ namespace gloox
         /**
          * Receives the affiliate list for a node.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the queried node.
          * @param list Affiliation list.
@@ -236,8 +249,10 @@ namespace gloox
         /**
          * Handle the affiliate list for a specific node.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the node.
+         * @param list The Affiliate list.
          * @param error Affiliation list modification Error.
          *
          * @see Manager::setAffiliations
@@ -252,6 +267,7 @@ namespace gloox
         /**
          * Receives the configuration for a specific node.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param config Configuration DataForm.
@@ -268,6 +284,7 @@ namespace gloox
         /**
          * Receives the result of a node's configuration modification.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param error Configuration modification Error.
@@ -282,6 +299,7 @@ namespace gloox
         /**
          * Receives the result of a node creation.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param error Node creation Error.
@@ -296,6 +314,7 @@ namespace gloox
         /**
          * Receives the result for a node removal.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param error Node removal Error.
@@ -311,6 +330,7 @@ namespace gloox
         /**
          * Receives the result of a node purge request.
          *
+         * @param id The reply IQ's id.
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param error Node purge Error.
@@ -325,6 +345,7 @@ namespace gloox
         /**
          * Receives the Subscription list for a specific service.
          *
+         * @param id The reply IQ's id.
          * @param service The queried service.
          * @param subMap The map of node's subscription.
          * @param error Subscription list retrieval Error.
@@ -339,8 +360,9 @@ namespace gloox
         /**
          * Receives the Affiliation map for a specific service.
          *
+         * @param id The reply IQ's id.
          * @param service The queried service.
-         * @param subMap The map of node's affiliation.
+         * @param affMap The map of node's affiliation.
          * @param error Affiliation list retrieval Error.
          *
          * @see Manager::getAffiliations
@@ -353,6 +375,7 @@ namespace gloox
         /**
          * Receives the default configuration for a specific node type.
          *
+         * @param id The reply IQ's id.
          * @param service The queried service.
          * @param config Configuration form for the node type.
          * @param error Default node config retrieval Error.

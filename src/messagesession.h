@@ -38,7 +38,7 @@ namespace gloox
    *
    * MessageSession adds an abstraction to a chat conversation. A MessageSession is responsible for
    * communicating with exactly one (full) JID. It is extensible with so-called MessageFilters, which can
-   * provide additional features such as Message Events, Chat State Notifications or In-Band Bytestreams.
+   * provide additional features such as Message Events, or Chat State Notifications.
    *
    * You can still use the old MessageHandler in parallel, but messages will not be relayed to both
    * the generic MessageHandler and a MessageSession established for the sender's JID. The MessageSession
@@ -117,7 +117,8 @@ namespace gloox
    * @endcode
    *
    * To send a message to the chat partner of the session, use
-   * @ref send( const std::string& message, const std::string& subject ). You don't have to care about
+   * @ref send( const std::string& message, const std::string& subject, const StanzaExtensionList& ).
+   * You don't have to care about
    * receipient, thread id, etc., they are added automatically.
    *
    * @code
@@ -134,8 +135,6 @@ namespace gloox
    *   return session;
    * }
    * @endcode
-   *
-   * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
    *
    * @note You should never delete a MessageSession manually. Use ClientBase::disposeMessageSession()
    * instead.
@@ -163,8 +162,8 @@ namespace gloox
        * a non-default value if this MessageSession is supposed to talk directly to a server or component
        * JID that has no resource. This 'upgrade' will only happen once.
        * @param types ORed list of Message::MessageType values this MessageSession shall receive.
-       * @param honorTID Indicates whether thread IDs should be honored when matching incoming messages to MessageSessions. The default is usually fine.
        * Defaults to 0 which means any type is received.
+       * @param honorTID Indicates whether thread IDs should be honored when matching incoming messages to MessageSessions. The default is usually fine.
        */
       MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade = true, int types = 0, bool honorTID = true );
 
@@ -191,7 +190,7 @@ namespace gloox
 
       /**
        * Use this function to set the session's thread ID if e.g. a specific thread is
-       * continued. It shpuld not normally be needed to set the thread ID manually.
+       * continued. It should not normally be needed to set the thread ID manually.
        * @param thread The new thread ID.
        */
       void setThreadID( const std::string& thread ) { m_thread = thread; }

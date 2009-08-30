@@ -53,7 +53,7 @@ namespace gloox
        * @param conn A transport connection. It should be an established connection from
        * a client that is about to perform a TLS handshake.
        * ConnectionTLSServer will own the transport connection and delete it in its destructor.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
+       * @param log The log target. Obtain it from ClientBase::logInstance().
        */
       ConnectionTLSServer( ConnectionBase* conn, const LogSink& log );
 

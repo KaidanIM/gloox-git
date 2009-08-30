@@ -44,7 +44,7 @@ namespace gloox
            * Constructor.
            *
            * @param remove Whether this is a retract operation or not (ie item).
-           * @param item Item ID of this item.
+           * @param itemid Item ID of this item.
            * @param pld Payload for this object (in the case of a non transient
            * item notification).
            */

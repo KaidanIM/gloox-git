@@ -153,7 +153,6 @@ namespace gloox
 
       /**
        * Retruns a Tag representation of the roster item data.
-       * @param remove Indicates whether the item is scheduled for removal.
        * @return A Tag representation.
        */
       Tag* tag() const

@@ -162,10 +162,9 @@ namespace gloox
       void setPriority( const std::string& resource, int priority );
 
       /**
-       * Sets the resource's Entity Capabilities.
-       * @param resource The resource to set the caps for.
-       * @param node The capabilities node.
-       * @param ver The capabilities ver string.
+       * Sets the resource's presence extensions.
+       * @param resource The resource to set the extensions for.
+       * @param exts The extensions to set.
        */
       void setExtensions( const std::string& resource, const StanzaExtensionList& exts );
 

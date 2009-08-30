@@ -40,6 +40,7 @@ namespace gloox
      * @param str String to search for.
      * @param values Array of String/Code pairs to look into.
      * @param size The array's size.
+     * @param def Default value returned in case the lookup failed.
      * @return The associated enum code.
      */
     GLOOX_API unsigned _lookup( const std::string& str, const char* values[],
@@ -50,6 +51,7 @@ namespace gloox
      * @param code Code of the string to search for.
      * @param values Array of String/Code pairs to look into.
      * @param size The array's size.
+     * @param def Default value returned in case the lookup failed.
      * @return The associated string (empty in case there's no match).
      */
     GLOOX_API const std::string _lookup( unsigned code, const char* values[],
@@ -60,6 +62,7 @@ namespace gloox
      * @param str String to search for.
      * @param values Array of String/Code pairs to look into.
      * @param size The array's size.
+     * @param def The default value to return if the lookup failed.
      * @return The associated enum code.
      */
     GLOOX_API unsigned _lookup2( const std::string& str, const char* values[],
@@ -70,6 +73,7 @@ namespace gloox
      * @param code Code of the string to search for.
      * @param values Array of String/Code pairs to look into.
      * @param size The array's size.
+     * @param def The default value to return if the lookup failed.
      * @return The associated string (empty in case there's no match).
      */
     GLOOX_API const std::string _lookup2( unsigned code, const char* values[],

@@ -35,17 +35,17 @@
 namespace gloox
 {
 
-  CompressionDefault::CompressionDefault( CompressionDataHandler* cdh, Type type )
+  CompressionDefault::CompressionDefault( CompressionDataHandler* cdh, Method method )
     : CompressionBase( cdh ), m_impl( 0 )
   {
-    switch( type )
+    switch( method )
     {
-      case TypeZlib:
+      case MethodZlib:
 #ifdef HAVE_ZLIB
         m_impl = new CompressionZlib( cdh );
 #endif
         break;
-      case TypeLZW:
+      case MethodLZW:
 #ifdef HAVE_LZW
         m_impl = new CompressionLZW( cdh );
 #endif

@@ -50,7 +50,7 @@ namespace gloox
 
       /**
        * Constructs a new object of the given type.
-       * @param type The chat state.
+       * @param rcpt The receipt type.
        */
       Receipt( ReceiptType rcpt )
         : StanzaExtension( ExtReceipt ), m_rcpt( rcpt )
