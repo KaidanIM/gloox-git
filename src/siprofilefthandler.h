@@ -69,7 +69,7 @@ namespace gloox
 
       /**
        * This function is called to handle a request error or decline.
-       * @param stanza The complete error stanza.
+       * @param iq The complete error stanza.
        * @param sid The request's SID.
        */
       virtual void handleFTRequestError( const IQ& iq, const std::string& sid ) = 0;

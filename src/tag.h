@@ -125,7 +125,7 @@ namespace gloox
 
           /**
            * Sets the attribute's namespace.
-           * @param value The new namespace.
+           * @param xmlns The new namespace.
            * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
            * input will be ignored.
            */
@@ -133,7 +133,7 @@ namespace gloox
 
           /**
            * Sets the attribute's namespace prefix.
-           * @param value The new namespace prefix.
+           * @param prefix The new namespace prefix.
            * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
            * input will be ignored.
            */
@@ -190,8 +190,6 @@ namespace gloox
        * Creates a new tag with a given name (and XML character data, if given).
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
-       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
-       * be escaped (false, default) or not (true).
        */
       Tag( const std::string& name, const std::string& cdata = EmptyString );
 
@@ -257,7 +255,7 @@ namespace gloox
        */
       const std::string& prefix( const std::string& xmlns ) const;
 
-      /**
+      /* *
        * Adds an XML namespace declaration to the Tag. If @b def is false, a unique prefix will
        * be created, else the default namespace is set (no prefix).
        * @param xmlns The namespace value.
@@ -273,7 +271,7 @@ namespace gloox
        * is empty.
        * @param xmlns The namespace value.
        * @param prefix An optional namespace prefix.
-       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * @return @b True if the input is valid UTF-8, @b false  otherwise. Invalid
        * input will be ignored.
        * @since 1.0
        */
@@ -292,9 +290,9 @@ namespace gloox
        * @c prefix is empty. Namespace declarations in parent tags will be taken into account.
        * Consider the following XML:
        * @code
-       * <foo:bar xmlns:foo='foobar'/>
+       * &lt;foo:bar xmlns:foo='foobar'/&gt;
        * @endcode
-       * <bar/> is in the @c foobar namespace, having a prefix of @b foo. A call to prefix()
+       * &lt;bar/&gt; is in the @c foobar namespace, having a prefix of @b foo. A call to prefix()
        * will return 'foo'. A call to xmlns( "foo" ) or xmlns( prefix() ) will return 'foobar'.
        * A call to xmlns() will also return 'foobar' (it is a shortcut to
        * xmlns( prefix() ).
@@ -491,7 +489,7 @@ namespace gloox
       /**
        * Removes and deletes all child tags that have the given name and are, optionally,
        * within the given namespace.
-       * @param tag The name of the tag(s) to remove from the list of child tags.
+       * @param name The name of the tag(s) to remove from the list of child tags.
        * @param xmlns An optional namespace to check for.
        */
       void removeChild( const std::string& name, const std::string& xmlns = EmptyString );

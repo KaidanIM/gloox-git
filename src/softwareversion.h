@@ -37,7 +37,9 @@ namespace gloox
     public:
     /**
      * Constructs a new object with the given resource string.
-     * @param tag The Tag to parse.
+     * @param name The software's name.
+     * @param version The software's version.
+     * @param os The software's operating system.
      */
       SoftwareVersion( const std::string& name, const std::string& version, const std::string& os );
 

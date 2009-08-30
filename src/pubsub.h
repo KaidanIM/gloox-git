@@ -78,6 +78,9 @@ namespace gloox
       SubscriptionInvalid           /**< Invalid subscription type. */
     };
 
+    /**
+     * Event types.
+     */
     enum EventType
     {
       EventCollection,         /**< A Collection node has been created. */

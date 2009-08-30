@@ -228,6 +228,8 @@ namespace gloox
            * @param node The node (command) to perform the action on.
            * @param sessionid The (possibly newly created) session ID of the adhoc command session.
            * @param status The execution status.
+           * @param executeAction The action to execute.
+           * @param allowedActions Allowed reply actions.
            * @param form An optional DataForm to include in the reply. Will be deleted in Command's
            * destructor.
            */

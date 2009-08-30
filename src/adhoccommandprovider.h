@@ -65,8 +65,12 @@ namespace gloox
        * stage.
        * @note This function should not block.
        */
-      virtual bool handleAdhocAccessRequest( const JID& /*from*/, const std::string& /*command*/ )
-        { return true; }
+      virtual bool handleAdhocAccessRequest( const JID& from, const std::string& command )
+      {
+        (void)from;
+        (void)command;
+        return true;
+      }
 
   };
 

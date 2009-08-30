@@ -380,15 +380,6 @@ namespace gloox
       void registerConnectionListener( ConnectionListener* cl );
 
       /**
-       * Registers @c ih as object that receives Iq stanza notifications for namespace
-       * @c xmlns. As of 1.0, the number of handlers per namespace is not limited.
-       * @param ih The object to receive Iq stanza notifications.
-       * @param xmlns The namespace the object handles.
-       * @deprecated Will be removed for 1.0. Use registerIqHandler( IqHandler*, int ) instead.
-       */
-      GLOOX_DEPRECATED void registerIqHandler( IqHandler* ih, const std::string& xmlns );
-
-      /**
        * Registers @c ih as object that receives notifications for IQ stanzas
        * that contain StanzaExtensions of the given type. The number of handlers
        * per extension type is not limited.
@@ -398,17 +389,6 @@ namespace gloox
        * @since 1.0
        */
       void registerIqHandler( IqHandler* ih, int exttype );
-
-      /**
-       * Use this function to be notified of incoming IQ stanzas with the given value of the @b id
-       * attribute.
-       * Since IDs are supposed to be unique, this notification works only once.
-       * @param ih The IqHandler to receive notifications.
-       * @param id The id to track.
-       * @param context A value that allows for restoring context.
-       * @deprecated Will be removed for 1.0. Use send( const IQ&, IqHandler*, int, bool ) instead.
-       */
-      GLOOX_DEPRECATED void trackID( IqHandler* ih, const std::string& id, int context );
 
       /**
        * Removes the given IqHandler from the list of handlers of pending operations, added
@@ -494,16 +474,6 @@ namespace gloox
        * @param cl The object to remove from the list.
        */
       void removeConnectionListener( ConnectionListener* cl );
-
-      /**
-       * Removes the given IQ handler for the given namespace.
-       * @param ih The IqHandler.
-       * @param xmlns The namespace to remove from the list.
-       * @deprecated Will be removed for 1.0. Use removeIqHandler( IqHandler*, int )
-       * instead.
-       * @since 1.0
-       */
-      GLOOX_DEPRECATED void removeIqHandler( IqHandler* ih, const std::string& xmlns );
 
       /**
        * Removes the given IQ handler for the given extension type.
