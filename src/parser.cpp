@@ -238,16 +238,43 @@ namespace gloox
               m_preamble = 1;
               break;
             case '!':
-              switch( forwardScan( i, data, "![CDATA[" ) )
+              if( i + 1 >= data.length() )
+                return -1;
+
+              switch( data[i + 1] )
               {
-                case ForwardFound:
-                  m_state = TagCDATASection;
+                case '[':
+                  switch( forwardScan( i, data, "![CDATA[" ) )
+                  {
+                    case ForwardFound:
+                      m_state = TagCDATASection;
+                      break;
+                    case ForwardNotFound:
+                      cleanup();
+                      return i;
+                      break;
+                    case ForwardInsufficientSize:
+                      return -1;
+                  }
+                break;
+                case '-':
+                  switch( forwardScan( i, data, "!-- " ) )
+                  {
+                    case ForwardFound:
+                      m_state = XMLComment;
+                      break;
+                    case ForwardNotFound:
+                      cleanup();
+                      return i;
+                      break;
+                    case ForwardInsufficientSize:
+                      return -1;
+                  }
                   break;
-                case ForwardNotFound:
+                default:
                   cleanup();
                   return i;
-                case ForwardInsufficientSize:
-                  return -1;
+                  break;
               }
               break;
             default:
@@ -275,6 +302,21 @@ namespace gloox
             default:
               m_cdata += c;
               break;
+          }
+          break;
+        case XMLComment: // we're inside an XMLcomment.
+          if( c == ' ' )
+          {
+            switch( forwardScan( i, data, " -->" ) )
+            {
+              case ForwardFound:
+                m_state = InterTag;
+                break;
+              case ForwardNotFound:
+                break;
+              case ForwardInsufficientSize:
+                return -1;
+            }
           }
           break;
         case TagNameCollect:          // we're collecting the tag's name, we have at least one octet already
