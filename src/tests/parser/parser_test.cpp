@@ -547,6 +547,66 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       //-------
+      name = "1 XML comment";
+      data = "<tag1><!-- foo --></tag1>";
+      i = -1;
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->name() != "tag1" )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "1 XML comment (leading)";
+      data = "<tag1><!-- foo -->abcdef</tag1>";
+      i = -1;
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->name() != "tag1" || m_tag->cdata()!="abcdef" )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "1 XML comment (trailing)";
+      data = "<tag1>abcdefg<!-- foo --></tag1>";
+      i = -1;
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->name() != "tag1" || m_tag->cdata() != "abcdefg" )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "1 XML comment (in between)";
+      data = "<tag1>abc<!-- foo -->def</tag1>";
+      i = -1;
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->name() != "tag1" || m_tag->cdata() != "abcdef" )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "2 XML comments";
+      data = "<tag1><!-- foo -->abcd<!-- bar --></tag1>";
+      i = -1;
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->name() != "tag1" )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
       name = "split escaping 1";
       data = "<tag1>&am";
       i = -1;

@@ -82,7 +82,8 @@ namespace gloox
         TagValueApos,
         TagAttributeValue,
         TagPreamble,
-        TagCDATASection
+        TagCDATASection,
+        XMLComment
       };
 
       enum ForwardScanState
