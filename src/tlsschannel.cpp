@@ -470,7 +470,7 @@ namespace gloox
     ts.tm_sec = stUTC.wSecond;
 
     time_t unixtime;
-    if ( (unixtime = mktime(&ts)) == -1 )
+    if ( ( unixtime = mktime( &ts ) ) == -1 )
       unixtime = 0;
     return (int)unixtime;
   }
