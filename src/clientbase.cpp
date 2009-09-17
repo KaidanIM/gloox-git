@@ -110,7 +110,7 @@ namespace gloox
     : m_connection( 0 ), m_transportConnection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_password( password ),
       m_xmllang( "en" ), m_server( server ),
-      m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ),
+      m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( TLSOptional ),
       m_port( port ), m_availableSaslMechs( SaslMechAll ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
