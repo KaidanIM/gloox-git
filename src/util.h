@@ -236,15 +236,15 @@ namespace gloox
         ++add;
         value = -value;
       }
-      int len = (int)( log( (double)( value ? value : 1 ) ) / log( (double)base ) ) + 1;
+      int len = static_cast<int>( ( log( static_cast<double>( value ? value : 1 ) ) / log( static_cast<double>( base ) ) ) + 1 );
       const char digits[] = "0123456789ABCDEF";
-      char* num = (char*)calloc( len + 1 + add, sizeof( char ) );
+      char* num = static_cast<char*>( calloc( len + 1 + add, sizeof( char ) ) );
       num[len--] = '\0';
       if( add )
         num[0] = '-';
       while( value && len > -1 )
       {
-        num[len-- + add] = digits[(int)( value % base )];
+        num[len-- + add] = digits[static_cast<int>( value % base )];
         value /= base;
       }
       const std::string result( num );
