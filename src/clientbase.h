@@ -195,7 +195,7 @@ namespace gloox
        * Returns whether TLS is currently enabled (not necessarily used).
        * @return The current TLS status.
        */
-      bool tls() const { return (bool)m_tls; }
+      bool tls() const { return m_tls != TLSDisabled; }
 
       /**
        * Returns whether Stream Compression is currently enabled (not necessarily used).
