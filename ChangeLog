@@ -2,6 +2,7 @@ v0.9.9.9 -- xx yyy 2009
 -----------------------
 - fixed SChannel on NT4
 - fixed configure.ac tests for FreeSD
+- preliminary workaround for connection problems when using recent OpenSSL + gtalk
 
 
 v0.9.9.8 -- 16 Aug 2009

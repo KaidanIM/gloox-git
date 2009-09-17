@@ -33,7 +33,7 @@ namespace gloox
 
     SSL_COMP_add_compression_method( 193, COMP_zlib() );
 
-    m_ctx = SSL_CTX_new( TLSv1_client_method() );
+    m_ctx = SSL_CTX_new( SSLv23_client_method() );
     if( !m_ctx )
       return;
 
