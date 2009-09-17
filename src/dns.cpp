@@ -390,16 +390,16 @@ namespace gloox
       // NOTE: DnsQuery_UTF8 and DnsQuery_A really should have been defined with
       // PDNS_RECORDA instead of PDNS_RECORD, since that's what it is (even with _UNICODE defined).
       // We'll correct for that mistake with a cast.
-//       DNS_RECORD* pRec = (DNS_RECORD*)pRecord;
+      DNS_RECORD* pRec = pRecord;
       do
       {
-        if( pRecord->wType == DNS_TYPE_SRV )
+        if( pRec->wType == DNS_TYPE_SRV )
         {
-          servers[pRecord->Data.SRV.pNameTarget] = pRecord->Data.SRV.wPort;
+          servers[pRec->Data.SRV.pNameTarget] = pRec->Data.SRV.wPort;
         }
-        pRecord = pRecord->pNext;
+        pRec = pRec->pNext;
       }
-      while( pRecord != NULL );
+      while( pRec != NULL );
       DnsRecordListFree( pRecord, DnsFreeRecordList );
     }
     else
