@@ -607,6 +607,42 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       //-------
+      name = "invalid XML comment 1";
+      data = "<tag1><!-- foo--></tag1>";
+      i = -1;
+      if( p->feed( data ) >= 0 || m_tag )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid XML comment 2";
+      data = "<tag1><!-- foo--></tag1> --></tag1>";
+      i = -1;
+      if( p->feed( data ) >= 0 || m_tag->name() != "tag1" )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid XML comment 3";
+      data = "<tag1><!--foo--></tag1>";
+      i = -1;
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
       name = "split escaping 1";
       data = "<tag1>&am";
       i = -1;
@@ -1282,7 +1318,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) < 0 )
       {
         ++fail;
-        printf( "test '%s' failed (%d)", name.c_str(), i );
+        printf( "test '%s' failed (%d)\n", name.c_str(), i );
       }
       delete m_tag;
       m_tag = 0;
@@ -1292,7 +1328,46 @@ class ParserTest : private TagHandler
 
 
 
+      // -- tests for static Tag* Parser::parse( string& ) --
 
+      //-------
+      {
+        name = "static: simple tag";
+        data = "<tag/>";
+        Tag* t = Parser::parse( data );
+        if( !t || t->name()!= "tag" )
+        {
+          ++fail;
+          printf( "test '%s' failed\n", name.c_str() );
+        }
+        delete t;
+      }
+
+      //-------
+      {
+        name = "static: simple tag 2";
+        data = "<tag>foo</tag>";
+        Tag* t = Parser::parse( data );
+        if( !t || t->name()!= "tag" )
+        {
+          ++fail;
+          printf( "test '%s' failed\n", name.c_str() );
+        }
+        delete t;
+      }
+
+      //-------
+      {
+        name = "static: broken tag";
+        data = "<tag>";
+        Tag* t = Parser::parse( data );
+        if( t )
+        {
+          ++fail;
+          printf( "test '%s' failed\n", name.c_str() );
+        }
+        delete t;
+      }
 
 
 
