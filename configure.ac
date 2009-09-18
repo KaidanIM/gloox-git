@@ -71,7 +71,7 @@ AC_MSG_RESULT($libidn)
 
 dnl extra win32 libs
 case "$host_os" in
-  *mingw*)
+  *mingw*|*cygwin*)
       LIBS="${LIBS} -lwsock32 -lgdi32 -ldnsapi";;
 esac
 
@@ -84,7 +84,7 @@ AC_ARG_WITH(schannel, AC_HELP_STRING([--with-schannel],
       schannel=yes, schannel=no)
 if test "$schannel" = "yes"; then
   case "$host_os" in
-    *mingw*)
+    *mingw*|*cygwin*)
         ssl=yes
         LIBS="${LIBS} -lcrypt32 -lsecur32";;
     *)
@@ -301,13 +301,6 @@ AC_CHECK_FUNCS(setsockopt,,[AC_CHECK_LIB(socket,setsockopt)])
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE
-
-case "$host_os" in
-  *mingw*)
-     LIBS="${LIBS} -lwsock32 -lgdi32";;
-  *)
-     ;;
-esac
 
 dnl Generating makefiles.
 AC_CONFIG_FILES([
