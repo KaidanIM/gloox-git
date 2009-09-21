@@ -174,6 +174,7 @@ dnl pthread
 ACX_PTHREAD()
 LIBS="$PTHREAD_LIBS $LIBS"
 CPPFLAGS="$CPPFLAGS $PTHREAD_CFLAGS"
+LDFLAGS="$LDFLAGS $PTHREAD_CFLAGS"
 
 dnl check for res_querydomain in libc, libbind and libresolv
 AC_CHECK_FUNCS(res_querydomain)
