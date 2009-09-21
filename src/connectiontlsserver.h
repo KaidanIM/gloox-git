@@ -69,13 +69,7 @@ namespace gloox
       virtual TLSBase* getTLSBase( TLSHandler* th, const std::string server );
 
       // reimplemented from ConnectionTLS
-      virtual ConnectionBase* ConnectionTLSServer::newInstance() const
-      {
-        ConnectionBase* newConn = 0;
-        if( m_connection )
-          newConn = m_connection->newInstance();
-        return new ConnectionTLSServer( m_handler, newConn, m_log );
-      }
+      virtual ConnectionBase* newInstance() const;
 
   };
 
