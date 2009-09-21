@@ -35,4 +35,12 @@ namespace gloox
     return new TLSDefault( th, server, TLSDefault::VerifyingServer );
   }
 
+  ConnectionBase* ConnectionTLSServer::newInstance() const
+  {
+    ConnectionBase* newConn = 0;
+    if( m_connection )
+      newConn = m_connection->newInstance();
+    return new ConnectionTLSServer( m_handler, newConn, m_log );
+  }
+
 }
