@@ -802,15 +802,19 @@ namespace gloox
 
   const std::string ClientBase::getID()
   {
+    static unsigned int uniqueBaseID = (unsigned int)time( 0 );
 #ifdef _WIN32_WCE
-    char r[8+1];
-    sprintf( r, "%08x", rand() );
-    std::string ret( r, 8 );
-    return std::string( "uid" ) + ret;
+    char r[21+1];
+    sprintf( r, "uid:%08x:%08x", uniqueBaseID, rand() );
+    std::string ret( r, 21 );
+    return ret;
 #else
     std::ostringstream oss;
+    oss << "uid:";
+    oss << uniqueBaseID;
+    oss << ":";
     oss << ++m_idCount;
-    return std::string( "uid" ) + oss.str();
+    return oss.str();
 #endif
   }
 
