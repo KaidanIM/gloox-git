@@ -299,8 +299,10 @@ namespace gloox
               for( ; in != (*it).second.end(); ++in )
               {
                 IdentityList il = (*in)->handleDiscoNodeIdentities( iq.from(), info->node() );
+                il.sort(); // needed on win32
                 identities.merge( il );
                 StringList fl = (*in)->handleDiscoNodeFeatures( iq.from(), info->node() );
+                fl.sort();  // needed on win32
                 features.merge( fl );
               }
             }
@@ -346,6 +348,7 @@ namespace gloox
               for( ; in != (*it).second.end(); ++in )
               {
                 ItemList il = (*in)->handleDiscoNodeItems( iq.from(), iq.to(), items->node() );
+                il.sort(); // needed on win32
                 itemlist.merge( il );
               }
               i->setItems( itemlist );

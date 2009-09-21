@@ -152,7 +152,11 @@ namespace gloox
            * @param features A list of supported features/namespaces.
            */
           void setFeatures( const StringList& features )
-            { StringList fl( features ); m_features.merge( fl ); } // FIXME is this really necessary?
+          {
+            StringList fl( features );
+            fl.sort(); // needed on win32
+            m_features.merge( fl );
+          }
 
           /**
            * This function can be used to set the entity's identities.
