@@ -169,7 +169,7 @@ namespace gloox
       // reimplemented from TLSHandler
       virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo& certinfo );
 
-    private:
+    protected:
       /**
        * Returns a TLS object (client). Reimplement to change the
        * type of the object.
