@@ -2,7 +2,9 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi -DGLOOX_IMPORTS
+AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare \
+              -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef \
+              -Wcast-qual -ansi -Wno-long-long -DGLOOX_IMPORTS
 
 noinst_PROGRAMS = adhoc_example \
                   annotations_example \

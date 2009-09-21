@@ -36,6 +36,7 @@ libgloox_la_SOURCES = adhoc.cpp \
 			connectiontcpclient.cpp \
 			connectiontcpserver.cpp \
 			connectiontls.cpp \
+			connectiontlsserver.cpp \
 			dataform.cpp \
 			dataformfieldcontainer.cpp \
 			dataformfield.cpp \
