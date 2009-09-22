@@ -156,13 +156,14 @@ namespace gloox
        * @param mimetype The stream's/file's mime-type. Defaults to 'binary/octet-stream'.
        * @param from An optional 'from' address to stamp outgoing requests with.
        * Used in component scenario only. Defaults to empty JID.
+       * @param sid Optionally specify a stream ID (SID). If empty, one will be generated.
        * @return The requested stream's ID (SID). Empty if SIHandler or ClientBase are invalid.
        * @note The SIManager claims ownership of the Tags supplied to this function, and will
        * delete them after use.
        */
       const std::string requestSI( SIHandler* sih, const JID& to, const std::string& profile, Tag* child1,
                                    Tag* child2 = 0, const std::string& mimetype = "binary/octet-stream",
-                                   const JID& from = JID() );
+                                   const JID& from = JID(), const std::string& sid = EmptyString );
 
       /**
        * Call this function to accept an SI request previously announced by means of
