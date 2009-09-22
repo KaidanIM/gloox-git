@@ -20,10 +20,10 @@
 #endif
 
 #ifdef _WIN32
-#  ifdef GLOOX_EXPORTS
+#  if defined( GLOOX_EXPORTS ) || defined( DLL_EXPORT )
 #    define GLOOX_API __declspec( dllexport )
 #  else
-#    ifdef GLOOX_IMPORTS
+#    if defined( GLOOX_IMPORTS ) || defined( DLL_IMPORT )
 #      define GLOOX_API __declspec( dllimport )
 #    endif
 #  endif
