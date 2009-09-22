@@ -19,6 +19,7 @@
 #include "logsink.h"
 #include "prep.h"
 #include "base64.h"
+#include "util.h"
 
 #include <string>
 #include <cstdlib>
@@ -33,10 +34,6 @@
 # include <winsock.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>
-#endif
-
-#ifndef _WIN32_WCE
-# include <sstream>
 #endif
 
 namespace gloox
@@ -316,11 +313,9 @@ namespace gloox
     d[pos++] = (char)nport;
     d[pos++] = (char)(nport >> 8);
 
-#ifndef _WIN32_WCE
-    std::ostringstream oss;
-    oss << "requesting socks5 proxy connection to " << server << ":" << port;
-    m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy, oss.str() );
-#endif
+    std::string message = "Requesting socks5 proxy connection to " + server + ":"
+        + util::int2string( port );
+    m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy, message );
 
     if( !send( std::string( d, pos ) ) )
     {

@@ -64,11 +64,6 @@
 
 #include <string.h> // for memset()
 
-#ifndef _WIN32_WCE
-# include <sstream>
-# include <iomanip>
-#endif
-
 namespace gloox
 {
 
@@ -100,7 +95,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_idCount( 0 ), m_autoMessageSession( false )
+      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
   {
     init();
   }
@@ -117,7 +112,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_idCount( 0 ), m_autoMessageSession( false )
+      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
   {
     init();
   }
@@ -509,17 +504,10 @@ namespace gloox
         std::string nonce = decoded.substr( pos + 7, end - ( pos + 7 ) );
 
         std::string cnonce;
-#ifdef _WIN32_WCE
         char cn[4*8+1];
         for( int i = 0; i < 4; ++i )
           sprintf( cn + i*8, "%08x", rand() );
         cnonce.assign( cn, 4*8 );
-#else
-        std::ostringstream cn;
-        for( int i = 0; i < 4; ++i )
-          cn << std::hex << std::setw( 8 ) << std::setfill( '0' ) << rand();
-        cnonce = cn.str();
-#endif
 
         MD5 md5;
         md5.feed( m_jid.username() );
@@ -777,19 +765,10 @@ namespace gloox
   const std::string ClientBase::getID()
   {
     static unsigned int uniqueBaseID = (unsigned int)time( 0 );
-#ifdef _WIN32_WCE
     char r[21+1];
     sprintf( r, "uid:%08x:%08x", uniqueBaseID, rand() );
     std::string ret( r, 21 );
     return ret;
-#else
-    std::ostringstream oss;
-    oss << "uid:";
-    oss << uniqueBaseID;
-    oss << ":";
-    oss << ++m_idCount;
-    return oss.str();
-#endif
   }
 
   bool ClientBase::checkStreamVersion( const std::string& version )

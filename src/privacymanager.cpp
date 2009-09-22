@@ -16,10 +16,6 @@
 #include "clientbase.h"
 #include "error.h"
 
-#ifndef _WIN32_WCE
-# include <sstream>
-#endif
-
 namespace gloox
 {
 
