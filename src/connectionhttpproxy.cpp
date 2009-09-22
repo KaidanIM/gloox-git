@@ -19,12 +19,9 @@
 #include "logsink.h"
 #include "prep.h"
 #include "base64.h"
+#include "util.h"
 
 #include <string>
-
-#ifndef _WIN32_WCE
-# include <sstream>
-#endif
 
 namespace gloox
 {
@@ -177,28 +174,26 @@ namespace gloox
           port = host.second;
         }
       }
-#ifndef _WIN32_WCE
-      std::ostringstream oss;
-      oss << "requesting http proxy connection to " << server << ":" << port;
-      m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, oss.str() );
-#endif
-      std::ostringstream os;
-      os << "CONNECT " << server << ":" << port << " HTTP/1.";
-      os << ( m_http11 ? '1' : '0' ) << "\r\n";
-      os << "Host: " << server << "\r\n";
-      os << "Content-Length: 0\r\n";
-      os << "Proxy-Connection: Keep-Alive\r\n";
-      os << "Pragma: no-cache\r\n";
-      os << "User-Agent: gloox/" << GLOOX_VERSION << "\r\n";
+      std::string message = "Requesting http proxy connection to " + server + ":"
+          + util::int2string( port );
+      m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, message );
+
+      std::string os = "CONNECT " + server + ":" + util::int2string( port ) + " HTTP/1."
+          + util::int2string( m_http11 ? 1 : 0 ) + "\r\n"
+          "Host: " + server + "\r\n"
+          "Content-Length: 0\r\n"
+          "Proxy-Connection: Keep-Alive\r\n"
+          "Pragma: no-cache\r\n"
+          "User-Agent: gloox/" + GLOOX_VERSION + "\r\n";
 
       if( !m_proxyUser.empty() && !m_proxyPwd.empty() )
       {
-        os << "Proxy-Authorization: Basic " << Base64::encode64( m_proxyUser + ":" + m_proxyPwd )
-            << "\r\n";
+        os += "Proxy-Authorization: Basic " + Base64::encode64( m_proxyUser + ":" + m_proxyPwd )
+            + "\r\n";
       }
-      os << "\r\n";
+      os += "\r\n";
 
-      if( !m_connection->send( os.str() ) )
+      if( !m_connection->send( os ) )
       {
         m_state = StateDisconnected;
         if( m_handler )

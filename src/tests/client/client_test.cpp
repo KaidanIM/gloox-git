@@ -17,7 +17,7 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
 {
   public:
     ClientTest( const JID& jid, const std::string& password, int port = -1 )
-      : Client( jid, password, port ), m_connected( 0 ), m_disconnected( 0 )
+      : Client( jid, password, port ), m_idCount( 0 ), m_connected( 0 ), m_disconnected( 0 )
     {
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
@@ -44,6 +44,8 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
     int disconnected() const { return m_disconnected; }
     ConnectionError disconnectReason() const { return m_disconnect; }
     StreamError streamErrorReason() const { return m_streamerror; }
+
+    int m_idCount;
 
   protected:
 
