@@ -594,7 +594,7 @@ namespace gloox
 #else
     int fd;
 #endif
-    if( ( fd = socket( af, socktype, proto ) ) == -1 )
+    if( ( fd = socket( af, socktype, proto ) ) == INVALID_SOCKET )
     {
       std::string message = "getSocket( "
           + util::int2string( af ) + ", "
