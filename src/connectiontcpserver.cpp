@@ -51,7 +51,6 @@
 
 #ifndef _WIN32_WCE
 # include <sys/types.h>
-# include <sstream>
 #endif
 
 namespace gloox

@@ -997,7 +997,6 @@ namespace gloox
 
       SaslMechanism m_selectedSaslMech;
 
-      int m_idCount;
       bool m_autoMessageSession;
 
   };

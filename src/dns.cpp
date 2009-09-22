@@ -25,7 +25,6 @@
 
 #ifndef _WIN32_WCE
 # include <sys/types.h>
-# include <sstream>
 #endif
 
 #include <stdio.h>
