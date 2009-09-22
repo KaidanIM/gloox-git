@@ -195,6 +195,7 @@ namespace gloox
        * @param streamTypes ORed StreamType that can be used for this transfer.
        * @param from An optional 'from' address to stamp outgoing requests with.
        * Used in component scenario only. Defaults to empty JID.
+       * @param sid Optionally specify a stream ID (SID). If empty, one will be generated.
        * @return The requested stream's ID (SID). Empty if conditions above (file name, size)
        * are not met.
        */
@@ -204,7 +205,8 @@ namespace gloox
                                    const std::string& date = EmptyString,
                                    const std::string& mimetype = EmptyString,
                                    int streamTypes = FTTypeAll,
-                                   const JID& from = JID() );
+                                   const JID& from = JID(),
+                                   const std::string& sid = EmptyString );
 
       /**
        * Call this function to accept a file transfer request previously announced by means of

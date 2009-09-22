@@ -85,6 +85,20 @@ namespace gloox
        */
       void stop();
 
+      /**
+       * Expose our TCP Connection localPort
+       * Returns the local port.
+       * @return The local port.
+       */
+      int localPort() const;
+
+      /**
+       * Expose our TCP Connection localInterface
+       * Returns the locally bound IP address.
+       * @return The locally bound IP address.
+       */
+      const std::string localInterface() const;
+
       // reimplemented from ConnectionHandler
       virtual void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection );
 

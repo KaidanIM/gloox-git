@@ -63,7 +63,8 @@ namespace gloox
   const std::string SIProfileFT::requestFT( const JID& to, const std::string& name, long size,
                                             const std::string& hash, const std::string& desc,
                                             const std::string& date, const std::string& mimetype,
-                                            int streamTypes, const JID& from )
+                                            int streamTypes, const JID& from,
+                                            const std::string& sid )
   {
     if( name.empty() || size <= 0 || !m_manager )
       return EmptyString;
@@ -93,7 +94,7 @@ namespace gloox
     dff->setOptions( sm );
     feature->addChild( df.tag() );
 
-    return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype, from );
+    return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype, from, sid );
   }
 
   void SIProfileFT::acceptFT( const JID& to, const std::string& sid, StreamType type, const JID& from )

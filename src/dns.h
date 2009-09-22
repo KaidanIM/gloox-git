@@ -111,15 +111,17 @@ namespace gloox
 
       /**
        * A convenience function that prepares and returnes a simple, unconnected TCP socket.
+       * @param logInstance A LogSink to use for logging.
        * @return A TCP socket.
        */
-      static int getSocket();
+      static int getSocket( const LogSink& logInstance );
 
       /**
        * Closes the given socket.
        * @param fd The socket to close.
+       * @param logInstance A LogSink to use for logging.
        */
-      static void closeSocket( int fd );
+      static void closeSocket( int fd, const LogSink& logInstance );
 
     private:
 #ifdef HAVE_GETADDRINFO
@@ -160,10 +162,10 @@ namespace gloox
        * @param socktype The socket type. E.g. SOCK_STREAM.
        * @param proto The protocol number. E.g. 6 (TCP).
        */
-      static int getSocket( int af, int socktype, int proto );
+      static int getSocket( int af, int socktype, int proto, const LogSink& logInstance );
 
       static HostMap defaultHostMap( const std::string& domain, const LogSink& logInstance );
-      static void cleanup();
+      static void cleanup( const LogSink& logInstance );
 
       struct buffer
       {
