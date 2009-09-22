@@ -155,7 +155,7 @@ namespace gloox
   {
     if( m_socket >= 0 )
     {
-      DNS::closeSocket( m_socket );
+      DNS::closeSocket( m_socket, m_logInstance );
       m_socket = -1;
     }
 

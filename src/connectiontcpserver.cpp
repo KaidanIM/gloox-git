@@ -21,6 +21,7 @@
 #include "logsink.h"
 #include "mutex.h"
 #include "mutexguard.h"
+#include "util.h"
 
 #ifdef __MINGW32__
 # include <winsock.h>
@@ -36,6 +37,7 @@
 # include <sys/un.h>
 # include <sys/select.h>
 # include <unistd.h>
+# include <errno.h>
 #endif
 
 #ifdef _WIN32
@@ -81,7 +83,7 @@ namespace gloox
     m_state = StateConnecting;
 
     if( m_socket < 0 )
-      m_socket = DNS::getSocket();
+      m_socket = DNS::getSocket( m_logInstance );
 
     if( m_socket < 0 )
       return ConnIoError;
@@ -93,10 +95,32 @@ namespace gloox
     memset( local.sin_zero, '\0', 8 );
 
     if( bind( m_socket, (struct sockaddr*)&local, sizeof( struct sockaddr ) ) < 0 )
+    {
+      std::string message = "bind() to " + ( m_server.empty() ? std::string( "*" ) : m_server )
+          + " (" + inet_ntoa( local.sin_addr ) + ":" + util::int2string( m_port ) + ") failed. "
+#ifdef _WIN32
+          "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
+#else
+          "errno: " + util::int2string( errno );
+#endif
+      m_logInstance.dbg( LogAreaClassConnectionTCPServer, message );
+
       return ConnIoError;
+    }
 
     if( listen( m_socket, 10 ) < 0 )
+    {
+      std::string message = "listen on " + ( m_server.empty() ? std::string( "*" ) : m_server )
+          + " (" + inet_ntoa( local.sin_addr ) + ":" + util::int2string( m_port ) + ") failed. "
+#ifdef _WIN32
+          "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
+#else
+          "errno: " + util::int2string( errno );
+#endif
+      m_logInstance.dbg( LogAreaClassConnectionTCPServer, message );
+
       return ConnIoError;
+    }
 
     m_cancel = false;
     return ConnNoError;
