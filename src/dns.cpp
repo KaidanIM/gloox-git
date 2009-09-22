@@ -242,7 +242,7 @@ namespace gloox
     }
 
     int fd;
-    if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1 )
+    if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == INVALID_SOCKET )
     {
       cleanup();
       return -ConnConnectionRefused;
