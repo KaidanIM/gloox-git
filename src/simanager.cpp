@@ -111,27 +111,27 @@ namespace gloox
 
   const std::string SIManager::requestSI( SIHandler* sih, const JID& to, const std::string& profile,
                                           Tag* child1, Tag* child2, const std::string& mimetype,
-                                          const JID& from )
+                                          const JID& from, const std::string& sid )
   {
     if( !m_parent || !sih )
       return EmptyString;
 
     const std::string& id = m_parent->getID();
-    const std::string& id2 = m_parent->getID();
+    const std::string& sidToUse = sid.empty() ? m_parent->getID() : sid;
 
     IQ iq( IQ::Set, to, id );
-    iq.addExtension( new SI( child1, child2, id2, mimetype, profile ) );
+    iq.addExtension( new SI( child1, child2, sidToUse, mimetype, profile ) );
     if( from )
       iq.setFrom( from );
 
     TrackStruct t;
-    t.sid = id2;
+    t.sid = sidToUse;
     t.profile = profile;
     t.sih = sih;
     m_track[id] = t;
     m_parent->send( iq, this, OfferSI );
 
-    return id2;
+    return sidToUse;
   }
 
   void SIManager::acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2, const JID& from )

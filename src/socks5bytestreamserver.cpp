@@ -90,6 +90,22 @@ namespace gloox
     }
   }
 
+  int SOCKS5BytestreamServer::localPort() const
+  {
+    if( m_tcpServer )
+      return m_tcpServer->localPort();
+
+    return m_port;
+  }
+
+  const std::string SOCKS5BytestreamServer::localInterface() const
+  {
+    if( m_tcpServer )
+      return m_tcpServer->localInterface();
+
+    return m_ip;
+  }
+
   ConnectionBase* SOCKS5BytestreamServer::getConnection( const std::string& hash )
   {
     util::MutexGuard mg( m_mutex );
