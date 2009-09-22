@@ -35,10 +35,6 @@
 #include <cstdlib>
 #include <string>
 
-#ifndef _WIN32_WCE
-# include <sstream>
-#endif
-
 namespace gloox
 {
 

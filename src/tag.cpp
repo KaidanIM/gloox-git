@@ -14,12 +14,6 @@
 #include "tag.h"
 #include "util.h"
 
-#ifdef _WIN32_WCE
-# include <cmath>
-#else
-# include <sstream>
-#endif
-
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
@@ -408,18 +402,7 @@ namespace gloox
     if( name.empty() )
       return false;
 
-#ifdef _WIN32_WCE
-    const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
-    char* tmp = new char[len];
-    sprintf( tmp, "%ld", value );
-    std::string ret( tmp, len );
-    delete[] tmp;
-    return addAttribute( name, ret );
-#else
-    std::ostringstream oss;
-    oss << value;
-    return addAttribute( name, oss.str() );
-#endif
+    return addAttribute( name, util::long2string( value ) );
   }
 
   void Tag::setAttributes( const AttributeList& attributes )
