@@ -92,16 +92,16 @@ namespace gloox
 
   int SOCKS5BytestreamServer::localPort() const
   {
-    if( m_tcpServer )
-      return m_tcpServer->localPort();
+    if( m_server )
+      return m_server->localPort();
 
     return m_port;
   }
 
   const std::string SOCKS5BytestreamServer::localInterface() const
   {
-    if( m_tcpServer )
-      return m_tcpServer->localInterface();
+    if( m_server )
+      return m_server->localInterface();
 
     return m_ip;
   }
