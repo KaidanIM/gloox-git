@@ -40,7 +40,7 @@ namespace gloox
 
       /**
        * Reimplement this function if you want to receive the chunks of the conversation
-       * between gloox and server.
+       * between gloox and server or other debug info from gloox.
        * @param level The log message's severity.
        * @param area The log message's origin.
        * @param message The log message.
