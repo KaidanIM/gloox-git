@@ -1,4 +1,4 @@
-v0.9.9.9 -- xx yyy 2009
+v0.9.9.9 -- 23 Sep 2009
 -----------------------
 - fixed SChannel on NT4
 - fixed configure.ac tests for FreeBSD
