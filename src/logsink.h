@@ -50,6 +50,7 @@ namespace gloox
 
       /**
        * Use this function to log a message with given LogLevel and LogIdentifier.
+       * dbg(), warn(), and err() are alternative shortcuts.
        * @param level The severity of the logged event.
        * @param area The part of the program/library the message comes from.
        * @param message The actual log message.
@@ -58,6 +59,7 @@ namespace gloox
 
       /**
        * Use this function to log a debug message with given LogIdentifier.
+       * This is a convenience wrapper around log().
        * @param area The part of the program/library the message comes from.
        * @param message The actual log message.
        */
@@ -66,6 +68,7 @@ namespace gloox
 
       /**
        * Use this function to log a warning message with given LogIdentifier.
+       * This is a convenience wrapper around log().
        * @param area The part of the program/library the message comes from.
        * @param message The actual log message.
        */
@@ -74,6 +77,7 @@ namespace gloox
 
       /**
        * Use this function to log a error message with given LogIdentifier.
+       * This is a convenience wrapper around log().
        * @param area The part of the program/library the message comes from.
        * @param message The actual log message.
        */
