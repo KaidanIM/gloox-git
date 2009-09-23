@@ -121,6 +121,18 @@ namespace gloox
       int port() const { return m_port; }
 
       /**
+       * Returns the local port.
+       * @return The local port.
+       */
+      virtual int localPort() const { return -1; }
+
+      /**
+       * Returns the locally bound IP address.
+       * @return The locally bound IP address.
+       */
+      virtual const std::string localInterface() const { return EmptyString; }
+
+      /**
        * Returns current connection statistics.
        * @param totalIn The total number of bytes received.
        * @param totalOut The total number of bytes sent.
