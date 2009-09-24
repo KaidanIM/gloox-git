@@ -414,7 +414,7 @@ namespace gloox
           // and this function won't get called again to finish the processing).  This is needed for
           // NT4.0 which does not seem to process the entire buffer the first time around
           if( obuf[0].cbBuffer == 0 )
-            handshakeStage( EmptyString );
+            handshakeStage( "" );
         }
         else
         {
