@@ -325,6 +325,8 @@ namespace gloox
         ChangePassword
       };
 
+      Registration operator=( const Registration& );
+
       void init();
 
       ClientBase* m_parent;

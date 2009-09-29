@@ -71,6 +71,9 @@ namespace gloox
       // reimplemented from ConnectionTLS
       virtual ConnectionBase* newInstance() const;
 
+    private:
+      ConnectionTLSServer operator=( const ConnectionTLSServer& );
+
   };
 
 }
