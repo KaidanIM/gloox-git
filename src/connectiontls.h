@@ -189,6 +189,9 @@ namespace gloox
       std::string m_clientCerts;
       std::string m_clientKey;
 
+    private:
+      ConnectionTLS operator=( const ConnectionTLS& );
+
   };
 
 }
