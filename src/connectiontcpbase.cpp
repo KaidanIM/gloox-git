@@ -24,7 +24,7 @@
 # include <winsock.h>
 #endif
 
-#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <arpa/inet.h>
 # include <sys/types.h>
 # include <sys/socket.h>
@@ -91,7 +91,9 @@ namespace gloox
     struct timeval tv;
 
     FD_ZERO( &fds );
-    FD_SET( m_socket, &fds ); // causes a C4127 warning in VC++ Express 2008 and possibly other versions.
+    // the following causes a C4127 warning in VC++ Express 2008 and possibly other versions.
+    // however, the reason for the warning can't be fixed in gloox.
+    FD_SET( m_socket, &fds );
 
     tv.tv_sec = timeout / 1000000;
     tv.tv_usec = timeout % 1000000;

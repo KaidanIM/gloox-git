@@ -264,7 +264,7 @@ namespace gloox
 
       };
 
-      SOCKS5BytestreamManager operator=( const SOCKS5BytestreamManager&);
+      SOCKS5BytestreamManager& operator=( const SOCKS5BytestreamManager&);
       void rejectSOCKS5Bytestream( const JID& from, const std::string& id, StanzaError reason );
       bool haveStream( const JID& from );
       const StreamHost* findProxy( const JID& from, const std::string& hostjid, const std::string& sid );

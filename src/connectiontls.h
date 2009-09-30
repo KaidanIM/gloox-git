@@ -190,7 +190,7 @@ namespace gloox
       std::string m_clientKey;
 
     private:
-      ConnectionTLS operator=( const ConnectionTLS& );
+      ConnectionTLS& operator=( const ConnectionTLS& );
 
   };
 
