@@ -283,7 +283,7 @@ namespace gloox
         }
       }
     }
-    if(dn == dst )
+    if( dn == dst )
     {
       if( dn >= eom )
       {
@@ -296,7 +296,7 @@ namespace gloox
       return -1;
     }
     *dn++ = '\0';
-    return (dn - dst);
+    return ( dn - dst );
   }
 
 #if defined( HAVE_RES_QUERYDOMAIN ) && defined( HAVE_DN_SKIPNAME ) && defined( HAVE_RES_QUERY )
@@ -421,7 +421,7 @@ namespace gloox
   DNS::HostMap DNS::resolve( const std::string& /*service*/, const std::string& /*proto*/,
                              const std::string& domain, const LogSink& logInstance )
   {
-    logInstance.warn( LogAreaClassDns, "notice: gloox does not support SRV "
+    logInstance.warn( LogAreaClassDns, "Notice: gloox does not support SRV "
                         "records on this platform. Using A records instead." );
     return defaultHostMap( domain, logInstance );
   }
@@ -431,7 +431,7 @@ namespace gloox
   {
     HostMap server;
 
-    logInstance.warn( LogAreaClassDns, "notice: no SRV record found for "
+    logInstance.warn( LogAreaClassDns, "Notice: no SRV record found for "
                                           + domain + ", using default port." );
 
     if( !domain.empty() )
