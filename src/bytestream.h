@@ -170,6 +170,9 @@ namespace gloox
       /** Indicates whether or not the stream is open. */
       bool m_open;
 
+    private:
+      Bytestream& operator=( const Bytestream& );
+
   };
 
 }
