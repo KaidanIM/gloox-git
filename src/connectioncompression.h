@@ -110,6 +110,7 @@ namespace gloox
 
 
     private:
+      ConnectionCompression& operator=( const ConnectionCompression& );
       ConnectionBase* m_connection;
       CompressionDefault* m_compression;
       const LogSink & m_log;
