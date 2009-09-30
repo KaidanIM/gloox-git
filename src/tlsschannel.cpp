@@ -537,8 +537,8 @@ namespace gloox
       if( !CertGetCertificateChain( NULL, remoteCertContext, NULL, remoteCertContext->hCertStore,
                                     &chainParameter, 0, NULL, &chainContext ) )
       {
-        DWORD status = GetLastError();
-        //printf("Error 0x%x returned by CertGetCertificateChain!!!\n", status);
+//         DWORD status = GetLastError();
+//         printf("Error 0x%x returned by CertGetCertificateChain!!!\n", status);
         break;
       }
 
@@ -559,8 +559,8 @@ namespace gloox
       if( !CertVerifyCertificateChainPolicy( CERT_CHAIN_POLICY_SSL, chainContext, &policyParameter,
                                              &policyStatus ) )
       {
-        DWORD status = GetLastError();
-        //printf("Error 0x%x returned by CertVerifyCertificateChainPolicy!!!\n", status);
+//         DWORD status = GetLastError();
+//         printf("Error 0x%x returned by CertVerifyCertificateChainPolicy!!!\n", status);
         break;
       }
 

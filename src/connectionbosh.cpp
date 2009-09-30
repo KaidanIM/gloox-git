@@ -10,6 +10,14 @@
  * This software is distributed without any warranty.
  */
 
+#ifdef _WIN32 // to disable warning C4996 about sprintf being deprecated
+# include "../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../config.h.win"
+// #else
+// # include "config.h"
+#endif
+
 #include "gloox.h"
 
 #include "connectionbosh.h"
