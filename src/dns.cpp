@@ -326,14 +326,14 @@ namespace gloox
     if( hdr->rcode >= 1 && hdr->rcode <= 5 )
       error = true;
 
-    if( ntohs( hdr->ancount ) == 0 )
+    if( ntohl( hdr->ancount ) == 0 )
       error = true;
 
-    if( ntohs( hdr->ancount ) > NS_PACKETSZ )
+    if( ntohl( hdr->ancount ) > NS_PACKETSZ )
       error = true;
 
     int cnt;
-    for( cnt = ntohs( hdr->qdcount ); cnt>0; --cnt )
+    for( cnt = ntohl( hdr->qdcount ); cnt > 0; --cnt )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
       here += strlen + NS_QFIXEDSZ;
@@ -341,7 +341,7 @@ namespace gloox
 
     unsigned char* srv[NS_PACKETSZ];
     int srvnum = 0;
-    for( cnt = ntohs( hdr->ancount ); cnt>0; --cnt )
+    for( cnt = ntohl( hdr->ancount ); cnt > 0; --cnt )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
       here += strlen;
@@ -358,7 +358,7 @@ namespace gloox
     // (q)sort here
 
     HostMap servers;
-    for( cnt=0; cnt<srvnum; ++cnt )
+    for( cnt=0; cnt < srvnum; ++cnt )
     {
       name srvname;
 
@@ -367,7 +367,7 @@ namespace gloox
 
       unsigned char* c = srv[cnt] + SRV_PORT;
 
-      servers.insert( std::make_pair( (char*)srvname, ntohs( c[1] << 8 | c[0] ) ) );
+      servers.insert( std::make_pair( (char*)srvname, ntohl( c[1] << 8 | c[0] ) ) );
     }
 
     return servers;
@@ -634,11 +634,11 @@ namespace gloox
 
     struct sockaddr_in target;
     target.sin_family = AF_INET;
-    target.sin_port = htons( (u_short)port );
+    target.sin_port = (unsigned short int)htonl( port );
 
     if( h->h_length != sizeof( struct in_addr ) )
     {
-      logInstance.dbg( LogAreaClassDns, "gethostbyname returned unexpected structure." );
+      logInstance.dbg( LogAreaClassDns, "gethostbyname() returned unexpected structure." );
       cleanup( logInstance );
       return -ConnDnsError;
     }
@@ -699,6 +699,8 @@ namespace gloox
       logInstance.dbg( LogAreaClassDns, "WSACleanup() failed. WSAGetLastError: "
           + util::int2string( ::WSAGetLastError() ) );
     }
+#else
+    (void)logInstance;
 #endif
   }
 
