@@ -242,22 +242,6 @@ SOURCE=.\src\jid.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\jinglecontent.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingledescription.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglesession.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingletransport.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\lastactivity.cpp
 # End Source File
 # Begin Source File
@@ -715,46 +699,6 @@ SOURCE=.\src\iqhandler.h
 # Begin Source File
 
 SOURCE=.\src\jid.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingleaudiortp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglecontent.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingledescription.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingleiceudp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingleplugin.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglerawudp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglesession.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglesessionhandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingletransport.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglevideortp.h
 # End Source File
 # Begin Source File
 
