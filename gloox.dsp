@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="gloox 1.0" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="gloox trunk" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=gloox 1.0 - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+CFG=gloox trunk - Win32 Debug
+!MESSAGE Dies ist kein gÃ¼ltiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und fÃ¼hren Sie den Befehl
 !MESSAGE
 !MESSAGE NMAKE /f "gloox.mak".
 !MESSAGE
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE Sie kÃ¶nnen beim AusfÃ¼hren von NMAKE eine Konfiguration angeben
 !MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE
 !MESSAGE NMAKE /f "gloox.mak" CFG="gloox 1.0 - Win32 Debug"
 !MESSAGE
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE FÃ¼r die Konfiguration stehen zur Auswahl:
 !MESSAGE
-!MESSAGE "gloox 1.0 - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gloox 1.0 - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gloox trunk - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gloox trunk - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE
 
 # Begin Project
@@ -29,7 +29,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "gloox 1.0 - Win32 Release"
+!IF  "$(CFG)" == "gloox trunk - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 /dll
 
-!ELSEIF  "$(CFG)" == "gloox 1.0 - Win32 Debug"
+!ELSEIF  "$(CFG)" == "gloox trunk - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -83,8 +83,8 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "gloox 1.0 - Win32 Release"
-# Name "gloox 1.0 - Win32 Debug"
+# Name "gloox trunk - Win32 Release"
+# Name "gloox trunk - Win32 Debug"
 # Begin Group "Quellcodedateien"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
