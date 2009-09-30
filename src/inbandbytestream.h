@@ -188,7 +188,7 @@ namespace gloox
 
       InBandBytestream( ClientBase* clientbase, LogSink& logInstance, const JID& initiator,
                         const JID& target, const std::string& sid );
-      InBandBytestream operator=( const InBandBytestream& );
+      InBandBytestream& operator=( const InBandBytestream& );
       void closed(); // by remote entity
       void returnResult( const JID& to, const std::string& id );
 
