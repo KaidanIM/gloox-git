@@ -220,7 +220,7 @@ namespace gloox
    * The root is returned as "."
    * All other domains are returned in non absolute form
    */
-  int x__ns_name_ntop( const u_char *src, char *dst, size_t dstsiz )
+  bool x__ns_name_ntop( const u_char *src, char *dst, size_t dstsiz )
   {
     const u_char *cp;
     char *dn, *eom;
@@ -231,24 +231,24 @@ namespace gloox
     dn = dst;
     eom = dst + dstsiz;
 
-    while( (n = *cp++) != 0 )
+    while( ( n = *cp++ ) != 0 )
     {
-      if( (n & NS_CMPRSFLGS) != 0 )
+      if( ( n & NS_CMPRSFLGS ) != 0 )
       {
         /* Some kind of compression pointer. */
-        return -1;
+        return false;
       }
       if( dn != dst )
       {
         if( dn >= eom )
         {
-          return -1;
+          return false;
         }
         *dn++ = '.';
       }
       if( dn + n >= eom )
       {
-        return -1;
+        return false;
       }
       for( ; n > 0; n-- )
       {
@@ -257,7 +257,7 @@ namespace gloox
         {
           if( dn + 1 >= eom )
           {
-            return -1;
+            return false;
           }
           *dn++ = '\\';
           *dn++ = (char)c;
@@ -266,7 +266,7 @@ namespace gloox
         {
           if( dn + 3 >= eom )
           {
-            return -1;
+            return false;
           }
           *dn++ = '\\';
           *dn++ = digits[c / 100];
@@ -277,7 +277,7 @@ namespace gloox
         {
           if( dn >= eom )
           {
-            return -1;
+            return false;
           }
           *dn++ = (char)c;
         }
@@ -287,16 +287,17 @@ namespace gloox
     {
       if( dn >= eom )
       {
-        return -1;
+        return false;
       }
       *dn++ = '.';
     }
     if( dn >= eom )
     {
-      return -1;
+      return false;
     }
     *dn++ = '\0';
-    return ( dn - dst );
+
+    return true;
   }
 
 #if defined( HAVE_RES_QUERYDOMAIN ) && defined( HAVE_DN_SKIPNAME ) && defined( HAVE_RES_QUERY )
@@ -358,12 +359,12 @@ namespace gloox
     // (q)sort here
 
     HostMap servers;
-    for( cnt=0; cnt < srvnum; ++cnt )
+    for( cnt = 0; cnt < srvnum; ++cnt )
     {
       name srvname;
 
-      if( x__ns_name_ntop( srv[cnt] + SRV_SERVER, (char*)srvname, NS_MAXDNAME ) < 0 )
-        printf( "handle this error!\n" );
+      if( !x__ns_name_ntop( srv[cnt] + SRV_SERVER, (char*)srvname, NS_MAXDNAME ) )
+        continue;
 
       unsigned char* c = srv[cnt] + SRV_PORT;
 
@@ -385,9 +386,6 @@ namespace gloox
     DNS_STATUS status = DnsQuery_UTF8( dname.c_str(), DNS_TYPE_SRV, DNS_QUERY_STANDARD, NULL, &pRecord, NULL );
     if( status == ERROR_SUCCESS )
     {
-      // NOTE: DnsQuery_UTF8 and DnsQuery_A really should have been defined with
-      // PDNS_RECORDA instead of PDNS_RECORD, since that's what it is (even with _UNICODE defined).
-      // We'll correct for that mistake with a cast.
       DNS_RECORD* pRec = pRecord;
       do
       {
