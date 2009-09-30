@@ -49,7 +49,7 @@ namespace gloox
         ~MutexGuard() { m_mutex.unlock(); }
 
       private:
-        MutexGuard operator=( const MutexGuard& );
+        MutexGuard& operator=( const MutexGuard& );
         Mutex& m_mutex;
 
   };

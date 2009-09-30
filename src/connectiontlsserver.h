@@ -72,7 +72,7 @@ namespace gloox
       virtual ConnectionBase* newInstance() const;
 
     private:
-      ConnectionTLSServer operator=( const ConnectionTLSServer& );
+      ConnectionTLSServer& operator=( const ConnectionTLSServer& );
 
   };
 
