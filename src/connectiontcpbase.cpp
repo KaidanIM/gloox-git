@@ -91,7 +91,7 @@ namespace gloox
     struct timeval tv;
 
     FD_ZERO( &fds );
-    FD_SET( m_socket, &fds );
+    FD_SET( m_socket, &fds ); // causes a C4127 warning in VC++ Express 2008 and possibly other versions.
 
     tv.tv_sec = timeout / 1000000;
     tv.tv_usec = timeout % 1000000;
