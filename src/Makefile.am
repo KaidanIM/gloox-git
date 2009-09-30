@@ -30,8 +30,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         error.cpp util.cpp iq.cpp message.cpp presence.cpp \
                         subscription.cpp capabilities.cpp chatstate.cpp connectionbosh.cpp connectiontls.cpp \
                         messageevent.cpp receipt.cpp nickname.cpp eventdispatcher.cpp \
-                        pubsubevent.cpp xhtmlim.cpp featureneg.cpp jinglesession.cpp jinglecontent.cpp \
-                        jingledescription.cpp jingletransport.cpp \
+                        pubsubevent.cpp xhtmlim.cpp featureneg.cpp \
                         shim.cpp softwareversion.cpp attention.cpp \
                         tlsopensslclient.cpp tlsopensslbase.cpp \
                         tlsopensslserver.cpp compressiondefault.cpp \
@@ -87,10 +86,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             capabilities.h            connectionbosh.h        featureneg.h \
                             connectiontls.h           messageevent.h          receipt.h \
                             nickname.h                pubsubevent.h           xhtmlim.h \
-                            eventdispatcher.h         jinglesession.h         jingletransport.h \
-                            jingledescription.h       jinglesessionhandler.h  jingleplugin.h \
-                            jinglecontent.h           jinglevideortp.h        jingleaudiortp.h \
-                            jingleiceudp.h            jinglerawudp.h \
+                            eventdispatcher.h         \
                             pubsubitem.h shim.h util.h \
                             connectiontlsserver.h compressiondefault.h
 

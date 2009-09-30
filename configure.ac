@@ -340,12 +340,6 @@ src/tests/inbandbytestreamibb/Makefile
 src/tests/inbandbytestream/Makefile
 src/tests/iq/Makefile
 src/tests/jid/Makefile
-src/tests/jinglesessionjingle/Makefile
-src/tests/jingleaudiortp/Makefile
-src/tests/jingleiceudp/Makefile
-src/tests/jinglerawudp/Makefile
-src/tests/jinglevideortp/Makefile
-src/tests/jinglesession/Makefile
 src/tests/lastactivityquery/Makefile
 src/tests/lastactivity/Makefile
 src/tests/md5/Makefile
