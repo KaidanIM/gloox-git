@@ -136,6 +136,8 @@ namespace gloox
         virtual StanzaExtension* clone() const;
 
       private:
+        Event operator=( const Event& );
+
         PubSub::EventType m_type;
         std::string m_node;
         StringList* m_subscriptionIDs;
