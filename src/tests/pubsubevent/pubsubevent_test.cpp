@@ -104,7 +104,7 @@ int main()
   new Tag( t, "retract", "id", "id" );
 
   pse = new PubSub::Event( tag );
-  if( !pse || !(t = pse->tag()) || *t != *tag )
+  if( !pse || !(t = pse->tag()) || *t != *tag || pse->type() != PubSub::EventItemsRetract )
   {
     ++failed;
     printf( "retract test failed\n" );
