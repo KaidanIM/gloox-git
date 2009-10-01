@@ -120,7 +120,7 @@ namespace gloox
     m_state = StateDisconnected;
   }
 
-  void ConnectionCompression::getStatistics( int& totalIn, int& totalOut )
+  void ConnectionCompression::getStatistics( long int& totalIn, long int& totalOut )
   {
     if( m_connection )
       m_connection->getStatistics( totalIn, totalOut );

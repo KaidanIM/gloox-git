@@ -46,7 +46,7 @@ namespace gloox
       return true;
     }
 
-    int ret = 0;
+    ssize_t ret = 0;
     std::string::size_type sum = 0;
     do
     {
@@ -64,14 +64,14 @@ namespace gloox
     if( !m_secure )
     {
       handshake();
-      return data.length();
+      return static_cast<int>( data.length() );
     }
 
     int sum = 0;
     int ret = 0;
     do
     {
-      ret = gnutls_record_recv( *m_session, m_buf, m_bufsize );
+      ret = static_cast<int>( gnutls_record_recv( *m_session, m_buf, m_bufsize ) );
 
       if( ret > 0 && m_handler )
       {

@@ -146,7 +146,7 @@ namespace gloox
       virtual void cleanup();
 
       // reimplemented from ConnectionBase
-      virtual void getStatistics( int& totalIn, int& totalOut );
+      virtual void getStatistics( long int& totalIn, long int& totalOut );
 
       // reimplemented from ConnectionDataHandler
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
