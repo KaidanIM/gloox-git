@@ -167,7 +167,7 @@ namespace gloox
       m_connection->cleanup();
   }
 
-  void ConnectionSOCKS5Proxy::getStatistics( int &totalIn, int &totalOut )
+  void ConnectionSOCKS5Proxy::getStatistics( long int &totalIn, long int &totalOut )
   {
     if( m_connection )
       m_connection->getStatistics( totalIn, totalOut );
@@ -294,7 +294,7 @@ namespace gloox
 
         if( server[k] == '.' || k == j-1 )
         {
-          d[pos++] = atoi( s.c_str() ) & 0xFF;
+          d[pos++] = static_cast<char>( atoi( s.c_str() ) & 0xFF );
           s = EmptyString;
           ++l;
         }
@@ -317,9 +317,9 @@ namespace gloox
       strncpy( d + pos, m_server.c_str(), m_server.length() );
       pos += m_server.length();
     }
-    int nport = htons( (u_short)port );
-    d[pos++] = (char)nport;
-    d[pos++] = (char)(nport >> 8);
+    int nport = htonl( port );
+    d[pos++] = static_cast<char>( nport );
+    d[pos++] = static_cast<char>( nport >> 8 );
 
     std::string message = "Requesting socks5 proxy connection to " + server + ":"
         + util::int2string( port );
@@ -350,15 +350,15 @@ namespace gloox
         }
       }
       m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy,
-                         "attempting to negotiate socks5 proxy connection" );
+                         "Attempting to negotiate socks5 proxy connection" );
 
       const bool auth = !m_proxyUser.empty() && !m_proxyPwd.empty();
       const char d[4] = {
-        0x05,        // SOCKS version 5
-        auth ? 0x02  // two methods
-             : 0x01, // one method
-        0x00,        // method: no auth
-        0x02         // method: username/password auth
+        0x05,                             // SOCKS version 5
+        static_cast<char>( auth ? 0x02    // two methods
+                                : 0x01 ), // one method
+        0x00,                             // method: no auth
+        0x02                              // method: username/password auth
       };
 
       if( !send( std::string( d, auth ? 4 : 3 ) ) )

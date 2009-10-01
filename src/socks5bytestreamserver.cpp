@@ -150,9 +150,9 @@ namespace gloox
 
         if( data.length() >= 3 && data[0] == 0x05 )
         {
-          unsigned int sz = ( data.length() - 2 < (unsigned int)data[1] )
-                              ? ( data.length() - 2 )
-                              : ( (unsigned int)data[1] );
+          unsigned int sz = ( data.length() - 2 < static_cast<unsigned int>( data[1] ) )
+                              ? static_cast<unsigned int>( data.length() - 2 )
+                              : static_cast<unsigned int>( data[1] );
           for( unsigned int i = 2; i < sz + 2; ++i )
           {
             if( data[i] == 0x00 )

@@ -89,7 +89,7 @@ namespace gloox
 
     struct sockaddr_in local;
     local.sin_family = AF_INET;
-    local.sin_port = htons( (u_short)m_port );
+    local.sin_port = static_cast<unsigned short int>( htonl( m_port ) );
     local.sin_addr.s_addr = m_server.empty() ? INADDR_ANY : inet_addr( m_server.c_str() );
     memset( local.sin_zero, '\0', 8 );
 
@@ -152,7 +152,7 @@ namespace gloox
     m_recvMutex.unlock();
 
     ConnectionTCPClient* conn = new ConnectionTCPClient( m_logInstance, inet_ntoa( they.sin_addr ),
-                                                         ntohs( they.sin_port ) );
+                                                         ntohl( they.sin_port ) );
     conn->setSocket( newfd );
     m_connectionHandler->handleIncomingConnection( this, conn );
 

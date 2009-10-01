@@ -137,7 +137,7 @@ namespace gloox
        * @param totalIn The total number of bytes received.
        * @param totalOut The total number of bytes sent.
        */
-      virtual void getStatistics( int &totalIn, int &totalOut ) = 0;
+      virtual void getStatistics( long int &totalIn, long int &totalOut ) = 0;
 
       /**
        * This function returns a new instance of the current ConnectionBase-derived object.

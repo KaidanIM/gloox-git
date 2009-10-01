@@ -632,7 +632,7 @@ namespace gloox
 
     struct sockaddr_in target;
     target.sin_family = AF_INET;
-    target.sin_port = (unsigned short int)htonl( port );
+    target.sin_port = static_cast<unsigned short int>( htonl( port ) );
 
     if( h->h_length != sizeof( struct in_addr ) )
     {

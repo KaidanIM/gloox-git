@@ -365,7 +365,7 @@ namespace gloox
     util::ForEach( m_connectionPool, &ConnectionBase::cleanup );
   }
 
-  void ConnectionBOSH::getStatistics( int& totalIn, int& totalOut )
+  void ConnectionBOSH::getStatistics( long int& totalIn, long int& totalOut )
   {
     util::ForEach( m_activeConnections, &ConnectionBase::getStatistics, totalIn, totalOut );
     util::ForEach( m_connectionPool, &ConnectionBase::getStatistics, totalIn, totalOut );
