@@ -83,10 +83,15 @@ namespace gloox
             for( ; itt != items.end(); ++itt )
             {
               tag = (*itt);
-
-              ItemOperation* op = new ItemOperation( tag->name() == "retract",
-                                                    tag->findAttribute( "id" ),
-                                                    tag->clone() );
+              bool retract = false;
+              if( tag->name() == "retract" )
+              {
+                retract = true;
+                type = PubSub::EventItemsRetract;
+              }
+              ItemOperation* op = new ItemOperation( retract,
+                                                     tag->findAttribute( "id" ),
+                                                     tag->clone() );
               m_itemOperations->push_back( op );
             }
             break;

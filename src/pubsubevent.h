@@ -48,7 +48,7 @@ namespace gloox
            * @param pld Payload for this object (in the case of a non transient
            * item notification).
            */
-          ItemOperation( bool remove, const std::string& itemid, const Tag* pld = 0)
+          ItemOperation( bool remove, const std::string& itemid, const Tag* pld = 0 )
             : retract( remove ), item( itemid ), payload( pld )
             {}
 
