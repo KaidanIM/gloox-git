@@ -126,11 +126,7 @@ namespace gloox
     int sent = 0;
     for( size_t num = 0, len = data.length(); sent != -1 && num < len; num += sent )
     {
-#ifdef SKYOS
-      sent = ::send( m_socket, (unsigned char*)(data.c_str()+num), (int)(len - num), 0 );
-#else
-      sent = ::send( m_socket, (data.c_str()+num), (int)(len - num), 0 );
-#endif
+      sent = static_cast<int>( ::send( m_socket, (data.c_str()+num), (int)(len - num), 0 ) );
     }
 
     m_totalBytesOut += (int)data.length();
@@ -143,7 +139,7 @@ namespace gloox
     return sent != -1;
   }
 
-  void ConnectionTCPBase::getStatistics( int &totalIn, int &totalOut )
+  void ConnectionTCPBase::getStatistics( long int &totalIn, long int &totalOut )
   {
     totalIn = m_totalBytesIn;
     totalOut = m_totalBytesOut;
@@ -172,7 +168,7 @@ namespace gloox
     if( getsockname ( m_socket, &local, &len ) < 0 )
       return -1;
     else
-      return ntohs( ((struct sockaddr_in *)&local)->sin_port );
+      return ntohl( ((struct sockaddr_in *)&local)->sin_port );
   }
 
   const std::string ConnectionTCPBase::localInterface() const

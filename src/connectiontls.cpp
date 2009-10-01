@@ -131,7 +131,7 @@ namespace gloox
     m_state = StateDisconnected;
   }
 
-  void ConnectionTLS::getStatistics( int& totalIn, int& totalOut )
+  void ConnectionTLS::getStatistics( long int& totalIn, long int& totalOut )
   {
     if( m_connection )
       m_connection->getStatistics( totalIn, totalOut );

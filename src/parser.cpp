@@ -168,7 +168,7 @@ namespace gloox
     }
 
     std::string::size_type count = data.length();
-    for( std::string::size_type i = 0 ; i < count; ++i )
+    for( std::string::size_type i = 0; i < count; ++i )
     {
       const unsigned char c = data[i];
 //       printf( "found char:   %c, ", c );
@@ -176,7 +176,7 @@ namespace gloox
       if( !isValid( c ) )
       {
         cleanup();
-        return i;
+        return static_cast<int>( i );
       }
 
       switch( m_state )
@@ -193,7 +193,7 @@ namespace gloox
               break;
             default:
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
           }
           break;
@@ -229,7 +229,7 @@ namespace gloox
             case '>':
             case '&':
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
             case '/':
               m_state = TagClosingSlash;
@@ -274,7 +274,7 @@ namespace gloox
                   break;
                 default:
                   cleanup();
-                  return i;
+                  return static_cast<int>( i );
                   break;
               }
               break;
@@ -335,7 +335,7 @@ namespace gloox
             case '!':
             case '&':
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
             case '/':
               m_state = TagOpeningSlash;
@@ -354,7 +354,7 @@ namespace gloox
               else
               {
                 cleanup();
-                return i;
+                return static_cast<int>( i );
               }
               break;
             default:
@@ -379,7 +379,7 @@ namespace gloox
                   break;
                 case DecodeInvalid:
                   cleanup();
-                  return i;
+                  return static_cast<int>( i );
                 case DecodeInsufficient:
                   return -1;
               }
@@ -401,7 +401,7 @@ namespace gloox
             {
 //               printf( "noipe, here\n" );
               cleanup();
-              return i;
+              return static_cast<int>( i );
             }
 
             m_state = InterTag;
@@ -409,7 +409,7 @@ namespace gloox
           else
           {
             cleanup();
-            return i;
+            return static_cast<int>( i );
           }
           break;
         case TagClosingSlash:         // we have found the '/' of a closing tag
@@ -423,7 +423,7 @@ namespace gloox
             case '<':
             case '/':
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
             default:
               m_tag += c;
@@ -441,7 +441,7 @@ namespace gloox
             case '?':
             case '&':
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
             case ':':
               if( !m_haveTagPrefix )
@@ -453,7 +453,7 @@ namespace gloox
               else
               {
                 cleanup();
-                return i;
+                return static_cast<int>( i );
               }
               break;
             case '>':
@@ -461,7 +461,7 @@ namespace gloox
               {
 //                 printf( "here\n" );
                 cleanup();
-                return i;
+                return static_cast<int>( i );
               }
               m_state = InterTag;
               break;
@@ -481,7 +481,7 @@ namespace gloox
             case '!':
             case '&':
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
             case '/':
               m_state = TagOpeningSlash;
@@ -490,7 +490,7 @@ namespace gloox
               if( m_preamble == 1 )
               {
                 cleanup();
-                return i;
+                return static_cast<int>( i );
               }
               m_state = TagInside;
               addTag();
@@ -501,7 +501,7 @@ namespace gloox
               else
               {
                 cleanup();
-                return i;
+                return static_cast<int>( i );
               }
               break;
             default:
@@ -527,7 +527,7 @@ namespace gloox
             case '!':
             case '&':
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
             case '=':
               m_state = TagAttributeEqual;
@@ -547,7 +547,7 @@ namespace gloox
               else
               {
                 cleanup();
-                return i;
+                return static_cast<int>( i );
               }
               break;
             default:
@@ -566,7 +566,7 @@ namespace gloox
               break;
             default:
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
           }
           break;
@@ -584,7 +584,7 @@ namespace gloox
               break;
             default:
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
           }
           break;
@@ -594,7 +594,7 @@ namespace gloox
           {
             case '<':
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
             case '\'':
               if( m_quote )
@@ -615,7 +615,7 @@ namespace gloox
                   break;
                 case DecodeInvalid:
                   cleanup();
-                  return i;
+                  return static_cast<int>( i );
                 case DecodeInsufficient:
                   return -1;
               }
@@ -642,7 +642,7 @@ namespace gloox
               if( m_preamble == 1 )
               {
                 cleanup();
-                return i;
+                return static_cast<int>( i );
               }
               m_state = TagInside;
               addTag();
@@ -653,12 +653,12 @@ namespace gloox
               else
               {
                 cleanup();
-                return i;
+                return static_cast<int>( i );
               }
               break;
             default:
               cleanup();
-              return i;
+              return static_cast<int>( i );
               break;
           }
           break;

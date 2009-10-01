@@ -48,7 +48,7 @@ namespace gloox
       void removeIDHandler( IqHandler* ) {}
       void registerStanzaExtension( StanzaExtension* ) {}
       void removeStanzaExtension( int ) {}
-      virtual void handleLastActivityResult( const JID&, int, const std::string& ) {}
+      virtual void handleLastActivityResult( const JID&, long int, const std::string& ) {}
       virtual void handleLastActivityError( const JID&, StanzaError ) {}
       void setTest( int test );
       bool ok();

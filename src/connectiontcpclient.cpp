@@ -134,12 +134,7 @@ namespace gloox
       return ConnNoError;
     }
 
-#ifdef SKYOS
-    int size = ::recv( m_socket, (unsigned char*)m_buf, m_bufsize, 0 );
-#else
-    int size = ::recv( m_socket, m_buf, m_bufsize, 0 );
-#endif
-
+    int size = static_cast<int>( ::recv( m_socket, m_buf, m_bufsize, 0 ) );
     if( size > 0 )
       m_totalBytesIn += size;
 

@@ -24,30 +24,30 @@ namespace gloox
    */
   struct StatisticsStruct
   {
-    int totalBytesSent;             /**< The total number of bytes sent over the wire. This does @b not
+    long int totalBytesSent;             /**< The total number of bytes sent over the wire. This does @b not
                                      * include the TLS handshake nor any TLS-related overhead, but it does
                                      * include anything sent before compression was switched on. */
-    int totalBytesReceived;         /**< The total number of bytes received over the wire. This does @b not
+    long int totalBytesReceived;         /**< The total number of bytes received over the wire. This does @b not
                                      * include the TLS handshake nor any TLS-related overhead, but it does
                                      * include anything sent before compression was switched on. */
-    int compressedBytesSent;        /**< Total number of bytes sent over the wire after compression was
+    long int compressedBytesSent;        /**< Total number of bytes sent over the wire after compression was
                                      * applied. */
-    int compressedBytesReceived;    /**< Total number of bytes received over the wire before decompression
+    long int compressedBytesReceived;    /**< Total number of bytes received over the wire before decompression
                                      * was applied. */
-    int uncompressedBytesSent;      /**< Total number of bytes sent over the wire before compression was
+    long int uncompressedBytesSent;      /**< Total number of bytes sent over the wire before compression was
                                      * applied. */
-    int uncompressedBytesReceived;  /**< Total number of bytes received over the wire after decompression
+    long int uncompressedBytesReceived;  /**< Total number of bytes received over the wire after decompression
                                      * was applied. */
-    int totalStanzasSent;           /**< The total number of Stanzas sent. */
-    int totalStanzasReceived;       /**< The total number of Stanzas received. */
-    int iqStanzasSent;              /**< The total number of IQ Stanzas sent. */
-    int iqStanzasReceived;          /**< The total number of IQ Stanzas received. */
-    int messageStanzasSent;         /**< The total number of Message Stanzas sent. */
-    int messageStanzasReceived;     /**< The total number of Message Stanzas received. */
-    int s10nStanzasSent;            /**< The total number of Subscription Stanzas sent. */
-    int s10nStanzasReceived;        /**< The total number of Subscription Stanzas received. */
-    int presenceStanzasSent;        /**< The total number of Presence Stanzas sent. */
-    int presenceStanzasReceived;    /**< The total number of Presence Stanzas received. */
+    long int totalStanzasSent;           /**< The total number of Stanzas sent. */
+    long int totalStanzasReceived;       /**< The total number of Stanzas received. */
+    long int iqStanzasSent;              /**< The total number of IQ Stanzas sent. */
+    long int iqStanzasReceived;          /**< The total number of IQ Stanzas received. */
+    long int messageStanzasSent;         /**< The total number of Message Stanzas sent. */
+    long int messageStanzasReceived;     /**< The total number of Message Stanzas received. */
+    long int s10nStanzasSent;            /**< The total number of Subscription Stanzas sent. */
+    long int s10nStanzasReceived;        /**< The total number of Subscription Stanzas received. */
+    long int presenceStanzasSent;        /**< The total number of Presence Stanzas sent. */
+    long int presenceStanzasReceived;    /**< The total number of Presence Stanzas received. */
     bool encryption;                /**< Whether or not the connection (to the server) is encrypted. */
     bool compression;               /**< Whether or not the stream (to the server) gets compressed. */
   };
