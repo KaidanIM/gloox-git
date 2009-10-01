@@ -327,14 +327,14 @@ namespace gloox
     if( hdr->rcode >= 1 && hdr->rcode <= 5 )
       error = true;
 
-    if( ntohl( hdr->ancount ) == 0 )
+    if( ntohs( hdr->ancount ) == 0 )
       error = true;
 
-    if( ntohl( hdr->ancount ) > NS_PACKETSZ )
+    if( ntohs( hdr->ancount ) > NS_PACKETSZ )
       error = true;
 
     int cnt;
-    for( cnt = ntohl( hdr->qdcount ); cnt > 0; --cnt )
+    for( cnt = ntohs( hdr->qdcount ); cnt > 0; --cnt )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
       here += strlen + NS_QFIXEDSZ;
@@ -342,7 +342,7 @@ namespace gloox
 
     unsigned char* srv[NS_PACKETSZ];
     int srvnum = 0;
-    for( cnt = ntohl( hdr->ancount ); cnt > 0; --cnt )
+    for( cnt = ntohs( hdr->ancount ); cnt > 0; --cnt )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
       here += strlen;
@@ -368,7 +368,7 @@ namespace gloox
 
       unsigned char* c = srv[cnt] + SRV_PORT;
 
-      servers.insert( std::make_pair( (char*)srvname, ntohl( c[1] << 8 | c[0] ) ) );
+      servers.insert( std::make_pair( (char*)srvname, ntohs( c[1] << 8 | c[0] ) ) );
     }
 
     return servers;
@@ -632,7 +632,7 @@ namespace gloox
 
     struct sockaddr_in target;
     target.sin_family = AF_INET;
-    target.sin_port = static_cast<unsigned short int>( htonl( port ) );
+    target.sin_port = htons( static_cast<unsigned short int>( port ) );
 
     if( h->h_length != sizeof( struct in_addr ) )
     {
