@@ -144,7 +144,7 @@ namespace gloox
     struct sockaddr_in they;
     int sin_size = sizeof( struct sockaddr_in );
 #ifdef _WIN32
-    int newfd = accept( (SOCKET)m_socket, (struct sockaddr*)&they, &sin_size );
+    int newfd = static_cast<int>( accept( static_cast<SOCKET>( m_socket ), (struct sockaddr*)&they, &sin_size ) );
 #else
     int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&sin_size );
 #endif

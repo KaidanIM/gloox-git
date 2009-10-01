@@ -139,7 +139,9 @@ namespace gloox
                cbIoBufferLength ? cbIoBufferLength : m_buffer.size() );
 
         buffer[0].pvBuffer     = e_iobuffer;
-        buffer[0].cbBuffer     = m_buffer.size() > cbIoBufferLength ? cbIoBufferLength : m_buffer.size();
+        buffer[0].cbBuffer     = static_cast<unsigned long>( m_buffer.size() > cbIoBufferLength
+                                                               ? cbIoBufferLength
+                                                               : m_buffer.size() );
         buffer[0].BufferType   = SECBUFFER_DATA;
         buffer[1].cbBuffer = buffer[2].cbBuffer = buffer[3].cbBuffer = 0;
         buffer[1].BufferType = buffer[2].BufferType = buffer[3].BufferType  = SECBUFFER_EMPTY;
@@ -334,7 +336,7 @@ namespace gloox
     do
     {
       /* initialize buffers */
-      ibuf[0].cbBuffer = m_buffer.size();
+      ibuf[0].cbBuffer = static_cast<unsigned long>( m_buffer.size() );
       ibuf[0].pvBuffer = static_cast<void*>( const_cast<char*>( m_buffer.c_str() ) );
       //std::cout << "Size: " << m_buffer.size() << "\n";
       ibuf[1].cbBuffer = 0;
