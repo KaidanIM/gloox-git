@@ -26,13 +26,10 @@
 /* Comment out if you don't have the `setsockopt' function. Usually available. */
 #define HAVE_SETSOCKOPT 1
 
-
+#ifdef _MSC_VER
 #pragma comment( lib, "Dnsapi.lib" )
-
 #pragma comment( lib, "Secur32.lib" )
-
 #pragma comment( lib, "Crypt32.lib" )
-
 #pragma comment( lib, "ws2_32.lib" )
 
 /* The following silences a few C4355 warnings ('this' : used in member initializer list).
@@ -43,3 +40,4 @@
 /* The following silcences warnings concerning "unsafe" functions (sprintf, strncpy, etc.).
    They are used in a safe way here, though. */
 #pragma warning( disable : 4996 )
+#endif
