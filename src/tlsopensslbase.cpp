@@ -34,7 +34,6 @@ namespace gloox
 
   OpenSSLBase::~OpenSSLBase()
   {
-    printf( "OpenSSLBase::~OpenSSLBase()\n" );
     m_handler = 0;
     free( m_buf );
     SSL_CTX_free( m_ctx );
