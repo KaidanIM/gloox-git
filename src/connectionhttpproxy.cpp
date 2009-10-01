@@ -115,7 +115,7 @@ namespace gloox
       m_connection->cleanup();
   }
 
-  void ConnectionHTTPProxy::getStatistics( int& totalIn, int& totalOut )
+  void ConnectionHTTPProxy::getStatistics( long int& totalIn, long int& totalOut )
   {
     if( m_connection )
       m_connection->getStatistics( totalIn, totalOut );

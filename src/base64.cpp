@@ -45,19 +45,19 @@ namespace gloox
 
       for( std::string::size_type i = 0; i < length; ++i )
       {
-        c = ( input[i] >> 2 ) & 0x3f;
+        c = static_cast<char>( ( input[i] >> 2 ) & 0x3f );
         encoded += alphabet64[c];
 
-        c = ( input[i] << 4 ) & 0x3f;
+        c = static_cast<char>( ( input[i] << 4 ) & 0x3f );
         if( ++i < length )
-          c |= ( ( input[i] >> 4 ) & 0x0f );
+          c = static_cast<char>( c | static_cast<char>( ( input[i] >> 4 ) & 0x0f ) );
         encoded += alphabet64[c];
 
         if( i < length )
         {
-          c = ( input[i] << 2 ) & 0x3c;
+          c = static_cast<char>( ( input[i] << 2 ) & 0x3c );
           if( ++i < length )
-            c |= ( input[i] >> 6 ) & 0x03;
+            c = static_cast<char>( c | static_cast<char>( ( input[i] >> 6 ) & 0x03 ) );
           encoded += alphabet64[c];
         }
         else
@@ -68,7 +68,7 @@ namespace gloox
 
         if( i < length )
         {
-          c = input[i] & 0x3f;
+          c = static_cast<char>( input[i] & 0x3f );
           encoded += alphabet64[c];
         }
         else
@@ -93,7 +93,7 @@ namespace gloox
         c = table64(input[i]);
         ++i;
         d = table64(input[i]);
-        c = ( c << 2 ) | ( ( d >> 4 ) & 0x3 );
+        c = static_cast<char>( ( c << 2 ) | ( ( d >> 4 ) & 0x3 ) );
         decoded += c;
         if( ++i < length )
         {
@@ -102,7 +102,7 @@ namespace gloox
             break;
 
           c = table64(input[i]);
-          d = ( ( d << 4 ) & 0xf0 ) | ( ( c >> 2 ) & 0xf );
+          d = static_cast<char>( ( ( d << 4 ) & 0xf0 ) | ( ( c >> 2 ) & 0xf ) );
           decoded += d;
         }
 
@@ -113,7 +113,7 @@ namespace gloox
             break;
 
           d = table64(input[i]);
-          c = ( ( c << 6 ) & 0xc0 ) | d;
+          c = static_cast<char>( ( ( c << 6 ) & 0xc0 ) | d );
           decoded += c;
         }
       }

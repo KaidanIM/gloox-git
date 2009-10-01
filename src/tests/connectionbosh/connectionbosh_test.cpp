@@ -30,7 +30,7 @@ namespace gloox
 //         printf( "FakeConnection::newInstance(): %d\n", g_test );
         return new FakeConnection();
       }
-      virtual void getStatistics( int &totalIn, int &totalOut ) {}
+      virtual void getStatistics( long int &totalIn, long int &totalOut ) {}
       void setTest( int test ) { g_test = test; }
   };
 

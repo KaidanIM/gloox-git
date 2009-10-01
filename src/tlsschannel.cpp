@@ -57,9 +57,9 @@ namespace gloox
     PBYTE e_message = e_iobuffer + m_sizes.cbHeader;
     do
     {
-      const int size = data_copy.size() > m_sizes.cbMaximumMessage
-                                  ? m_sizes.cbMaximumMessage
-                                  : data_copy.size();
+      const size_t size = ( data_copy.size() > m_sizes.cbMaximumMessage )
+                         ? m_sizes.cbMaximumMessage
+                         : data_copy.size();
       memcpy( e_message, data_copy.data(), size );
       if( data_copy.size() > m_sizes.cbMaximumMessage )
         data_copy.erase( 0, m_sizes.cbMaximumMessage );

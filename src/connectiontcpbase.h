@@ -81,7 +81,7 @@ namespace gloox
       virtual void cleanup();
 
       // reimplemented from ConnectionBase
-      virtual void getStatistics( int &totalIn, int &totalOut );
+      virtual void getStatistics( long int &totalIn, long int &totalOut );
 
       /**
        * Gives access to the raw socket of this connection. Use it wisely. You can
@@ -111,7 +111,7 @@ namespace gloox
       virtual const std::string localInterface() const;
 
     protected:
-      ConnectionTCPBase &operator=( const ConnectionTCPBase & );
+      ConnectionTCPBase& operator=( const ConnectionTCPBase& );
       void init( const std::string& server, int port );
       bool dataAvailable( int timeout = -1 );
       void cancel();
@@ -122,8 +122,8 @@ namespace gloox
 
       char* m_buf;
       int m_socket;
-      int m_totalBytesIn;
-      int m_totalBytesOut;
+      long int m_totalBytesIn;
+      long int m_totalBytesOut;
       const int m_bufsize;
       bool m_cancel;
 
