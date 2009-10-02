@@ -120,6 +120,20 @@ namespace gloox
          */
         const std::string& node() const { return m_node; }
 
+        /**
+         * Returns the subscribe/unsubscribed JID. Only set for subscription notifications
+         * (type() == EventSubscription).
+         * @return The affected JID.
+         */
+        const JID& jid() { return m_jid; }
+
+        /**
+         * Returns the subscription state. Only set for subscription notifications
+         * (type() == EventSubscription).
+         * @return @btrue if the subscription request was approved, @b false otherwise.
+         */
+        bool subscription() { return m_subscription; }
+
         // reimplemented from StanzaExtension
         const std::string& filterString() const;
 
@@ -141,9 +155,11 @@ namespace gloox
         PubSub::EventType m_type;
         std::string m_node;
         StringList* m_subscriptionIDs;
+        JID m_jid;
         Tag* m_config;
         ItemOperationList* m_itemOperations;
         std::string m_collection;
+        bool m_subscription;
 
         const ItemOperationList m_emptyOperationList;
         const StringList m_emptyStringList;
