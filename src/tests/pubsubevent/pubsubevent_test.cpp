@@ -133,6 +133,45 @@ int main()
   t = 0;
   tag = 0;
 
+
+  tag = new Tag( "event", XMLNS, XMLNS_PUBSUB_EVENT );
+  t   = new Tag( tag, "subscription", "node", "princely_musings" );
+  t->addAttribute( "jid", "foo@bar.com" );
+  t->addAttribute( "subscription", "subscribed" );
+
+  pse = new PubSub::Event( tag );
+  if( !pse || !(t = pse->tag()) || *t != *tag || pse->type() != PubSub::EventSubscription
+      || pse->node() != "princely_musings" || pse->jid().full() != "foo@bar.com" || !pse->subscription())
+  {
+    ++failed;
+    printf("t: %s\n", t->xml().c_str() );
+    printf("tag: %s\n", tag->xml().c_str() );
+    printf( "'subscription successful' test failed\n" );
+  }
+  delete pse;
+  delete t;
+  pse = 0;
+  t = 0;
+
+
+  tag = new Tag( "event", XMLNS, XMLNS_PUBSUB_EVENT );
+  t   = new Tag( tag, "subscription", "node", "princely_musings" );
+  t->addAttribute( "jid", "foo@bar.com" );
+  t->addAttribute( "subscription", "none" );
+
+  pse = new PubSub::Event( tag );
+  if( !pse || !(t = pse->tag()) || *t != *tag || pse->type() != PubSub::EventSubscription
+      || pse->node() != "princely_musings" || pse->jid().full() != "foo@bar.com" || pse->subscription())
+  {
+    ++failed;
+    printf( "'subscription failed' test failed\n" );
+  }
+  delete pse;
+  delete t;
+  pse = 0;
+  t = 0;
+
+
   Tag* tmp = 0;
   tag = new Tag( "event", XMLNS, XMLNS_PUBSUB_EVENT );
   t = new Tag( tag, "configuration", "node", "princely_musings" );

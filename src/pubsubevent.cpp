@@ -26,7 +26,8 @@ namespace gloox
       "delete",
       "items",
       "items",
-      "purge"
+      "purge",
+      "subscription"
     };
 
     Event::ItemOperation::ItemOperation( const ItemOperation& right )
@@ -37,7 +38,7 @@ namespace gloox
 
     Event::Event( const Tag* event )
       : StanzaExtension( ExtPubSubEvent ), m_type( PubSub::EventUnknown ),
-        m_subscriptionIDs( 0 ), m_config( 0 ), m_itemOperations( 0 )
+        m_subscriptionIDs( 0 ), m_config( 0 ), m_itemOperations( 0 ), m_subscription( false )
     {
       if( !event || event->name() != "event" )
         return;
@@ -94,6 +95,14 @@ namespace gloox
                                                      tag->clone() );
               m_itemOperations->push_back( op );
             }
+            break;
+          }
+
+          case EventSubscription:
+          {
+            m_node = tag->findAttribute( "node" );
+            m_jid.setJID( tag->findAttribute( "jid" ) );
+            m_subscription = tag->hasAttribute( "subscription", "subscribed" );
             break;
           }
 
@@ -212,6 +221,14 @@ namespace gloox
                 child->addChildCopy( op->payload );
             }
           }
+          break;
+        }
+
+        case EventSubscription:
+        {
+          child->addAttribute( "node", m_node );
+          child->addAttribute( "jid", m_jid.full() );
+          child->addAttribute( "subscription", m_subscription ? "subscribed" : "none" );
           break;
         }
 
