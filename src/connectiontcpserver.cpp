@@ -89,7 +89,7 @@ namespace gloox
 
     struct sockaddr_in local;
     local.sin_family = AF_INET;
-    local.sin_port = static_cast<unsigned short int>( htonl( m_port ) );
+    local.sin_port = static_cast<unsigned short int>( htons( m_port ) );
     local.sin_addr.s_addr = m_server.empty() ? INADDR_ANY : inet_addr( m_server.c_str() );
     memset( local.sin_zero, '\0', 8 );
 
