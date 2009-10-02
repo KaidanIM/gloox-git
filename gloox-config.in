@@ -70,7 +70,7 @@ else
   libs=""
 fi
 
-libs="$libs @LIBS@"
+libs="$libs @LIBS@ -lgloox"
 
 if test "$echo_cflags" = "yes"; then
   echo $cflags
