@@ -60,6 +60,7 @@
 #include <algorithm>
 #include <cmath>
 #include <ctime>
+#include <cstdio>
 
 #include <string.h> // for memset()
 
