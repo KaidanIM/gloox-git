@@ -431,7 +431,6 @@ namespace gloox
       bool m_resourceBound;
       bool m_forceNonSasl;
       bool m_manageRoster;
-      bool m_doAuth;
 
       int m_streamFeatures;
 
