@@ -31,8 +31,8 @@ namespace gloox
    * @code
    * Client* c = new Client( ... );
    * c->setConnectionImpl( new ConnectionSOCKS5Proxy( c,
-   *                                new ConnectionTCP( c->logInstance(), proxyHost, proxyPort ),
-   *                                c->logInstance(), xmppHost, xmppPort ) );
+   *                         new ConnectionTCPClient( c->logInstance(), proxyHost, proxyPort ),
+   *                           c->logInstance(), xmppHost, xmppPort ) );
    * @endcode
    *
    * Make sure to pass the proxy host/port to the transport connection (ConnectionTCPClient in this case),
