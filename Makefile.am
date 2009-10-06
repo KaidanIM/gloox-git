@@ -4,7 +4,7 @@
 
 SUBDIRS = src
 
-EXTRA_DIST = LICENSE Doxyfile gloox.pc.in gloox.cbp gloox.dsp README README.win32 README.wince INSTALL config.h.win UPGRADING
+EXTRA_DIST = LICENSE Doxyfile gloox.pc.in gloox.cbp gloox.dsp gloox.vcproj README README.win32 README.wince INSTALL config.h.win UPGRADING
 
 pkgconfigdir=$(libdir)/pkgconfig
 pkgconfig_DATA = gloox.pc
