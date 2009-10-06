@@ -33,6 +33,12 @@
 #include <list>
 #include <map>
 
+#ifdef _WIN32
+#include <windows.h>
+#define SECURITY_WIN32
+#include <security.h>
+#endif
+
 namespace gloox
 {
 
@@ -779,6 +785,11 @@ namespace gloox
       void startSASL( SaslMechanism type );
 
       /**
+       * Releases SASL related resources.
+       */
+      void processSASLSuccess();
+
+      /**
        * Processes the given SASL challenge and sends a response.
        * @param challenge The SASL challenge to process.
        */
@@ -789,6 +800,12 @@ namespace gloox
        * @param tag The Tag to parse.
        */
       void processSASLError( Tag* tag );
+
+      /**
+       * Sets the domain to use in SASL NTLM authentication.
+       * @param domain The domain.
+       */
+      void setNTLMDomain( const std::string& domain ) { m_ntlmDomain = domain; }
 
       /**
        * Starts the TLS handshake.
@@ -997,7 +1014,13 @@ namespace gloox
 
       SaslMechanism m_selectedSaslMech;
 
+      std::string m_ntlmDomain;
       bool m_autoMessageSession;
+
+#ifdef _WIN32
+      CredHandle m_credHandle;
+      CtxtHandle m_ctxtHandle;
+#endif
 
   };
 

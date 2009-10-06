@@ -64,6 +64,10 @@
 
 #include <string.h> // for memset()
 
+#ifdef _WIN32
+#include <tchar.h>
+#endif
+
 namespace gloox
 {
 
@@ -482,7 +486,31 @@ namespace gloox
 //         etc... see gssapi-sasl-draft.txt
 #else
         logInstance().err( LogAreaClassClientbase,
-                    "GSSAPI is not supported on this platform. You should never see this." );
+                    "SASL GSSAPI is not supported on this platform. You should never see this." );
+#endif
+        break;
+      }
+      case SaslMechNTLM:
+      {
+#ifdef _WIN32
+        a->addAttribute( "mechanism", "NTLM" );
+        SEC_WINNT_AUTH_IDENTITY identity, *ident = 0;
+        memset( &identity, 0, sizeof( identity ) );
+        if( m_jid.username().length() > 0 )
+        {
+          identity.User = (unsigned char*)m_jid.username().c_str();
+          identity.UserLength = (unsigned long)m_jid.username().length();
+          identity.Domain = (unsigned char*)m_ntlmDomain.c_str();
+          identity.DomainLength = (unsigned long)m_ntlmDomain.length();
+          identity.Password = (unsigned char*)m_password.c_str();
+          identity.PasswordLength = (unsigned long)m_password.length();
+          identity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
+          ident = &identity;
+        }
+        AcquireCredentialsHandle( 0, _T( "NTLM" ), SECPKG_CRED_OUTBOUND, 0, ident, 0, 0, &m_credHandle, 0 );
+#else
+        logInstance().err( LogAreaClassClientbase,
+                    "SASL NTLM is not supported on this platform. You should never see this." );
 #endif
         break;
       }
@@ -592,6 +620,48 @@ namespace gloox
                            "Huh, received GSSAPI challenge?! This should have never happened!" );
 #endif
         break;
+      case SaslMechNTLM:
+      {
+#ifdef _WIN32
+        bool type1 = ( decoded.length() < 7 ) ? true : false;
+
+        SecBuffer bufferIn = { type1 ? 0 : (unsigned long)decoded.length(),
+                               SECBUFFER_TOKEN,
+                               (void*)decoded.c_str() };
+        SecBufferDesc secIn = { 0, 1, &bufferIn };
+
+        char buffer[4096];
+
+        SecBuffer bufferOut = { sizeof( buffer ), SECBUFFER_TOKEN, buffer };
+        SecBufferDesc secOut = { 0, 1, &bufferOut };
+
+        TimeStamp timestamp;
+        unsigned long contextAttr;
+
+        SECURITY_STATUS status = InitializeSecurityContext( &m_credHandle, type1 ? 0 : &m_ctxtHandle,
+                                                            0, ISC_REQ_MUTUAL_AUTH, 0, 0, &secIn, 0,
+                                                            &m_ctxtHandle, &secOut, &contextAttr,
+                                                            &timestamp );
+        std::string response;
+        if( SUCCEEDED( status ) )
+        {
+          response = std::string( (const char *)bufferOut.pvBuffer, bufferOut.cbBuffer );
+        }
+        else
+        {
+          logInstance().err( LogAreaClassClientbase,
+                             "InitializeSecurityContext() failed, return value "
+                               + util::int2string( status ) );
+        }
+
+        t->setCData( Base64::encode64( response ) );
+#else
+        m_logInstance.err( LogAreaClassClientbase,
+                           "Huh, received NTLM challenge?! This should have never happened!" );
+#endif
+        break;
+      }
+
       default:
         // should never happen.
         break;
@@ -618,6 +688,25 @@ namespace gloox
       m_authError = SaslNotAuthorized;
     else if( tag->hasChild( "temporary-auth-failure" ) )
       m_authError = SaslTemporaryAuthFailure;
+
+#ifdef _WIN32
+    if( m_selectedSaslMech == SaslMechNTLM )
+    {
+      FreeCredentialsHandle( &m_credHandle );
+      DeleteSecurityContext( &m_ctxtHandle );
+    }
+#endif
+  }
+
+  void ClientBase::processSASLSuccess()
+  {
+#ifdef _WIN32
+    if( m_selectedSaslMech == SaslMechNTLM )
+    {
+      FreeCredentialsHandle( &m_credHandle );
+      DeleteSecurityContext( &m_ctxtHandle );
+    }
+#endif
   }
 
   void ClientBase::send( IQ& iq, IqHandler* ih, int context, bool del )
