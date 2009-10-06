@@ -155,7 +155,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
     virtual void handleFTRequest( const JID& from, const JID& /*to*/, const std::string& sid,
                                   const std::string& name, long size, const std::string& hash,
                                   const std::string& date, const std::string& mimetype,
-                                  const std::string& desc, int /*stypes*/, long /*offset*/, long /*length*/ )
+                                  const std::string& desc, int /*stypes*/ )
     {
       printf( "received ft request from %s: %s (%ld bytes, sid: %s). hash: %s, date: %s, mime-type: %s\n"
               "desc: %s\n",
@@ -176,7 +176,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
 
     virtual void handleFTBytestream( Bytestream* bs )
     {
-      printf( "received bytestream type: %s\n", bs->type() == Bytestream::S5B ? "s5b" : "ibb" );
+      printf( "received bytestream of type: %s", bs->type() == Bytestream::S5B ? "s5b" : "ibb" );
       m_bs = bs;
       m_bs->registerBytestreamDataHandler( this );
       if( m_bs->connect() )

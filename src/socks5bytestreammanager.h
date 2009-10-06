@@ -108,12 +108,13 @@ namespace gloox
        * @b not indicate that the bytestream has been opened. This is announced by means of the
        * BytestreamHandler.
        */
-      bool requestSOCKS5Bytestream( const JID& to, S5BMode mode, const std::string& sid = EmptyString, const JID& from = JID() );
+      bool requestSOCKS5Bytestream( const JID& to, S5BMode mode, const std::string& sid = EmptyString,
+                                    const JID& from = JID() );
 
       /**
        * To get rid of a bytestream (i.e., close and delete it), call this function. You
-       * should not use the bytestream any more.
-       * The remote entity will be notified about the closing of the stream.
+       * should then not use the bytestream any more.
+       * The remote entity will be notified of the closing of the stream.
        * @param s5b The bytestream to dispose. It will be deleted here.
        */
       bool dispose( SOCKS5Bytestream* s5b );

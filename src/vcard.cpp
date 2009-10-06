@@ -253,6 +253,13 @@ namespace gloox
       m_photo.binval = binval;
       m_PHOTO = true;
     }
+    else
+    {
+      m_photo.type = EmptyString;
+      m_photo.binval = EmptyString;
+      m_photo.extval = EmptyString;
+      m_PHOTO = false;
+    }
   }
 
   void VCard::setLogo( const std::string& extval )
@@ -271,6 +278,13 @@ namespace gloox
       m_logo.type = type;
       m_logo.binval = binval;
       m_LOGO = true;
+    }
+    else
+    {
+      m_logo.type = EmptyString;
+      m_logo.binval = EmptyString;
+      m_logo.extval = EmptyString;
+      m_LOGO = false;
     }
   }
 

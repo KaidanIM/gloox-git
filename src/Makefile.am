@@ -6,7 +6,7 @@ SUBDIRS = . tests examples
 
 AM_CPPFLAGS = -Wall -pedantic -pipe -Wextra -Wfloat-equal -Wcast-align \
               -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas \
-              -Wconversion -Wundef -Wcast-qual -ansi -Wwrite-strings \
+              -Wconversion -Wundef -Wcast-qual -Wwrite-strings \
               -Wformat-security -Wmissing-format-attribute \
               -Wformat-nonliteral -Wformat-security -Wredundant-decls \
               -Wformat=2 -Wswitch-enum -Wold-style-cast -Wno-long-long

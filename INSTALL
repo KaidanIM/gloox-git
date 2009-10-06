@@ -7,6 +7,15 @@ make
 make install
 
 
+building from svn
+-----------------
+
+./autogen.sh
+./configure
+make
+make install
+
+
 relevant configure options
 --------------------------
 

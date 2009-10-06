@@ -185,7 +185,7 @@ namespace gloox
        * Returns the current priority.
        * @return The priority of the current resource.
        */
-      int priority() const { return m_priority; }
+      int priority() const { return m_presence.priority(); }
 
       /**
        * Sets the username to use to connect to the XMPP server.
@@ -431,10 +431,8 @@ namespace gloox
       bool m_resourceBound;
       bool m_forceNonSasl;
       bool m_manageRoster;
-      bool m_doAuth;
 
       int m_streamFeatures;
-      int m_priority;
 
   };
 

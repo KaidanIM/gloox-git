@@ -118,8 +118,8 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ), m_auth( 0 ),
       m_presence( Presence::Available, JID() ), m_resourceBound( false ),
-      m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( false ),
-      m_streamFeatures( 0 ), m_priority( 0 )
+      m_forceNonSasl( false ), m_manageRoster( true ),
+      m_streamFeatures( 0 )
   {
     m_jid.setServer( server );
     init();
@@ -129,8 +129,8 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, password, EmptyString, port ),
       m_rosterManager( 0 ), m_auth( 0 ),
       m_presence( Presence::Available, JID() ), m_resourceBound( false ),
-      m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( true ),
-      m_streamFeatures( 0 ), m_priority( 0 )
+      m_forceNonSasl( false ), m_manageRoster( true ),
+      m_streamFeatures( 0 )
   {
     m_jid = jid;
     m_server = m_jid.serverRaw();
@@ -155,7 +155,6 @@ namespace gloox
   void Client::setUsername( const std::string &username )
   {
     m_jid.setUsername( username );
-    m_doAuth = true;
   }
 
   bool Client::handleNormalNode( Tag* tag )
@@ -196,7 +195,7 @@ namespace gloox
             bindResource( resource() );
           }
         }
-        else if( m_doAuth && !username().empty() && !password().empty() )
+        else if( !username().empty() && !password().empty() )
         {
           if( !login() )
           {
@@ -205,20 +204,20 @@ namespace gloox
             disconnect( ConnNoSupportedAuth );
           }
         }
-        else if( m_doAuth && !m_clientCerts.empty() && !m_clientKey.empty()
+        else if( !m_clientCerts.empty() && !m_clientKey.empty()
                  && m_streamFeatures & SaslMechExternal && m_availableSaslMechs & SaslMechExternal )
         {
           notifyStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechExternal );
         }
 #ifdef _WIN32
-        else if( m_doAuth && m_streamFeatures & SaslMechGssapi && m_availableSaslMechs & SaslMechGssapi )
+        else if( m_streamFeatures & SaslMechGssapi && m_availableSaslMechs & SaslMechGssapi )
         {
           notifyStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechGssapi );
         }
 #endif
-        else if( m_doAuth && m_streamFeatures & SaslMechAnonymous
+        else if( m_streamFeatures & SaslMechAnonymous
                  && m_availableSaslMechs & SaslMechAnonymous )
         {
           notifyStreamEvent( StreamEventAuthentication );
