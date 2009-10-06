@@ -434,8 +434,9 @@ namespace gloox
        * Sets the photo directly.
        * @param type Format type parameter.
        * @param binval The binary photo data.
+       * @note To remove the photo from the VCard call this function without any parameters.
        */
-      void setPhoto( const std::string& type, const std::string& binval );
+      void setPhoto( const std::string& type = EmptyString, const std::string& binval = EmptyString );
 
       /**
        * Returns photo information.
@@ -453,8 +454,9 @@ namespace gloox
        * Sets the organization logo directly.
        * @param type Format type parameter.
        * @param binval The binary logo data.
+       * @note To remove the logo from the VCard call this function without any parameters.
        */
-      void setLogo( const std::string& type, const std::string& binval );
+      void setLogo( const std::string& type = EmptyString, const std::string& binval = EmptyString );
 
       /**
        * Returns logo information.

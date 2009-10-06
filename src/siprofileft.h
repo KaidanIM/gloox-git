@@ -233,13 +233,6 @@ namespace gloox
                       const std::string& text = EmptyString );
 
       /**
-       * Enables or disables offering of ranged file transfers.
-       * This is off by default.
-       * @param ranged @b True if you want to support ranged transfers, @b false otherwise.
-       */
-      void setRangedTransfers( bool ranged ) { m_ranged = ranged; }
-
-      /**
        * To get rid of a bytestream (i.e., close and delete it), call this function.
        * The remote entity will be notified about the closing of the stream.
        * @param bs The bytestream to dispose. It will be deleted here.
@@ -332,7 +325,6 @@ namespace gloox
       StringMap m_id2sid;
       bool m_delManager;
       bool m_delS5Manager;
-      bool m_ranged;
 
   };
 

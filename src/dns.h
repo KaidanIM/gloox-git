@@ -172,7 +172,6 @@ namespace gloox
         unsigned char buf[NS_PACKETSZ];
         int len;
       };
-      typedef unsigned char name[NS_MAXDNAME];
   };
 
 }

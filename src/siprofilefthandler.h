@@ -58,14 +58,11 @@ namespace gloox
        * @param desc The file's description.
        * @param stypes An ORed list of @link gloox::SIProfileFT::StreamType SIProfileFT::StreamType @endlink
        * indicating the StreamTypes the initiator supports.
-       * @param offset The offset in bytes from which the file should be transmitted.
-       * @param length The number of bytes to send, starting from the given offset. A value of -1
-       * indicates that the entire file is to be transmitted (taking the offset into account).
        */
       virtual void handleFTRequest( const JID& from, const JID& to, const std::string& sid,
                                     const std::string& name, long size, const std::string& hash,
                                     const std::string& date, const std::string& mimetype,
-                                    const std::string& desc, int stypes, long offset, long length ) = 0;
+                                    const std::string& desc, int stypes ) = 0;
 
       /**
        * This function is called to handle a request error or decline.
@@ -79,12 +76,12 @@ namespace gloox
        * The bytestream is not yet open and not ready to send/receive data.
        * @note To initialize the bytestream and to prepare it for data transfer
        * do the following, preferable in that order:
-       * @li register a SOCKS5BytestreamDataHandler with the SOCKS5Bytestream,
+       * @li register a BytestreamDataHandler with the Bytestream,
        * @li set up a separate thread for the bytestream or integrate it into
        * your main loop,
        * @li call its connect() method and check the return value.
        * To not block your application while the data transfer and/or the connection
-       * attempts last, you most likely want to put  the bytestream into its own
+       * attempts last, you most likely want to put the bytestream into its own
        * thread or process (before calling connect() on it). It is safe to do so
        * without additional synchronization.
        * @param bs The bytestream.

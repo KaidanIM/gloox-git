@@ -180,7 +180,11 @@ namespace gloox
                                                          const JID& from )
   {
     if( !m_parent )
+    {
+      m_parent->logInstance().warn( LogAreaClassS5BManager,
+                                    "No parent (ClientBase) set, cannot request bytestream." );
       return false;
+    }
 
     if( m_hosts.empty() )
     {

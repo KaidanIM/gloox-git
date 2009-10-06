@@ -31,14 +31,14 @@ namespace gloox
    * @code
    * Client* c = new Client( ... );
    * c->setConnectionImpl( new ConnectionSOCKS5Proxy( c,
-   *                                new ConnectionTCP( c->logInstance(), proxyHost, proxyPort ),
-   *                                c->logInstance(), xmppHost, xmppPort ) );
+   *                         new ConnectionTCPClient( c->logInstance(), proxyHost, proxyPort ),
+   *                           c->logInstance(), xmppHost, xmppPort ) );
    * @endcode
    *
-   * Make sure to pass the proxy host/port to the transport connection (ConnectionTCP in this case),
+   * Make sure to pass the proxy host/port to the transport connection (ConnectionTCPClient in this case),
    * and the XMPP host/port to the proxy connection.
    *
-   * The reason why ConnectionSOCKS5Proxy doesn't manage its own ConnectionTCP is that it allows it
+   * The reason why ConnectionSOCKS5Proxy doesn't manage its own ConnectionTCPClient is that it allows it
    * to be used with other transports (like IPv6 or chained HTTP/SOCKS5 proxies).
    *
    * @note This class is also used by the SOCKS5 bytestreams implementation (with slightly different

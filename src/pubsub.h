@@ -89,6 +89,7 @@ namespace gloox
       EventItems,              /**< An item has been created or modified. */
       EventItemsRetract,       /**< An item has been deleted. */
       EventPurge,              /**< A Leaf node has been purged. */
+      EventSubscription,       /**< A user's subscription has been processed. */
       EventUnknown             /**< Unknown event. */
     };
 

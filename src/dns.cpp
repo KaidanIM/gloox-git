@@ -83,223 +83,6 @@
 namespace gloox
 {
 
-  /*
-   * The following copyright notices apply ONLY to the functions
-   * printable(), special(), and x__ns_name_ntop() below.
-   * They are included here as temporary copies.
-   */
-
-  /*
-   * Copyright (c) 1985, 1993
-   * The Regents of the University of California. All rights reserved.
-   *
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-   * 1. Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-   * 2. Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the distribution.
-   * 4. Neither the name of the University nor the names of its contributors
-   * may be used to endorse or promote products derived from this software
-   * without specific prior written permission.
-   *
-   * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
-   * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-   * ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-   * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-   * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-   * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-   * SUCH DAMAGE.
-   */
-
-  /*
-   * Portions Copyright (c) 1993 by Digital Equipment Corporation.
-   *
-   * Permission to use, copy, modify, and distribute this software for any
-   * purpose with or without fee is hereby granted, provided that the above
-   * copyright notice and this permission notice appear in all copies, and that
-   * the name of Digital Equipment Corporation not be used in advertising or
-   * publicity pertaining to distribution of the document or software without
-   * specific, written prior permission.
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS" AND DIGITAL EQUIPMENT CORP. DISCLAIMS ALL
-   * WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES
-   * OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL DIGITAL EQUIPMENT
-   * CORPORATION BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
-   * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
-   * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
-   * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
-   * SOFTWARE.
-   */
-
-  /*
-   * Portions Copyright (c) 1996-1999 by Internet Software Consortium.
-   *
-   * Permission to use, copy, modify, and distribute this software for any
-   * purpose with or without fee is hereby granted, provided that the above
-   * copyright notice and this permission notice appear in all copies.
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS" AND INTERNET SOFTWARE CONSORTIUM DISCLAIMS
-   * ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
-      WARRANTIES
-   * OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL INTERNET SOFTWARE
-   * CONSORTIUM BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
-   * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
-   * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
-   * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
-   * SOFTWARE.
-   */
-
-  /*
-   * Copyright (c) 1996,1999 by Internet Software Consortium.
-   *
-   * Permission to use, copy, modify, and distribute this software for any
-   * purpose with or without fee is hereby granted, provided that the above
-   * copyright notice and this permission notice appear in all copies.
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS" AND INTERNET SOFTWARE CONSORTIUM DISCLAIMS
-   * ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
-      WARRANTIES
-   * OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL INTERNET SOFTWARE
-   * CONSORTIUM BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
-   * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
-   * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
-   * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
-   * SOFTWARE.
-   */
-  static const char digits[] = "0123456789";
-
-  /*
-   * printable(ch)
-   * Thinking in noninternationalized USASCII (per the DNS spec),
-   * is this character visible and not a space when printed ?
-   * return:
-   * boolean.
-   */
-  static int printable( int ch )
-  {
-    return ( ch > 0x20 && ch < 0x7f );
-  }
-
-  /*
-   * special(ch)
-   * Thinking in noninternationalized USASCII (per the DNS spec),
-   * is this characted special ("in need of quoting") ?
-   * return:
-   * boolean.
-   */
-  static int special( int ch )
-  {
-    switch( ch )
-    {
-      case 0x22: /* '"' */
-      case 0x2E: /* '.' */
-      case 0x3B: /* ';' */
-      case 0x5C: /* '\\' */
-            /* Special modifiers in zone files. */
-      case 0x40: /* '@' */
-      case 0x24: /* '$' */
-        return 1;
-      default:
-        return 0;
-    }
-  }
-
-  /*
-   * ns_name_ntop(src, dst, dstsiz)
-   * Convert an encoded domain name to printable ascii as per RFC1035.
-   * return:
-   * Number of bytes written to buffer, or -1 (with errno set)
-   * notes:
-   * The root is returned as "."
-   * All other domains are returned in non absolute form
-   */
-  bool x__ns_name_ntop( const u_char *src, char *dst, size_t dstsiz )
-  {
-    const u_char *cp;
-    char *dn, *eom;
-    u_char c;
-    u_int n;
-
-    cp = src;
-    dn = dst;
-    eom = dst + dstsiz;
-
-    while( ( n = *cp++ ) != 0 )
-    {
-      if( ( n & NS_CMPRSFLGS ) != 0 )
-      {
-        /* Some kind of compression pointer. */
-        return false;
-      }
-      if( dn != dst )
-      {
-        if( dn >= eom )
-        {
-          return false;
-        }
-        *dn++ = '.';
-      }
-      if( dn + n >= eom )
-      {
-        return false;
-      }
-      for( ; n > 0; n-- )
-      {
-        c = *cp++;
-        if( special( c ) )
-        {
-          if( dn + 1 >= eom )
-          {
-            return false;
-          }
-          *dn++ = '\\';
-          *dn++ = (char)c;
-        }
-        else if( !printable( c ) )
-        {
-          if( dn + 3 >= eom )
-          {
-            return false;
-          }
-          *dn++ = '\\';
-          *dn++ = digits[c / 100];
-          *dn++ = digits[( c % 100) / 10];
-          *dn++ = digits[c % 10];
-        }
-        else
-        {
-          if( dn >= eom )
-          {
-            return false;
-          }
-          *dn++ = (char)c;
-        }
-      }
-    }
-    if( dn == dst )
-    {
-      if( dn >= eom )
-      {
-        return false;
-      }
-      *dn++ = '.';
-    }
-    if( dn >= eom )
-    {
-      return false;
-    }
-    *dn++ = '\0';
-
-    return true;
-  }
-
 #if defined( HAVE_RES_QUERYDOMAIN ) && defined( HAVE_DN_SKIPNAME ) && defined( HAVE_RES_QUERY )
   DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
                              const std::string& domain, const LogSink& logInstance )
@@ -327,14 +110,14 @@ namespace gloox
     if( hdr->rcode >= 1 && hdr->rcode <= 5 )
       error = true;
 
-    if( ntohl( hdr->ancount ) == 0 )
+    if( ntohs( hdr->ancount ) == 0 )
       error = true;
 
-    if( ntohl( hdr->ancount ) > NS_PACKETSZ )
+    if( ntohs( hdr->ancount ) > NS_PACKETSZ )
       error = true;
 
     int cnt;
-    for( cnt = ntohl( hdr->qdcount ); cnt > 0; --cnt )
+    for( cnt = ntohs( hdr->qdcount ); cnt > 0; --cnt )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
       here += strlen + NS_QFIXEDSZ;
@@ -342,7 +125,7 @@ namespace gloox
 
     unsigned char* srv[NS_PACKETSZ];
     int srvnum = 0;
-    for( cnt = ntohl( hdr->ancount ); cnt > 0; --cnt )
+    for( cnt = ntohs( hdr->ancount ); cnt > 0; --cnt )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
       here += strlen;
@@ -361,15 +144,19 @@ namespace gloox
     HostMap servers;
     for( cnt = 0; cnt < srvnum; ++cnt )
     {
-      name srvname;
+      char srvname[NS_MAXDNAME];
 
-      if( !x__ns_name_ntop( srv[cnt] + SRV_SERVER, (char*)srvname, NS_MAXDNAME ) )
+      if( dn_expand( srvbuf.buf, srvbuf.buf + NS_PACKETSZ,
+                     srv[cnt] + SRV_SERVER, srvname, NS_MAXDNAME ) < 0
+          || !strnlen( srvname, NS_MAXDNAME ) )
         continue;
 
       unsigned char* c = srv[cnt] + SRV_PORT;
-
-      servers.insert( std::make_pair( (char*)srvname, ntohl( c[1] << 8 | c[0] ) ) );
+      servers.insert( std::make_pair( (char*)srvname, ntohs( c[1] << 8 | c[0] ) ) );
     }
+
+    if( !servers.size() )
+      return defaultHostMap( domain, logInstance );
 
     return servers;
   }
@@ -625,14 +412,14 @@ namespace gloox
     struct hostent* h;
     if( ( h = gethostbyname( host.c_str() ) ) == 0 )
     {
-      logInstance.dbg( LogAreaClassDns, "gethostbyname() failed." );
+      logInstance.dbg( LogAreaClassDns, "gethostbyname() failed for " + host + "." );
       cleanup( logInstance );
       return -ConnDnsError;
     }
 
     struct sockaddr_in target;
     target.sin_family = AF_INET;
-    target.sin_port = static_cast<unsigned short int>( htonl( port ) );
+    target.sin_port = htons( static_cast<unsigned short int>( port ) );
 
     if( h->h_length != sizeof( struct in_addr ) )
     {
