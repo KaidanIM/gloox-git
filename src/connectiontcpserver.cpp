@@ -152,7 +152,7 @@ namespace gloox
     m_recvMutex.unlock();
 
     ConnectionTCPClient* conn = new ConnectionTCPClient( m_logInstance, inet_ntoa( they.sin_addr ),
-                                                         ntohl( they.sin_port ) );
+                                                         ntohs( they.sin_port ) );
     conn->setSocket( newfd );
     m_connectionHandler->handleIncomingConnection( this, conn );
 

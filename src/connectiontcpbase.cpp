@@ -169,7 +169,7 @@ namespace gloox
     if( getsockname ( m_socket, &local, &len ) < 0 )
       return -1;
     else
-      return ntohl( ((struct sockaddr_in *)&local)->sin_port );
+      return ntohs( ((struct sockaddr_in *)&local)->sin_port );
   }
 
   const std::string ConnectionTCPBase::localInterface() const
