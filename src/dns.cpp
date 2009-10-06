@@ -145,10 +145,11 @@ namespace gloox
     for( cnt = 0; cnt < srvnum; ++cnt )
     {
       char srvname[NS_MAXDNAME];
+      srvname[0] = '\0';
 
       if( dn_expand( srvbuf.buf, srvbuf.buf + NS_PACKETSZ,
                      srv[cnt] + SRV_SERVER, srvname, NS_MAXDNAME ) < 0
-          || !strnlen( srvname, NS_MAXDNAME ) )
+          || !(*srvname) )
         continue;
 
       unsigned char* c = srv[cnt] + SRV_PORT;
