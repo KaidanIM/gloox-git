@@ -16,9 +16,7 @@ general changes and additions:
 - removed message-based IBB
 - added IQ, Message, Subscription, Presence classes
 - added SASL error malformed-request from RFC 3920bis
-- added StanzaExtension and ported most XEPs
-- ClientBase: removed limit of one IQ handler per xmlns
-- ClientBase: IQ ID handlers will be called first; xmlns handlers will be called only if no ID handler matched
+- added StanzaExtension and ported all XEPs
 - DataForm: removed 'Form' prefix from DataForm::DataFormType enum members
 - DataForm: removed 'Field' prefix from DataForm::FieldType enum members
 - JID: made setters return success/failure

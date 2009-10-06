@@ -12,7 +12,8 @@ No other compilers have been tested by the author so far.
 
 See README.wince for info on building gloox for Win CE/Mobile
 
-Project files for Code::Blocks (gloox.cbp) and MSVC 6 (gloox.dsp) are included.
+Project files for Code::Blocks (gloox.cbp), Visual C++ Express 2008 (gloox.vcproj),
+and MSVC 6 (gloox.dsp) are included. The latter can be imported by other IDEs.
 
 - Edit config.h.win to suit your needs.
 - Add additional libs you have available to the project.
@@ -25,7 +26,7 @@ Project files for Code::Blocks (gloox.cbp) and MSVC 6 (gloox.dsp) are included.
 Building gloox in MinGW and Code::Blocks
 ----------------------------------------
 
-gloox should build out of the box on MinGW. If using MSys, you shoud run configure with
+gloox should build out of the box on MinGW. If using MSys, you should run configure with
 the --with-schannel flag.
 
 
@@ -44,7 +45,7 @@ Building libidn in Win32
 - install mingw + msys from http://www.mingw.org, including mingw-utils
 - build libidn 1.1 or above in msys/mingw
 
-If you want to use libidn in MSVC, type the following in a shell to create msvc import libs :
+If you want to use libidn in MSVC, type the following in a shell to create msvc import libs:
   $ pexports libidn-11.dll > libidn-11.def
   $ lib /def:libidn-11.def
 
