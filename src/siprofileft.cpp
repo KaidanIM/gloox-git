@@ -32,7 +32,7 @@ namespace gloox
                             SOCKS5BytestreamManager* s5Manager )
     : m_parent( parent ), m_manager( manager ), m_handler( sipfth ),
       m_socks5Manager( s5Manager ), m_delManager( false ),
-      m_delS5Manager( false ), m_ranged( false )
+      m_delS5Manager( false )
   {
     if( !m_manager )
     {
@@ -78,8 +78,6 @@ namespace gloox
       file->addAttribute( "date", date );
     if( !desc.empty() )
       new Tag( file, "desc", desc );
-    if( m_ranged )
-      new Tag( file, "range" );
 
     Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
     DataForm df( TypeForm );
@@ -175,19 +173,8 @@ namespace gloox
 
     if( m_handler )
     {
-      long offset = 0;
-      long length = -1;
-
       const Tag* t = si.tag1()->findChild( "desc" );
       const std::string& desc = t ? t->cdata() : EmptyString;
-
-      if( ( t = si.tag1()->findChild( "range" ) ) )
-      {
-        if( t->hasAttribute( "offset" ) )
-          offset = atol( t->findAttribute( "offset" ).c_str() );
-        if( t->hasAttribute( "length" ) )
-          length = atol( t->findAttribute( "length" ).c_str() );
-      }
 
       const std::string& mt = si.mimetype();
       int types = 0;
@@ -220,7 +207,7 @@ namespace gloox
                                         si.tag1()->findAttribute( "hash" ),
                                             si.tag1()->findAttribute( "date" ),
                                   mt.empty() ? "binary/octet-stream" : mt,
-                                  desc, types, offset, length );
+                                  desc, types );
     }
   }
 
