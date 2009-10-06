@@ -214,6 +214,11 @@ namespace gloox
           notifyStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechGssapi );
         }
+        else if( m_streamFeatures & SaslMechNTLM && m_availableSaslMechs & SaslMechNTLM )
+        {
+          notifyStreamEvent( StreamEventAuthentication );
+          startSASL( SaslMechNTLM );
+        }
 #endif
         else if( m_streamFeatures & SaslMechAnonymous
                  && m_availableSaslMechs & SaslMechAnonymous )
@@ -273,7 +278,7 @@ namespace gloox
         }
         else if( xmlns == XMLNS_COMPRESSION )
         {
-          logInstance().err( LogAreaClassClient, "stream compression init failed!" );
+          logInstance().err( LogAreaClassClient, "Stream compression init failed!" );
           disconnect( ConnCompressionFailed );
         }
         else if( xmlns == XMLNS_STREAM_SASL )
@@ -285,18 +290,19 @@ namespace gloox
       }
       else if( name == "compressed" && xmlns == XMLNS_COMPRESSION )
       {
-        logInstance().dbg( LogAreaClassClient, "stream compression inited" );
+        logInstance().dbg( LogAreaClassClient, "Stream compression initialized" );
         m_compressionActive = true;
         header();
       }
       else if( name == "challenge" && xmlns == XMLNS_STREAM_SASL )
       {
-        logInstance().dbg( LogAreaClassClient, "processing SASL challenge" );
+        logInstance().dbg( LogAreaClassClient, "Processing SASL challenge" );
         processSASLChallenge( tag->cdata() );
       }
       else if( name == "success" && xmlns == XMLNS_STREAM_SASL )
       {
         logInstance().dbg( LogAreaClassClient, "SASL authentication successful" );
+        processSASLSuccess();
         setAuthed( true );
         header();
       }
@@ -364,6 +370,9 @@ namespace gloox
 
     if( tag->hasChildWithCData( mech, "GSSAPI" ) )
       mechs |= SaslMechGssapi;
+
+    if( tag->hasChildWithCData( mech, "NTLM" ) )
+      mechs |= SaslMechNTLM;
 
     return mechs;
   }
