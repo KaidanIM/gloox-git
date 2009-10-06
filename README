@@ -1,5 +1,6 @@
 
-For installation instructions check INSTALL.
+For installation instructions on *NIX/Linux/BSD-like systems see INSTALL.
+For installation instructions on Windows see README.win32.
 
 For API documentation, run doxygen or go to http://camaya.net/api/gloox/
 
