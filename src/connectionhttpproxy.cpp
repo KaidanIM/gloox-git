@@ -139,7 +139,7 @@ namespace gloox
         m_proxyHandshakeBuffer = EmptyString;
         m_state = StateConnected;
         m_logInstance.dbg( LogAreaClassConnectionHTTPProxy,
-                           "http proxy connection established" );
+                           "HTTP proxy connection established" );
         m_handler->handleConnect( this );
       }
       else if( !m_proxyHandshakeBuffer.compare( 9, 3, "407" ) )
@@ -174,9 +174,9 @@ namespace gloox
           port = host.second;
         }
       }
-      std::string message = "Requesting http proxy connection to " + server + ":"
-          + util::int2string( port );
-      m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, message );
+      m_logInstance.dbg( LogAreaClassConnectionHTTPProxy,
+                         "Requesting HTTP proxy connection to " + server + ":"
+                           + util::int2string( port ) );
 
       std::string os = "CONNECT " + server + ":" + util::int2string( port ) + " HTTP/1."
           + util::int2string( m_http11 ? 1 : 0 ) + "\r\n"
@@ -206,7 +206,7 @@ namespace gloox
                                               ConnectionError reason )
   {
     m_state = StateDisconnected;
-    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, "HTTP Proxy connection closed" );
+    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, "HTTP proxy connection closed" );
 
     if( m_handler )
       m_handler->handleDisconnect( this, reason );
