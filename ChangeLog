@@ -33,6 +33,7 @@ general changes and additions:
 - Tag: made findTag(), findTagList(), findCData() const
 - RosterItem: SubscriptionEnum moved to gloox namespace; renamed to SubscriptionType
 - MessageSession::send(): added StanzaExtensionList parameter
+- added SASL NTLM authentication (win32 only)
 
 deprecated:
 - MUCRoomHandler::handleMUCMessage( MUCRoom*, string, string, bool, string, bool ),
