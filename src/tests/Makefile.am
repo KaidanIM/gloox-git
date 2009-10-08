@@ -12,7 +12,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           inbandbytestreamibb inbandbytestream iq \
           jid jinglesessionjingle jinglertp jingleiceudp jinglerawudp jinglesession \
           lastactivity lastactivityquery \
-          md5 message messageeventfilter \
+          md4 md5 message messageeventfilter \
           mucroommuc mucroommucadmin mucroommucowner mucroommucuser \
           nickname nonsaslauthquery nonsaslauth \
           oob \
