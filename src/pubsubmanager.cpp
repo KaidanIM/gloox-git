@@ -615,7 +615,7 @@ namespace gloox
           if( depth == 0 )
             field->setValue( "all" );
           else
-           field->setValue( util::int2string( depth ) );
+            field->setValue( util::int2string( depth ) );
         }
 
         if( !expire.empty() )
@@ -624,7 +624,6 @@ namespace gloox
           field->setValue( expire );
         }
 
-        ps->setJID( jid );
         ps->setOptions( node, df );
       }
       iq.addExtension( ps  );
