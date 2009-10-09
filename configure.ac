@@ -360,6 +360,7 @@ src/tests/jinglerawudp/Makefile
 src/tests/jinglesession/Makefile
 src/tests/lastactivityquery/Makefile
 src/tests/lastactivity/Makefile
+src/tests/md4/Makefile
 src/tests/md5/Makefile
 src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
