@@ -15,13 +15,7 @@
 
 #include "tlsbase.h"
 
-#ifdef _WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
+#include "config.h"
 
 #ifdef HAVE_WINTLS
 

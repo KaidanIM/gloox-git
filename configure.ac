@@ -6,7 +6,7 @@ AC_CONFIG_SRCDIR(src/gloox.cpp)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
-AM_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER(config.h.unix)
 
 AC_SUBST(VERSION)
 

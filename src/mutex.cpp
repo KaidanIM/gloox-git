@@ -13,11 +13,9 @@
 
 #include "mutex.h"
 
-#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
-# include "config.h"
-#endif
+#include "config.h"
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 # include <windows.h>
 #endif
 
@@ -46,48 +44,48 @@ namespace gloox
         MutexImpl( const MutexImpl& );
         MutexImpl& operator=( const MutexImpl& );
 
-  #ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         CRITICAL_SECTION m_cs;
-  #elif defined( HAVE_PTHREAD )
+#elif defined( HAVE_PTHREAD )
         pthread_mutex_t m_mutex;
-  #endif
+#endif
 
     };
 
     Mutex::MutexImpl::MutexImpl()
     {
-  #ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       InitializeCriticalSection( &m_cs );
-  #elif defined( HAVE_PTHREAD )
+#elif defined( HAVE_PTHREAD )
       pthread_mutex_init( &m_mutex, 0 );
-  #endif
+#endif
     }
 
     Mutex::MutexImpl::~MutexImpl()
     {
-  #ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       DeleteCriticalSection( &m_cs );
-  #elif defined( HAVE_PTHREAD )
+#elif defined( HAVE_PTHREAD )
       pthread_mutex_destroy( &m_mutex );
-  #endif
+#endif
     }
 
     void Mutex::MutexImpl::lock()
     {
-  #ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       EnterCriticalSection( &m_cs );
-  #elif defined( HAVE_PTHREAD )
+#elif defined( HAVE_PTHREAD )
       pthread_mutex_lock( &m_mutex );
-  #endif
+#endif
     }
 
     void Mutex::MutexImpl::unlock()
     {
-  #ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       LeaveCriticalSection( &m_cs );
-  #elif defined( HAVE_PTHREAD )
+#elif defined( HAVE_PTHREAD )
       pthread_mutex_unlock( &m_mutex );
-  #endif
+#endif
     }
 
     Mutex::Mutex()

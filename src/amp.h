@@ -20,7 +20,7 @@
 #include <string>
 #include <list>
 
-#include <time.h>
+#include <ctime>
 
 namespace gloox
 {

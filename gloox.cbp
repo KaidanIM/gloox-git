@@ -141,6 +141,8 @@
 		<Unit filename="src\logsink.cpp" />
 		<Unit filename="src\logsink.h" />
 		<Unit filename="src\macros.h" />
+		<Unit filename="src\md4.cpp" />
+		<Unit filename="src\md4.h" />
 		<Unit filename="src\md5.cpp" />
 		<Unit filename="src\md5.h" />
 		<Unit filename="src\message.cpp" />

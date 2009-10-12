@@ -12,13 +12,7 @@
 
 
 
-#ifdef _WIN32 // to disable warning C4996 about sprintf being deprecated
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-// #else
-// # include "config.h"
-#endif
+#include "config.h"
 
 #include "gloox.h"
 
@@ -34,11 +28,11 @@
 
 #include <string.h>
 
-#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
+#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
 # include <netinet/in.h>
 #endif
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 # include <winsock.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>

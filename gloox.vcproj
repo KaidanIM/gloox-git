@@ -370,6 +370,10 @@
 				>
 			</File>
 			<File
+				RelativePath="Z:\gloox-trunk\src\md4.cpp"
+				>
+			</File>
+			<File
 				RelativePath="src\md5.cpp"
 				>
 			</File>
@@ -917,6 +921,10 @@
 			</File>
 			<File
 				RelativePath="src\macros.h"
+				>
+			</File>
+			<File
+				RelativePath="Z:\gloox-trunk\src\md4.h"
 				>
 			</File>
 			<File

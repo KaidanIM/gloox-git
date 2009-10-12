@@ -15,7 +15,6 @@
 #include "util.h"
 
 #include <cstdlib>
-#include <sstream>
 
 namespace gloox
 {
