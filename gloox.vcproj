@@ -370,7 +370,7 @@
 				>
 			</File>
 			<File
-				RelativePath="Z:\gloox-trunk\src\md4.cpp"
+				RelativePath="src\md4.cpp"
 				>
 			</File>
 			<File
@@ -924,7 +924,7 @@
 				>
 			</File>
 			<File
-				RelativePath="Z:\gloox-trunk\src\md4.h"
+				RelativePath="src\md4.h"
 				>
 			</File>
 			<File

@@ -134,11 +134,19 @@ SOURCE=.\src\component.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\compressiondefault.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\compressionzlib.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\connectionbosh.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectioncompression.cpp
 # End Source File
 # Begin Source File
 
@@ -266,6 +274,10 @@ SOURCE=.\src\logsink.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\md4.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\md5.cpp
 # End Source File
 # Begin Source File
@@ -347,6 +359,10 @@ SOURCE=.\src\pubsubitem.cpp
 # Begin Source File
 
 SOURCE=.\src\pubsubmanager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rap.cpp
 # End Source File
 # Begin Source File
 
@@ -570,6 +586,10 @@ SOURCE=.\src\compressiondatahandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\compressiondefault.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\compressionzlib.h
 # End Source File
 # Begin Source File
@@ -778,6 +798,10 @@ SOURCE=.\src\macros.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\md4.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\md5.h
 # End Source File
 # Begin Source File
@@ -911,6 +935,10 @@ SOURCE=.\src\pubsubmanager.h
 # Begin Source File
 
 SOURCE=.\src\pubsubresulthandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rap.h
 # End Source File
 # Begin Source File
 
