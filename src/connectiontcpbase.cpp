@@ -36,7 +36,7 @@
 typedef int socklen_t;
 #endif
 
-#include <time.h>
+#include <ctime>
 
 #include <cstdlib>
 #include <string>
