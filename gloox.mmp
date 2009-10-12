@@ -100,7 +100,6 @@ source        stanza.cpp
 source        stanzaextensionfactory.cpp
 source        subscription.cpp
 source        tag.cpp
-source        t.cpp
 source        tlsdefault.cpp
 source        tlsgnutlsbase.cpp
 source        tlsgnutlsclientanon.cpp
