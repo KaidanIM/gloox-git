@@ -30,7 +30,9 @@
 #elif defined( HAVE_OPENSSL )
 # define HAVE_TLS
 # include "tlsopensslclient.h"
+#ifndef __SYMBIAN32__
 # include "tlsopensslserver.h"
+#endif
 #elif defined( HAVE_WINTLS )
 # define HAVE_TLS
 # include "tlsschannel.h"
@@ -65,7 +67,9 @@ namespace gloox
         break;
       case VerifyingServer:
 #ifdef HAVE_OPENSSL
+#ifndef __SYMBIAN32__
         m_impl = new OpenSSLServer( th );
+#endif
 #endif
         break;
       default:
