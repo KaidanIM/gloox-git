@@ -14,13 +14,7 @@
 
 #include "tlshandler.h"
 
-#ifdef _WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
+#include "config.h"
 
 #if defined( HAVE_GNUTLS )
 # define HAVE_TLS
@@ -31,7 +25,9 @@
 #elif defined( HAVE_OPENSSL )
 # define HAVE_TLS
 # include "tlsopensslclient.h"
+#ifndef __SYMBIAN32__
 # include "tlsopensslserver.h"
+#endif
 #elif defined( HAVE_WINTLS )
 # define HAVE_TLS
 # include "tlsschannel.h"
@@ -68,7 +64,9 @@ namespace gloox
 #ifdef HAVE_GNUTLS
         m_impl = new GnuTLSServer( th );
 #elif defined( HAVE_OPENSSL )
+#ifndef __SYMBIAN32__
         m_impl = new OpenSSLServer( th );
+#endif
 #endif
         break;
       default:

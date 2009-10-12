@@ -102,7 +102,7 @@ else( WIN32 )
         endif( NOT CMAKE_USE_PTHREADS_INIT )
 endif( WIN32 )
 
-configure_file( ${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/config.h )
+configure_file( ${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/config.h.unix )
 
 enable_testing()
 add_test( adhoc_test adhoc_test )

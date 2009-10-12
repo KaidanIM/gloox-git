@@ -273,7 +273,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
                         vcardupdate.h \
                         xhtmlim.h
 
-noinst_HEADERS = compressiondefault.h \
+noinst_HEADERS =        config.h \
+                        compressiondefault.h \
                         compressionzlib.h \
                         dns.h \
                         nonsaslauth.h \

@@ -21,8 +21,6 @@
 #include "util.h"
 #include "error.h"
 
-#include <iostream>
-
 namespace gloox
 {
 

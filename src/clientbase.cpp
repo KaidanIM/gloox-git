@@ -12,13 +12,7 @@
 
 
 
-#ifdef _WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
+#include "config.h"
 
 #include "clientbase.h"
 #include "connectionbase.h"
@@ -66,7 +60,7 @@
 
 #include <string.h> // for memset()
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 #include <tchar.h>
 #endif
 
@@ -92,7 +86,7 @@ namespace gloox
 
   // ---- ClientBase ----
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
-    : m_connection( 0 ), m_transportConnection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
+    : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ),
       m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( TLSOptional ), m_port( port ),
       m_availableSaslMechs( SaslMechAll ),
@@ -101,14 +95,14 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
+      m_transportConnection( 0 ), m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
   {
     init();
   }
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
-    : m_connection( 0 ), m_transportConnection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
+    : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_password( password ),
       m_xmllang( "en" ), m_server( server ),
       m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( TLSOptional ),
@@ -118,7 +112,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
+      m_transportConnection( 0 ), m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
   {
     init();
   }
@@ -450,7 +444,7 @@ namespace gloox
        break;
       case SaslMechGssapi:
       {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         a->addAttribute( "mechanism", "GSSAPI" );
 // The client calls GSS_Init_sec_context, passing in 0 for
 // input_context_handle (initially) and a targ_name equal to output_name
@@ -471,7 +465,7 @@ namespace gloox
       }
       case SaslMechNTLM:
       {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         a->addAttribute( "mechanism", "NTLM" );
         SEC_WINNT_AUTH_IDENTITY identity, *ident = 0;
         memset( &identity, 0, sizeof( identity ) );
@@ -592,7 +586,7 @@ namespace gloox
         break;
       }
       case SaslMechGssapi:
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         // see gssapi-sasl-draft.txt
 #else
         m_logInstance.err( LogAreaClassClientbase,
@@ -601,7 +595,7 @@ namespace gloox
         break;
       case SaslMechNTLM:
       {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         bool type1 = ( decoded.length() < 7 ) ? true : false;
 
         SecBuffer bufferIn = { type1 ? 0 : (unsigned long)decoded.length(),
@@ -668,7 +662,7 @@ namespace gloox
     else if( tag->hasChild( "temporary-auth-failure" ) )
       m_authError = SaslTemporaryAuthFailure;
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     if( m_selectedSaslMech == SaslMechNTLM )
     {
       FreeCredentialsHandle( &m_credHandle );
@@ -679,7 +673,7 @@ namespace gloox
 
   void ClientBase::processSASLSuccess()
   {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     if( m_selectedSaslMech == SaslMechNTLM )
     {
       FreeCredentialsHandle( &m_credHandle );
