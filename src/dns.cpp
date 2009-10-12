@@ -11,13 +11,7 @@
 */
 
 
-#ifdef _WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
+#include "config.h"
 
 #include "gloox.h"
 #include "dns.h"
@@ -29,7 +23,7 @@
 
 #include <stdio.h>
 
-#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
+#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
 # include <netinet/in.h>
 # include <arpa/nameser.h>
 # include <resolv.h>
@@ -41,7 +35,7 @@
 # include <errno.h>
 #endif
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 # include <winsock.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>
@@ -304,7 +298,7 @@ namespace gloox
     }
 
     std::string message = "connect() failed. "
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
         "errno: " + util::int2string( errno );
@@ -337,7 +331,7 @@ namespace gloox
 
   int DNS::getSocket( const LogSink& logInstance )
   {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     WSADATA wsaData;
     if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
     {
@@ -356,7 +350,7 @@ namespace gloox
     else
     {
       std::string message = "getprotobyname( \"tcp\" ) failed. "
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() )
 #else
           "errno: " + util::int2string( errno );
@@ -372,7 +366,7 @@ namespace gloox
 
   int DNS::getSocket( int af, int socktype, int proto, const LogSink& logInstance )
   {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     SOCKET fd;
 #else
     int fd;
@@ -384,7 +378,7 @@ namespace gloox
           + util::int2string( socktype ) + ", "
           + util::int2string( proto )
           + " ) failed. "
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
           "errno: " + util::int2string( errno );
@@ -446,7 +440,7 @@ namespace gloox
 
     std::string message = "Connection to " + host + " ("
         + inet_ntoa( target.sin_addr ) + ":" + util::int2string( port ) + ") failed. "
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
         "errno: " + util::int2string( errno );
@@ -459,7 +453,7 @@ namespace gloox
 
   void DNS::closeSocket( int fd, const LogSink& logInstance )
   {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     int result = closesocket( fd );
 #else
     int result = close( fd );
@@ -468,7 +462,7 @@ namespace gloox
     if( result != 0 )
     {
       std::string message = "closeSocket() failed. "
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
           "errno: " + util::int2string( errno );
@@ -479,7 +473,7 @@ namespace gloox
 
   void DNS::cleanup( const LogSink& logInstance )
   {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     if( WSACleanup() != 0 )
     {
       logInstance.dbg( LogAreaClassDns, "WSACleanup() failed. WSAGetLastError: "

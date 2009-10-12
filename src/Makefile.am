@@ -90,7 +90,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             pubsubitem.h shim.h util.h \
                             connectiontlsserver.h compressiondefault.h
 
-noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
+noinst_HEADERS = config.h prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h \
+                   tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopensslbase.h tlsschannel.h \
                    compressionzlib.h rosteritemdata.h tlsopensslclient.h \
                    tlsopensslserver.h

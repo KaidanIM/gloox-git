@@ -14,13 +14,7 @@
 
 #include "tlshandler.h"
 
-#ifdef _WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
+#include "config.h"
 
 #if defined( HAVE_GNUTLS )
 # define HAVE_TLS

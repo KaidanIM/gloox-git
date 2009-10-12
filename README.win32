@@ -8,7 +8,8 @@ gloox compiles (at least) on:
 As of 1.0-alpha1, gloox DOES NOT compile on:
 - MSVC 6
 
-No other compilers have been tested by the author so far.
+No other compilers are officially supported at this point. Please let me know about
+your experiences with other compilers.
 
 See README.wince for info on building gloox for Win CE/Mobile
 

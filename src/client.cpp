@@ -10,13 +10,7 @@
   This software is distributed without any warranty.
 */
 
-#ifdef _WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
+#include "config.h"
 
 #include "client.h"
 #include "capabilities.h"
@@ -36,12 +30,7 @@
 # include <unistd.h>
 #endif
 
-#ifndef _WIN32_WCE
-# include <iostream>
-# include <sstream>
-#else
-# include <stdio.h>
-#endif
+#include <cstdio>
 
 namespace gloox
 {
@@ -208,7 +197,7 @@ namespace gloox
           notifyStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechExternal );
         }
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         else if( m_streamFeatures & SaslMechGssapi && m_availableSaslMechs & SaslMechGssapi )
         {
           notifyStreamEvent( StreamEventAuthentication );

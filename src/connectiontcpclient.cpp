@@ -23,12 +23,12 @@
 # include <winsock.h>
 #endif
 
-#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
+#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <sys/select.h>
 # include <unistd.h>
-#else
+#elif ( defined( _WIN32 ) || defined( _WIN32_WCE ) ) && !defined( __SYMBIAN32__ )
 # include <winsock.h>
 #endif
 
