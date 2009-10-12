@@ -28,7 +28,7 @@ namespace gloox
    *
    * You should not need to use this class directly.
    *
-   * @author Jakob Schr�ter <js@camaya.net>
+   * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
   class GLOOX_API ConnectionBase

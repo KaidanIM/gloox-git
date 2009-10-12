@@ -10,13 +10,7 @@
  * This software is distributed without any warranty.
  */
 
-#ifdef _WIN32 // to disable warning C4996 about sprintf being deprecated
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-// #else
-// # include "config.h"
-#endif
+#include "config.h"
 
 #include "gloox.h"
 
@@ -27,8 +21,6 @@
 #include "util.h"
 
 #include <string>
-#include <sstream>
-
 #include <cstdlib>
 #include <cctype>
 #include <algorithm>
@@ -70,9 +62,7 @@ namespace gloox
     m_port = xmppPort;
     if( m_port != -1 )
     {
-      std::ostringstream strBOSHHost;
-      strBOSHHost << m_boshHost << ":" << m_port;
-      m_boshedHost = strBOSHHost.str();
+      m_boshedHost = m_boshHost + ":" + util::int2string( m_port );
     }
 
     // drop this connection into our pool of available connections
@@ -138,22 +128,19 @@ namespace gloox
     {
       ++m_rid;
 
-      std::ostringstream requestBody;
-
-      requestBody << "<body ";
-      requestBody << "rid='" << m_rid << "' ";
-      requestBody << "sid='" << m_sid << "' ";
-      requestBody << "type='terminal' ";
-      requestBody << "xml:lang='en' ";
-      requestBody << "xmlns='" << XMLNS_HTTPBIND << "'";
+      std::string requestBody = "<body rid='" + util::int2string( m_rid ) + "' ";
+      requestBody += "sid='" + m_sid + "' ";
+      requestBody += "type='terminal' ";
+      requestBody += "xml:lang='en' ";
+      requestBody += "xmlns='" + XMLNS_HTTPBIND + "'";
       if( m_sendBuffer.empty() )  // Make sure that any data in the send buffer gets sent
-        requestBody << "/>";
+        requestBody += "/>";
       else
       {
-        requestBody << ">" << m_sendBuffer << "</body>";
+        requestBody += ">" + m_sendBuffer + "</body>";
         m_sendBuffer = EmptyString;
       }
-      sendRequest( requestBody.str() );
+      sendRequest( requestBody );
 
       m_logInstance.dbg( LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
     }
@@ -247,26 +234,24 @@ namespace gloox
 
     ++m_rid;
 
-    std::ostringstream requestBody;
-    requestBody << "<body ";
-    requestBody << "rid='" << m_rid << "' ";
-    requestBody << "sid='" << m_sid << "' ";
-    requestBody << "xmlns='" << XMLNS_HTTPBIND << "'";
+    std::string requestBody = "<body rid='" + util::int2string( m_rid ) + "' ";
+    requestBody += "sid='" + m_sid + "' ";
+    requestBody += "xmlns='" + XMLNS_HTTPBIND + "'";
 
     if( m_streamRestart )
     {
-      requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='"
-          << XMLNS_XMPP_BOSH << "' />";
+      requestBody += " xmpp:restart='true' to='" + m_server + "' xml:lang='en' xmlns:xmpp='"
+          + XMLNS_XMPP_BOSH + "' />";
       m_logInstance.dbg( LogAreaClassConnectionBOSH, "Restarting stream" );
     }
     else
     {
-      requestBody << ">" << m_sendBuffer << "</body>";
+      requestBody += ">" + m_sendBuffer + "</body>";
     }
     // Send a request. Force if we are not sending an empty request, or if there are no connections open
-    if( sendRequest( requestBody.str() ) )
+    if( sendRequest( requestBody ) )
     {
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "successfully sent m_sendBuffer" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "Successfully sent m_sendBuffer" );
       m_sendBuffer = EmptyString;
       m_streamRestart = false;
     }
@@ -288,25 +273,23 @@ namespace gloox
     if( !conn )
       return false;
 
-    std::ostringstream request;
-    request << "POST " << m_path;
-
+    std::string request = "POST " + m_path;
     if( m_connMode == ModeLegacyHTTP )
     {
-      request << " HTTP/1.0\r\n";
-      request << "Connection: close\r\n";
+      request += " HTTP/1.0\r\n";
+      request += "Connection: close\r\n";
     }
     else
-      request << " HTTP/1.1\r\n";
+      request += " HTTP/1.1\r\n";
 
-    request << "Host: " << m_boshedHost << "\r\n";
-    request << "Content-Type: text/xml; charset=utf-8\r\n";
-    request << "Content-Length: " << xml.length() << "\r\n";
-    request << "User-Agent: " << "gloox/" << GLOOX_VERSION << "\r\n\r\n";
-    request << xml;
+    request += "Host: " + m_boshedHost + "\r\n";
+    request += "Content-Type: text/xml; charset=utf-8\r\n";
+    request += "Content-Length: " + util::int2string( xml.length() ) + "\r\n";
+    request += "User-Agent: gloox/" + GLOOX_VERSION + "\r\n\r\n";
+    request += xml;
 
 
-    if( conn->send( request.str() ) )
+    if( conn->send( request ) )
     {
       m_lastRequestTime = time( 0 );
       ++m_openRequests;

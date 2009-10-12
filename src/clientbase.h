@@ -33,7 +33,7 @@
 #include <list>
 #include <map>
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 #include <windows.h>
 #define SECURITY_WIN32
 #include <security.h>
@@ -1017,7 +1017,7 @@ namespace gloox
       std::string m_ntlmDomain;
       bool m_autoMessageSession;
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       CredHandle m_credHandle;
       CtxtHandle m_ctxtHandle;
 #endif

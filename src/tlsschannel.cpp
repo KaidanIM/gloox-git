@@ -15,7 +15,6 @@
 #ifdef HAVE_WINTLS
 
 #include <stdio.h> // just for debugging output
-#include <iostream>
 
 namespace gloox
 {

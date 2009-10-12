@@ -27,7 +27,7 @@
 # include <winsock.h>
 #endif
 
-#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
+#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
 # include <netinet/in.h>
 # include <arpa/nameser.h>
 # include <resolv.h>
@@ -40,7 +40,7 @@
 # include <errno.h>
 #endif
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 # include <winsock.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>
@@ -97,7 +97,7 @@ namespace gloox
     {
       std::string message = "bind() to " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + inet_ntoa( local.sin_addr ) + ":" + util::int2string( m_port ) + ") failed. "
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
           "errno: " + util::int2string( errno );
@@ -111,7 +111,7 @@ namespace gloox
     {
       std::string message = "listen on " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + inet_ntoa( local.sin_addr ) + ":" + util::int2string( m_port ) + ") failed. "
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
           "errno: " + util::int2string( errno );
@@ -143,7 +143,7 @@ namespace gloox
 
     struct sockaddr_in they;
     int sin_size = sizeof( struct sockaddr_in );
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     int newfd = static_cast<int>( accept( static_cast<SOCKET>( m_socket ), (struct sockaddr*)&they, &sin_size ) );
 #else
     int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&sin_size );
