@@ -4,7 +4,7 @@
 #include "../../compressiondatahandler.h"
 using namespace gloox;
 
-#include "config.h"
+#include "../../config.h"
 
 #include <stdio.h>
 #include <locale.h>

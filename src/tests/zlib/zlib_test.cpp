@@ -2,13 +2,7 @@
 #include "../../compressiondatahandler.h"
 using namespace gloox;
 
-#ifdef _WIN32
-# include "../../../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../../../config.h.win"
-#else
-# include "config.h"
-#endif
+#include "../../config.h"
 
 #include <stdio.h>
 #include <locale.h>
