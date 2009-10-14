@@ -305,6 +305,39 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE
 
+dnl build tests?
+want_tests=yes
+AC_ARG_WITH(tests, AC_HELP_STRING([--with-tests],
+      [Build unit tests]),
+      want_tests=$withval, want_tests=yes)
+AC_MSG_CHECKING([if unit tests should be built])
+AC_MSG_RESULT($want_tests)
+
+if test "$want_tests" = yes;
+then
+  MAYBE_TESTS=tests
+else
+  MAYBE_TESTS=
+fi
+AC_SUBST([MAYBE_TESTS])
+
+dnl build examples?
+want_examples=yes
+AC_ARG_WITH(examples, AC_HELP_STRING([--with-examples],
+      [Build example programs]),
+      want_examples=$withval, want_examples=yes)
+AC_MSG_CHECKING([if example programs should be built])
+AC_MSG_RESULT($want_examples)
+
+if test "$want_examples" = yes;
+then
+  MAYBE_EXAMPLES=examples
+else
+  MAYBE_EXAMPLES=
+fi
+AC_SUBST([MAYBE_EXAMPLES])
+
+
 dnl Generating makefiles.
 AC_CONFIG_FILES([
 Makefile
