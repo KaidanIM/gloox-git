@@ -802,8 +802,11 @@ namespace gloox
       std::string m_server;              /**< The server to connect to, if different from the
                                           * JID's server. */
       std::string m_sid;                 /**< The stream ID. */
-      bool m_compress;                   /**< Whether stream compression
-                                          * is desired at all. */
+      bool m_compressionActive;          /**< Indicates whether or not stream compression
+                                          * is currently activated. */
+      bool m_encryptionActive;           /**< Indicates whether or not stream encryption
+                                          * is currently activated. */
+      bool m_compress;                   /**< Whether stream compression is desired at all. */
       bool m_authed;                     /**< Whether authentication has been completed successfully. */
       bool m_block;                      /**< Whether blocking connection is wanted. */
       bool m_sasl;                       /**< Whether SASL authentication is wanted. */

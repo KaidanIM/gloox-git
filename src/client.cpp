@@ -152,23 +152,27 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( tag );
 
-      if( m_tls == TLSRequired && ( !hasTls() || !( m_streamFeatures & StreamFeatureStartTls ) ) )
+      if( !m_encryptionActive && m_tls == TLSRequired
+          && ( !hasTls() || ( ( m_streamFeatures & StreamFeatureStartTls ) != StreamFeatureStartTls ) ) )
       {
-        logInstance().err( LogAreaClassClient, "Client is configured to require"
-                                " TLS but either the server didn't offer TLS or"
-                                " TLS support is not compiled in." );
+        if( !hasTls() )
+          logInstance().err( LogAreaClassClient, "Client is configured to require"
+                                  " TLS but TLS support is not compiled into gloox." );
+        else
+          logInstance().err( LogAreaClassClient, "Client is configured to require"
+                                  " TLS but the server didn't offer TLS." );
         disconnect( ConnTlsNotAvailable );
       }
-      else if( m_tls > TLSDisabled && hasTls()
+      else if( m_tls > TLSDisabled && hasTls() && !m_encryptionActive
                && ( !m_encryption || m_encryption->state() == StateDisconnected )
-               && ( m_streamFeatures & StreamFeatureStartTls ) )
+               && ( ( m_streamFeatures & StreamFeatureStartTls ) == StreamFeatureStartTls ) )
       {
         notifyStreamEvent( StreamEventEncryption );
         startTls();
       }
-      else if( hasCompression()
+      else if( hasCompression() && !m_compressionActive
                && ( !m_compression || m_compression->state() == StateDisconnected )
-               && ( m_streamFeatures & StreamFeatureCompressZlib ) )
+               && ( ( m_streamFeatures & StreamFeatureCompressZlib ) == StreamFeatureCompressZlib ) )
       {
         notifyStreamEvent( StreamEventCompression );
         logInstance().warn( LogAreaClassClient, "The server offers compression, but negotiating Compression at this stage is not recommended. See XEP-0170 for details. We'll continue anyway." );
