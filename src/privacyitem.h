@@ -111,7 +111,7 @@ namespace gloox
        * @param item The item which shall be compared.
        * @return @b True if both items are equal, @b false otherwise.
        */
-      bool operator==( PrivacyItem& item ) const;
+      bool operator==( const PrivacyItem& item ) const;
 
     private:
       ItemType m_type;
