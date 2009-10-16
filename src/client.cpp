@@ -138,7 +138,7 @@ namespace gloox
     m_disco->setIdentity( "client", "bot" );
     registerStanzaExtension( new ResourceBind( 0 ) );
     registerStanzaExtension( new Capabilities() );
-    m_presence.addExtension( new Capabilities( m_disco ) );
+    m_presenceExtensions.push_back( new Capabilities( m_disco ) );
   }
 
   void Client::setUsername( const std::string &username )
@@ -553,10 +553,6 @@ namespace gloox
   {
     if( state() < StateConnected )
       return;
-
-    StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
-    for( ; it != m_presenceExtensions.end(); ++it )
-      pres.addExtension( (*it)->clone() );
 
     send( pres );
   }
