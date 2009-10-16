@@ -35,7 +35,10 @@ namespace gloox
     m_buf = 0;
     cleanup();
     delete m_session;
-    gnutls_global_deinit();
+// FIXME: It segfaults if more then one account uses
+// encryption at same time, so we comment it for now.
+// Do we need to deinit at all?
+//     gnutls_global_deinit();
   }
 
   bool GnuTLSBase::encrypt( const std::string& data )
