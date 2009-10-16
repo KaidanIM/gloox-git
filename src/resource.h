@@ -90,7 +90,7 @@ namespace gloox
         for( ; it != exts.end(); ++it )
         {
           Tag* t = (*it)->tag();
-          m_extensions.push_back( (*it)->newInstance( t ) ); // FIXME suboptimal at best
+          m_extensions.push_back( (*it)->clone() );
           delete t;
         }
       }
