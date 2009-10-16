@@ -279,7 +279,7 @@ namespace gloox
        * A convenience function that sends the given Presence stanza.
        * @param pres The Presence stanza to send.
        */
-      void send( const Presence& pres );
+      void send( Presence& pres );
 
       /**
        * Returns whether authentication has taken place and was successful.
