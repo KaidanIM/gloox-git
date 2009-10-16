@@ -160,10 +160,22 @@ namespace gloox
         i->addAttribute( "jid", (*it).jid().bare() );
       if( !(*it).nick().empty() )
         i->addAttribute( "nick", (*it).nick() );
-      if( m_role != RoleInvalid )
-        i->addAttribute( "role", util::lookup( m_role, roleValues ) );
-      if( m_affiliation != AffiliationInvalid )
-        i->addAttribute( "affiliation", util::lookup( m_affiliation, affiliationValues ) );
+
+      MUCRoomRole rol;
+      if( (*it).role() != RoleInvalid )
+        rol = (*it).role();
+      else if( m_role != RoleInvalid )
+        rol = m_role;
+      if( rol != RoleInvalid )
+        i->addAttribute( "role", util::lookup( rol, roleValues ) );
+
+      MUCRoomAffiliation aff;
+      if( (*it).affiliation() != AffiliationInvalid )
+        aff = (*it).affiliation();
+      else if( m_affiliation != AffiliationInvalid )
+        aff = m_affiliation;
+      if( aff != AffiliationInvalid )
+        i->addAttribute( "affiliation", util::lookup( aff, affiliationValues ) );
       if( !(*it).reason().empty() )
         new Tag( i, "reason", (*it).reason() );
     }
@@ -876,6 +888,7 @@ namespace gloox
 
     IQ iq( IQ::Get, m_nick.bareJID() );
     iq.addExtension( new MUCAdmin( operation ) );
+    m_parent->send( iq, this, operation );
   }
 
   void MUCRoom::storeList( const MUCListItemList items, MUCOperation operation )
@@ -979,7 +992,7 @@ namespace gloox
       return;
 
     IQ iq( IQ::Get, m_nick.bareJID() );
-    iq.addExtension( new MUCOwner() );
+    iq.addExtension( new MUCOwner( MUCOwner::TypeRequestConfig ) );
 
     m_parent->send( iq, this, RequestRoomConfig );
 
