@@ -130,6 +130,8 @@ namespace gloox
     registerStanzaExtension( new Ping() );
     registerIqHandler( this, ExtPing );
 
+    m_encryptionActive = false;
+    m_compressionActive = false;
     m_streamError = StreamErrorUndefined;
     m_block = false;
     memset( &m_stats, 0, sizeof( m_stats ) );
@@ -291,6 +293,7 @@ namespace gloox
       else
       {
         logInstance().dbg( LogAreaClassClientbase, "Connection encryption active" );
+        m_encryptionActive = true;
       }
     }
     else
@@ -322,9 +325,11 @@ namespace gloox
 
     if( m_encryption )
       m_encryption->setConnectionImpl( 0 );
+    m_encryptionActive = false;
 
     if( m_compression )
       m_compression->setConnectionImpl( 0 );
+    m_compressionActive = false;
 
     m_connection->registerConnectionDataHandler( this );
 
