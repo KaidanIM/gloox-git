@@ -1006,14 +1006,7 @@ namespace gloox
             }
             case Unsubscription:
             {
-              const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
-              if( ps )
-              {
-                const std::string& node = ps->node();
-                const std::string& sid = ps->subscriptionID();
-                const std::string& jid = ps->jid().full();
-                rh->handleUnsubscriptionResult( iq.id(), service, node, sid, jid, error );
-              }
+              rh->handleUnsubscriptionResult( iq.id(), service, error );
               break;
             }
             case GetSubscriptionList:

@@ -144,18 +144,12 @@ namespace gloox
          *
          * @param id The reply IQ's id.
          * @param service PubSub service.
-         * @param node Node to unsubscribe from.
-         * @param sid Subscription ID.
-         * @param jid Subscribed entity.
          * @param error Unsubscription Error.
          *
          * @see Manager::unsubscribe
          */
         virtual void handleUnsubscriptionResult( const std::string& id,
                                                  const JID& service,
-                                                 const std::string& node,
-                                                 const std::string& sid,
-                                                 const JID& jid,
                                                  const Error* error = 0 ) = 0;
 
         /**
