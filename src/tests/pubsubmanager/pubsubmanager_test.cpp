@@ -26,9 +26,7 @@ class RH : public PubSub::ResultHandler
                                                const PubSub::SubscriptionType,
                                                const Error* ) {}
     void handleUnsubscriptionResult( const std::string&,
-                                     const JID&, const std::string&,
-                                                 const std::string&,
-                                                 const JID&,
+                                     const JID&,
                                                  const Error* ) {}
     void handleSubscriptionOptions( const std::string&,
                                     const JID&, const JID&,
