@@ -89,9 +89,7 @@ namespace gloox
         StanzaExtensionList::const_iterator it = exts.begin();
         for( ; it != exts.end(); ++it )
         {
-          Tag* t = (*it)->tag();
           m_extensions.push_back( (*it)->clone() );
-          delete t;
         }
       }
 
