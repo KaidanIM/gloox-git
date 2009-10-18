@@ -106,6 +106,12 @@ namespace gloox
     util::clearList( m_identities );
   }
 
+  void Disco::Info::setForm( DataForm* form )
+  {
+    delete m_form;
+    m_form = form;
+  }
+
   bool Disco::Info::hasFeature( const std::string& feature ) const
   {
     StringList::const_iterator it = m_features.begin();
@@ -226,7 +232,7 @@ namespace gloox
 
   // ---- Disco ----
   Disco::Disco( ClientBase* parent )
-    : m_parent( parent )
+    : m_parent( parent ), m_form( 0 )
   {
     addFeature( XMLNS_VERSION );
 //     addFeature( XMLNS_DISCO_INFO ); //handled by Disco::Info now
@@ -245,6 +251,7 @@ namespace gloox
   Disco::~Disco()
   {
     util::clearList( m_identities );
+    delete m_form;
 
     if( m_parent )
     {
@@ -256,6 +263,12 @@ namespace gloox
       m_parent->removeStanzaExtension( ExtVersion );
       m_parent->removeIDHandler( this );
     }
+  }
+
+  void Disco::setForm( DataForm* form )
+  {
+    delete m_form;
+    m_form = form;
   }
 
   bool Disco::handleIq( const IQ& iq )
@@ -319,6 +332,8 @@ namespace gloox
             }
             i->setIdentities( il );
             i->setFeatures( m_features );
+            if( m_form )
+              i->setForm( m_form );
           }
 
           re.addExtension( i );

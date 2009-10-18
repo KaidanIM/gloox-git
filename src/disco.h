@@ -98,6 +98,15 @@ namespace gloox
            */
           const DataForm* form() const { return m_form; }
 
+          /**
+           * Adds an optional DataForm, e.g. for XEP-0232. Only one form can be added
+           * at this point.
+           * @param form An optional DataForm to include in the Info reply.
+           * The form will be owned by and deleted on destruction of the Info object.
+           * @note If called more than once the previously set form will be deleted.
+           */
+          void setForm( DataForm* form );
+
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;
 
@@ -514,6 +523,15 @@ namespace gloox
       const IdentityList& identities() const { return m_identities; }
 
       /**
+       * Adds an optional DataForm to Disco:Info replies, e.g. for XEP-0232.
+       * Only one form can be added at this point.
+       * @param form An optional DataForm to include in the Info reply.
+       * The form will be owned by and deleted on destruction of the Disco object.
+       * @note If called more than once the previously set form will be deleted.
+       */
+      void setForm( DataForm* form );
+
+      /**
        * Use this function to register an @ref DiscoHandler with the Disco
        * object. This is only necessary if you want to receive Disco-set requests. Else
        * a one-time registration happens when calling getDiscoInfo() and getDiscoItems(), respectively.
@@ -592,7 +610,8 @@ namespace gloox
       DiscoHandlerMap m_track;
       IdentityList m_identities;
       StringList m_features;
-      StringMap  m_queryIDs;
+      StringMap m_queryIDs;
+      DataForm* m_form;
 
       std::string m_versionName;
       std::string m_versionVersion;
