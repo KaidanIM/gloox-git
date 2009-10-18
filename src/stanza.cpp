@@ -70,7 +70,7 @@ namespace gloox
                         std::string& defaultLang,
                         const Tag* tag )
   {
-    const std::string& lang = tag->findAttribute( "xml:lang" );
+    const std::string& lang = tag ? tag->findAttribute( "xml:lang" ) : EmptyString;
     setLang( map, defaultLang, tag ? tag->cdata() : EmptyString, lang );
   }
 
