@@ -106,6 +106,7 @@ libgloox_la_SOURCES = adhoc.cpp \
                         stanzaextensionfactory.cpp \
                         subscription.cpp \
                         tag.cpp \
+                        thread.cpp \
                         tlsdefault.cpp \
                         tlsgnutlsbase.cpp \
                         tlsgnutlsclientanon.cpp \
@@ -263,6 +264,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
                         subscriptionhandler.h \
                         tag.h \
                         taghandler.h \
+                        thread.h \
                         tlsbase.h \
                         tlsdefault.h \
                         tlshandler.h \
