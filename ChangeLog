@@ -1,6 +1,7 @@
 v1.1 -- xx yyy 2009
 -------------------
 - added MD4 support (for native NTLM auth)
+- added wrapper for Posix and Windows natice threads
 
 
 v1.0 -- xx yyy 2008
