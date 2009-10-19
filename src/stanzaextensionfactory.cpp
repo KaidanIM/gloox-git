@@ -67,12 +67,11 @@ namespace gloox
 
   void StanzaExtensionFactory::addExtensions( Stanza& stanza, Tag* tag )
   {
-    ConstTagList match;
     ConstTagList::const_iterator it;
     SEList::const_iterator ite = m_extensions.begin();
     for( ; ite != m_extensions.end(); ++ite )
     {
-      match = tag->findTagList( (*ite)->filterString() );
+      const ConstTagList& match = tag->findTagList( (*ite)->filterString() );
       it = match.begin();
       for( ; it != match.end(); ++it )
       {
