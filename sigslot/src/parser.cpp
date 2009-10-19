@@ -19,8 +19,8 @@
 namespace gloox
 {
 
-  Parser::Parser( TagHandler* ph, bool deleteRoot )
-    : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_xmlnss( 0 ), m_state( Initial ),
+  Parser::Parser( bool deleteRoot )
+    : m_current( 0 ), m_root( 0 ), m_xmlnss( 0 ), m_state( Initial ),
       m_preamble( 0 ), m_return( ParseIncomplete ), m_quote( false ), m_haveTagPrefix( false ),
       m_haveAttribPrefix( false ), m_attribIsXmlns( false ), m_deleteRoot( deleteRoot ),
       m_nullRoot( true )
@@ -838,13 +838,12 @@ namespace gloox
 
   void Parser::streamEvent( Tag* tag )
   {
-    if( m_tagHandler )
-      m_tagHandler->handleTag( tag );
+    tagParsed( tag );
   }
 
   Tag* Parser::parse( std::string& data )
   {
-    Parser p( 0, false );
+    Parser p( false );
     p.m_nullRoot = false;
     int i = p.feed( data );
     if( i == -1 && p.m_return == ParseOK )

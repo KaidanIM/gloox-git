@@ -16,7 +16,7 @@
 #define PARSER_H__
 
 #include "gloox.h"
-#include "taghandler.h"
+#include "sigslot.h"
 #include "tag.h"
 
 #include <string>
@@ -36,11 +36,10 @@ namespace gloox
     public:
       /**
        * Constructs a new Parser object.
-       * @param ph The object to send incoming Tags to.
        * @param deleteRoot Indicates whether a parsed Tag should be
        * deleted after pushing it upstream. Defaults to @p true.
        */
-      Parser( TagHandler* ph, bool deleteRoot = true );
+      Parser( bool deleteRoot = true );
 
       /**
        * Virtual destructor.
@@ -73,6 +72,12 @@ namespace gloox
        * @since 1.0
        */
       static Tag* parse( std::string& data );
+
+      /**
+       * This signal is emitted when a complete Tag has been parsed.
+       * @param T The parsed Tag.
+       */
+      signal1<Tag*> tagParsed;
 
     private:
       enum ParserInternalState
@@ -133,7 +138,6 @@ namespace gloox
                                     const std::string& needle );
       DecodeState decode( std::string::size_type& pos, const std::string& data );
 
-      TagHandler* m_tagHandler;
       Tag* m_current;
       Tag* m_root;
       StringMap* m_xmlnss;

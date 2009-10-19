@@ -47,6 +47,7 @@
 #include "stanzaextensionfactory.h"
 #include "eventhandler.h"
 #include "event.h"
+#include "taghandler.h"
 
 #include <cstdlib>
 #include <cstdio>
@@ -93,7 +94,7 @@ namespace gloox
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
-      m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
+      m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_transportConnection( 0 ), m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
   {
@@ -110,7 +111,7 @@ namespace gloox
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
-      m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
+      m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_transportConnection( 0 ), m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
   {
@@ -119,6 +120,8 @@ namespace gloox
 
   void ClientBase::init()
   {
+    m_parser.tagParsed.Connect( this, &ClientBase::handleTag );
+
     if( !m_disco )
     {
       m_disco = new Disco( this );

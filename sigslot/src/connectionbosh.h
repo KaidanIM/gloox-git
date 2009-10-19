@@ -16,8 +16,8 @@
 #include "gloox.h"
 #include "connectionbase.h"
 #include "logsink.h"
-#include "taghandler.h"
 #include "parser.h"
+#include "sigslot.h"
 
 #include <string>
 #include <list>
@@ -61,7 +61,8 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class GLOOX_API ConnectionBOSH : public ConnectionBase, ConnectionDataHandler, TagHandler
+  class GLOOX_API ConnectionBOSH : public ConnectionBase, ConnectionDataHandler,
+                                   public has_slots<>
   {
     public:
       /**

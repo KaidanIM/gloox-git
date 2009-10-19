@@ -1,6 +1,7 @@
 #include "../../parser.h"
 #include "../../taghandler.h"
 #include "../../util.h"
+#include "../../sigslot.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -8,7 +9,7 @@ using namespace gloox;
 #include <string>
 #include <cstdio> // [s]print[f]
 
-class ParserTest : private TagHandler
+class ParserTest : private TagHandler, public has_slots<>
 {
   public:
     ParserTest() : m_tag( 0 ), m_multiple( false ) {}
@@ -33,8 +34,8 @@ class ParserTest : private TagHandler
       std::string name;
       std::string data;
       bool tfail = false;
-      Parser *p = new Parser( this );
-
+      Parser* p = new Parser();
+      p->tagParsed.Connect( this, &ParserTest::handleTag );
 
       // -------
       name = "simple";

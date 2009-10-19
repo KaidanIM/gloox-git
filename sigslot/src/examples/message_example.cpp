@@ -41,8 +41,8 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
     void start()
     {
 
-      JID jid( "hurkhurk@example.net/gloox" );
-      j = new Client( jid, "hurkhurks" );
+      JID jid( "hurkhurk@jabber.cc/gloox" );
+      j = new Client( jid, "kuss" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );

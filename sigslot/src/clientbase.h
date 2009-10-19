@@ -22,11 +22,11 @@
 #include "jid.h"
 #include "logsink.h"
 #include "mutex.h"
-#include "taghandler.h"
 #include "statisticshandler.h"
 #include "connectiondatahandler.h"
 #include "parser.h"
 #include "tlshandler.h"
+#include "sigslot.h"
 
 #include <string>
 #include <list>
@@ -70,7 +70,8 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_API ClientBase : public TagHandler, public ConnectionDataHandler,
+  class GLOOX_API ClientBase : public has_slots<>,
+                               public ConnectionDataHandler,
                                public IqHandler, public TLSHandler
   {
 
@@ -643,8 +644,7 @@ namespace gloox
        */
       const StanzaExtensionList& presenceExtensions() const { return m_presenceExtensions; }
 
-      // reimplemented from ParserHandler
-      virtual void handleTag( Tag* tag );
+      void handleTag( Tag* tag );
 
       // reimplemented from ConnectionDataHandler
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
