@@ -1,0 +1,55 @@
+##
+## Process this file with automake to produce Makefile.in
+##
+
+SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp asyncdns \
+          base64 \
+          capabilities chatstatefilter client clientbase connectionbosh \
+          dataform dataformfield \
+          dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
+          error \
+          featureneg flexoffline flexofflineoffline \
+          gpgencrypted gpgsigned \
+          inbandbytestreamibb inbandbytestream iq \
+          jid jinglesessionjingle jinglertp jingleiceudp jinglerawudp jinglesession \
+          lastactivity lastactivityquery \
+          md4 md5 message messageeventfilter \
+          mucroommuc mucroommucadmin mucroommucowner mucroommucuser \
+          nickname nonsaslauthquery nonsaslauth \
+          oob \
+          parser prep presence privacymanager privacymanagerquery \
+          privatexml \
+          pubsubmanagerpubsub pubsubmanager pubsubevent\
+          receipt \
+          registrationquery registration \
+          rostermanagerquery rostermanager \
+          searchquery search \
+          sha shim \
+          simanager simanagersi stanzaextensionfactory subscription \
+          tag tlsgnutls tlsopenssl\
+          uniquemucroomunique \
+          vcard vcardupdate \
+          xpath \
+          zlib util
+
+EXTRA_DIST = clientbase.h
+
+check: test
+
+test: ${SUBDIRS}
+	@for i in $?; do \
+	  ${MAKE} -C $$i all || exit; \
+	done;
+	@for i in $?; do \
+	  $$i/$${i}_test;    \
+	done;
+
+leaktest: leakcheck
+
+leakcheck: ${SUBDIRS}
+	@for i in $?; do \
+	  ${MAKE} -C $$i all || exit; \
+	done;
+	@for i in $?; do \
+	  valgrind -q --leak-check=full --show-reachable=yes $$i/$${i}_test;    \
+	done;

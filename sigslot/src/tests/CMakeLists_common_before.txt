@@ -1,0 +1,5 @@
+file( GLOB test_SRCS *_test.cpp )
+file( GLOB perf_SRCS *_perf.cpp )
+
+get_filename_component( dirname ${CMAKE_CURRENT_SOURCE_DIR} NAME )
+

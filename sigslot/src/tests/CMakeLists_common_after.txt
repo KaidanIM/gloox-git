@@ -1,0 +1,1 @@
+target_link_libraries( ${dirname}_test ${LIBS} )
