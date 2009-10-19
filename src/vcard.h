@@ -388,7 +388,7 @@ namespace gloox
       const std::string& uid() const { return m_uid; }
 
       /**
-       * Sets the "Time zone's Standard Time UTC offset. Value must be an ISO 8601
+       * Sets the Time zone's Standard Time UTC offset. Value must be an ISO 8601
        * formatted UTC offset.
        * @param tz The timezone offset.
        */
