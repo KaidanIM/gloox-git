@@ -27,6 +27,8 @@
 # include <pthread.h>
 #endif
 
+#include <cstdio>
+
 namespace gloox
 {
 
@@ -67,7 +69,12 @@ namespace gloox
 #elif defined( HAVE_PTHREAD )
     void* Thread::ThreadImpl::redirect( void* context )
     {
+      printf( "context's address: %p\n", context );
       Thread* self = static_cast<Thread*>( context );
+//       Thread* d = dynamic_cast<Thread*>( context );
+//       if( !d )
+//         printf( "dynamic cast failed!\n" );
+
       self->run();
       return 0;
     }
@@ -78,6 +85,7 @@ namespace gloox
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       m_self = CreateThread( 0, 0, redirect, this, 0, 0 );
 #elif defined( HAVE_PTHREAD )
+      printf( "this' address: %p\n", reinterpret_cast<void*>( this ) );
       pthread_create( &m_self, 0, redirect, this );
 #endif
     }
