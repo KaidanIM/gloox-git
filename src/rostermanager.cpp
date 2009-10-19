@@ -63,11 +63,13 @@ namespace gloox
 
   void RosterManager::fill()
   {
+    Roster::iterator it2;
     Roster::iterator it = m_roster.begin();
-    for( ; it != m_roster.end(); ++it )
+    while( it != m_roster.end() )
     {
-      delete (*it).second;
-      m_roster.erase( it );
+      it2 = it++;
+      delete (*it2).second;
+      m_roster.erase( it2 );
     }
 
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
