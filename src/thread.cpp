@@ -27,8 +27,6 @@
 # include <pthread.h>
 #endif
 
-#include <cstdio>
-
 namespace gloox
 {
 
@@ -41,7 +39,7 @@ namespace gloox
         ThreadImpl() {}
         ~ThreadImpl() {}
 
-        void start();
+        void start( Thread* thread );
         void join();
 
       private:
@@ -69,24 +67,18 @@ namespace gloox
 #elif defined( HAVE_PTHREAD )
     void* Thread::ThreadImpl::redirect( void* context )
     {
-      printf( "context's address: %p\n", context );
       Thread* self = static_cast<Thread*>( context );
-//       Thread* d = dynamic_cast<Thread*>( context );
-//       if( !d )
-//         printf( "dynamic cast failed!\n" );
-
       self->run();
       return 0;
     }
 #endif
 
-    void Thread::ThreadImpl::start()
+    void Thread::ThreadImpl::start( Thread* thread )
     {
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-      m_self = CreateThread( 0, 0, redirect, this, 0, 0 );
+      m_self = CreateThread( 0, 0, redirect, thread, 0, 0 );
 #elif defined( HAVE_PTHREAD )
-      printf( "this' address: %p\n", reinterpret_cast<void*>( this ) );
-      pthread_create( &m_self, 0, redirect, this );
+      pthread_create( &m_self, 0, redirect, thread );
 #endif
     }
 
@@ -114,7 +106,7 @@ namespace gloox
     void Thread::start()
     {
       if( m_impl )
-        m_impl->start();
+        m_impl->start( this );
     }
 
     void Thread::join()

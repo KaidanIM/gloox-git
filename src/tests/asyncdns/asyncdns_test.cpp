@@ -23,7 +23,7 @@ void ADNSTest::handleAsyncResolveResult( const gloox::DNS::HostMap& hosts, void*
 {
   if( hosts.size() )
   {
-    printf( "results for %s\n", subjects[reinterpret_cast<int>( context )].c_str() );
+    printf( "results for %s\n", subjects[reinterpret_cast<long int>( context )].c_str() );
     gloox::DNS::HostMap::const_iterator it = hosts.begin();
     for( ; it != hosts.end(); ++it )
     {
@@ -31,7 +31,7 @@ void ADNSTest::handleAsyncResolveResult( const gloox::DNS::HostMap& hosts, void*
     }
   }
   else
-    printf( "no hosts found for %s\n", subjects[reinterpret_cast<int>( context )].c_str() );
+    printf( "no hosts found for %s\n", subjects[reinterpret_cast<long int>( context )].c_str() );
 }
 
 void ADNSTest::handleAsyncConnectResult( int fd, void* context )
@@ -50,7 +50,10 @@ int main( int, char** )
     name = "resolve test";
     for( int i = 0; i < 5; ++i )
       adns.resolve( &adt, subjects[i], ls, reinterpret_cast<void*>( i ) );
-    if( 0 ) // should fail, as there's no handler for foonode anymore
+
+    sleep( 15 );
+
+    if( 0 )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );

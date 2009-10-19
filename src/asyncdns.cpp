@@ -62,6 +62,10 @@ namespace  gloox
        */
       virtual ~AsyncDNSWorker();
 
+    protected:
+      // reimplemented from Thread
+      virtual void run();
+
     private:
       enum JobType
       {
@@ -69,9 +73,6 @@ namespace  gloox
         ConnectResolve,
         Connect
       };
-
-      // reimplemented from Thread
-      virtual void run();
 
       void* m_context;
       AsyncDNSHandler* m_adh;

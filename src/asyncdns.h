@@ -94,6 +94,7 @@ namespace gloox
       void connect( AsyncDNSHandler* adh, const std::string& host, int port,
                     const LogSink& logInstance, void* context );
 
+    protected:
       // reimplemented from AsyncDNSHandler
       virtual void handleAsyncResolveResult( const DNS::HostMap& hosts, void* context );
 
