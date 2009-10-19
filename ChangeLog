@@ -1,6 +1,7 @@
 v0.9.9.10 -- 19 Oct 2009
 ------------------------
 - fixed potential crash in Rostermanager::fill() (when reusing the RosterManager)
+- fixed gnutls check in configure.ac (using pkg-config)
 
 
 v0.9.9.9 -- 23 Sep 2009
