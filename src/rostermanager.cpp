@@ -147,6 +147,7 @@ namespace gloox
     if( !m_parent )
       return;
 
+    util::clearMap( m_roster );
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
     IQ iq( IQ::Get, JID(), m_parent->getID() );
     iq.addExtension( new Query() );
