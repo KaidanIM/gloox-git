@@ -2,7 +2,8 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
+SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp asyncdns \
+          base64 \
           capabilities chatstatefilter client clientbase connectionbosh \
           dataform dataformfield \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \

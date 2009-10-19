@@ -18,6 +18,7 @@ libgloox_la_SOURCES = adhoc.cpp \
                         amp.cpp \
                         annotations.cpp \
                         attention.cpp \
+                        asyncdns.cpp \
                         base64.cpp \
                         bob.cpp \
                         bookmarkstorage.cpp \
@@ -135,6 +136,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
                         amp.h \
                         annotations.h \
                         annotationshandler.h \
+                        asyncdns.h \
+                        asyncdnshandler.h \
                         attention.h \
                         base64.h \
                         bob.h \
