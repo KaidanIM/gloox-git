@@ -1,5 +1,5 @@
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../mucroomhandler.h"
 #include "../mucroom.h"
 #include "../disco.h"
@@ -22,7 +22,7 @@ using namespace gloox;
 #include <windows.h>
 #endif
 
-class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
+class MessageTest : public has_slots<>, LogHandler, MUCRoomHandler
 {
   public:
     MessageTest() {}
@@ -33,7 +33,11 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
     {
       JID jid( "hurkhurk@example.net/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &MessageTest::onConnect );
+      j->onDisconnect.Connect( this, &MessageTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &MessageTest::onTLSConnect );
+
       j->setPresence( Presence::Available, -1 );
       j->disco()->setVersion( "gloox muc_example", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
@@ -62,7 +66,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
       delete j;
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       printf( "connected!!!\n" );
       m_room->join();
@@ -70,20 +74,19 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
       m_room->getRoomItems();
     }
 
-    virtual void onDisconnect( ConnectionError e )
+    void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
     }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )

@@ -1,5 +1,5 @@
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../bookmarkhandler.h"
 #include "../disco.h"
 #include "../bookmarkstorage.h"
@@ -11,7 +11,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
+class BookmarkStorageTest : public BookmarkHandler, public has_slots<>
 {
   public:
     BookmarkStorageTest() {}
@@ -23,7 +23,10 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
 
-      j->registerConnectionListener(this );
+      j->onConnect.Connect( this, &BookmarkStorageTest::onConnect );
+      j->onDisconnect.Connect( this, &BookmarkStorageTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &BookmarkStorageTest::onTLSConnect );
+
       j->disco()->setVersion( "bookmarkTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
@@ -36,20 +39,19 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       b->requestBookmarks();
     }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
+    void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleBookmarks( const BookmarkList &bList, const ConferenceList &cList )

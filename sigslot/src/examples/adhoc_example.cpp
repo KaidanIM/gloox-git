@@ -1,11 +1,11 @@
 #include "../client.h"
-#include "../connectionlistener.h"
 #include "../adhoccommandprovider.h"
 #include "../disco.h"
 #include "../adhoc.h"
 #include "../tag.h"
 #include "../loghandler.h"
 #include "../logsink.h"
+#include "../sigslot.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -15,7 +15,7 @@ using namespace gloox;
 #include <cstdio> // [s]print[f]
 
 
-class AdhocTest : public ConnectionListener, AdhocCommandProvider, LogHandler
+class AdhocTest : public AdhocCommandProvider, LogHandler, public has_slots<>
 {
   public:
     AdhocTest() {}
@@ -27,7 +27,11 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider, LogHandler
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->disableRoster();
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &AdhocTest::onConnect );
+      j->onDisconnect.Connect( this, &AdhocTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &AdhocTest::onTLSConnect );
+
       j->disco()->setVersion( "adhocTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
@@ -55,19 +59,18 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider, LogHandler
       }
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
     }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
+    void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )

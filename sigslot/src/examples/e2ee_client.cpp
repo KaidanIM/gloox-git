@@ -1,5 +1,5 @@
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../disco.h"
 #include "../message.h"
 #include "../gloox.h"
@@ -31,7 +31,7 @@ using namespace gloox;
  * nor is it standardized in any way. Use this code at your own risk.
  */
 
-class MessageTest : public ConnectionListener, LogHandler,
+class MessageTest : public has_slots<>, LogHandler,
                     MessageHandler, TLSHandler
 {
   public:
@@ -49,8 +49,12 @@ class MessageTest : public ConnectionListener, LogHandler,
 
       JID jid( "hurkhurk@example.net/client" );
       j = new Client( jid, "hurkhurks" );
-      j->registerConnectionListener( this );
       j->registerMessageHandler( this );
+
+      j->onConnect.Connect( this, &MessageTest::onConnect );
+      j->onDisconnect.Connect( this, &MessageTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &MessageTest::onTLSConnect );
+
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
@@ -62,7 +66,7 @@ class MessageTest : public ConnectionListener, LogHandler,
       delete j;
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       printf( "connected!\n" );
       m_tls->handshake();
@@ -70,14 +74,14 @@ class MessageTest : public ConnectionListener, LogHandler,
       m_send = "";
     }
 
-    virtual void onDisconnect( ConnectionError e )
+    void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
     }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       time_t from( info.date_from );
       time_t to( info.date_to );
@@ -87,7 +91,6 @@ class MessageTest : public ConnectionListener, LogHandler,
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str(), ctime( &from ), ctime( &to ) );
-      return true;
     }
 
     void xtlsSend()

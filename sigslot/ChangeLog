@@ -1,3 +1,13 @@
+v1.1-sigslot-rewrite
+--------------------
+- converted Parser to sigslot
+  - kept function names
+- converted ConnectionListener to sigslot
+  - kept function names
+  - sematic changes: onTLSConnect() returns void, disconnect() has to be called manually
+                     if the server's certificate is invalid/untrusted
+
+
 v1.1 -- xx yyy 2009
 -------------------
 - added MD4 support (for native NTLM auth)

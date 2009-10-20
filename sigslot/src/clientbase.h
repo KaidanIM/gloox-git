@@ -381,12 +381,6 @@ namespace gloox
       bool removeStanzaExtension( int ext );
 
       /**
-       * Registers @c cl as object that receives connection notifications.
-       * @param cl The object to receive connection notifications.
-       */
-      void registerConnectionListener( ConnectionListener* cl );
-
-      /**
        * Registers @c ih as object that receives notifications for IQ stanzas
        * that contain StanzaExtensions of the given type. The number of handlers
        * per extension type is not limited.
@@ -664,47 +658,74 @@ namespace gloox
       // reimplemented from TLSHandler
       virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
 
+      /**
+       * This signal notifies about successful connections. It will be emitted either after all
+       * authentication is finished if username/password were supplied, or after a connection has
+       * been established if no credentials were supplied. Depending on the setting of AutoPresence,
+       * a presence stanza is sent or not.
+       * @since 1.1
+       */
+      signal0<> onConnect;
+
+      /**
+       * This signal notifies about disconnection and its reason.
+       * If @b e indicates a stream error, you can use @ref ClientBase::streamError() to find out
+       * what exactly went wrong, and @ref ClientBase::streamErrorText() to retrieve any explaining
+       * text sent along with the error.
+       * If @b e indicates an authentication error, you can use @ref ClientBase::authError()
+       * to get a finer grained reason.
+       * @param e The reason for the disconnection.
+       * @since 1.1
+       */
+      signal1<ConnectionError> onDisconnect;
+
+      /**
+       * This signal will be emitted when a resource has been bound to the stream. It
+       * will be called for any bound resource, including the main one.
+       * @note The bound resource may be different from the one requested. The server
+       * has the authority to change/overwrite the requested resource.
+       * @param resource The resource string.
+       * @since 1.1
+       */
+      signal1<const std::string&> onResourceBind;
+
+      /**
+       * This signal is emitted (by a Client object) if an error occurs while trying to bind a
+       * resource.
+       * @param error A pointer to an Error object that contains more
+       * information. May be 0.
+       * @since 1.1
+       */
+      signal1<const Error*> onResourceBindError;
+
+      /**
+       * This signal is emitted (by a Client object) if an error occurs while trying to establish
+       * a session.
+       * @param error A pointer to an Error object that contains more
+       * information. May be 0.
+       * @since 1.1
+       */
+      signal1<const Error*> onSessionCreateError;
+
+      /**
+       * This signal is emitted when the connection was TLS/SSL secured.
+       * @param info Comprehensive info on the certificate.
+       * @return @b True if cert credentials are accepted, @b false otherwise. If @b false is returned
+       * the connection is terminated.
+       * @since 1.1
+       */
+      signal1<const CertInfo&> onTLSConnect;
+
+      /**
+       * This signal is emitted for certain stream events. Notifications are purely informational
+       * and implementation is optional. Not all StreamEvents will necessarily be emitted for
+       * a given connection.
+       * @param event A stream event.
+       * @since 1.1
+       */
+      signal1<StreamEvent> onStreamEvent;
+
     protected:
-      /**
-       * This function is called when resource binding yieled an error.
-       * @param error A pointer to an Error object that contains more
-       * information. May be 0.
-       */
-      void notifyOnResourceBindError( const Error* error );
-
-      /**
-       * This function is called when binding a resource succeeded.
-       * @param resource The bound resource.
-       */
-      void notifyOnResourceBind( const std::string& resource );
-
-      /**
-       * This function is called when session creation yieled an error.
-       * @param error A pointer to an Error object that contains more
-       * information. May be 0.
-       */
-      void notifyOnSessionCreateError( const Error* error );
-
-      /**
-       * This function is called when the TLS handshake completed correctly. The return
-       * value is used to determine whether or not the client accepted the server's
-       * certificate. If @b false is returned the connection is closed.
-       * @param info Information on the server's certificate.
-       * @return @b True if the certificate seems trustworthy, @b false otherwise.
-       */
-      bool notifyOnTLSConnect( const CertInfo& info );
-
-      /**
-       * This function is called to notify about successful connection.
-       */
-      void notifyOnConnect();
-
-      /**
-       * This function is used to notify subscribers of stream events.
-       * @param event The event to publish.
-       */
-      void notifyStreamEvent( StreamEvent event );
-
       /**
        * Disconnects the underlying stream and broadcasts the given reason.
        * @param reason The reason for the disconnect.
@@ -891,7 +912,6 @@ namespace gloox
       void notifyPresenceHandlers( Presence& presence );
       void notifySubscriptionHandlers( Subscription& s10n );
       void notifyTagHandlers( Tag* tag );
-      void notifyOnDisconnect( ConnectionError e );
       void send( const std::string& xml );
       void addFrom( Tag* tag );
       void addNamespace( Tag* tag );

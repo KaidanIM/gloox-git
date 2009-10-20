@@ -1,5 +1,5 @@
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../registration.h"
 #include "../logsink.h"
 #include "../loghandler.h"
@@ -11,7 +11,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
+class RegTest : public RegistrationHandler, public has_slots<>, LogHandler
 {
   public:
     RegTest() {}
@@ -38,7 +38,10 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
 
       j = new Client( "example.net" );
       j->disableRoster();
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &RegTest::onConnect );
+      j->onDisconnect.Connect( this, &RegTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &RegTest::onTLSConnect );
 
       m_reg = new Registration( j );
       m_reg->registerRegistrationHandler( this );
@@ -51,7 +54,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
 //       requesting reg fields
      m_reg->fetchRegistrationFields();
@@ -63,15 +66,14 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
 //       m_reg->removeAccount();
     }
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "register_test: disconnected: %d\n", e ); }
+    void onDisconnect( ConnectionError e ) { printf( "register_test: disconnected: %d\n", e ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleRegistrationFields( const JID& /*from*/, int fields, std::string instructions )

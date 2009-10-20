@@ -4,7 +4,7 @@
 #include "../messageeventfilter.h"
 #include "../chatstatehandler.h"
 #include "../chatstatefilter.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../disco.h"
 #include "../message.h"
 #include "../gloox.h"
@@ -30,7 +30,7 @@ using namespace gloox;
 # include <windows.h>
 #endif
 
-class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler,
+class MessageTest : public MessageSessionHandler, public has_slots<>, LogHandler,
                     MessageEventHandler, MessageHandler, ChatStateHandler
 {
   public:
@@ -43,7 +43,11 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 
       JID jid( "hurkhurk@jabber.cc/gloox" );
       j = new Client( jid, "kuss" );
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &MessageTest::onConnect );
+      j->onDisconnect.Connect( this, &MessageTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &MessageTest::onTLSConnect );
+
       j->registerMessageSessionHandler( this, 0 );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
@@ -88,19 +92,19 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       printf( "connected!!!\n" );
     }
 
-    virtual void onDisconnect( ConnectionError e )
+    void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
     }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       time_t from( info.date_from );
       time_t to( info.date_to );
@@ -110,7 +114,6 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str(), ctime( &from ), ctime( &to ) );
-      return true;
     }
 
     virtual void handleMessage( const Message& msg, MessageSession * /*session*/ )

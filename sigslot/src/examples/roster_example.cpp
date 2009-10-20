@@ -1,5 +1,5 @@
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../discohandler.h"
 #include "../disco.h"
 #include "../rostermanager.h"
@@ -16,7 +16,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class RosterTest : public RosterListener, ConnectionListener, LogHandler, MessageHandler
+class RosterTest : public RosterListener, public has_slots<>, LogHandler, MessageHandler
 {
   public:
     RosterTest() {}
@@ -27,7 +27,11 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &RosterTest::onConnect );
+      j->onDisconnect.Connect( this, &RosterTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &RosterTest::onTLSConnect );
+
       j->registerMessageHandler( this );
       j->rosterManager()->registerRosterListener( this );
       j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
@@ -40,19 +44,18 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
     }
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
+    void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void onResourceBindError( ResourceBindError error )

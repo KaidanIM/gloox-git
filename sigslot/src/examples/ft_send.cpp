@@ -1,5 +1,5 @@
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../stanza.h"
 #include "../gloox.h"
 #include "../disco.h"
@@ -31,7 +31,7 @@ using namespace gloox;
  *
  * Sends the given file to the given full JID.
  */
-class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, BytestreamDataHandler
+class FTTest : public LogHandler, public has_slots<>, SIProfileFTHandler, BytestreamDataHandler
 {
   public:
     FTTest( const JID& to, const std::string& file ) : m_bs( 0 ), m_to( to ), m_file( file ), m_quit( false ) {}
@@ -52,7 +52,11 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
 
       JID jid( "hurkhurk@example.net/glooxsendfile" );
       j = new Client( jid, "hurkhurks" );
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &FTTest::onConnect );
+      j->onDisconnect.Connect( this, &FTTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &FTTest::onTLSConnect );
+
       j->disco()->setVersion( "ftsend", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       StringList ca;
@@ -121,20 +125,20 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
       delete j;
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       printf( "connected!!!\n" );
       f->requestFT( m_to, m_file, m_size );
     }
 
-    virtual void onDisconnect( ConnectionError e )
+    void onDisconnect( ConnectionError e )
     {
       printf( "ft_send: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
     }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       time_t from( info.date_from );
       time_t to( info.date_to );
@@ -144,7 +148,6 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str(), ctime( &from ), ctime( &to ) );
-      return true;
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )

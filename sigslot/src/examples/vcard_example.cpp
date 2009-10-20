@@ -1,6 +1,5 @@
-
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../disco.h"
 #include "../stanza.h"
 #include "../gloox.h"
@@ -16,7 +15,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class VCardTest : public ConnectionListener, LogHandler, VCardHandler
+class VCardTest : public has_slots<>, LogHandler, VCardHandler
 {
   public:
     VCardTest() : m_count( 0 ) {}
@@ -28,7 +27,11 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->disableRoster();
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &VCardTest::onConnect );
+      j->onDisconnect.Connect( this, &VCardTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &VCardTest::onTLSConnect );
+
       j->disco()->setVersion( "discoTest", GLOOX_VERSION, "linux" );
       j->disco()->setIdentity( "client", "bot" );
       StringList ca;
@@ -43,22 +46,21 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       printf( "connected\n" );
       JID jid( "hurkhurk@example.org" );
       m_vManager->fetchVCard( jid, this );
     }
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
+    void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )

@@ -26,7 +26,6 @@
 #include "message.h"
 #include "subscription.h"
 #include "presence.h"
-#include "connectionlistener.h"
 #include "iqhandler.h"
 #include "messagehandler.h"
 #include "presencehandler.h"
@@ -288,16 +287,9 @@ namespace gloox
   {
     if( success )
     {
-      if( !notifyOnTLSConnect( certinfo ) )
-      {
-        logInstance().err( LogAreaClassClientbase, "Server's certificate rejected!" );
-        disconnect( ConnTlsFailed );
-      }
-      else
-      {
-        logInstance().dbg( LogAreaClassClientbase, "Connection encryption active" );
-        m_encryptionActive = true;
-      }
+      logInstance().dbg( LogAreaClassClientbase, "Connection encryption active" );
+      m_encryptionActive = true;
+      onTLSConnect( certinfo );
     }
     else
     {
@@ -336,7 +328,8 @@ namespace gloox
 
     m_connection->registerConnectionDataHandler( this );
 
-    notifyOnDisconnect( reason );
+    onDisconnect( reason );
+    init();
   }
 
   void ClientBase::disconnect( ConnectionError reason )
@@ -1170,57 +1163,6 @@ namespace gloox
   {
     m_mucInvitationHandler = 0;
     m_disco->removeFeature( XMLNS_MUC );
-  }
-
-  void ClientBase::registerConnectionListener( ConnectionListener* cl )
-  {
-    if( cl )
-      m_connectionListeners.push_back( cl );
-  }
-
-  void ClientBase::removeConnectionListener( ConnectionListener* cl )
-  {
-    if( cl )
-      m_connectionListeners.remove( cl );
-  }
-
-  void ClientBase::notifyOnConnect()
-  {
-    util::ForEach( m_connectionListeners, &ConnectionListener::onConnect );
-  }
-
-  void ClientBase::notifyOnDisconnect( ConnectionError e )
-  {
-    util::ForEach( m_connectionListeners, &ConnectionListener::onDisconnect, e );
-    init();
-  }
-
-  bool ClientBase::notifyOnTLSConnect( const CertInfo& info )
-  {
-    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end() && (*it)->onTLSConnect( info ); ++it )
-      ;
-    return m_stats.encryption = ( it == m_connectionListeners.end() );
-  }
-
-  void ClientBase::notifyOnResourceBindError( const Error* error )
-  {
-    util::ForEach( m_connectionListeners, &ConnectionListener::onResourceBindError, error );
-  }
-
-  void ClientBase::notifyOnResourceBind( const std::string& resource )
-  {
-    util::ForEach( m_connectionListeners, &ConnectionListener::onResourceBind, resource );
-  }
-
-  void ClientBase::notifyOnSessionCreateError( const Error* error )
-  {
-    util::ForEach( m_connectionListeners, &ConnectionListener::onSessionCreateError, error );
-  }
-
-  void ClientBase::notifyStreamEvent( StreamEvent event )
-  {
-    util::ForEach( m_connectionListeners, &ConnectionListener::onStreamEvent, event );
   }
 
   void ClientBase::notifyPresenceHandlers( Presence& pres )

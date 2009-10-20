@@ -1,8 +1,8 @@
 #include "../client.h"
-#include "../connectionlistener.h"
 #include "../annotationshandler.h"
 #include "../disco.h"
 #include "../annotations.h"
+#include "../sigslot.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -11,7 +11,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class AnnotationsTest : public AnnotationsHandler, ConnectionListener
+class AnnotationsTest : public AnnotationsHandler, public has_slots<>
 {
   public:
     AnnotationsTest() {}
@@ -23,7 +23,10 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
 
-      j->registerConnectionListener(this );
+      j->onConnect.Connect( this, &AnnotationsTest::onConnect );
+      j->onDisconnect.Connect( this, &AnnotationsTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &AnnotationsTest::onTLSConnect );
+
       j->disco()->setVersion( "annotationsTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
@@ -36,20 +39,19 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       a->requestAnnotations();
     }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "annotations_test: disconnected\n" ); }
+    void onDisconnect( ConnectionError /*e*/ ) { printf( "annotations_test: disconnected\n" ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleAnnotations( const AnnotationsList &aList )

@@ -37,7 +37,7 @@ namespace gloox
     if( m_sid.empty() )
       return;
 
-    notifyStreamEvent( StreamEventAuthentication );
+    onStreamEvent( StreamEventAuthentication );
 
     SHA sha;
     sha.feed( m_sid + m_password );
@@ -53,8 +53,8 @@ namespace gloox
       return false;
 
     m_authed = true;
-    notifyStreamEvent( StreamEventFinished );
-    notifyOnConnect();
+    onStreamEvent( StreamEventFinished );
+    onConnect();
 
     return true;
   }

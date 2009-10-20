@@ -1,6 +1,5 @@
-
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../discohandler.h"
 #include "../disco.h"
 #include "../stanza.h"
@@ -14,7 +13,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
+class DiscoTest : public DiscoHandler, public has_slots<>, LogHandler
 {
   public:
     DiscoTest() {}
@@ -26,7 +25,11 @@ class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->disableRoster();
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &DiscoTest::onConnect );
+      j->onDisconnect.Connect( this, &DiscoTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &DiscoTest::onTLSConnect );
+
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "discoTest", GLOOX_VERSION, "linux" );
       j->disco()->setIdentity( "client", "bot" );
@@ -40,19 +43,18 @@ class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
     }
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
+    void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleDiscoInfo( const JID& /*iq*/, const Disco::Info&, int /*context*/ )

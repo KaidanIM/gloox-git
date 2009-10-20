@@ -1,5 +1,5 @@
 #include "../component.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../loghandler.h"
 #include "../discohandler.h"
 #include "../disco.h"
@@ -11,7 +11,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class ComponentTest : public DiscoHandler, ConnectionListener, LogHandler
+class ComponentTest : public DiscoHandler, public has_slots<>, LogHandler
 {
   public:
     ComponentTest() {}
@@ -24,7 +24,10 @@ class ComponentTest : public DiscoHandler, ConnectionListener, LogHandler
                          "component.example.org", "secret", 5000 );
       j->disco()->setVersion( "componentTest", GLOOX_VERSION );
 
-      j->registerConnectionListener( this );
+      j->onConnect.Connect( this, &ComponentTest::onConnect );
+      j->onDisconnect.Connect( this, &ComponentTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &ComponentTest::onTLSConnect );
+
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
       j->connect();
@@ -32,21 +35,20 @@ class ComponentTest : public DiscoHandler, ConnectionListener, LogHandler
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       printf( "connected -- disconnecting...\n" );
 //       j->disconnect( STATE_DISCONNECTED );
     }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "component: disconnected\n" ); }
+    void onDisconnect( ConnectionError /*e*/ ) { printf( "component: disconnected\n" ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleDiscoInfo( const JID& /*iq*/, const Disco::Info&, int /*context*/ )

@@ -1,5 +1,5 @@
 #include "../client.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../discohandler.h"
 #include "../disco.h"
 #include "../privatexml.h"
@@ -11,7 +11,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
+class PrivateXMLTest : public PrivateXMLHandler, public has_slots<>
 {
   public:
     PrivateXMLTest() {}
@@ -23,7 +23,10 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
 
-      j->registerConnectionListener(this );
+      j->onConnect.Connect( this, &PrivateXMLTest::onConnect );
+      j->onDisconnect.Connect( this, &PrivateXMLTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &PrivateXMLTest::onTLSConnect );
+
       j->disco()->setVersion( "privateXMLTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
@@ -35,20 +38,19 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       p->requestXML( "test", "http://camaya.net/jabber/test", this );
     }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
+    void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handlePrivateXML( const Tag* /*xml*/ )

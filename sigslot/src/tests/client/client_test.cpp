@@ -4,8 +4,8 @@
 #include "../../connectionbase.h"
 // #include "../../logsink.h"
 // #include "../../loghandler.h"
-#include "../../connectionlistener.h"
 #include "../../gloox.h"
+#include "../../sigslot.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -13,33 +13,29 @@ using namespace gloox;
 #include <string>
 #include <cstdio> // [s]print[f]
 
-class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
+class ClientTest : public Client /*, LogHandler,*/
 {
   public:
     ClientTest( const JID& jid, const std::string& password, int port = -1 )
       : Client( jid, password, port ), m_idCount( 0 ), m_connected( 0 ), m_disconnected( 0 )
     {
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
-      registerConnectionListener( this );
+      Client::onConnect.Connect( this, &ClientTest::onConnect );
+      Client::onDisconnect.Connect( this, &ClientTest::onDisconnect );
     }
     virtual ~ClientTest() {}
 //     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
 //     {
 //       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
 //     }
-    virtual void onConnect() { ++m_connected; disconnect(); }
-    virtual void onDisconnect( ConnectionError e )
+    void onConnect() { ++m_connected; disconnect(); }
+    void onDisconnect( ConnectionError e )
     {
       ++m_disconnected;
       m_disconnect = e;
       m_streamerror = streamError();
 //       printf( "reason: %d\n", e );
     }
-    virtual void onResourceBindError( ResourceBindError /*error*/ )
-      { /*printf( "res bind err: %d\n", error );*/ }
-    virtual void onSessionCreateError( SessionCreateError /*error*/ )
-      { /*printf( "ses err: %d\n", error );*/ }
-    virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; }
     int connected() const { return m_connected; }
     int disconnected() const { return m_disconnected; }
     ConnectionError disconnectReason() const { return m_disconnect; }

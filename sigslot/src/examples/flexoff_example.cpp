@@ -1,6 +1,6 @@
 #include "../client.h"
 #include "../messagehandler.h"
-#include "../connectionlistener.h"
+#include "../sigslot.h"
 #include "../disco.h"
 #include "../message.h"
 #include "../gloox.h"
@@ -17,7 +17,7 @@ using namespace gloox;
 
 #include <cstdio> // [s]print[f]
 
-class FlexOffTest : public MessageHandler, ConnectionListener, FlexibleOfflineHandler,
+class FlexOffTest : public MessageHandler, public has_slots<>, FlexibleOfflineHandler,
                            LogHandler
 {
   public:
@@ -29,7 +29,11 @@ class FlexOffTest : public MessageHandler, ConnectionListener, FlexibleOfflineHa
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->registerConnectionListener( this );
+
+      j->onConnect.Connect( this, &FlexOffTest::onConnect );
+      j->onDisconnect.Connect( this, &FlexOffTest::onDisconnect );
+      j->onTLSConnect.Connect( this, &FlexOffTest::onTLSConnect );
+
       j->registerMessageHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
@@ -47,25 +51,24 @@ class FlexOffTest : public MessageHandler, ConnectionListener, FlexibleOfflineHa
       delete( j );
     }
 
-    virtual void onConnect()
+    void onConnect()
     {
       f->checkSupport();
     }
 
-    virtual void onDisconnect( ConnectionError e )
+    void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
     }
 
-    virtual bool onTLSConnect( const CertInfo& info )
+    void onTLSConnect( const CertInfo& info )
     {
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
-      return true;
     }
 
     virtual void handleMessage( const Message& msg, MessageSession * /*session*/ )

@@ -167,14 +167,14 @@ namespace gloox
                && ( !m_encryption || m_encryption->state() == StateDisconnected )
                && ( ( m_streamFeatures & StreamFeatureStartTls ) == StreamFeatureStartTls ) )
       {
-        notifyStreamEvent( StreamEventEncryption );
+        onStreamEvent( StreamEventEncryption );
         startTls();
       }
       else if( hasCompression() && !m_compressionActive
                && ( !m_compression || m_compression->state() == StateDisconnected )
                && ( ( m_streamFeatures & StreamFeatureCompressZlib ) == StreamFeatureCompressZlib ) )
       {
-        notifyStreamEvent( StreamEventCompression );
+        onStreamEvent( StreamEventCompression );
         logInstance().warn( LogAreaClassClient, "The server offers compression, but negotiating Compression at this stage is not recommended. See XEP-0170 for details. We'll continue anyway." );
         negotiateCompression( StreamFeatureCompressZlib );
       }
@@ -184,7 +184,7 @@ namespace gloox
         {
           if( m_streamFeatures & StreamFeatureBind )
           {
-            notifyStreamEvent( StreamEventResourceBinding );
+            onStreamEvent( StreamEventResourceBinding );
             bindResource( resource() );
           }
         }
@@ -200,30 +200,30 @@ namespace gloox
         else if( !m_clientCerts.empty() && !m_clientKey.empty()
                  && m_streamFeatures & SaslMechExternal && m_availableSaslMechs & SaslMechExternal )
         {
-          notifyStreamEvent( StreamEventAuthentication );
+          onStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechExternal );
         }
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         else if( m_streamFeatures & SaslMechGssapi && m_availableSaslMechs & SaslMechGssapi )
         {
-          notifyStreamEvent( StreamEventAuthentication );
+          onStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechGssapi );
         }
         else if( m_streamFeatures & SaslMechNTLM && m_availableSaslMechs & SaslMechNTLM )
         {
-          notifyStreamEvent( StreamEventAuthentication );
+          onStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechNTLM );
         }
 #endif
         else if( m_streamFeatures & SaslMechAnonymous
                  && m_availableSaslMechs & SaslMechAnonymous )
         {
-          notifyStreamEvent( StreamEventAuthentication );
+          onStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechAnonymous );
         }
         else
         {
-          notifyStreamEvent( StreamEventFinished );
+          onStreamEvent( StreamEventFinished );
           connected();
         }
       }
@@ -231,7 +231,7 @@ namespace gloox
                && ( !m_compression || m_compression->state() == StateDisconnected )
                && ( m_streamFeatures & StreamFeatureCompressZlib ) )
       {
-        notifyStreamEvent( StreamEventCompression );
+        onStreamEvent( StreamEventCompression );
         negotiateCompression( StreamFeatureCompressZlib );
       }
 //       else if( ( m_streamFeatures & StreamFeatureCompressDclz )
@@ -241,7 +241,7 @@ namespace gloox
 //       }
       else if( m_streamFeatures & StreamFeatureIqAuth )
       {
-        notifyStreamEvent( StreamEventAuthentication );
+        onStreamEvent( StreamEventAuthentication );
         nonSaslLogin();
       }
       else
@@ -403,18 +403,18 @@ namespace gloox
     if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
         && !m_forceNonSasl )
     {
-      notifyStreamEvent( StreamEventAuthentication );
+      onStreamEvent( StreamEventAuthentication );
       startSASL( SaslMechDigestMd5 );
     }
     else if( m_streamFeatures & SaslMechPlain && m_availableSaslMechs & SaslMechPlain
              && !m_forceNonSasl )
     {
-      notifyStreamEvent( StreamEventAuthentication );
+      onStreamEvent( StreamEventAuthentication );
       startSASL( SaslMechPlain );
     }
     else if( m_streamFeatures & StreamFeatureIqAuth || m_forceNonSasl )
     {
-      notifyStreamEvent( StreamEventAuthentication );
+      onStreamEvent( StreamEventAuthentication );
       nonSaslLogin();
     }
     else
@@ -472,14 +472,14 @@ namespace gloox
         const ResourceBind* rb = iq.findExtension<ResourceBind>( ExtResourceBind );
         if( !rb || !rb->jid() )
         {
-          notifyOnResourceBindError( 0 );
+          onResourceBindError( 0 );
           break;
         }
 
         m_jid = rb->jid();
         m_resourceBound = true;
         m_selectedResource = m_jid.resource();
-        notifyOnResourceBind( m_jid.resource() );
+        onResourceBind( m_jid.resource() );
 
         if( m_streamFeatures & StreamFeatureSession )
           createSession();
@@ -489,7 +489,7 @@ namespace gloox
       }
       case IQ::Error:
       {
-        notifyOnResourceBindError( iq.error() );
+        onResourceBindError( iq.error() );
         break;
       }
       default:
@@ -499,7 +499,7 @@ namespace gloox
 
   void Client::createSession()
   {
-    notifyStreamEvent( StreamEventSessionCreation );
+    onStreamEvent( StreamEventSessionCreation );
     IQ iq( IQ::Set, JID(), getID() );
     iq.addExtension( new SessionCreation() );
     send( iq, this, CtxSessionEstablishment );
@@ -513,7 +513,7 @@ namespace gloox
         connected();
         break;
       case IQ::Error:
-        notifyOnSessionCreateError( iq.error() );
+        onSessionCreateError( iq.error() );
         break;
       default:
         break;
@@ -577,7 +577,7 @@ namespace gloox
     {
       if( m_manageRoster )
       {
-        notifyStreamEvent( StreamEventRoster );
+        onStreamEvent( StreamEventRoster );
         m_rosterManager->fill();
       }
       else
@@ -585,16 +585,16 @@ namespace gloox
     }
     else
     {
-      notifyStreamEvent( StreamEventFinished );
-      notifyOnConnect();
+      onStreamEvent( StreamEventFinished );
+      onConnect();
     }
   }
 
   void Client::rosterFilled()
   {
     sendPresence( m_presence );
-    notifyStreamEvent( StreamEventFinished );
-    notifyOnConnect();
+    onStreamEvent( StreamEventFinished );
+    onConnect();
   }
 
   void Client::disconnect()
