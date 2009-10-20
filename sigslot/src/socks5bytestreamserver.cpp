@@ -35,7 +35,7 @@ namespace gloox
       delete (*it).first;
   }
 
-  void SOCKS5BytestreamServer::setServerImpl( ConnectionBase* server )
+  void SOCKS5BytestreamServer::setServerImpl( ConnectionTCPServer* server )
   {
     removeServerImpl();
 
@@ -55,7 +55,9 @@ namespace gloox
   ConnectionError SOCKS5BytestreamServer::listen()
   {
     if( !m_server )
-      m_server = new ConnectionTCPServer( this, m_logInstance, m_ip, m_port );
+      m_server = new ConnectionTCPServer( m_logInstance, m_ip, m_port );
+
+    m_server->handleIncomingConnection.Connect( this, &SOCKS5BytestreamServer::handleIncomingConnection );
 
     return m_server->connect();
   }

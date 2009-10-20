@@ -16,7 +16,6 @@
 
 #include "connectiontcpserver.h"
 #include "connectiontcpclient.h"
-#include "connectionhandler.h"
 #include "dns.h"
 #include "logsink.h"
 #include "mutex.h"
@@ -56,10 +55,9 @@
 namespace gloox
 {
 
-  ConnectionTCPServer::ConnectionTCPServer( ConnectionHandler* ch, const LogSink& logInstance,
+  ConnectionTCPServer::ConnectionTCPServer( const LogSink& logInstance,
                                             const std::string& ip, int port )
-    : ConnectionTCPBase( 0, logInstance, ip, port ),
-      m_connectionHandler( ch )
+    : ConnectionTCPBase( 0, logInstance, ip, port )
   {
   }
 
@@ -69,7 +67,7 @@ namespace gloox
 
   ConnectionBase* ConnectionTCPServer::newInstance() const
   {
-    return new ConnectionTCPServer( m_connectionHandler, m_logInstance, m_server, m_port );
+    return new ConnectionTCPServer( m_logInstance, m_server, m_port );
   }
 
   ConnectionError ConnectionTCPServer::connect()
@@ -129,7 +127,7 @@ namespace gloox
   {
     m_recvMutex.lock();
 
-    if( m_cancel || m_socket < 0 || !m_connectionHandler )
+    if( m_cancel || m_socket < 0 )
     {
       m_recvMutex.unlock();
       return ConnNotConnected;
@@ -154,7 +152,7 @@ namespace gloox
     ConnectionTCPClient* conn = new ConnectionTCPClient( m_logInstance, inet_ntoa( they.sin_addr ),
                                                          ntohs( they.sin_port ) );
     conn->setSocket( newfd );
-    m_connectionHandler->handleIncomingConnection( this, conn );
+    handleIncomingConnection( this, conn );
 
     return ConnNoError;
   }

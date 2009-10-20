@@ -14,10 +14,11 @@
 #ifndef SOCKS5BYTESTREAMSERVER_H__
 #define SOCKS5BYTESTREAMSERVER_H__
 
+#include "connectiondatahandler.h"
 #include "macros.h"
-#include "connectionhandler.h"
 #include "logsink.h"
 #include "mutex.h"
+#include "sigslot.h"
 
 namespace gloox
 {
@@ -34,7 +35,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API SOCKS5BytestreamServer : public ConnectionHandler, public ConnectionDataHandler
+  class GLOOX_API SOCKS5BytestreamServer : public ConnectionDataHandler, public has_slots<>
   {
 
     friend class SOCKS5BytestreamManager;
@@ -58,7 +59,7 @@ namespace gloox
        * The default is a ConnectionTCPServer.
        * @param An alternate server.
        */
-      void setServerImpl( ConnectionBase *server );
+      void setServerImpl( ConnectionTCPServer *server );
 
       /**
        * Removes the current server implementation.
@@ -99,8 +100,12 @@ namespace gloox
        */
       const std::string localInterface() const;
 
-      // reimplemented from ConnectionHandler
-      virtual void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection );
+      /**
+       * This function is going to be called for incomming connections. You should not call it manually.
+       * @param server The server instance that accepted the connection.
+       * @param connection The new connection.
+       */
+      void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection );
 
       // reimplemented from ConnectionDataHandler
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
@@ -142,7 +147,7 @@ namespace gloox
       typedef std::list<std::string> HashMap;
       HashMap m_hashes;
 
-      ConnectionBase* m_server;
+      ConnectionTCPServer* m_server;
 
       util::Mutex m_mutex;
       const LogSink& m_logInstance;

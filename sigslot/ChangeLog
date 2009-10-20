@@ -6,6 +6,11 @@ v1.1-sigslot-rewrite
   - kept function names
   - sematic changes: onTLSConnect() returns void, disconnect() has to be called manually
                      if the server's certificate is invalid/untrusted
+- converted ConnectionHandler to sigslot
+  - kept function names
+
+TODO
+- split ConnectionTCPServer in CTS and ConnectionServerBase and use CSB for m_server and setserverImpl() in s5bstreamserver
 
 
 v1.1 -- xx yyy 2009

@@ -17,13 +17,12 @@
 #include "gloox.h"
 #include "connectiontcpbase.h"
 #include "logsink.h"
+#include "sigslot.h"
 
 #include <string>
 
 namespace gloox
 {
-
-  class ConnectionHandler;
 
   /**
    * @brief This is an implementation of a simple listening TCP connection.
@@ -38,13 +37,13 @@ namespace gloox
     public:
       /**
        * Constructs a new ConnectionTCPServer object.
-       * @param ch An ConnectionHandler-derived object that will handle incoming connections.
+       * Connect to the @ref handleIncomingConnection signal to receive incoming connections.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param ip The local IP address to listen on. This must @b not be a hostname.
        * Leave this empty to listen on all local interfaces.
        * @param port The port to listen on.
        */
-      ConnectionTCPServer( ConnectionHandler* ch, const LogSink& logInstance,
+      ConnectionTCPServer( const LogSink& logInstance,
                            const std::string& ip, int port );
 
       /**
@@ -65,10 +64,16 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual ConnectionBase* newInstance() const;
 
+      /**
+       * This signal is emitted when an incoming connection has been accepted.
+       * @param server The server that the connection was made to.
+       * @param connection The incoming connection.
+       */
+      signal2<ConnectionBase*, ConnectionBase*> handleIncomingConnection;
+
     private:
       ConnectionTCPServer &operator=( const ConnectionTCPServer & );
 
-      ConnectionHandler* m_connectionHandler;
 
   };
 
