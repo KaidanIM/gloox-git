@@ -1,6 +1,6 @@
 v0.9.9.11 -- 22 Oct 2009
 ------------------------
-- fixed potential crahs in SOCKS5BytestreamManager
+- fixed potential crash in SOCKS5BytestreamManager
 
 
 v0.9.9.10 -- 19 Oct 2009
