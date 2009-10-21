@@ -15,11 +15,10 @@
 #define TLSDEFAULT_H__
 
 #include "tlsbase.h"
+#include "sigslot.h"
 
 namespace gloox
 {
-
-  class TLSHandler;
 
   /**
    * @brief This is an abstraction of the various TLS implementations.
@@ -27,7 +26,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API TLSDefault : public TLSBase
+  class GLOOX_API TLSDefault : public TLSBase, public has_slots<>
   {
     public:
 
@@ -47,11 +46,10 @@ namespace gloox
 
       /**
        * Constructs a new TLS wrapper.
-       * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
        * @param type What you want to use this TLS object for.
        */
-      TLSDefault( TLSHandler* th, const std::string server, Type type = VerifyingClient );
+      TLSDefault( const std::string server, Type type = VerifyingClient );
 
       /**
        * Virtual Destructor.
@@ -93,8 +91,31 @@ namespace gloox
        */
       static int types();
 
+      /**
+       * Reimplement this function to receive encrypted data from a TLSBase implementation.
+       * @param base The encryption implementation which called this function.
+       * @param data The encrypted data (e.g. to send over the wire).
+       */
+      void handleEncryptedData( const TLSBase* base, const std::string& data );
+
+      /**
+       * Reimplement this function to receive decrypted data from a TLSBase implementation.
+       * @param base The encryption implementation which called this function.
+       * @param data The decrypted data (e.g. to parse).
+       */
+      void handleDecryptedData( const TLSBase* base, const std::string& data );
+
+      /**
+       * Reimplement this function to receive the result of a TLS handshake.
+       * @param base The encryption implementation which called this function.
+       * @param success Whether or not the handshake was successful.
+       * @param certinfo Information about the server's certificate.
+       */
+      void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
+
     private:
       TLSBase* m_impl;
+
   };
 }
 

@@ -18,7 +18,6 @@
 #include "connectionbase.h"
 #include "connectiontls.h"
 #include "tlsdefault.h"
-#include "tlshandler.h"
 
 #include <string>
 
@@ -54,7 +53,7 @@ namespace gloox
        * Returns a TLS server.
        * @return A  TLS server.
        */
-      virtual TLSBase* getTLSBase( TLSHandler* th, const std::string server );
+      virtual TLSBase* getTLSBase( const std::string server );
 
       // reimplemented from ConnectionTLS
       virtual ConnectionBase* newInstance() const;

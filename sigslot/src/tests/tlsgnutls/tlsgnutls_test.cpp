@@ -1,7 +1,7 @@
 #include "../../gloox.h"
-#include "../../tlshandler.h"
 #include "../../tlsgnutlsclientanon.h"
 #include "../../tlsgnutlsserveranon.h"
+#include "../../sigslot.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -13,14 +13,14 @@ using namespace gloox;
 
 #ifdef HAVE_GNUTLS
 
-class GnuTLSTest : TLSHandler
+class GnuTLSTest : public has_slots<>
 {
   public:
     GnuTLSTest();
     ~GnuTLSTest();
-    virtual void handleEncryptedData( const TLSBase* base, const std::string& data );
-    virtual void handleDecryptedData( const TLSBase* base, const std::string& data );
-    virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
+    void handleEncryptedData( const TLSBase* base, const std::string& data );
+    void handleDecryptedData( const TLSBase* base, const std::string& data );
+    void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
 
     bool handshake();
     std::string send( const std::string& txt );
@@ -43,9 +43,15 @@ GnuTLSTest::GnuTLSTest()
  : m_clientHandshake( false ), m_clientHandshakeResult( false ),
    m_serverHandshake( false ), m_serverHandshakeResult( false )
 {
-  m_client = new GnuTLSClientAnon( this );
+  m_client = new GnuTLSClientAnon();
+  m_client->dataEncrypted.Connect( this, &GnuTLSTest::handleEncryptedData );
+  m_client->dataDecrypted.Connect( this, &GnuTLSTest::handleDecryptedData );
+  m_client->handshakeFinished.Connect( this, &GnuTLSTest::handleHandshakeResult );
   m_client->init();
-  m_server = new GnuTLSServerAnon( this );
+  m_server = new GnuTLSServerAnon();
+  m_server->dataEncrypted.Connect( this, &GnuTLSTest::handleEncryptedData );
+  m_server->dataDecrypted.Connect( this, &GnuTLSTest::handleDecryptedData );
+  m_server->handshakeFinished.Connect( this, &GnuTLSTest::handleHandshakeResult );
   m_server->init();
 }
 

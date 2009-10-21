@@ -16,7 +16,7 @@
 #define TLSBASE_H__
 
 #include "gloox.h"
-#include "tlshandler.h"
+#include "sigslot.h"
 
 namespace gloox
 {
@@ -32,11 +32,10 @@ namespace gloox
     public:
       /**
        * Constructor.
-       * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
        */
-      TLSBase( TLSHandler* th, const std::string server )
-        : m_handler( th ), m_server( server ), m_secure( false ), m_valid( false ), m_initLib( true )
+      TLSBase( const std::string server )
+        : m_server( server ), m_secure( false ), m_valid( false ), m_initLib( true )
       {}
 
       /**
@@ -129,8 +128,29 @@ namespace gloox
        */
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts ) = 0;
 
+      /**
+       * Reimplement this function to receive encrypted data from a TLSBase implementation.
+       * @param base The encryption implementation which called this function.
+       * @param data The encrypted data (e.g. to send over the wire).
+       */
+      signal2<const TLSBase*, const std::string&> dataEncrypted;
+
+      /**
+       * Reimplement this function to receive decrypted data from a TLSBase implementation.
+       * @param base The encryption implementation which called this function.
+       * @param data The decrypted data (e.g. to parse).
+       */
+      signal2<const TLSBase*, const std::string&> dataDecrypted;
+
+      /**
+       * Reimplement this function to receive the result of a TLS handshake.
+       * @param base The encryption implementation which called this function.
+       * @param success Whether or not the handshake was successful.
+       * @param certinfo Information about the server's certificate.
+       */
+      signal3<const TLSBase*, bool, CertInfo&> handshakeFinished;
+
     protected:
-      TLSHandler* m_handler;
       StringList m_cacerts;
       std::string m_clientKey;
       std::string m_clientCerts;

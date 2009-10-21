@@ -12,8 +12,6 @@
 
 #include "tlsdefault.h"
 
-#include "tlshandler.h"
-
 #include "config.h"
 
 #if defined( HAVE_GNUTLS )
@@ -36,41 +34,48 @@
 namespace gloox
 {
 
-  TLSDefault::TLSDefault( TLSHandler* th, const std::string server, Type type )
-    : TLSBase( th, server ), m_impl( 0 )
+  TLSDefault::TLSDefault( const std::string server, Type type )
+    : TLSBase( server ), m_impl( 0 )
   {
     switch( type )
     {
       case VerifyingClient:
 #ifdef HAVE_GNUTLS
-        m_impl = new GnuTLSClient( th, server );
+        m_impl = new GnuTLSClient( server );
 #elif defined( HAVE_OPENSSL )
-        m_impl = new OpenSSLClient( th, server );
+        m_impl = new OpenSSLClient( server );
 #elif defined( HAVE_WINTLS )
-        m_impl = new SChannel( th, server );
+        m_impl = new SChannel( server );
 #endif
         break;
       case AnonymousClient:
 #ifdef HAVE_GNUTLS
-        m_impl = new GnuTLSClientAnon( th );
+        m_impl = new GnuTLSClientAnon();
 #endif
         break;
       case AnonymousServer:
 #ifdef HAVE_GNUTLS
-        m_impl = new GnuTLSServerAnon( th );
+        m_impl = new GnuTLSServerAnon();
 #endif
         break;
       case VerifyingServer:
 #ifdef HAVE_GNUTLS
-        m_impl = new GnuTLSServer( th );
+        m_impl = new GnuTLSServer();
 #elif defined( HAVE_OPENSSL )
 #ifndef __SYMBIAN32__
-        m_impl = new OpenSSLServer( th );
+        m_impl = new OpenSSLServer();
 #endif
 #endif
         break;
       default:
         break;
+    }
+
+    if( m_impl )
+    {
+      m_impl->dataDecrypted.Connect( this, &TLSDefault::handleDecryptedData );
+      m_impl->dataEncrypted.Connect( this, &TLSDefault::handleEncryptedData );
+      m_impl->handshakeFinished.Connect( this, &TLSDefault::handleHandshakeResult );
     }
   }
 
@@ -145,5 +150,22 @@ namespace gloox
     if( m_impl )
       m_impl->setClientCert( clientKey, clientCerts );
   }
+
+  void TLSDefault::handleEncryptedData( const TLSBase* base, const std::string& data )
+  {
+    dataEncrypted( base, data );
+  }
+
+  void TLSDefault::handleDecryptedData( const TLSBase* base, const std::string& data )
+  {
+    dataDecrypted( base, data );
+  }
+
+  void TLSDefault::handleHandshakeResult( const TLSBase* base, bool success,
+                                          CertInfo &certinfo )
+  {
+    handshakeFinished( base, success, certinfo );
+  }
+
 
 }

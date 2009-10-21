@@ -24,9 +24,9 @@ namespace gloox
   {
   }
 
-  TLSBase* ConnectionTLSServer::getTLSBase( TLSHandler* th, const std::string server )
+  TLSBase* ConnectionTLSServer::getTLSBase( const std::string server )
   {
-    return new TLSDefault( th, server, TLSDefault::VerifyingServer );
+    return new TLSDefault( server, TLSDefault::VerifyingServer );
   }
 
   ConnectionBase* ConnectionTLSServer::newInstance() const

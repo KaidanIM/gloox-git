@@ -23,8 +23,8 @@
 namespace gloox
 {
 
-  GnuTLSBase::GnuTLSBase( TLSHandler* th, const std::string& server )
-    : TLSBase( th, server ), m_session( new gnutls_session_t ), m_buf( 0 ), m_bufsize( 17000 )
+  GnuTLSBase::GnuTLSBase( const std::string& server )
+    : TLSBase( server ), m_session( new gnutls_session_t ), m_buf( 0 ), m_bufsize( 17000 )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
@@ -76,9 +76,9 @@ namespace gloox
     {
       ret = static_cast<int>( gnutls_record_recv( *m_session, m_buf, m_bufsize ) );
 
-      if( ret > 0 && m_handler )
+      if( ret > 0 )
       {
-        m_handler->handleDecryptedData( this, std::string( m_buf, ret ) );
+        dataDecrypted( this, std::string( m_buf, ret ) );
         sum += ret;
       }
     }
@@ -89,8 +89,8 @@ namespace gloox
 
   void GnuTLSBase::cleanup()
   {
-    TLSHandler* handler = m_handler;
-    m_handler = 0;
+/*    TLSHandler* handler = m_handler;
+    m_handler = 0;*/
     gnutls_bye( *m_session, GNUTLS_SHUT_RDWR );
     gnutls_db_remove_session( *m_session );
     gnutls_credentials_clear( *m_session );
@@ -102,14 +102,11 @@ namespace gloox
     delete m_session;
     m_session = 0;
     m_session = new gnutls_session_t;
-    m_handler = handler;
+//     m_handler = handler;
   }
 
   bool GnuTLSBase::handshake()
   {
-    if( !m_handler )
-      return false;
-
     int ret = gnutls_handshake( *m_session );
     if( ret < 0 && gnutls_error_is_fatal( ret ) )
     {
@@ -118,7 +115,7 @@ namespace gloox
       gnutls_deinit( *m_session );
       m_valid = false;
 
-      m_handler->handleHandshakeResult( this, false, m_certInfo );
+      handshakeFinished( this, false, m_certInfo );
       return false;
     }
     else if( ret == GNUTLS_E_AGAIN )
@@ -130,7 +127,7 @@ namespace gloox
 
     getCertInfo();
 
-    m_handler->handleHandshakeResult( this, true, m_certInfo );
+    handshakeFinished( this, true, m_certInfo );
     return true;
   }
 
@@ -157,8 +154,7 @@ namespace gloox
 
   ssize_t GnuTLSBase::pushFunc( const void* data, size_t len )
   {
-    if( m_handler )
-      m_handler->handleEncryptedData( this, std::string( (const char*)data, len ) );
+    dataEncrypted( this, std::string( (const char*)data, len ) );
 
     return len;
   }

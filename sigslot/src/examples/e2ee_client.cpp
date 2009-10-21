@@ -4,7 +4,7 @@
 #include "../message.h"
 #include "../gloox.h"
 #include "../loghandler.h"
-#include "../tlshandler.h"
+#include "../sigslot.h"
 #include "../tlsdefault.h"
 #include "../logsink.h"
 #include "../messagehandler.h"
@@ -32,12 +32,17 @@ using namespace gloox;
  */
 
 class MessageTest : public has_slots<>, LogHandler,
-                    MessageHandler, TLSHandler
+                    MessageHandler
 {
   public:
     MessageTest()
-      : m_tls( new TLSDefault( this, "", TLSDefault::AnonymousClient ) ),
-        rcpt( "hurkhurk@example.net/server" ) {}
+      : m_tls( new TLSDefault( "", TLSDefault::AnonymousClient ) ),
+        rcpt( "hurkhurk@example.net/server" )
+    {
+      m_tls->dataEncrypted.Connect( this, &MessageTest::handleEncryptedData );
+      m_tls->dataDecrypted.Connect( this, &MessageTest::handleDecryptedData );
+      m_tls->handshakeFinished.Connect( this, &MessageTest::handleHandshakeResult );
+   }
 
     virtual ~MessageTest()
     {

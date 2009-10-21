@@ -24,7 +24,6 @@
 #include "mutex.h"
 #include "statisticshandler.h"
 #include "parser.h"
-#include "tlshandler.h"
 #include "sigslot.h"
 
 #include <list>
@@ -60,6 +59,7 @@ namespace gloox
   class ConnectionTLS;
   class ConnectionCompression;
   class StanzaExtensionFactory;
+  class TLSBase;
 
   /**
    * @brief This is the common base class for a Jabber/XMPP Client and a Jabber Component.
@@ -70,7 +70,7 @@ namespace gloox
    * @since 0.3
    */
   class GLOOX_API ClientBase : public has_slots<>,
-                               public IqHandler, public TLSHandler
+                               public IqHandler
   {
 
     friend class RosterManager;
@@ -658,14 +658,7 @@ namespace gloox
        */
       void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
-      // reimplemented from TLSHandler
-      virtual void handleEncryptedData( const TLSBase* /*base*/, const std::string& /*data*/ ) {}
-
-      // reimplemented from TLSHandler
-      virtual void handleDecryptedData( const TLSBase* /*base*/, const std::string& /*data*/ ) {}
-
-      // reimplemented from TLSHandler
-      virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
+      void handleHandshakeResult( bool success, CertInfo &certinfo );
 
       /**
        * This signal notifies about successful connections. It will be emitted either after all

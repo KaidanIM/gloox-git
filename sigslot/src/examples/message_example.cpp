@@ -41,8 +41,8 @@ class MessageTest : public MessageSessionHandler, public has_slots<>, LogHandler
     void start()
     {
 
-      JID jid( "hurkhurk@jabber.cc/gloox" );
-      j = new Client( jid, "kuss" );
+      JID jid( "hurkhurk@example.net/gloox" );
+      j = new Client( jid, "hurkhurks" );
 
       j->onConnect.Connect( this, &MessageTest::onConnect );
       j->onDisconnect.Connect( this, &MessageTest::onDisconnect );

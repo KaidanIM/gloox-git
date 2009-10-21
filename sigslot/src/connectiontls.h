@@ -47,7 +47,7 @@ namespace gloox
    * @since 1.0
    */
 
-  class GLOOX_API ConnectionTLS : public TLSHandler, public ConnectionBase, public has_slots<>
+  class GLOOX_API ConnectionTLS : public ConnectionBase, public has_slots<>
   {
     public:
       /**
@@ -106,16 +106,6 @@ namespace gloox
        */
       void setConnectionImpl( ConnectionBase* connection );
 
-      /**
-       * Registers an TLSHandler derived object. Only the handleHandshakeResult()
-       * function will be used after a handshake took place.
-       * You can review certificate info there.
-       * @param th The TLSHandler to register.
-       * @note If no handler is set, ConnectionTLS will accept
-       * any certificate and continue with the connection.
-       */
-      void registerTLSHandler( TLSHandler* th ) { m_tlsHandler = th; }
-
       // reimplemented from ConnectionBase
       virtual ConnectionError connect();
 
@@ -137,6 +127,28 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void getStatistics( long int& totalIn, long int& totalOut );
 
+      /**
+       * Reimplement this function to receive encrypted data from a TLSBase implementation.
+       * @param base The encryption implementation which called this function.
+       * @param data The encrypted data (e.g. to send over the wire).
+       */
+      void handleEncryptedData( const TLSBase* base, const std::string& data );
+
+      /**
+       * Reimplement this function to receive decrypted data from a TLSBase implementation.
+       * @param base The encryption implementation which called this function.
+       * @param data The decrypted data (e.g. to parse).
+       */
+      void handleDecryptedData( const TLSBase* base, const std::string& data );
+
+      /**
+       * Reimplement this function to receive the result of a TLS handshake.
+       * @param base The encryption implementation which called this function.
+       * @param success Whether or not the handshake was successful.
+       * @param certinfo Information about the server's certificate.
+       */
+      void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
+
       // reimplemented from ConnectionBase
       void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
@@ -146,17 +158,15 @@ namespace gloox
       // reimplemented from ConnectionBase
       void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual ConnectionBase* newInstance() const;
 
-      // reimplemented from TLSHandler
-      virtual void handleEncryptedData( const TLSBase*, const std::string& data );
-
-      // reimplemented from TLSHandler
-      virtual void handleDecryptedData( const TLSBase*, const std::string& data );
-
-      // reimplemented from TLSHandler
-      virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo& certinfo );
+      /**
+       * This signal is emitted when the TLS handshake finidshed.
+       * @param success Whether or not the handshake was successful.
+       * @param certinfo Information about the server's certificate.
+       */
+      signal2<bool, CertInfo&> handshakeFinished;
 
     protected:
       /**
@@ -164,14 +174,13 @@ namespace gloox
        * type of the object.
        * @return A TLS object.
        */
-      virtual TLSBase* getTLSBase( TLSHandler* th, const std::string server )
+      virtual TLSBase* getTLSBase( const std::string server )
       {
-        return new TLSDefault( th, server, TLSDefault::VerifyingClient );
+        return new TLSDefault( server, TLSDefault::VerifyingClient );
       }
 
       ConnectionBase* m_connection;
       TLSBase* m_tls;
-      TLSHandler* m_tlsHandler;
       CertInfo m_certInfo;
       const LogSink& m_log;
       StringList m_cacerts;

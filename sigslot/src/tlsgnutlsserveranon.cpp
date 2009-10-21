@@ -21,8 +21,8 @@
 namespace gloox
 {
 
-  GnuTLSServerAnon::GnuTLSServerAnon( TLSHandler* th )
-    : GnuTLSBase( th ), m_dhBits( 1024 )
+  GnuTLSServerAnon::GnuTLSServerAnon()
+    : m_dhBits( 1024 )
   {
   }
 

@@ -266,7 +266,6 @@ namespace gloox
         else
         {
           m_encryption = new ConnectionTLS( m_connection, m_logInstance );
-          m_encryption->registerTLSHandler( this );
         }
         m_encryption->setCACerts( m_cacerts );
         m_encryption->setClientCert( m_clientKey, m_clientCerts );
@@ -274,6 +273,7 @@ namespace gloox
         m_connection->connected.Connect( (ClientBase*)this, &ClientBase::handleConnect );
         m_connection->disconnected.Connect( (ClientBase*)this, &ClientBase::handleDisconnect );
         m_connection->dataReceived.Connect( (ClientBase*)this, &ClientBase::handleReceivedData );
+        ((ConnectionTLS*)m_connection)->handshakeFinished.Connect( (ClientBase*)this, &ClientBase::handleHandshakeResult );
         m_connection->connect();
       }
       else if( name == "failure" )

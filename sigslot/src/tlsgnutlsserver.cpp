@@ -21,8 +21,8 @@
 namespace gloox
 {
 
-  GnuTLSServer::GnuTLSServer( TLSHandler* th )
-    : GnuTLSBase( th ), m_dhBits( 1024 )
+  GnuTLSServer::GnuTLSServer()
+    : m_dhBits( 1024 )
   {
   }
 

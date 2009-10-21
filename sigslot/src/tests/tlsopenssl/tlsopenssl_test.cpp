@@ -1,7 +1,7 @@
 #include "../../gloox.h"
-#include "../../tlshandler.h"
 #include "../../tlsopensslclient.h"
 #include "../../tlsopensslserver.h"
+#include "../../sigslot.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -13,7 +13,7 @@ using namespace gloox;
 
 #ifdef HAVE_OPENSSL
 
-class OpenSSLTest : TLSHandler
+class OpenSSLTest : public has_slots<>
 {
   public:
     OpenSSLTest();
@@ -44,9 +44,15 @@ OpenSSLTest::OpenSSLTest()
    m_serverHandshake( false ), m_serverHandshakeResult( false )
 {
   m_client = new OpenSSLClient( this, EmptyString );
+  m_client->dataEncrypted.Connect( this, &GnuTLSTest::handleEncryptedData );
+  m_client->dataDecrypted.Connect( this, &GnuTLSTest::handleDecryptedData );
+  m_client->handshakeFinished.Connect( this, &GnuTLSTest::handleHandshakeResult );
   if( !m_client->init() )
     printf( "client init failed!\n" );
   m_server = new OpenSSLServer( this );
+  m_server->dataEncrypted.Connect( this, &GnuTLSTest::handleEncryptedData );
+  m_server->dataDecrypted.Connect( this, &GnuTLSTest::handleDecryptedData );
+  m_server->handshakeFinished.Connect( this, &GnuTLSTest::handleHandshakeResult );
   if( !m_server->init() )
     printf( "server init failed\n" );
   StringList sl;

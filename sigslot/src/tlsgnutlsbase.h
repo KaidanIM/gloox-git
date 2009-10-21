@@ -40,10 +40,9 @@ namespace gloox
     public:
       /**
        * Constructor.
-       * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
        */
-      GnuTLSBase( TLSHandler* th, const std::string& server = EmptyString );
+      GnuTLSBase( const std::string& server = EmptyString );
 
       /**
        * Virtual destructor.

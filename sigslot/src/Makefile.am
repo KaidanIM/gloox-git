@@ -267,7 +267,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
                         thread.h \
                         tlsbase.h \
                         tlsdefault.h \
-                        tlshandler.h \
                         uniquemucroom.h \
                         util.h \
                         vcard.h \

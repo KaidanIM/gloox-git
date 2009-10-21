@@ -12,6 +12,10 @@ v1.1-sigslot-rewrite
   - renamed: handleConnect --> connected
              handleDisconnected --> disconnected
              handleReceivedData --> dataReceived
+- converted TLSHandler to sigslot
+  - renamed: handleEncryptedData --> dataEncrypted
+             handleDecryptedData --> dataDecrypted
+             handleHandshakeResult --> handshakeFinished
 
 
 TODO

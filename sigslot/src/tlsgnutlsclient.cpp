@@ -21,8 +21,8 @@
 namespace gloox
 {
 
-  GnuTLSClient::GnuTLSClient( TLSHandler* th, const std::string& server )
-    : GnuTLSBase( th, server )
+  GnuTLSClient::GnuTLSClient( const std::string& server )
+    : GnuTLSBase( server )
   {
   }
 

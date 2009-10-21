@@ -302,7 +302,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
+  void ClientBase::handleHandshakeResult( bool success, CertInfo &certinfo )
   {
     if( success )
     {

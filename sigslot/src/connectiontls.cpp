@@ -18,7 +18,7 @@ namespace gloox
 {
 
   ConnectionTLS::ConnectionTLS( ConnectionBase* conn, const LogSink& log )
-    : m_connection( conn ), m_tls( 0 ), m_tlsHandler( 0 ), m_log( log )
+    : m_connection( conn ), m_tls( 0 ), m_log( log )
   {
     if( m_connection )
     {
@@ -62,13 +62,17 @@ namespace gloox
       return ConnNoError;
 
     if( !m_tls )
-      m_tls = getTLSBase( this, m_connection->server() );
+      m_tls = getTLSBase( m_connection->server() );
 
     if( !m_tls )
       return ConnTlsNotAvailable;
 
     if( !m_tls->init( m_clientKey, m_clientCerts, m_cacerts ) )
       return ConnTlsFailed;
+
+    m_tls->dataEncrypted.Connect( this, &ConnectionTLS::handleEncryptedData );
+    m_tls->dataDecrypted.Connect( this, &ConnectionTLS::handleDecryptedData );
+    m_tls->handshakeFinished.Connect( this, &ConnectionTLS::handleHandshakeResult );
 
 //     m_tls->setCACerts( m_cacerts );
 //     m_tls->setClientCert( m_clientKey, m_clientCerts );
@@ -159,7 +163,8 @@ namespace gloox
       m_tls->handshake();
   }
 
-  void ConnectionTLS::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
+  void ConnectionTLS::handleDisconnect( const ConnectionBase* /*connection*/,
+                                        ConnectionError reason )
   {
     disconnected( this, reason );
     cleanup();
@@ -176,14 +181,13 @@ namespace gloox
     dataReceived( this, data );
   }
 
-  void ConnectionTLS::handleHandshakeResult( const TLSBase* tls, bool success, CertInfo& certinfo )
+  void ConnectionTLS::handleHandshakeResult( const TLSBase* /*tls*/, bool success, CertInfo& certinfo )
   {
     if( success )
     {
       m_state = StateConnected;
       m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "TLS handshake succeeded" );
-      if( m_tlsHandler )
-        m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
+      handshakeFinished( success, certinfo );
 
       connected( this );
     }
@@ -191,8 +195,7 @@ namespace gloox
     {
       m_state = StateDisconnected;
       m_log.log( LogLevelWarning, LogAreaClassConnectionTLS, "TLS handshake failed" );
-      if( m_tlsHandler )
-        m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
+      handshakeFinished( success, certinfo );
       disconnect();
     }
   }
