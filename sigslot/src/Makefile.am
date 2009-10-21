@@ -158,8 +158,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
                         connectionbase.h \
                         connectionbosh.h \
                         connectioncompression.h \
-                        connectiondatahandler.h \
-                        connectionhandler.h \
                         connectionhttpproxy.h \
                         connectionsocks5proxy.h \
                         connectiontcpbase.h \

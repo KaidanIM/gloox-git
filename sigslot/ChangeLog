@@ -8,6 +8,11 @@ v1.1-sigslot-rewrite
                      if the server's certificate is invalid/untrusted
 - converted ConnectionHandler to sigslot
   - kept function names
+- converted ConnectionDataHandler to sigslot
+  - renamed: handleConnect --> connected
+             handleDisconnected --> disconnected
+             handleReceivedData --> dataReceived
+
 
 TODO
 - split ConnectionTCPServer in CTS and ConnectionServerBase and use CSB for m_server and setserverImpl() in s5bstreamserver

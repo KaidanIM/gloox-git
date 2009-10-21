@@ -45,7 +45,7 @@ namespace gloox
                                                 const LogSink& logInstance,
                                                 const std::string& server,
                                                 int port, bool ip )
-    : ConnectionBase( 0 ), m_connection( connection ),
+    : m_connection( connection ),
       m_logInstance( logInstance ), m_s5state( S5StateDisconnected ), m_ip( ip )
   {
 // FIXME check return value?
@@ -53,35 +53,22 @@ namespace gloox
     m_port = port;
 
     if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
-  }
-
-  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionDataHandler* cdh,
-                                                ConnectionBase* connection,
-                                                const LogSink& logInstance,
-                                                const std::string& server,
-                                                int port, bool ip )
-    : ConnectionBase( cdh ), m_connection( connection ),
-      m_logInstance( logInstance ), m_s5state( S5StateDisconnected ), m_ip( ip )
-  {
-// FIXME check return value?
-    prep::idna( server, m_server );
-    m_port = port;
-
-    if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
+    {
+      m_connection->dataReceived.Connect( this, &ConnectionSOCKS5Proxy::handleReceivedData );
+      m_connection->connected.Connect( this, &ConnectionSOCKS5Proxy::handleConnect );
+      m_connection->disconnected.Connect( this, &ConnectionSOCKS5Proxy::handleDisconnect );
+    }
   }
 
   ConnectionSOCKS5Proxy::~ConnectionSOCKS5Proxy()
   {
-    if( m_connection )
-      delete m_connection;
+    delete m_connection;
   }
 
   ConnectionBase* ConnectionSOCKS5Proxy::newInstance() const
   {
     ConnectionBase* conn = m_connection ? m_connection->newInstance() : 0;
-    return new ConnectionSOCKS5Proxy( m_handler, conn, m_logInstance, m_server, m_port, m_ip );
+    return new ConnectionSOCKS5Proxy( conn, m_logInstance, m_server, m_port, m_ip );
   }
 
   void ConnectionSOCKS5Proxy::setConnectionImpl( ConnectionBase* connection )
@@ -95,14 +82,14 @@ namespace gloox
   ConnectionError ConnectionSOCKS5Proxy::connect()
   {
 // FIXME CHECKME
-    if( m_connection && m_connection->state() == StateConnected && m_handler )
+    if( m_connection && m_connection->state() == StateConnected )
     {
       m_state = StateConnected;
       m_s5state = S5StateConnected;
       return ConnNoError;
     }
 
-    if( m_connection && m_handler )
+    if( m_connection )
     {
       m_state = StateConnecting;
       m_s5state = S5StateConnecting;
@@ -184,7 +171,7 @@ namespace gloox
 //       printf( "\n" );
 //     }
 
-    if( !m_connection || !m_handler )
+    if( !m_connection )
       return;
 
     ConnectionError connError = ConnNoError;
@@ -217,7 +204,7 @@ namespace gloox
           if( !send( std::string( d, pos ) ) )
           {
             cleanup();
-            m_handler->handleDisconnect( this, ConnIoError );
+            disconnected( this, ConnIoError );
           }
           delete[] d;
         }
@@ -236,7 +223,7 @@ namespace gloox
           {
             m_state = StateConnected;
             m_s5state = S5StateConnected;
-            m_handler->handleConnect( this );
+            connected( this );
           }
           else // connection refused
             connError = ConnConnectionRefused;
@@ -251,7 +238,7 @@ namespace gloox
           connError = ConnProxyAuthFailed;
         break;
       case S5StateConnected:
-        m_handler->handleReceivedData( this, data );
+        dataReceived( this, data );
         break;
       default:
         break;
@@ -260,7 +247,7 @@ namespace gloox
     if( connError != ConnNoError )
     {
       m_connection->disconnect();
-      m_handler->handleDisconnect( this, connError );
+      disconnected( this, connError );
     }
 
   }
@@ -322,7 +309,7 @@ namespace gloox
     if( !send( std::string( d, pos ) ) )
     {
       cleanup();
-      m_handler->handleDisconnect( this, ConnIoError );
+      disconnected( this, ConnIoError );
     }
     delete[] d;
   }
@@ -358,8 +345,7 @@ namespace gloox
       if( !send( std::string( d, auth ? 4 : 3 ) ) )
       {
         cleanup();
-        if( m_handler )
-          m_handler->handleDisconnect( this, ConnIoError );
+        disconnected( this, ConnIoError );
       }
     }
   }
@@ -370,8 +356,7 @@ namespace gloox
     cleanup();
     m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy, "socks5 proxy connection closed" );
 
-    if( m_handler )
-      m_handler->handleDisconnect( this, reason );
+    disconnected( this, reason );
   }
 
 }

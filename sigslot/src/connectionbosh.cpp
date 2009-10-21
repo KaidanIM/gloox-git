@@ -31,24 +31,9 @@ namespace gloox
   ConnectionBOSH::ConnectionBOSH( ConnectionBase* connection, const LogSink& logInstance,
                                   const std::string& boshHost, const std::string& xmppServer,
                                   int xmppPort )
-    : ConnectionBase( 0 ),
-      m_logInstance( logInstance ),
+    : m_logInstance( logInstance ),
       m_boshHost( boshHost ), m_path( "/http-bind/" ),
       m_rid( 0 ), m_initialStreamSent( false ), m_openRequests( 0 ),
-      m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ),
-      m_lastRequestTime( std::time( 0 ) ), m_minTimePerRequest( 0 ), m_bufferContentLength( 0 ),
-      m_connMode( ModePipelining )
-  {
-    initInstance( connection, xmppServer, xmppPort );
-  }
-
-  ConnectionBOSH::ConnectionBOSH( ConnectionDataHandler* cdh, ConnectionBase* connection,
-                                  const LogSink& logInstance, const std::string& boshHost,
-                                  const std::string& xmppServer, int xmppPort )
-    : ConnectionBase( cdh ),
-      m_logInstance( logInstance ),
-      m_boshHost( boshHost ), m_path( "/http-bind/" ),
-      m_rid( 0 ),  m_initialStreamSent( false ), m_openRequests( 0 ),
       m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ),
       m_lastRequestTime( std::time( 0 ) ), m_minTimePerRequest( 0 ), m_bufferContentLength( 0 ),
       m_connMode( ModePipelining )
@@ -72,7 +57,9 @@ namespace gloox
     // drop this connection into our pool of available connections
     if( connection )
     {
-      connection->registerConnectionDataHandler( this );
+      connection->dataReceived.Connect( this, &ConnectionBOSH::handleReceivedData );
+      connection->connected.Connect( this, &ConnectionBOSH::handleConnect );
+      connection->disconnected.Connect( this, &ConnectionBOSH::handleDisconnect );
       m_connectionPool.push_back( connection );
     }
   }
@@ -100,7 +87,7 @@ namespace gloox
       return 0;
     }
 
-    return new ConnectionBOSH( m_handler, pBaseConn, m_logInstance,
+    return new ConnectionBOSH( pBaseConn, m_logInstance,
                                m_boshHost, m_server, m_port );
   }
 
@@ -108,9 +95,6 @@ namespace gloox
   {
     if( m_state >= StateConnecting )
       return ConnNoError;
-
-    if( !m_handler )
-      return ConnNotConnected;
 
     m_state = StateConnecting;
     m_logInstance.dbg( LogAreaClassConnectionBOSH,
@@ -158,8 +142,7 @@ namespace gloox
     util::ForEach( m_connectionPool, &ConnectionBase::disconnect );
 
     m_state = StateDisconnected;
-    if( m_handler )
-      m_handler->handleDisconnect( this, ConnUserDisconnected );
+    disconnected( this, ConnUserDisconnected );
   }
 
   ConnectionError ConnectionBOSH::recv( int timeout )
@@ -442,10 +425,10 @@ namespace gloox
   void ConnectionBOSH::handleDisconnect( const ConnectionBase* /*connection*/,
                                          ConnectionError reason )
   {
-    if( m_handler && m_state == StateConnecting )
+    if( m_state == StateConnecting )
     {
       m_state = StateDisconnected;
-      m_handler->handleDisconnect( this, reason );
+      disconnected( this, reason );
       return;
     }
 
@@ -466,14 +449,14 @@ namespace gloox
 
   void ConnectionBOSH::handleTag( Tag* tag )
   {
-    if( !m_handler || tag->name() != "body" )
+    if( tag->name() != "body" )
       return;
 
     if( m_streamRestart )
     {
       m_streamRestart = false;
       m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
-      m_handler->handleReceivedData( this, "<?xml version='1.0' ?>"
+      dataReceived( this, "<?xml version='1.0' ?>"
           "<stream:stream xmlns:stream='http://etherx.jabber.org/streams'"
           " xmlns='" + XMLNS_CLIENT + "' version='" + XMPP_STREAM_VERSION_MAJOR
           + "." + XMPP_STREAM_VERSION_MINOR + "' from='" + m_server + "' id ='"
@@ -526,11 +509,11 @@ namespace gloox
       }
 
       if( m_state < StateConnected )
-        m_handler->handleConnect( this );
+        connected( this );
 
-      m_handler->handleReceivedData( this, "<?xml version='1.0' ?>" // FIXME move to send() so that
-                                                                    // it is more clearly a response
-                                                                    // to the initial stream opener?
+      dataReceived( this, "<?xml version='1.0' ?>" // FIXME move to send() so that
+                                                   // it is more clearly a response
+                                                   // to the initial stream opener?
                           "<stream:stream xmlns:stream='http://etherx.jabber.org/streams' "
                           "xmlns='" + XMLNS_CLIENT
                           + "' version='" + XMPP_STREAM_VERSION_MAJOR + "." + XMPP_STREAM_VERSION_MINOR
@@ -542,14 +525,14 @@ namespace gloox
       m_logInstance.dbg( LogAreaClassConnectionBOSH,
                          "bosh connection closed by server: " + tag->findAttribute( "condition" ) );
       m_state = StateDisconnected;
-      m_handler->handleDisconnect( this, ConnStreamClosed );
+      disconnected( this, ConnStreamClosed );
       return;
     }
 
     const TagList& stanzas = tag->children();
     TagList::const_iterator it = stanzas.begin();
     for( ; it != stanzas.end(); ++it )
-      m_handler->handleReceivedData( this, (*it)->xml() );
+      dataReceived( this, (*it)->xml() );
   }
 
   ConnectionBase* ConnectionBOSH::getConnection()
@@ -593,7 +576,9 @@ namespace gloox
         {
           m_logInstance.dbg( LogAreaClassConnectionBOSH, "No connections in pool, creating a new one." );
           conn = m_activeConnections.front()->newInstance();
-          conn->registerConnectionDataHandler( this );
+          conn->dataReceived.Connect( this, &ConnectionBOSH::handleReceivedData );
+          conn->connected.Connect( this, &ConnectionBOSH::handleConnect );
+          conn->disconnected.Connect( this, &ConnectionBOSH::handleDisconnect );
           m_connectionPool.push_back( conn );
           conn->connect();
         }

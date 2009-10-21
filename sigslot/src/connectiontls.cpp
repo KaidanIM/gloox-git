@@ -17,21 +17,15 @@
 namespace gloox
 {
 
-  ConnectionTLS::ConnectionTLS( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log )
-    : ConnectionBase( cdh ),
-      m_connection( conn ), m_tls( 0 ), m_tlsHandler( 0 ),
-      m_log( log )
-  {
-    if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
-  }
-
   ConnectionTLS::ConnectionTLS( ConnectionBase* conn, const LogSink& log )
-    : ConnectionBase( 0 ),
-      m_connection( conn ), m_tls( 0 ), m_tlsHandler( 0 ), m_log( log )
+    : m_connection( conn ), m_tls( 0 ), m_tlsHandler( 0 ), m_log( log )
   {
     if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
+    {
+      m_connection->dataReceived.Connect( this, &ConnectionTLS::handleReceivedData );
+      m_connection->connected.Connect( this, &ConnectionTLS::handleConnect );
+      m_connection->disconnected.Connect( this, &ConnectionTLS::handleDisconnect );
+    }
   }
 
   ConnectionTLS::~ConnectionTLS()
@@ -43,12 +37,20 @@ namespace gloox
   void ConnectionTLS::setConnectionImpl( ConnectionBase* connection )
   {
     if( m_connection )
-      m_connection->registerConnectionDataHandler( 0 );
+    {
+      m_connection->dataReceived.Disconnect( this );
+      m_connection->connected.Disconnect( this );
+      m_connection->disconnected.Disconnect( this );
+    }
 
     m_connection = connection;
 
     if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
+    {
+      m_connection->dataReceived.Connect( this, &ConnectionTLS::handleReceivedData );
+      m_connection->connected.Connect( this, &ConnectionTLS::handleConnect );
+      m_connection->disconnected.Connect( this, &ConnectionTLS::handleDisconnect );
+    }
   }
 
   ConnectionError ConnectionTLS::connect()
@@ -84,7 +86,7 @@ namespace gloox
 
   ConnectionError ConnectionTLS::recv( int timeout )
   {
-    if( m_connection->state() == StateConnected )
+    if( m_connection && m_connection->state() == StateConnected )
     {
       return m_connection->recv( timeout );
     }
@@ -142,7 +144,7 @@ namespace gloox
     ConnectionBase* newConn = 0;
     if( m_connection )
       newConn = m_connection->newInstance();
-    return new ConnectionTLS( m_handler, newConn, m_log );
+    return new ConnectionTLS( newConn, m_log );
   }
 
   void ConnectionTLS::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
@@ -159,9 +161,7 @@ namespace gloox
 
   void ConnectionTLS::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
   {
-    if( m_handler )
-      m_handler->handleDisconnect( this, reason );
-
+    disconnected( this, reason );
     cleanup();
   }
 
@@ -173,12 +173,7 @@ namespace gloox
 
   void ConnectionTLS::handleDecryptedData( const TLSBase* /*tls*/, const std::string& data )
   {
-    if( m_handler )
-      m_handler->handleReceivedData( this, data );
-    else
-    {
-      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Data received and decrypted but no handler" );
-    }
+    dataReceived( this, data );
   }
 
   void ConnectionTLS::handleHandshakeResult( const TLSBase* tls, bool success, CertInfo& certinfo )
@@ -189,8 +184,8 @@ namespace gloox
       m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "TLS handshake succeeded" );
       if( m_tlsHandler )
         m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
-      if( m_handler )
-        m_handler->handleConnect( this );
+
+      connected( this );
     }
     else
     {

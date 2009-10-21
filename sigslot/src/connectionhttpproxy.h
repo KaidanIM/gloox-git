@@ -17,6 +17,7 @@
 #include "gloox.h"
 #include "connectionbase.h"
 #include "logsink.h"
+#include "sigslot.h"
 
 #include <string>
 
@@ -32,7 +33,7 @@ namespace gloox
    * Client* c = new Client( ... );
    * ConnectionTCPClient* conn0 = new ConnectionTCPClient( c->logInstance(),
    *                                                       proxyHost, proxyPort );
-   * ConnectionHTTPProxy* conn1 = new ConnectionHTTPProxy( c, conn0, c->logInstance(),
+   * ConnectionHTTPProxy* conn1 = new ConnectionHTTPProxy( conn0, c->logInstance(),
    *                                                       xmppHost, xmppPort );
    * c->setConnectionImpl( conn1 );
    * @endcode
@@ -50,7 +51,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API ConnectionHTTPProxy : public ConnectionBase, public ConnectionDataHandler
+  class GLOOX_API ConnectionHTTPProxy : public ConnectionBase, public has_slots<>
   {
     public:
       /**
@@ -67,21 +68,6 @@ namespace gloox
        * part of a 'connection chain', e.g. with ConnectionSOCKS5Proxy.
        */
       ConnectionHTTPProxy( ConnectionBase* connection, const LogSink& logInstance,
-                           const std::string& server, int port = -1 );
-
-      /**
-       * Constructs a new ConnectionHTTPProxy object.
-       * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
-       * @param connection A transport connection. It should be configured to connect to
-       * the proxy host and port, @b not to the XMPP host. ConnectionHTTPProxy will own the
-       * transport connection and delete it in its destructor.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
-       * @param server A server to connect to. This is the XMPP server's address, @b not the proxy.
-       * @param port The port to connect to. This is the XMPP server's port, @b not the proxy's.
-       * The default of -1 means that SRV records will be used to find out about the actual host:port.
-       */
-      ConnectionHTTPProxy( ConnectionDataHandler* cdh, ConnectionBase* connection,
-                           const LogSink& logInstance,
                            const std::string& server, int port = -1 );
 
       /**
@@ -110,16 +96,16 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void getStatistics( long int &totalIn, long int &totalOut );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleConnect( const ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual ConnectionBase* newInstance() const;
 
       /**

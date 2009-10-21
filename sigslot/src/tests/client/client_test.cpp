@@ -55,26 +55,26 @@ class ClientTest : public Client /*, LogHandler,*/
 class ConnectionImpl : public ConnectionBase
 {
   public:
-    ConnectionImpl( ConnectionDataHandler *cdh, int test )
-      : ConnectionBase( cdh ), m_test( test ), m_pos( 0 ), m_run( true ) {}
+    ConnectionImpl( int test )
+      : m_test( test ), m_pos( 0 ), m_run( true ) {}
     virtual ~ConnectionImpl() {}
     virtual ConnectionError connect()
     {
       m_run = true;
       m_state = StateConnected;
-      m_handler->handleConnect( this );
+      connected( this );
       return ConnNoError;
     }
     virtual ConnectionError recv( int /*timeout = -1*/ )
     {
       if( m_msgs[m_test][m_pos] )
       {
-        m_handler->handleReceivedData( this, m_msgs[m_test][m_pos++] );
+        dataReceived( this, m_msgs[m_test][m_pos++] );
         return ConnNoError;
       }
       else
       {
-        m_handler->handleDisconnect( this, ConnIoError );
+        disconnected( this, ConnIoError );
         return ConnIoError;
       }
     }
@@ -198,7 +198,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //   printf( "-----------------------------\n" );
   name = "connect test: ok";
   c = new ClientTest( j, "b" );
-  conn = new ConnectionImpl( c, 0 );
+  conn = new ConnectionImpl( 0 );
   c->setConnectionImpl( conn );
   c->setTls( TLSDisabled );
   c->setCompression( false );
@@ -215,7 +215,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //   printf( "-----------------------------\n" );
   name = "connect test: auth failure";
   c = new ClientTest( j, "b" );
-  conn = new ConnectionImpl( c, 1 );
+  conn = new ConnectionImpl( 1 );
   c->setConnectionImpl( conn );
   c->setTls( TLSDisabled );
   c->setCompression( false );
@@ -232,7 +232,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //   printf( "-----------------------------\n" );
   name = "connect test: io error";
   c = new ClientTest( j, "b" );
-  conn = new ConnectionImpl( c, 2 );
+  conn = new ConnectionImpl( 2 );
   c->setConnectionImpl( conn );
   c->setTls( TLSDisabled );
   c->setCompression( false );
@@ -249,7 +249,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "connect test: xml error";
   c = new ClientTest( j, "b" );
-  conn = new ConnectionImpl( c, 3 );
+  conn = new ConnectionImpl( 3 );
   c->setConnectionImpl( conn );
   c->setTls( TLSDisabled );
   c->setCompression( false );
@@ -266,7 +266,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "re-connect test 1";
   c = new ClientTest( j, "b" );
-  conn = new ConnectionImpl( c, 2 );
+  conn = new ConnectionImpl( 2 );
   c->setConnectionImpl( conn );
   c->setTls( TLSDisabled );
   c->setCompression( false );
@@ -288,7 +288,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "re-connect test 2";
   c = new ClientTest( j, "b" );
-  conn = new ConnectionImpl( c, 0 );
+  conn = new ConnectionImpl( 0 );
   c->setConnectionImpl( conn );
   c->setTls( TLSDisabled );
   c->setCompression( false );

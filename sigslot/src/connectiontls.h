@@ -16,8 +16,8 @@
 #include "gloox.h"
 #include "logsink.h"
 #include "connectionbase.h"
+#include "sigslot.h"
 #include "tlsdefault.h"
-#include "connectiondatahandler.h"
 
 #include <string>
 
@@ -34,9 +34,8 @@ namespace gloox
    * Usage:
    * @code
    * Client *c = new Client( ... );
-   * c->setConnectionImpl( new ConnectionTLS( c,
-   *                                new ConnectionTCP( c->logInstance(), server, 5223 ),
-   *                                c->logInstance()) );
+   * c->setConnectionImpl( new ConnectionTLS( new ConnectionTCP( c->logInstance(), server, 5223 ),
+   *                                          c->logInstance()) );
    * @endcode
    *
    * Due to the need for handshaking data to be sent/received before the connection is fully
@@ -48,19 +47,9 @@ namespace gloox
    * @since 1.0
    */
 
-  class GLOOX_API ConnectionTLS : public TLSHandler, public ConnectionBase, public ConnectionDataHandler
+  class GLOOX_API ConnectionTLS : public TLSHandler, public ConnectionBase, public has_slots<>
   {
     public:
-      /**
-       * Constructs a new ConnectionTLS object.
-       * @param cdh The ConnectionDataHandler that will be notified of events from this connection
-       * @param conn A transport connection. It should be configured to connect to
-       * the server and port you wish to make the encrypted connection to.
-       * ConnectionTLS will own the transport connection and delete it in its destructor.
-       * @param log The log target. Obtain it from ClientBase::logInstance().
-       */
-      ConnectionTLS( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log );
-
       /**
        * Constructs a new ConnectionTLS object.
        * @param conn A transport connection. It should be configured to connect to
@@ -148,14 +137,14 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void getStatistics( long int& totalIn, long int& totalOut );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
+      // reimplemented from ConnectionBase
+      void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleConnect( const ConnectionBase* connection );
+      // reimplemented from ConnectionBase
+      void handleConnect( const ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
+      // reimplemented from ConnectionBase
+      void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
       // reimplemented from ConnectionDataHandler
       virtual ConnectionBase* newInstance() const;

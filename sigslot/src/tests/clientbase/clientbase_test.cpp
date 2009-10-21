@@ -49,8 +49,8 @@ class ClientBaseTest : public ClientBase /*, LogHandler,*/
 class ConnectionImpl : public ConnectionBase
 {
   public:
-    ConnectionImpl( ConnectionDataHandler *cdh )
-      : ConnectionBase( cdh ), m_pos( 0 ) {}
+    ConnectionImpl()
+      : m_pos( 0 ) {}
     virtual ~ConnectionImpl() {}
     virtual ConnectionError connect() { m_state = StateConnected; return ConnNoError; }
     virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; }

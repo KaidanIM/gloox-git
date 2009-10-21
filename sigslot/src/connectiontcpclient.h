@@ -49,17 +49,6 @@ namespace gloox
       ConnectionTCPClient( const LogSink& logInstance, const std::string& server, int port = -1 );
 
       /**
-       * Constructs a new ConnectionTCPClient object.
-       * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
-       * @param server A server to connect to.
-       * @param port The port to connect to. The default of -1 means that SRV records will be used
-       * to find out about the actual host:port.
-       */
-      ConnectionTCPClient( ConnectionDataHandler* cdh, const LogSink& logInstance,
-                           const std::string& server, int port = -1 );
-
-      /**
        * Virtual destructor
        */
       virtual ~ConnectionTCPClient();

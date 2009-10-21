@@ -23,14 +23,13 @@
 #include "logsink.h"
 #include "mutex.h"
 #include "statisticshandler.h"
-#include "connectiondatahandler.h"
 #include "parser.h"
 #include "tlshandler.h"
 #include "sigslot.h"
 
-#include <string>
 #include <list>
 #include <map>
+#include <string>
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 #include <windows.h>
@@ -71,7 +70,6 @@ namespace gloox
    * @since 0.3
    */
   class GLOOX_API ClientBase : public has_slots<>,
-                               public ConnectionDataHandler,
                                public IqHandler, public TLSHandler
   {
 
@@ -640,14 +638,25 @@ namespace gloox
 
       void handleTag( Tag* tag );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
+      /**
+       * This slot is called for received data from the underlying transport.
+       * @param connection The connection that received the data.
+       * @param data The data received.
+       */
+      void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleConnect( const ConnectionBase* connection );
+      /**
+       * This slot is called when e.g. the raw TCP connection was established.
+       * @param connection The connection.
+       */
+      void handleConnect( const ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
+      /**
+       * This slot is called when e.g. the raw TCP connection was closed.
+       * @param connection The connection.
+       * @param reason The reason for the disconnect.
+       */
+      void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
       // reimplemented from TLSHandler
       virtual void handleEncryptedData( const TLSBase* /*base*/, const std::string& /*data*/ ) {}
@@ -904,6 +913,7 @@ namespace gloox
       virtual void handleIqIDForward( const IQ& iq, int context ) { (void) iq; (void) context; }
 
       void parse( const std::string& data );
+      void processIncomingQueue();
       void init();
       void handleStreamError( Tag* tag );
 
@@ -958,6 +968,7 @@ namespace gloox
       typedef std::list<JidPresHandlerStruct>              PresenceJidHandlerList;
       typedef std::list<SubscriptionHandler*>              SubscriptionHandlerList;
       typedef std::list<TagHandlerStruct>                  TagHandlerList;
+      typedef std::list<Tag*>                              IncomingQueue;
 
       ConnectionListenerList   m_connectionListeners;
       IqHandlerMapXmlns        m_iqNSHandlers;
@@ -975,8 +986,10 @@ namespace gloox
       MessageSessionHandler  * m_messageSessionHandlerGroupchat;
       MessageSessionHandler  * m_messageSessionHandlerHeadline;
       MessageSessionHandler  * m_messageSessionHandlerNormal;
+      IncomingQueue            m_incomingQueue;
 
       util::Mutex m_iqHandlerMapMutex;
+      util::Mutex m_incomingQueueMutex;
 
       Parser m_parser;
       StanzaExtensionFactory* m_seFactory;

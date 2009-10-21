@@ -16,8 +16,8 @@
 #include "gloox.h"
 #include "logsink.h"
 #include "connectionbase.h"
-#include "connectiondatahandler.h"
 #include "compressiondatahandler.h"
+#include "sigslot.h"
 
 #include <string>
 
@@ -36,19 +36,9 @@ namespace gloox
    * @since 1.1
    */
 
-  class GLOOX_API ConnectionCompression : public CompressionDataHandler, public ConnectionBase, ConnectionDataHandler
+  class GLOOX_API ConnectionCompression : public CompressionDataHandler, public ConnectionBase, public has_slots<>
   {
     public:
-      /**
-       * Constructs a new ConnectionCompression object.
-       * @param cdh The ConnectionDataHandler that will be notified of events from this connection
-       * @param conn A transport connection. It should be configured to connect to
-       * the server and port you wish to make the encrypted connection to.
-       * ConnectionCompression will own the transport connection and delete it in its destructor.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
-       */
-      ConnectionCompression( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log );
-
       /**
        * Constructs a new ConnectionCompression object.
        * @param conn A transport connection. It should be configured to connect to
@@ -90,14 +80,14 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void getStatistics( long int& totalIn, long int& totalOut );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
+      // reimplemented from ConnectionBase
+      void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleConnect( const ConnectionBase* connection );
+      // reimplemented from ConnectionBase
+      void handleConnect( const ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
-      virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
+      // reimplemented from ConnectionBase
+      void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
       // reimplemented from ConnectionDataHandler
       virtual ConnectionBase* newInstance() const;
@@ -107,7 +97,6 @@ namespace gloox
 
       // reimplemented from CompressionDataHandler
       virtual void handleDecompressedData( const std::string& data );
-
 
     private:
       ConnectionCompression& operator=( const ConnectionCompression& );

@@ -54,7 +54,10 @@ namespace gloox
     sha.feed( m_sid );
     sha.feed( m_initiator.full() );
     sha.feed( m_target.full() );
-    m_socks5 = new ConnectionSOCKS5Proxy( this, connection, m_logInstance, sha.hex(), 0 );
+    m_socks5 = new ConnectionSOCKS5Proxy( connection, m_logInstance, sha.hex(), 0 );
+    m_socks5->connected.Connect( this, &SOCKS5Bytestream::handleConnect );
+    m_socks5->disconnected.Connect( this, &SOCKS5Bytestream::handleDisconnect );
+    m_socks5->dataReceived.Connect( this, &SOCKS5Bytestream::handleReceivedData);
   }
 
   bool SOCKS5Bytestream::connect()

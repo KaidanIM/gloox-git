@@ -29,7 +29,7 @@ namespace gloox
   ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionBase* connection,
                                             const LogSink& logInstance,
                                             const std::string& server, int port )
-    : ConnectionBase( 0 ), m_connection( connection ),
+    : m_connection( connection ),
       m_logInstance( logInstance ), m_http11( false )
   {
 // FIXME check return value?
@@ -37,22 +37,11 @@ namespace gloox
     m_port = port;
 
     if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
-  }
-
-  ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionDataHandler* cdh,
-                                            ConnectionBase* connection,
-                                            const LogSink& logInstance,
-                                            const std::string& server, int port )
-    : ConnectionBase( cdh ), m_connection( connection ),
-      m_logInstance( logInstance )
-  {
-// FIXME check return value?
-    prep::idna( server, m_server );
-    m_port = port;
-
-    if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
+    {
+      m_connection->dataReceived.Connect( this, &ConnectionHTTPProxy::handleReceivedData );
+      m_connection->connected.Connect( this, &ConnectionHTTPProxy::handleConnect );
+      m_connection->disconnected.Connect( this, &ConnectionHTTPProxy::handleDisconnect );
+    }
   }
 
   ConnectionHTTPProxy::~ConnectionHTTPProxy()
@@ -63,7 +52,7 @@ namespace gloox
   ConnectionBase* ConnectionHTTPProxy::newInstance() const
   {
     ConnectionBase* conn = m_connection ? m_connection->newInstance() : 0;
-    return new ConnectionHTTPProxy( m_handler, conn, m_logInstance, m_server, m_port );
+    return new ConnectionHTTPProxy( conn, m_logInstance, m_server, m_port );
   }
 
   void ConnectionHTTPProxy::setConnectionImpl( ConnectionBase* connection )
@@ -76,7 +65,7 @@ namespace gloox
 
   ConnectionError ConnectionHTTPProxy::connect()
   {
-    if( m_connection && m_handler )
+    if( m_connection )
     {
       m_state = StateConnecting;
       return m_connection->connect();
@@ -126,9 +115,6 @@ namespace gloox
   void ConnectionHTTPProxy::handleReceivedData( const ConnectionBase* /*connection*/,
                                                 const std::string& data )
   {
-    if( !m_handler )
-      return;
-
     if( m_state == StateConnecting )
     {
       m_proxyHandshakeBuffer += data;
@@ -140,22 +126,22 @@ namespace gloox
         m_state = StateConnected;
         m_logInstance.dbg( LogAreaClassConnectionHTTPProxy,
                            "HTTP proxy connection established" );
-        m_handler->handleConnect( this );
+        connected( this );
       }
       else if( !m_proxyHandshakeBuffer.compare( 9, 3, "407" ) )
       {
-        m_handler->handleDisconnect( this, ConnProxyAuthRequired );
+        disconnected( this, ConnProxyAuthRequired );
         m_connection->disconnect();
       }
       else if( !m_proxyHandshakeBuffer.compare( 9, 3, "403" )
             || !m_proxyHandshakeBuffer.compare( 9, 3, "404" ) )
       {
-        m_handler->handleDisconnect( this, ConnProxyAuthFailed );
+        disconnected( this, ConnProxyAuthFailed );
         m_connection->disconnect();
       }
     }
     else if( m_state == StateConnected )
-      m_handler->handleReceivedData( this, data );
+      dataReceived( this, data );
   }
 
   void ConnectionHTTPProxy::handleConnect( const ConnectionBase* /*connection*/ )
@@ -196,8 +182,7 @@ namespace gloox
       if( !m_connection->send( os ) )
       {
         m_state = StateDisconnected;
-        if( m_handler )
-          m_handler->handleDisconnect( this, ConnIoError );
+        disconnected( this, ConnIoError );
       }
     }
   }
@@ -208,8 +193,7 @@ namespace gloox
     m_state = StateDisconnected;
     m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, "HTTP proxy connection closed" );
 
-    if( m_handler )
-      m_handler->handleDisconnect( this, reason );
+    disconnected( this, reason );
   }
 
 }

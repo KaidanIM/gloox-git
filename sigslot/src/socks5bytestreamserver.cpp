@@ -13,6 +13,7 @@
 
 #include "socks5bytestreamserver.h"
 #include "connectiontcpserver.h"
+#include "connectionbase.h"
 #include "mutexguard.h"
 #include "util.h"
 
@@ -27,8 +28,7 @@ namespace gloox
 
   SOCKS5BytestreamServer::~SOCKS5BytestreamServer()
   {
-    if( m_server )
-      delete m_server;
+    delete m_server;
 
     ConnectionMap::const_iterator it = m_connections.begin();
     for( ; it != m_connections.end(); ++it )
@@ -45,11 +45,8 @@ namespace gloox
 
   void SOCKS5BytestreamServer::removeServerImpl()
   {
-    if( m_server )
-    {
-      delete m_server;
-      m_server = 0;
-    }
+    delete m_server;
+    m_server = 0;
   }
 
   ConnectionError SOCKS5BytestreamServer::listen()
@@ -118,7 +115,9 @@ namespace gloox
       if( (*it).second.hash == hash )
       {
         ConnectionBase* conn = (*it).first;
-        conn->registerConnectionDataHandler( 0 );
+        conn->dataReceived.Disconnect( this );
+        conn->connected.Disconnect( this );
+        conn->disconnected.Disconnect( this );
         m_connections.erase( it );
         return conn;
       }
@@ -141,7 +140,9 @@ namespace gloox
 
   void SOCKS5BytestreamServer::handleIncomingConnection( ConnectionBase* /*server*/, ConnectionBase* connection )
   {
-    connection->registerConnectionDataHandler( this );
+    connection->dataReceived.Connect( this, &SOCKS5BytestreamServer::handleReceivedData );
+    connection->connected.Connect( this, &SOCKS5BytestreamServer::handleConnect );
+    connection->disconnected.Connect( this, &SOCKS5BytestreamServer::handleDisconnect );
     ConnectionInfo ci;
     ci.state = StateUnnegotiated;
     m_connections[connection] = ci;

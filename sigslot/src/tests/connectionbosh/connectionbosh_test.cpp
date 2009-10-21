@@ -1,9 +1,9 @@
 #include "../../gloox.h"
 #include "../../connectionbase.h"
 #include "../../connectionbosh.h"
-#include "../../connectiondatahandler.h"
 #include "../../logsink.h"
 #include "../../loghandler.h"
+#include "../../sigslot.h"
 
 #include <stdio.h>
 #include <locale.h>
@@ -17,7 +17,7 @@ namespace gloox
   class FakeConnection : public ConnectionBase
   {
     public:
-      FakeConnection() : ConnectionBase( 0 ) {}
+      FakeConnection() {}
       virtual ~FakeConnection() {}
       virtual ConnectionError connect();
       virtual ConnectionError recv( int timeout = -1 );
@@ -46,13 +46,13 @@ namespace gloox
     if( g_test == 1 )
     {
       m_state = StateConnected;
-      m_handler->handleConnect( this );
+      connected( this );
       ++g_test;
     }
     else if( g_test == 2 )
     {
       ++g_test;
-      m_handler->handleReceivedData( this, "HTTP/1.0 200 OK\r\n"
+      dataReceived( this, "HTTP/1.0 200 OK\r\n"
           "Date: Sun, 09 Dec 2007 17:49:11 GMT\r\n"
               "Content-length: 592\r\n"
               "Content-type: text/xml\r\n"
@@ -88,10 +88,15 @@ namespace gloox
 //     printf( "FakeConnection::disconnect(): %d\n", g_test );
   }
 
-  class FakeClientBase : public ConnectionDataHandler, public LogHandler
+  class FakeClientBase : public has_slots<>, public LogHandler
   {
     public:
-      FakeClientBase( ConnectionBOSH* cb ) : m_bosh( cb ) { m_bosh->registerConnectionDataHandler( this ); }
+      FakeClientBase( ConnectionBOSH* cb ) : m_bosh( cb )
+      {
+        m_bosh->connected.Connect( this, &FakeClientBase::handleConnect );
+        m_bosh->disconnected.Connect( this, &FakeClientBase::handleDisconnect );
+        m_bosh->dataReceived.Connect( this, &FakeClientBase::handleReceivedData );
+      }
       virtual ~FakeClientBase() {}
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
       virtual void handleConnect( const ConnectionBase* connection );

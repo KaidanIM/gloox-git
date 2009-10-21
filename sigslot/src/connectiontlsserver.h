@@ -25,8 +25,6 @@
 namespace gloox
 {
 
-  class ConnectionDataHandler;
-
   /**
    * @brief This is an implementation of the server-side of a TLS/SSL connection.
    *
@@ -38,16 +36,6 @@ namespace gloox
   class GLOOX_API ConnectionTLSServer : public ConnectionTLS
   {
     public:
-      /**
-       * Constructs a new ConnectionTLSServer object.
-       * @param cdh The ConnectionDataHandler that will be notified of events from this connection
-       * @param conn A transport connection. It should be an established connection from
-       * a client that is about to perform a TLS handshake.
-       * ConnectionTLSServer will own the transport connection and delete it in its destructor.
-       * @param log The log target. Obtain it from ClientBase::logInstance().
-       */
-      ConnectionTLSServer( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log );
-
       /**
        * Constructs a new ConnectionTLSServer object.
        * @param conn A transport connection. It should be an established connection from

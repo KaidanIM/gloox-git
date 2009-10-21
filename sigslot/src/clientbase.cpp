@@ -28,6 +28,7 @@
 #include "presence.h"
 #include "iqhandler.h"
 #include "messagehandler.h"
+#include "mutexguard.h"
 #include "presencehandler.h"
 #include "rosterlistener.h"
 #include "subscriptionhandler.h"
@@ -50,9 +51,6 @@
 
 #include <cstdlib>
 #include <cstdio>
-#include <string>
-#include <map>
-#include <list>
 #include <algorithm>
 #include <cmath>
 #include <ctime>
@@ -93,7 +91,7 @@ namespace gloox
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
-      m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
+      m_parser( false ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_transportConnection( 0 ), m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
   {
@@ -110,7 +108,7 @@ namespace gloox
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
-      m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
+      m_parser( false ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_transportConnection( 0 ), m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
   {
@@ -171,6 +169,8 @@ namespace gloox
     if( !m_connection || m_connection->state() == StateDisconnected )
       return ConnNotConnected;
 
+    processIncomingQueue();
+
     return m_connection->recv( timeout );
   }
 
@@ -180,7 +180,11 @@ namespace gloox
       return false;
 
     if( !m_connection )
-      m_connection = new ConnectionTCPClient( this, m_logInstance, m_server, m_port );
+      m_connection = new ConnectionTCPClient( m_logInstance, m_server, m_port );
+
+    m_connection->connected.Connect( this, &ClientBase::handleConnect );
+    m_connection->disconnected.Connect( this, &ClientBase::handleDisconnect );
+    m_connection->dataReceived.Connect( this, &ClientBase::handleReceivedData );
 
     m_transportConnection = m_connection;
 
@@ -202,85 +206,100 @@ namespace gloox
   void ClientBase::handleTag( Tag* tag )
   {
     if( !tag )
-    {
-      logInstance().dbg( LogAreaClassClientbase, "stream closed" );
-      disconnect( ConnStreamClosed );
       return;
-    }
 
-    logInstance().dbg( LogAreaXmlIncoming, tag->xml() );
-    ++m_stats.totalStanzasReceived;
+    util::MutexGuard mg( m_incomingQueueMutex );
+    m_incomingQueue.push_back( tag );
+  }
 
-    if( tag->name() == "stream" && tag->xmlns() == XMLNS_STREAM )
+  void ClientBase::processIncomingQueue()
+  {
+    m_incomingQueueMutex.lock();
+    IncomingQueue::iterator it = m_incomingQueue.begin();
+    m_incomingQueueMutex.unlock();
+    IncomingQueue::iterator it2;
+
+    while( it != m_incomingQueue.end() )
     {
-      const std::string& version = tag->findAttribute( "version" );
-      if( !checkStreamVersion( version ) )
+      Tag* tag = (*it++);
+      m_incomingQueueMutex.lock();
+      m_incomingQueue.pop_front();
+      m_incomingQueueMutex.unlock();
+
+      logInstance().dbg( LogAreaXmlIncoming, tag->xml() );
+      ++m_stats.totalStanzasReceived;
+
+      if( tag->name() == "stream" && tag->xmlns() == XMLNS_STREAM )
       {
-        logInstance().dbg( LogAreaClassClientbase, "This server is not XMPP-compliant"
-            " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
-        disconnect( ConnStreamVersionError );
-        return;
-      }
-
-      m_sid = tag->findAttribute( "id" );
-      handleStartNode();
-    }
-    else if( tag->name() == "error" && tag->xmlns() == XMLNS_STREAM )
-    {
-      handleStreamError( tag );
-      disconnect( ConnStreamError );
-    }
-    else
-    {
-      if( !handleNormalNode( tag ) )
-      {
-        if( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT )
+        const std::string& version = tag->findAttribute( "version" );
+        if( !checkStreamVersion( version ) )
         {
-          if( tag->name() == "iq"  )
+          logInstance().dbg( LogAreaClassClientbase, "This server is not XMPP-compliant"
+              " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
+          disconnect( ConnStreamVersionError );
+          return;
+        }
+
+        m_sid = tag->findAttribute( "id" );
+        handleStartNode();
+      }
+      else if( tag->name() == "error" && tag->xmlns() == XMLNS_STREAM )
+      {
+        handleStreamError( tag );
+        disconnect( ConnStreamError );
+      }
+      else
+      {
+        if( !handleNormalNode( tag ) )
+        {
+          if( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT )
           {
-            IQ iq( tag );
-            m_seFactory->addExtensions( iq, tag );
-            notifyIqHandlers( iq );
-            ++m_stats.iqStanzasReceived;
-          }
-          else if( tag->name() == "message" )
-          {
-            Message msg( tag );
-            m_seFactory->addExtensions( msg, tag );
-            notifyMessageHandlers( msg );
-            ++m_stats.messageStanzasReceived;
-          }
-          else if( tag->name() == "presence" )
-          {
-            const std::string& type = tag->findAttribute( TYPE );
-            if( type == "subscribe"  || type == "unsubscribe"
-                || type == "subscribed" || type == "unsubscribed" )
+            if( tag->name() == "iq"  )
             {
-              Subscription sub( tag );
-              m_seFactory->addExtensions( sub, tag );
-              notifySubscriptionHandlers( sub );
-              ++m_stats.s10nStanzasReceived;
+              IQ iq( tag );
+              m_seFactory->addExtensions( iq, tag );
+              notifyIqHandlers( iq );
+              ++m_stats.iqStanzasReceived;
+            }
+            else if( tag->name() == "message" )
+            {
+              Message msg( tag );
+              m_seFactory->addExtensions( msg, tag );
+              notifyMessageHandlers( msg );
+              ++m_stats.messageStanzasReceived;
+            }
+            else if( tag->name() == "presence" )
+            {
+              const std::string& type = tag->findAttribute( TYPE );
+              if( type == "subscribe"  || type == "unsubscribe"
+                  || type == "subscribed" || type == "unsubscribed" )
+              {
+                Subscription sub( tag );
+                m_seFactory->addExtensions( sub, tag );
+                notifySubscriptionHandlers( sub );
+                ++m_stats.s10nStanzasReceived;
+              }
+              else
+              {
+                Presence pres( tag );
+                m_seFactory->addExtensions( pres, tag );
+                notifyPresenceHandlers( pres );
+                ++m_stats.presenceStanzasReceived;
+              }
             }
             else
-            {
-              Presence pres( tag );
-              m_seFactory->addExtensions( pres, tag );
-              notifyPresenceHandlers( pres );
-              ++m_stats.presenceStanzasReceived;
-            }
+              m_logInstance.err( LogAreaClassClientbase, "Received invalid stanza." );
           }
           else
-            m_logInstance.err( LogAreaClassClientbase, "Received invalid stanza." );
-        }
-        else
-        {
-          notifyTagHandlers( tag );
+          {
+            notifyTagHandlers( tag );
+          }
         }
       }
-    }
 
-    if( m_statisticsHandler )
-      m_statisticsHandler->handleStatistics( getStatistics() );
+      if( m_statisticsHandler )
+        m_statisticsHandler->handleStatistics( getStatistics() );
+    }
   }
 
   void ClientBase::handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
@@ -318,6 +337,10 @@ namespace gloox
     m_connection->cleanup();
     m_connection = m_transportConnection;
 
+    m_connection->dataReceived.Connect( this, &ClientBase::handleReceivedData );
+    m_connection->connected.Connect( this, &ClientBase::handleConnect );
+    m_connection->disconnected.Connect( this, &ClientBase::handleDisconnect );
+
     if( m_encryption )
       m_encryption->setConnectionImpl( 0 );
     m_encryptionActive = false;
@@ -325,8 +348,6 @@ namespace gloox
     if( m_compression )
       m_compression->setConnectionImpl( 0 );
     m_compressionActive = false;
-
-    m_connection->registerConnectionDataHandler( this );
 
     onDisconnect( reason );
     init();
@@ -887,6 +908,9 @@ namespace gloox
 
     delete m_connection;
     m_connection = cb;
+    m_connection->connected.Connect( this, &ClientBase::handleConnect );
+    m_connection->disconnected.Connect( this, &ClientBase::handleDisconnect );
+    m_connection->dataReceived.Connect( this, &ClientBase::handleReceivedData );
   }
 
   void ClientBase::handleStreamError( Tag* tag )

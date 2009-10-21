@@ -44,31 +44,19 @@ namespace gloox
   {
   }
 
-  ConnectionTCPClient::ConnectionTCPClient( ConnectionDataHandler* cdh, const LogSink& logInstance,
-                                            const std::string& server, int port )
-    : ConnectionTCPBase( cdh, logInstance, server, port )
-  {
-  }
-
-
   ConnectionTCPClient::~ConnectionTCPClient()
   {
   }
 
   ConnectionBase* ConnectionTCPClient::newInstance() const
   {
-    return new ConnectionTCPClient( m_handler, m_logInstance, m_server, m_port );
+    return new ConnectionTCPClient( m_logInstance, m_server, m_port );
   }
 
   ConnectionError ConnectionTCPClient::connect()
   {
     m_sendMutex.lock();
 // FIXME CHECKME
-    if( !m_handler )
-    {
-      m_sendMutex.unlock();
-      return ConnNotConnected;
-    }
 
     if( m_socket >= 0 && m_state > StateDisconnected )
     {
@@ -105,7 +93,7 @@ namespace gloox
                              "Unknown error condition" );
           break;
       }
-      m_handler->handleDisconnect( this, (ConnectionError)-m_socket );
+      disconnected( this, (ConnectionError)-m_socket );
       return (ConnectionError)-m_socket;
     }
     else
@@ -114,7 +102,7 @@ namespace gloox
     }
 
     m_cancel = false;
-    m_handler->handleConnect( this );
+    connected( this );
     return ConnNoError;
   }
 
@@ -143,15 +131,13 @@ namespace gloox
     if( size <= 0 )
     {
       ConnectionError error = ( size ? ConnIoError : ConnStreamClosed );
-      if( m_handler )
-        m_handler->handleDisconnect( this, error );
+      disconnected( this, error );
       return error;
     }
 
     m_buf[size] = '\0';
 
-    if( m_handler )
-      m_handler->handleReceivedData( this, std::string( m_buf, size ) );
+    dataReceived( this, std::string( m_buf, size ) );
 
     return ConnNoError;
   }

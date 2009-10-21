@@ -16,7 +16,7 @@
 #define CONNECTIONBASE_H__
 
 #include "gloox.h"
-#include "connectiondatahandler.h"
+#include "sigslot.h"
 
 #include <string>
 
@@ -39,8 +39,8 @@ namespace gloox
        * @param cdh An object derived from @ref ConnectionDataHandler that will receive
        * received data.
        */
-      ConnectionBase( ConnectionDataHandler* cdh )
-        : m_handler( cdh ), m_state( StateDisconnected ), m_port( -1 )
+      ConnectionBase()
+        : m_state( StateDisconnected ), m_port( -1 )
       {}
 
       /**
@@ -95,13 +95,6 @@ namespace gloox
       ConnectionState state() const { return m_state; }
 
       /**
-       * Use this function to register a new ConnectionDataHandler. There can be only one
-       * ConnectionDataHandler at any one time.
-       * @param cdh The new ConnectionDataHandler.
-       */
-      void registerConnectionDataHandler( ConnectionDataHandler* cdh ) { m_handler = cdh; }
-
-      /**
        * Sets the server to connect to.
        * @param server The server to connect to. Either IP or fully qualified domain name.
        * @param port The port to connect to.
@@ -147,10 +140,27 @@ namespace gloox
        */
       virtual ConnectionBase* newInstance() const = 0;
 
-    protected:
-      /** A handler for incoming data and connect/disconnect events. */
-      ConnectionDataHandler* m_handler;
+      /**
+       * This signal is emitted for data received from the underlying transport.
+       * @param connection The connection that received the data.
+       * @param data The data received.
+       */
+      signal2<const ConnectionBase*, const std::string&> dataReceived;
 
+      /**
+       * This signal is emitted when e.g. the raw TCP connection was established.
+       * @param connection The connection.
+       */
+      signal1<const ConnectionBase*> connected;
+
+      /**
+       * This signal is emitted when e.g. the raw TCP connection was closed.
+       * @param connection The connection.
+       * @param reason The reason for the disconnect.
+       */
+      signal2<const ConnectionBase*, ConnectionError> disconnected;
+
+    protected:
       /** Holds the current connection state. */
       ConnectionState m_state;
 

@@ -30,7 +30,7 @@ namespace gloox
    *
    * @code
    * Client* c = new Client( ... );
-   * c->setConnectionImpl( new ConnectionSOCKS5Proxy( c,
+   * c->setConnectionImpl( new ConnectionSOCKS5Proxy(
    *                         new ConnectionTCPClient( c->logInstance(), proxyHost, proxyPort ),
    *                           c->logInstance(), xmppHost, xmppPort ) );
    * @endcode
@@ -50,7 +50,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API ConnectionSOCKS5Proxy : public ConnectionBase, public ConnectionDataHandler
+  class GLOOX_API ConnectionSOCKS5Proxy : public ConnectionBase, public has_slots<>
   {
     public:
       /**
@@ -68,22 +68,6 @@ namespace gloox
        * part of a 'connection chain', e.g. with ConnectionHTTPProxy.
        */
       ConnectionSOCKS5Proxy( ConnectionBase* connection, const LogSink& logInstance,
-                             const std::string& server, int port = -1, bool ip = false );
-
-      /**
-       * Constructs a new ConnectionSOCKS5Proxy object.
-       * @param cdh A ConnectionDataHandler-derived object that will handle incoming data.
-       * @param connection A transport connection. It should be configured to connect to
-       * the proxy host and port, @b not to the (XMPP) host. ConnectionSOCKS5Proxy will own the
-       * transport connection and delete it in its destructor.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
-       * @param server A server to connect to. This is the XMPP server's address, @b not the proxy.
-       * @param port The proxy's port to connect to. This is the (XMPP) server's port, @b not the proxy's.
-       * The default of -1 means that SRV records will be used to find out about the actual host:port.
-       * @param ip Indicates whether @c server is an IP address (true) or a host name (false).
-       */
-      ConnectionSOCKS5Proxy( ConnectionDataHandler* cdh, ConnectionBase* connection,
-                             const LogSink& logInstance,
                              const std::string& server, int port = -1, bool ip = false );
 
       /**
@@ -112,16 +96,16 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void getStatistics( long int &totalIn, long int &totalOut );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleConnect( const ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual ConnectionBase* newInstance() const;
 
       /**

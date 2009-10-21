@@ -15,12 +15,6 @@
 namespace gloox
 {
 
-  ConnectionTLSServer::ConnectionTLSServer( ConnectionDataHandler* cdh, ConnectionBase* conn,
-                                            const LogSink& log )
-    : ConnectionTLS( cdh, conn, log )
-  {
-  }
-
   ConnectionTLSServer::ConnectionTLSServer( ConnectionBase* conn, const LogSink& log )
     : ConnectionTLS( conn, log )
   {
@@ -40,7 +34,7 @@ namespace gloox
     ConnectionBase* newConn = 0;
     if( m_connection )
       newConn = m_connection->newInstance();
-    return new ConnectionTLSServer( m_handler, newConn, m_log );
+    return new ConnectionTLSServer( newConn, m_log );
   }
 
 }

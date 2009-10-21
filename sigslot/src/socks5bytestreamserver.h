@@ -14,7 +14,6 @@
 #ifndef SOCKS5BYTESTREAMSERVER_H__
 #define SOCKS5BYTESTREAMSERVER_H__
 
-#include "connectiondatahandler.h"
 #include "macros.h"
 #include "logsink.h"
 #include "mutex.h"
@@ -24,6 +23,7 @@ namespace gloox
 {
 
   class ConnectionTCPServer;
+  class ConnectionBase;
 
   /**
    * @brief A server listening for SOCKS5 bytestreams.
@@ -35,7 +35,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API SOCKS5BytestreamServer : public ConnectionDataHandler, public has_slots<>
+  class GLOOX_API SOCKS5BytestreamServer : public has_slots<>
   {
 
     friend class SOCKS5BytestreamManager;
@@ -107,13 +107,24 @@ namespace gloox
        */
       void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
+      /**
+       * This slot is called for data received from the underlying transport.
+       * @param connection The connection that received the data.
+       * @param data The data received.
+       */
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // reimplemented from ConnectionDataHandler
+      /**
+       * This slot is called when e.g. the raw TCP connection was established.
+       * @param connection The connection.
+       */
       virtual void handleConnect( const ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
+      /**
+       * This slot is called when e.g. the raw TCP connection was closed.
+       * @param connection The connection.
+       * @param reason The reason for the disconnect.
+       */
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
     private:

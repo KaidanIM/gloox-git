@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) 2009 by Jakob Schroeter <js@camaya.net>
+ * This file is part of the gloox library. http://camaya.net/gloox
+ *
+ * This software is distributed under a license. The full license
+ * agreement can be found in the file LICENSE in this distribution.
+ * This software may not be copied, modified, sold or distributed
+ * other than expressed in the named license agreement.
+ *
+ * This software is distributed without any warranty.
+ */
+
+/* This is a modified version of sigslot.h from the sigslot library.
+ *
+ * - merged patches 2006-01-13, 2006-09-13 from sf.net tracker
+ *
+ * Changes made specifically for gloox:
+ * - changed namespace to gloox
+ * - renamed connect --> Connect
+ *           emit --> Emit
+ *           disconnect --> Disconnect
+ * -
+ */
+
 // sigslot.h: Signal/Slot classes
 //
 // Written by Sarah Thompson (sarah@telergy.com) 2002.
@@ -509,7 +533,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();
@@ -632,7 +656,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();
@@ -740,7 +764,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();
@@ -848,7 +872,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();
@@ -956,7 +980,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();
@@ -1066,7 +1090,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();
@@ -1176,7 +1200,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();
@@ -1287,7 +1311,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();
@@ -1398,7 +1422,7 @@ namespace gloox
 
       m_connected_slots.erase( m_connected_slots.begin(), m_connected_slots.end() );
     }
-    void disconnect( has_slots<mt_policy>* pclass )
+    void Disconnect( has_slots<mt_policy>* pclass )
     {
       lock_block<mt_policy>lock( this );
       iterator it = m_connected_slots.begin();

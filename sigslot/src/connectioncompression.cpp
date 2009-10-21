@@ -18,20 +18,15 @@
 namespace gloox
 {
 
-  ConnectionCompression::ConnectionCompression( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log )
-    : ConnectionBase( cdh ),
-      m_connection( conn ), m_compression( 0 ), m_log( log )
-  {
-    if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
-  }
-
   ConnectionCompression::ConnectionCompression( ConnectionBase* conn, const LogSink& log )
-    : ConnectionBase( 0 ),
-      m_connection( conn ), m_compression( 0 ), m_log( log )
+    : m_connection( conn ), m_compression( 0 ), m_log( log )
   {
     if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
+    {
+      m_connection->dataReceived.Connect( this, &ConnectionCompression::handleReceivedData );
+      m_connection->connected.Connect( this, &ConnectionCompression::handleConnect );
+      m_connection->disconnected.Connect( this, &ConnectionCompression::handleDisconnect );
+    }
   }
 
   ConnectionCompression::~ConnectionCompression()
@@ -43,12 +38,20 @@ namespace gloox
   void ConnectionCompression::setConnectionImpl( ConnectionBase* connection )
   {
     if( m_connection )
-      m_connection->registerConnectionDataHandler( 0 );
+    {
+      m_connection->dataReceived.Disconnect( this );
+      m_connection->connected.Disconnect( this );
+      m_connection->disconnected.Disconnect( this );
+    }
 
     m_connection = connection;
 
     if( m_connection )
-      m_connection->registerConnectionDataHandler( this );
+    {
+      m_connection->dataReceived.Connect( this, &ConnectionCompression::handleReceivedData );
+      m_connection->connected.Connect( this, &ConnectionCompression::handleConnect );
+      m_connection->disconnected.Connect( this, &ConnectionCompression::handleDisconnect );
+    }
   }
 
   ConnectionError ConnectionCompression::connect()
@@ -131,7 +134,7 @@ namespace gloox
     ConnectionBase* newConn = 0;
     if( m_connection )
       newConn = m_connection->newInstance();
-    return new ConnectionCompression( m_handler, newConn, m_log );
+    return new ConnectionCompression( newConn, m_log );
   }
 
   void ConnectionCompression::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
@@ -142,15 +145,12 @@ namespace gloox
 
   void ConnectionCompression::handleConnect( const ConnectionBase* /*connection*/ )
   {
-    if( m_handler )
-      m_handler->handleConnect( this );
+    handleConnect( this );
   }
 
   void ConnectionCompression::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
   {
-    if( m_handler )
-      m_handler->handleDisconnect( this, reason );
-
+    handleDisconnect( this, reason );
     cleanup();
   }
 
@@ -162,8 +162,7 @@ namespace gloox
 
   void ConnectionCompression::handleDecompressedData( const std::string& data )
   {
-    if( m_handler )
-      m_handler->handleReceivedData( this, data );
+    handleReceivedData( this, data );
   }
 
 }

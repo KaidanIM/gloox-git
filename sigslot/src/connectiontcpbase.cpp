@@ -46,17 +46,7 @@ namespace gloox
 
   ConnectionTCPBase::ConnectionTCPBase( const LogSink& logInstance,
                                         const std::string& server, int port )
-    : ConnectionBase( 0 ),
-      m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
-      m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
-  {
-    init( server, port );
-  }
-
-  ConnectionTCPBase::ConnectionTCPBase( ConnectionDataHandler* cdh, const LogSink& logInstance,
-                                        const std::string& server, int port )
-    : ConnectionBase( cdh ),
-      m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
+    : m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
       m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
   {
     init( server, port );
@@ -134,8 +124,8 @@ namespace gloox
 
     m_sendMutex.unlock();
 
-    if( sent == -1 && m_handler )
-      m_handler->handleDisconnect( this, ConnIoError );
+    if( sent == -1 )
+      disconnected( this, ConnIoError );
 
     return sent != -1;
   }

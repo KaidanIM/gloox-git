@@ -33,9 +33,9 @@ namespace gloox
    *
    * @code
    * Client *c = new Client( ... );
-   * c->setConnectionImpl( new ConnectionBOSH( c,
-   *                                new ConnectionTCP( c->logInstance(), httpServer, httpPort ),
-   *                                c->logInstance(), boshHost, xmpphost, xmppPort ) );
+   * c->setConnectionImpl( new ConnectionBOSH( new ConnectionTCP( c->logInstance(),
+   *                                                              httpServer, httpPort ),
+   *                                       c->logInstance(), boshHost, xmpphost, xmppPort ) );
    * @endcode
    *
    * Make sure to pass the BOSH connection manager's host/port to the transport connection
@@ -61,8 +61,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class GLOOX_API ConnectionBOSH : public ConnectionBase, ConnectionDataHandler,
-                                   public has_slots<>
+  class GLOOX_API ConnectionBOSH : public ConnectionBase, public has_slots<>
   {
     public:
       /**
@@ -81,23 +80,6 @@ namespace gloox
        * part of a 'connection chain', e.g. with ConnectionSOCKS5Proxy.
        */
       ConnectionBOSH( ConnectionBase* connection, const LogSink& logInstance, const std::string& boshHost,
-                      const std::string& xmppServer, int xmppPort = 5222 );
-
-      /**
-       * Constructs a new ConnectionBOSH object.
-       * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
-       * @param connection A transport connection. It should be configured to connect to
-       * the connection manager's (or proxy's) host and port, @b not to the XMPP host. ConnectionBOSH
-       * will own the transport connection and delete it in its destructor.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
-       * @param boshHost The hostname of the BOSH connection manager (not any intermediate proxy)
-       * @param xmppServer A server to connect to. This is the XMPP server's address, @b not the connection
-       * manager's.
-       * @param xmppPort The port to connect to. This is the XMPP server's port, @b not the connection
-       * manager's.
-       */
-      ConnectionBOSH( ConnectionDataHandler* cdh, ConnectionBase* connection,
-                      const LogSink& logInstance, const std::string& boshHost,
                       const std::string& xmppServer, int xmppPort = 5222 );
 
       /**
@@ -160,16 +142,16 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void getStatistics( long int& totalIn, long int& totalOut );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleConnect( const ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
-      // reimplemented from ConnectionDataHandler
+      // reimplemented from ConnectionBase
       virtual ConnectionBase* newInstance() const;
 
       // reimplemented from TagHandler

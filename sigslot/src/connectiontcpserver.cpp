@@ -57,7 +57,7 @@ namespace gloox
 
   ConnectionTCPServer::ConnectionTCPServer( const LogSink& logInstance,
                                             const std::string& ip, int port )
-    : ConnectionTCPBase( 0, logInstance, ip, port )
+    : ConnectionTCPBase( logInstance, ip, port )
   {
   }
 

@@ -31,8 +31,6 @@
 # include <unistd.h>
 #endif
 
-#include <cstdio>
-
 namespace gloox
 {
 
@@ -258,17 +256,25 @@ namespace gloox
       if( name == "proceed" && xmlns == XMLNS_STREAM_TLS && hasTls() )
       {
         logInstance().dbg( LogAreaClassClient, "Starting TLS handshake..." );
+
+        m_connection->connected.Disconnect( this );
+        m_connection->disconnected.Disconnect( this );
+        m_connection->dataReceived.Disconnect( this );
+
         if( m_encryption )
           m_encryption->setConnectionImpl( m_connection );
         else
         {
-          m_encryption = new ConnectionTLS( this, m_connection, m_logInstance );
+          m_encryption = new ConnectionTLS( m_connection, m_logInstance );
           m_encryption->registerTLSHandler( this );
         }
-        m_connection = m_encryption;
         m_encryption->setCACerts( m_cacerts );
         m_encryption->setClientCert( m_clientKey, m_clientCerts );
-        m_encryption->connect();
+        m_connection = m_encryption;
+        m_connection->connected.Connect( (ClientBase*)this, &ClientBase::handleConnect );
+        m_connection->disconnected.Connect( (ClientBase*)this, &ClientBase::handleDisconnect );
+        m_connection->dataReceived.Connect( (ClientBase*)this, &ClientBase::handleReceivedData );
+        m_connection->connect();
       }
       else if( name == "failure" )
       {
@@ -295,7 +301,7 @@ namespace gloox
         if( m_compression )
           m_compression->setConnectionImpl( m_connection );
         else
-          m_compression = new ConnectionCompression( this, m_connection, m_logInstance );
+          m_compression = new ConnectionCompression( m_connection, m_logInstance );
         m_connection = m_compression;
         m_compression->connect();
         header();

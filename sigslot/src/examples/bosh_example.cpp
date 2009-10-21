@@ -68,7 +68,7 @@ class MessageTest : public MessageSessionHandler, public has_slots<>, LogHandler
 
       // this code connects to a jabber server through a BOSH connection...
       ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "example.net", 8080 );
-      ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "example.net", "example.net" );
+      ConnectionBOSH* conn1 = new ConnectionBOSH( conn0, j->logInstance(), "example.net", "example.net" );
 //       conn1->setMode( ConnectionBOSH::ModeLegacyHTTP );
 //        conn1->setMode( ConnectionBOSH::ModePersistentHTTP );
       j->setConnectionImpl( conn1 );

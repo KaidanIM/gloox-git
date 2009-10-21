@@ -17,14 +17,13 @@
 #include "bytestream.h"
 #include "gloox.h"
 #include "socks5bytestreammanager.h"
-#include "connectiondatahandler.h"
+#include "sigslot.h"
 
 #include <string>
 
 namespace gloox
 {
 
-  class SOCKS5BytestreamDataHandler;
   class ConnectionBase;
   class LogSink;
 
@@ -39,7 +38,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API SOCKS5Bytestream : public ConnectionDataHandler, public Bytestream
+  class GLOOX_API SOCKS5Bytestream : public has_slots<>, public Bytestream
   {
     friend class SOCKS5BytestreamManager;
 
@@ -57,8 +56,6 @@ namespace gloox
        * otherwise.
        * @note If @b false is returned you should hand this SOCKS5Bytestream object
        * to SOCKS5BytestreamManager::dispose() for deletion.
-       * @note Make sure you have a SOCKS5BytestreamDataHandler registered (using
-       * registerSOCKS5BytestreamDataHandler()) before calling this function.
        */
       virtual bool connect();
 
@@ -106,13 +103,24 @@ namespace gloox
        */
       void setStreamHosts( const StreamHostList& hosts ) { m_hosts = hosts; }
 
-      // reimplemented from ConnectionDataHandler
+      /**
+       * This slot is called for data received from the underlying transport.
+       * @param connection The connection that received the data.
+       * @param data The data received.
+       */
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // reimplemented from ConnectionDataHandler
+      /**
+       * This slot is called when e.g. the raw TCP connection was established.
+       * @param connection The connection.
+       */
       virtual void handleConnect( const ConnectionBase* connection );
 
-      // reimplemented from ConnectionDataHandler
+      /**
+       * This slot is called when e.g. the raw TCP connection was closed.
+       * @param connection The connection.
+       * @param reason The reason for the disconnect.
+       */
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
     private:
