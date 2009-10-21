@@ -751,12 +751,11 @@ namespace gloox
 
   void ClientBase::send( Presence& pres )
   {
-    StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
-    for( ; it != m_presenceExtensions.end(); ++it )
-      pres.addExtension( (*it)->clone() );
-
     ++m_stats.presenceStanzasSent;
     Tag* tag = pres.tag();
+    StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
+    for( ; it != m_presenceExtensions.end(); ++it )
+      tag->addChild( (*it)->tag() );
     addFrom( tag );
     addNamespace( tag );
     send( tag );
