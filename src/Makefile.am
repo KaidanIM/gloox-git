@@ -185,6 +185,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
                         flexoff.h \
                         flexoffhandler.h \
                         gloox.h \
+                        glooxversion.h \
                         gpgencrypted.h \
                         gpgsigned.h \
                         inbandbytestream.h \
