@@ -146,6 +146,12 @@ namespace gloox
           Info( const Tag* tag );
 
           /**
+           * Copy constructor.
+           * @param info An Info object to copy.
+           */
+          Info( const Info& info );
+
+          /**
            * Virtual destructor.
            */
           virtual ~Info();
