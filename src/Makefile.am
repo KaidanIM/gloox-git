@@ -50,6 +50,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             bookmarkstorage.h         messagehandler.h        rosteritem.h \
                             clientbase.h              rosterlistener.h        taghandler.h \
                             connectionlistener.h      rostermanager.h         gloox.h \
+                            glooxversion.h \
                             disco.h                   presencehandler.h       subscriptionhandler.h \
                             discohandler.h            privacyitem.h           stanza.h \
                             disconodehandler.h        privacylisthandler.h    loghandler.h \
