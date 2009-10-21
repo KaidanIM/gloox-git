@@ -100,6 +100,12 @@ namespace gloox
     }
   }
 
+  Disco::Info::Info( const Info& info )
+    : StanzaExtension( ExtDiscoInfo ), m_node( info.m_node ), m_features( info.m_features ),
+      m_identities( info.m_identities ),  m_form( info.m_form ? new DataForm( *(info.m_form) ) : 0 )
+  {
+  }
+
   Disco::Info::~Info()
   {
     delete m_form;
