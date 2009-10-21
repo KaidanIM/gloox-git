@@ -26,7 +26,7 @@ namespace gloox
 {
 
   SOCKS5BytestreamManager::SOCKS5BytestreamManager( ClientBase *parent, SOCKS5BytestreamHandler* s5bh )
-    : m_parent( parent ), m_socks5BytestreamHandler( s5bh )
+    : m_parent( parent ), m_socks5BytestreamHandler( s5bh ), m_server( 0 )
   {
     if( m_parent )
       m_parent->registerIqHandler( this, XMLNS_BYTESTREAMS );
