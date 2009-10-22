@@ -47,7 +47,7 @@ OpenSSLTest::OpenSSLTest()
   if( !m_client->init() )
     printf( "client init failed!\n" );
   m_server = new OpenSSLServer( this );
-  if( !m_server->init( /*"server.key", "server.crt"*/ ) )
+  if( !m_server->init( "server.key", "server.crt" ) )
     printf( "server init failed\n" );
 }
 
