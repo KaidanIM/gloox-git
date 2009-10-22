@@ -308,7 +308,7 @@ AC_C_INLINE
 dnl build tests?
 want_tests=yes
 AC_ARG_WITH(tests, AC_HELP_STRING([--with-tests],
-      [Build unit tests]),
+      [Build unit tests (default=yes]),
       want_tests=$withval, want_tests=yes)
 AC_MSG_CHECKING([if unit tests should be built])
 AC_MSG_RESULT($want_tests)
@@ -324,7 +324,7 @@ AC_SUBST([MAYBE_TESTS])
 dnl build examples?
 want_examples=yes
 AC_ARG_WITH(examples, AC_HELP_STRING([--with-examples],
-      [Build example programs]),
+      [Build example programs (default=yes)]),
       want_examples=$withval, want_examples=yes)
 AC_MSG_CHECKING([if example programs should be built])
 AC_MSG_RESULT($want_examples)
