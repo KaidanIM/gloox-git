@@ -178,8 +178,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "client/server handshake test";
   OpenSSLTest *t = new OpenSSLTest();
-  handshakeOK = t->handshake();
-  if( !handshakeOK )
+  if( !t->handshake() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -188,7 +187,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "simple send";
   std::string text( "text" );
-  if( !handshakeOK || ( t->send( text ) != text ) )
+  if( t->send( text ) != text )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -197,7 +196,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "subsequent send";
   text = std::string( "txt"/*17000, 'x'*/ );
-  if( !handshakeOK || ( t->send( text ) != text ) )
+  if( t->send( text ) != text )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -206,7 +205,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "large send";
   text = std::string( 17000, 'x' );
-  if( !handshakeOK || ( t->send( text ) != text ) )
+  if( t->send( text ) != text )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -215,7 +214,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "larger send";
   text = std::string( 170000, 'x' );
-  if( !handshakeOK || ( t->send( text ) != text ) )
+  if( t->send( text ) != text )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -224,7 +223,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "largest send";
   text = std::string( 1700000, 'x' );
-  if( !handshakeOK || ( t->send( text ) != text ) )
+  if( t->send( text ) != text )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
