@@ -67,21 +67,21 @@ bool OpenSSLTest::handshake()
 
 void OpenSSLTest::loop()
 {
-  while( m_clientToServer.length() )
+  while( !m_clientToServer.empty() )
   {
 //     printf( "we have %d bytes for the server\n", m_clientToServer.length() );
     m_server->decrypt( m_clientToServer );
     m_clientToServer = "";
 //     printf( "we have %d bytes left for the server\n", m_clientToServer.length() );
   }
-  while( m_serverToClient.length() )
+  while( !m_serverToClient.empty() )
   {
 //     printf( "we have %d bytes for the client\n", m_serverToClient.length() );
     m_client->decrypt( m_serverToClient );
     m_serverToClient = "";
 //     printf( "we have %d bytes left for the client\n", m_serverToClient.length() );
   }
-  while( m_serverDecrypted.length() )
+  while( !m_serverDecrypted.empty() )
   {
 //     printf( "we have %d bytes for the server to encrypt\n", m_serverDecrypted.length() );
     m_server->encrypt( m_serverDecrypted );
@@ -92,45 +92,54 @@ void OpenSSLTest::loop()
 
 void OpenSSLTest::handleEncryptedData( const TLSBase* base, const std::string& data )
 {
-  const OpenSSLClient *c = dynamic_cast<const OpenSSLClient*>( base );
-  if( c )
+//   const OpenSSLClient *c = dynamic_cast<const OpenSSLClient*>( base );
+//   if( c )
+  if( base ==m_client )
   {
 //     printf( "recv encrypted data from client: %d\n", data.length() );
     m_clientToServer += data;
+//     printf( "m_clientToServer: %d\n", m_clientToServer.length() );
     return;
   }
 
-  const OpenSSLServer *s = dynamic_cast<const OpenSSLServer*>( base );
-  if( s )
+//   const OpenSSLServer *s = dynamic_cast<const OpenSSLServer*>( base );
+//   if( s )
+  if( base == m_server )
   {
 //     printf( "recv encrypted data from server: %d\n", data.length() );
     m_serverToClient += data;
+//     printf( "m_serverToClient: %d\n", m_serverToClient.length() );
   }
 }
 
 void OpenSSLTest::handleDecryptedData( const TLSBase* base, const std::string& data )
 {
-  const OpenSSLClient *c = dynamic_cast<const OpenSSLClient*>( base );
-  if( c )
+//   const OpenSSLClient *c = dynamic_cast<const OpenSSLClient*>( base );
+  if( base == m_client )
+//   if( c )
   {
 //     printf( "recv decrypted data from client: %d\n", data.length() );
     m_clientDecrypted += data;
+//     printf( "m_clientDecrypted: %d\n", m_clientDecrypted.length() );
     return;
   }
 
-  const OpenSSLServer *s = dynamic_cast<const OpenSSLServer*>( base );
-  if( s )
+//   const OpenSSLServer *s = dynamic_cast<const OpenSSLServer*>( base );
+//   if( s )
+  if( base == m_server )
   {
 //     printf( "recv decrypted data from server: %d\n", data.length() );
     m_serverDecrypted += data;
+//     printf( "m_serverDecrypted: %d\n", m_serverDecrypted.length() );
   }
 }
 
 void OpenSSLTest::handleHandshakeResult( const TLSBase* base, bool success, CertInfo& certinfo )
 {
   printfCert( certinfo );
-  const OpenSSLClient *c = dynamic_cast<const OpenSSLClient*>( base );
-  if( c )
+//   const OpenSSLClient *c = dynamic_cast<const OpenSSLClient*>( base );
+//   if( c )
+  if( base == m_client )
   {
 //     printf( "recv handshake result from client: %d\n", success );
     m_clientHandshakeResult = true;
@@ -138,8 +147,9 @@ void OpenSSLTest::handleHandshakeResult( const TLSBase* base, bool success, Cert
     return;
   }
 
-  const OpenSSLServer *s = dynamic_cast<const OpenSSLServer*>( base );
-  if( s )
+//   const OpenSSLServer *s = dynamic_cast<const OpenSSLServer*>( base );
+//   if( s )
+  if( base == m_server )
   {
 //     printf( "recv handshake result from server: %d\n", success );
     m_serverHandshakeResult = true;
@@ -173,7 +183,6 @@ int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
-  bool handshakeOK = false;
 
   // -------
   name = "client/server handshake test";
@@ -222,7 +231,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "largest send";
-  text = std::string( 1700000, 'x' );
+  text = std::string( 170000000, 'x' );
   if( t->send( text ) != text )
   {
     ++fail;
