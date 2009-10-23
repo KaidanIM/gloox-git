@@ -1,3 +1,8 @@
+v0.9.9.12 -- xx yyy 2009
+------------------------
+- removed apparent openssl chunk size limit
+
+
 v0.9.9.11 -- 22 Oct 2009
 ------------------------
 - fixed potential crash in SOCKS5BytestreamManager

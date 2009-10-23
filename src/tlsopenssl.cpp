@@ -48,7 +48,7 @@ namespace gloox
       return;
     }
     SSL_set_bio( m_ssl, m_ibio, m_ibio );
-    SSL_set_mode( m_ssl, SSL_MODE_AUTO_RETRY );
+    SSL_set_mode( m_ssl, SSL_MODE_AUTO_RETRY | SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER | SSL_MODE_ENABLE_PARTIAL_WRITE );
   }
 
   OpenSSL::~OpenSSL()
@@ -166,7 +166,8 @@ namespace gloox
       else if( onceAgain )
         onceAgain = false;
     }
-    while( ( onceAgain || m_recvBuffer.length() ) && ( !m_secure || op == TLSRead ) );
+    while( ( ( onceAgain || m_recvBuffer.length() ) && ( !m_secure || op == TLSRead ) )
+           || ( ( op == TLSWrite ) && ( ret > 0 ) ));
   }
 
   int OpenSSL::openSSLTime2UnixTime( const char* time_string )
