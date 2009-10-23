@@ -65,21 +65,21 @@ bool GnuTLSTest::handshake()
 
 void GnuTLSTest::loop()
 {
-  while( m_clientToServer.length() )
+  while( !m_clientToServer.empty() )
   {
 //     printf( "we have %d bytes for the server\n", m_clientToServer.length() );
     m_server->decrypt( m_clientToServer );
     m_clientToServer = "";
 //     printf( "we have %d bytes left for the server\n", m_clientToServer.length() );
   }
-  while( m_serverToClient.length() )
+  while( !m_serverToClient.empty() )
   {
 //     printf( "we have %d bytes for the client\n", m_serverToClient.length() );
     m_client->decrypt( m_serverToClient );
     m_serverToClient = "";
 //     printf( "we have %d bytes left for the client\n", m_serverToClient.length() );
   }
-  while( m_serverDecrypted.length() )
+  while( !m_serverDecrypted.empty() )
   {
 //     printf( "we have %d bytes for the server to encrypt\n", m_serverDecrypted.length() );
     m_server->encrypt( m_serverDecrypted );
@@ -90,45 +90,54 @@ void GnuTLSTest::loop()
 
 void GnuTLSTest::handleEncryptedData( const TLSBase* base, const std::string& data )
 {
-  const GnuTLSClientAnon *c = dynamic_cast<const GnuTLSClientAnon*>( base );
-  if( c )
+//   const GnuTLSClientAnon *c = dynamic_cast<const GnuTLSClientAnon*>( base );
+//   if( c )
+  if( base == m_client )
   {
 //     printf( "recv encrypted data from client: %d\n", data.length() );
     m_clientToServer += data;
+//     printf( "m_clientToServer: %d\n", m_clientToServer.length() );
     return;
   }
 
-  const GnuTLSServerAnon *s = dynamic_cast<const GnuTLSServerAnon*>( base );
-  if( s )
+//   const GnuTLSServerAnon *s = dynamic_cast<const GnuTLSServerAnon*>( base );
+//   if( s )
+  if( base == m_server )
   {
 //     printf( "recv encrypted data from server: %d\n", data.length() );
     m_serverToClient += data;
+//     printf( "m_serverToClient: %d\n", m_serverToClient.length() );
   }
 }
 
 void GnuTLSTest::handleDecryptedData( const TLSBase* base, const std::string& data )
 {
-  const GnuTLSClientAnon *c = dynamic_cast<const GnuTLSClientAnon*>( base );
-  if( c )
+//   const GnuTLSClientAnon *c = dynamic_cast<const GnuTLSClientAnon*>( base );
+//   if( c )
+  if( base == m_client )
   {
 //     printf( "recv decrypted data from client: %d\n", data.length() );
     m_clientDecrypted += data;
+//     printf( "m_clientDecrypted: %d\n", m_clientDecrypted.length() );
     return;
   }
 
-  const GnuTLSServerAnon *s = dynamic_cast<const GnuTLSServerAnon*>( base );
-  if( s )
+//   const GnuTLSServerAnon *s = dynamic_cast<const GnuTLSServerAnon*>( base );
+//   if( s )
+  if( base == m_server )
   {
 //     printf( "recv decrypted data from server: %d\n", data.length() );
     m_serverDecrypted += data;
+//     printf( "m_serverDecrypted: %d\n", m_serverDecrypted.length() );
   }
 }
 
 void GnuTLSTest::handleHandshakeResult( const TLSBase* base, bool success, CertInfo& /*certinfo*/ )
 {
 //   printfCert( certinfo );
-  const GnuTLSClientAnon *c = dynamic_cast<const GnuTLSClientAnon*>( base );
-  if( c )
+//   const GnuTLSClientAnon *c = dynamic_cast<const GnuTLSClientAnon*>( base );
+//   if( c )
+  if( base == m_client )
   {
 //     printf( "recv handshake result from client: %d\n", success );
     m_clientHandshakeResult = true;
@@ -136,8 +145,9 @@ void GnuTLSTest::handleHandshakeResult( const TLSBase* base, bool success, CertI
     return;
   }
 
-  const GnuTLSServerAnon *s = dynamic_cast<const GnuTLSServerAnon*>( base );
-  if( s )
+//   const GnuTLSServerAnon *s = dynamic_cast<const GnuTLSServerAnon*>( base );
+//   if( s )
+  if( base == m_server )
   {
 //     printf( "recv handshake result from server: %d\n", success );
     m_serverHandshakeResult = true;
@@ -155,13 +165,13 @@ void GnuTLSTest::printfCert( CertInfo &certinfo )
 
 std::string GnuTLSTest::send( const std::string& txt )
 {
-//   printf( "sending %s\n", txt.c_str() );
+  printf( "sending %d\n", txt.length() );
 
   m_client->encrypt( txt );
   while( m_clientDecrypted.empty() )
     loop();
 
-//   printf( "recv'ed %s\n", m_clientDecrypted.c_str() );
+  printf( "recv'ed %d\n", m_clientDecrypted.length() );
   const std::string t = m_clientDecrypted;
   m_clientDecrypted = "";
   return t;
