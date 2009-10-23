@@ -3,8 +3,8 @@ include( ../CMakeLists_common_before.txt )
 add_executable( ${dirname}_test ${test_SRCS} ../../client.cpp ../../clientbase.cpp ../../connectiontcpbase.cpp ../../connectiontcpclient.cpp
 			../../disco.cpp ../../parser.cpp ../../tag.cpp ../../stanza.cpp ../../base64.cpp ../../jid.cpp
 			../../md5.cpp ../../tlsgnutlsclient.cpp
-			../../tlsopensslclient.cpp ../../tlsschannel.cpp
-			../../tlsgnutlsserver.cpp
+			../../tlsopensslclient.cpp ../../tlsschannelbase.cpp
+			../../tlsgnutlsserver.cpp ../../tlsschannelclient.cpp ../../tlsschannelserver.cpp
 			../../tlsopensslbase.cpp ../../tlsopensslserver.cpp
 			../../logsink.cpp ../../messagesession.cpp ../../prep.cpp ../../compressionzlib.cpp
 			../../dns.cpp ../../stanzaextensionfactory.cpp

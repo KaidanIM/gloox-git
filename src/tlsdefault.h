@@ -40,7 +40,7 @@ namespace gloox
                                      * TLS implementations. */
         AnonymousClient   =  2,     /**< Anonymous TLS client (non-verifying), available with
                                      * GnuTLS. */
-        VerifyingServer   =  4,     /**< TLS server, verifying, currently not available. */
+        VerifyingServer   =  4,     /**< TLS server, verifying, available for GnuTLS and OpenSSL. */
         AnonymousServer   =  8      /**< Anonymous TLS server (non-verifying), available with
                                      * GnuTLS. */
       };

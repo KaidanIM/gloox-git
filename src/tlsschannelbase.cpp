@@ -10,7 +10,8 @@
  * This software is distributed without any warranty.
  */
 
-#include "tlsschannel.h"
+#include "tlsschannelbase.h"
+#include "gloox.h"
 
 #ifdef HAVE_WINTLS
 
@@ -18,25 +19,25 @@
 
 namespace gloox
 {
-  SChannel::SChannel( TLSHandler* th, const std::string& server )
-    : TLSBase( th, server ), m_cleanedup( true )
+  SChannelBase::SChannelBase( TLSHandler* th, const std::string& server )
+    : TLSBase( th, server ), m_cleanedup( true ), m_haveCredentialsHandle( false )
   {
-    //printf(">> SChannel::SChannel()\n");
+    //printf(">> SChannelBase::SChannelBase()\n");
   }
 
-  SChannel::~SChannel()
+  SChannelBase::~SChannelBase()
   {
     m_handler = 0;
     cleanup();
-    //printf(">> SChannel::~SChannel()\n");
+    //printf(">> SChannelBase::~SChannelBase()\n");
   }
 
-  bool SChannel::encrypt( const std::string& data )
+  bool SChannelBase::encrypt( const std::string& data )
   {
     if( !m_handler )
       return false;
 
-    //printf(">> SChannel::encrypt()\n");
+    //printf(">> SChannelBase::encrypt()\n");
     std::string data_copy = data;
 
     SecBuffer buffer[4];
@@ -105,113 +106,113 @@ namespace gloox
     return true;
   }
 
-  int SChannel::decrypt( const std::string& data )
+  int SChannelBase::decrypt( const std::string& data )
   {
 
     if( !m_handler )
       return 0;
 
-    //printf(">> SChannel::decrypt()\n");
-    if( m_secure )
+    //printf(">> SChannelBase::decrypt()\n");
+    m_buffer += data;
+
+    if( !m_secure )
     {
-      m_buffer += data;
+      handshake();
+      return 0;
+    }
 
-      SecBuffer buffer[4];
-      SecBufferDesc buffer_desc;
-      DWORD cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
+    SecBuffer buffer[4];
+    SecBufferDesc buffer_desc;
+    DWORD cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
 
-      PBYTE e_iobuffer = static_cast<PBYTE>( LocalAlloc( LMEM_FIXED, cbIoBufferLength ) );
-      if( e_iobuffer == NULL )
+    PBYTE e_iobuffer = static_cast<PBYTE>( LocalAlloc( LMEM_FIXED, cbIoBufferLength ) );
+    if( e_iobuffer == NULL )
+    {
+      //printf("**** Out of memory (2)\n");
+      cleanup();
+      if( !m_secure )
+        m_handler->handleHandshakeResult( this, false, m_certInfo );
+      return 0;
+    }
+    SECURITY_STATUS e_status;
+
+    // copy data chunk from tmp string into encryption memory buffer
+    do
+    {
+      memcpy( e_iobuffer, m_buffer.data(), m_buffer.size() >
+              cbIoBufferLength ? cbIoBufferLength : m_buffer.size() );
+
+      buffer[0].pvBuffer     = e_iobuffer;
+      buffer[0].cbBuffer     = static_cast<unsigned long>( m_buffer.size() > cbIoBufferLength
+                                                              ? cbIoBufferLength
+                                                              : m_buffer.size() );
+      buffer[0].BufferType   = SECBUFFER_DATA;
+      buffer[1].cbBuffer = buffer[2].cbBuffer = buffer[3].cbBuffer = 0;
+      buffer[1].BufferType = buffer[2].BufferType = buffer[3].BufferType  = SECBUFFER_EMPTY;
+
+      buffer_desc.ulVersion       = SECBUFFER_VERSION;
+      buffer_desc.cBuffers        = 4;
+      buffer_desc.pBuffers        = buffer;
+
+      unsigned long processed_data = buffer[0].cbBuffer;
+      e_status = DecryptMessage( &m_context, &buffer_desc, 0, 0 );
+
+      // print_error(e_status, "decrypt() ~ DecryptMessage()");
+      // for (int n=0; n<4; n++)
+      //     printf("buffer[%d].cbBuffer: %d   \t%d\n", n, buffer[n].cbBuffer, buffer[n].BufferType);
+
+      // Locate data and (optional) extra buffers.
+      SecBuffer* pDataBuffer  = NULL;
+      SecBuffer* pExtraBuffer = NULL;
+      for( int i = 1; i < 4; i++ )
       {
-        //printf("**** Out of memory (2)\n");
-        cleanup();
-        if( !m_secure )
-          m_handler->handleHandshakeResult( this, false, m_certInfo );
-        return 0;
+        if( pDataBuffer == NULL && buffer[i].BufferType == SECBUFFER_DATA )
+        {
+          pDataBuffer = &buffer[i];
+          //printf("buffer[%d].BufferType = SECBUFFER_DATA\n",i);
+        }
+        if( pExtraBuffer == NULL && buffer[i].BufferType == SECBUFFER_EXTRA )
+        {
+          pExtraBuffer = &buffer[i];
+        }
       }
-      SECURITY_STATUS e_status;
-
-      // copy data chunk from tmp string into encryption memory buffer
-      do
+      if( e_status == SEC_E_OK )
       {
-        memcpy( e_iobuffer, m_buffer.data(), m_buffer.size() >
-               cbIoBufferLength ? cbIoBufferLength : m_buffer.size() );
-
-        buffer[0].pvBuffer     = e_iobuffer;
-        buffer[0].cbBuffer     = static_cast<unsigned long>( m_buffer.size() > cbIoBufferLength
-                                                               ? cbIoBufferLength
-                                                               : m_buffer.size() );
-        buffer[0].BufferType   = SECBUFFER_DATA;
-        buffer[1].cbBuffer = buffer[2].cbBuffer = buffer[3].cbBuffer = 0;
-        buffer[1].BufferType = buffer[2].BufferType = buffer[3].BufferType  = SECBUFFER_EMPTY;
-
-        buffer_desc.ulVersion       = SECBUFFER_VERSION;
-        buffer_desc.cBuffers        = 4;
-        buffer_desc.pBuffers        = buffer;
-
-        unsigned long processed_data = buffer[0].cbBuffer;
-        e_status = DecryptMessage( &m_context, &buffer_desc, 0, 0 );
-
-        // print_error(e_status, "decrypt() ~ DecryptMessage()");
-        // for (int n=0; n<4; n++)
-        //     printf("buffer[%d].cbBuffer: %d   \t%d\n", n, buffer[n].cbBuffer, buffer[n].BufferType);
-
-        // Locate data and (optional) extra buffers.
-        SecBuffer* pDataBuffer  = NULL;
-        SecBuffer* pExtraBuffer = NULL;
-        for( int i = 1; i < 4; i++ )
+        std::string decrypted( reinterpret_cast<const char*>( pDataBuffer->pvBuffer ),
+                                pDataBuffer->cbBuffer );
+        m_handler->handleDecryptedData( this, decrypted );
+        if( pExtraBuffer == NULL )
         {
-          if( pDataBuffer == NULL && buffer[i].BufferType == SECBUFFER_DATA )
-          {
-            pDataBuffer = &buffer[i];
-            //printf("buffer[%d].BufferType = SECBUFFER_DATA\n",i);
-          }
-          if( pExtraBuffer == NULL && buffer[i].BufferType == SECBUFFER_EXTRA )
-          {
-            pExtraBuffer = &buffer[i];
-          }
-        }
-        if( e_status == SEC_E_OK )
-        {
-          std::string decrypted( reinterpret_cast<const char*>( pDataBuffer->pvBuffer ),
-                                 pDataBuffer->cbBuffer );
-          m_handler->handleDecryptedData( this, decrypted );
-          if( pExtraBuffer == NULL )
-          {
-            m_buffer.erase( 0, processed_data );
-          }
-          else
-          {
-            //std::cout << "m_buffer.size() = " << pExtraBuffer->cbBuffer << std::endl;
-            m_buffer.erase( 0, m_buffer.size() - pExtraBuffer->cbBuffer );
-            //std::cout << "m_buffer.size() = " << m_buffer.size() << std::endl;
-          }
-        }
-        else if( e_status == SEC_E_INCOMPLETE_MESSAGE )
-        {
-          break;
+          m_buffer.erase( 0, processed_data );
         }
         else
         {
-          //std::cout << "decrypt !!!ERROR!!!\n";
-          cleanup();
-          if( !m_secure )
-            m_handler->handleHandshakeResult( this, false, m_certInfo );
-          break;
+          //std::cout << "m_buffer.size() = " << pExtraBuffer->cbBuffer << std::endl;
+          m_buffer.erase( 0, m_buffer.size() - pExtraBuffer->cbBuffer );
+          //std::cout << "m_buffer.size() = " << m_buffer.size() << std::endl;
         }
       }
-      while( m_buffer.size() != 0 );
-      LocalFree( e_iobuffer );
+      else if( e_status == SEC_E_INCOMPLETE_MESSAGE )
+      {
+        break;
+      }
+      else
+      {
+        //std::cout << "decrypt !!!ERROR!!!\n";
+        cleanup();
+        if( !m_secure )
+          m_handler->handleHandshakeResult( this, false, m_certInfo );
+        break;
+      }
     }
-    else
-    {
-      handshakeStage( data );
-    }
-    //printf("<< SChannel::decrypt()\n");
+    while( m_buffer.size() != 0 );
+    LocalFree( e_iobuffer );
+
+    //printf("<< SChannelBase::decrypt()\n");
     return 0;
   }
 
-  void SChannel::cleanup()
+  void SChannelBase::cleanup()
   {
     m_buffer = "";
     if( !m_cleanedup )
@@ -224,227 +225,11 @@ namespace gloox
     }
   }
 
-  bool SChannel::handshake()
-  {
-    if( !m_handler )
-      return false;
+  void SChannelBase::setCACerts( const StringList& /*cacerts*/ ) {}
 
-    //printf(">> SChannel::handshake()\n");
-    SECURITY_STATUS error;
-    ULONG return_flags;
-    TimeStamp t;
-    SecBuffer obuf[1];
-    SecBufferDesc obufs;
-    SCHANNEL_CRED tlscred;
-    ULONG request = ISC_REQ_ALLOCATE_MEMORY
-                    | ISC_REQ_CONFIDENTIALITY
-                    | ISC_REQ_EXTENDED_ERROR
-                    | ISC_REQ_INTEGRITY
-                    | ISC_REQ_REPLAY_DETECT
-                    | ISC_REQ_SEQUENCE_DETECT
-                    | ISC_REQ_STREAM
-                    | ISC_REQ_MANUAL_CRED_VALIDATION;
+  void SChannelBase::setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {}
 
-    /* initialize TLS credential */
-    memset( &tlscred, 0, sizeof( SCHANNEL_CRED ) );
-    tlscred.dwVersion = SCHANNEL_CRED_VERSION;
-    tlscred.grbitEnabledProtocols = SP_PROT_TLS1;
-    /* acquire credentials */
-    error = AcquireCredentialsHandle( 0,
-                                      UNISP_NAME,
-                                      SECPKG_CRED_OUTBOUND,
-                                      0,
-                                      &tlscred,
-                                      0,
-                                      0,
-                                      &m_credHandle,
-                                      &t );
-    //print_error(error, "handshake() ~ AcquireCredentialsHandle()");
-    if( error != SEC_E_OK )
-    {
-      cleanup();
-      m_handler->handleHandshakeResult( this, false, m_certInfo );
-      return false;
-    }
-    else
-    {
-      /* initialize buffers */
-      obuf[0].cbBuffer = 0;
-      obuf[0].pvBuffer = 0;
-      obuf[0].BufferType = SECBUFFER_TOKEN;
-      /* initialize buffer descriptors */
-      obufs.ulVersion = SECBUFFER_VERSION;
-      obufs.cBuffers = 1;
-      obufs.pBuffers = obuf;
-      /* negotiate security */
-      SEC_CHAR* hname = const_cast<char*>( m_server.c_str() );
-
-      error = InitializeSecurityContextA( &m_credHandle,
-                                         0,
-                                         hname,
-                                         request,
-                                         0,
-                                         SECURITY_NETWORK_DREP,
-                                         0,
-                                         0,
-                                         &m_context,
-                                         &obufs,
-                                         &return_flags,
-                                         NULL );
-      //print_error(error, "handshake() ~ InitializeSecurityContext()");
-
-      if( error == SEC_I_CONTINUE_NEEDED )
-      {
-        m_cleanedup = false;
-        //std::cout << "obuf[1].cbBuffer: " << obuf[0].cbBuffer << "\n";
-        std::string senddata( static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer );
-        FreeContextBuffer( obuf[0].pvBuffer );
-        m_handler->handleEncryptedData( this, senddata );
-        return true;
-      }
-      else
-      {
-        cleanup();
-        m_handler->handleHandshakeResult( this, false, m_certInfo );
-        return false;
-      }
-    }
-  }
-
-  void SChannel::handshakeStage( const std::string& data )
-  {
-    //printf(" >> handshake_stage\n");
-    m_buffer += data;
-
-    SECURITY_STATUS error;
-    ULONG a;
-    TimeStamp t;
-    SecBuffer ibuf[2], obuf[1];
-    SecBufferDesc ibufs, obufs;
-    ULONG request = ISC_REQ_ALLOCATE_MEMORY
-                    | ISC_REQ_CONFIDENTIALITY
-                    | ISC_REQ_EXTENDED_ERROR
-                    | ISC_REQ_INTEGRITY
-                    | ISC_REQ_REPLAY_DETECT
-                    | ISC_REQ_SEQUENCE_DETECT
-                    | ISC_REQ_STREAM
-                    | ISC_REQ_MANUAL_CRED_VALIDATION;
-
-    SEC_CHAR* hname = const_cast<char*>( m_server.c_str() );
-
-    do
-    {
-      /* initialize buffers */
-      ibuf[0].cbBuffer = static_cast<unsigned long>( m_buffer.size() );
-      ibuf[0].pvBuffer = static_cast<void*>( const_cast<char*>( m_buffer.c_str() ) );
-      //std::cout << "Size: " << m_buffer.size() << "\n";
-      ibuf[1].cbBuffer = 0;
-      ibuf[1].pvBuffer = 0;
-      obuf[0].cbBuffer = 0;
-      obuf[0].pvBuffer = 0;
-
-      ibuf[0].BufferType = SECBUFFER_TOKEN;
-      ibuf[1].BufferType = SECBUFFER_EMPTY;
-      obuf[0].BufferType = SECBUFFER_EMPTY;
-      /* initialize buffer descriptors */
-      ibufs.ulVersion = obufs.ulVersion = SECBUFFER_VERSION;
-      ibufs.cBuffers = 2;
-      obufs.cBuffers = 1;
-      ibufs.pBuffers = ibuf;
-      obufs.pBuffers = obuf;
-
-      /*
-       * std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
-       * std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
-       * std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
-       */
-
-      /* negotiate security */
-      error = InitializeSecurityContextA( &m_credHandle,
-                                         &m_context,
-                                         hname,
-                                         request,
-                                         0,
-                                         0,
-                                         &ibufs,
-                                         0,
-                                         0,
-                                         &obufs,
-                                         &a,
-                                         &t );
-      //print_error(error, "handshake() ~ InitializeSecurityContext()");
-      if( error == SEC_E_OK )
-      {
-        // EXTRA STUFF??
-        if( ibuf[1].BufferType == SECBUFFER_EXTRA )
-        {
-          m_buffer.erase( 0, m_buffer.size() - ibuf[1].cbBuffer );
-        }
-        else
-        {
-          m_buffer = EmptyString;
-        }
-        setSizes();
-        setCertinfos();
-
-        m_secure = true;
-        m_handler->handleHandshakeResult( this, true, m_certInfo );
-        break;
-      }
-      else if( error == SEC_I_CONTINUE_NEEDED )
-      {
-        /*
-         * std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
-         * std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
-         * std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
-         */
-
-        // STUFF TO SEND??
-        if( obuf[0].cbBuffer != 0 && obuf[0].pvBuffer != NULL )
-        {
-          std::string senddata( static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer );
-          FreeContextBuffer( obuf[0].pvBuffer );
-          m_handler->handleEncryptedData( this, senddata );
-        }
-        // EXTRA STUFF??
-        if( ibuf[1].BufferType == SECBUFFER_EXTRA )
-        {
-          m_buffer.erase( 0, m_buffer.size() - ibuf[1].cbBuffer );
-          // Call again if we aren't sending anything (otherwise the server will not send anything back
-          // and this function won't get called again to finish the processing).  This is needed for
-          // NT4.0 which does not seem to process the entire buffer the first time around
-          if( obuf[0].cbBuffer == 0 )
-            handshakeStage( EmptyString );
-        }
-        else
-        {
-          m_buffer = EmptyString;
-        }
-        return;
-      }
-      else if( error == SEC_I_INCOMPLETE_CREDENTIALS )
-      {
-        handshakeStage( EmptyString );
-      }
-      else if( error == SEC_E_INCOMPLETE_MESSAGE )
-      {
-        break;
-      }
-      else
-      {
-        cleanup();
-        m_handler->handleHandshakeResult( this, false, m_certInfo );
-        break;
-      }
-    }
-    while( true );
-  }
-
-  void SChannel::setCACerts( const StringList& /*cacerts*/ ) {}
-
-  void SChannel::setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {}
-
-  void SChannel::setSizes()
+  void SChannelBase::setSizes()
   {
     if( QueryContextAttributes( &m_context, SECPKG_ATTR_STREAM_SIZES, &m_sizes ) == SEC_E_OK )
     {
@@ -458,7 +243,7 @@ namespace gloox
     }
   }
 
-  int SChannel::filetime2int( FILETIME t )
+  int SChannelBase::filetime2int( FILETIME t )
   {
     SYSTEMTIME stUTC;
     FileTimeToSystemTime(&t, &stUTC);
@@ -476,7 +261,7 @@ namespace gloox
     return (int)unixtime;
   }
 
-  void SChannel::validateCert()
+  void SChannelBase::validateCert()
   {
     bool valid = false;
     HTTPSPolicyCallbackData policyHTTPS;
@@ -578,7 +363,7 @@ namespace gloox
     m_certInfo.chain = valid;
   }
 
-  void SChannel::connectionInfos()
+  void SChannelBase::connectionInfos()
   {
     SecPkgContext_ConnectionInfo conn_info;
 
@@ -636,7 +421,7 @@ namespace gloox
     }
   }
 
-  void SChannel::certData()
+  void SChannelBase::certData()
   {
     PCCERT_CONTEXT remoteCertContext = NULL;
     CHAR certString[1000];
@@ -671,7 +456,7 @@ namespace gloox
     m_certInfo.issuer = certString;
   }
 
-  void SChannel::setCertinfos()
+  void SChannelBase::setCertinfos()
   {
     validateCert();
     connectionInfos();
@@ -679,7 +464,7 @@ namespace gloox
   }
 
 #if 0
-  void SChannel::print_error( int errorcode, const char* place )
+  void SChannelBase::print_error( int errorcode, const char* place )
   {
     printf( "Win error at %s.\n", place );
     switch( errorcode )
