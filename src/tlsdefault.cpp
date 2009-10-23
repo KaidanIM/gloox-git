@@ -30,7 +30,8 @@
 #endif
 #elif defined( HAVE_WINTLS )
 # define HAVE_TLS
-# include "tlsschannel.h"
+# include "tlsschannelclient.h"
+# include "tlsschannelserver.h"
 #endif
 
 namespace gloox
@@ -47,7 +48,7 @@ namespace gloox
 #elif defined( HAVE_OPENSSL )
         m_impl = new OpenSSLClient( th, server );
 #elif defined( HAVE_WINTLS )
-        m_impl = new SChannel( th, server );
+        m_impl = new SChannelClient( th, server );
 #endif
         break;
       case AnonymousClient:
@@ -67,6 +68,8 @@ namespace gloox
 #ifndef __SYMBIAN32__
         m_impl = new OpenSSLServer( th );
 #endif
+#elif defined( HAVE_WINTLS )
+        m_impl = new SChannelServer( th );
 #endif
         break;
       default:

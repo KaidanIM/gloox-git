@@ -1,3 +1,4 @@
+#include "../../config.h"
 #include "../../asyncdns.h"
 #include "../../asyncdnshandler.h"
 #include "../../logsink.h"
@@ -6,6 +7,8 @@
 #include <locale.h>
 #include <string>
 #include <cstdio> // [s]print[f]
+
+#ifdef HAVE_PTHREAD
 
 std::string subjects[5] = { "camaya.net", "jabber.org", "glooxd.im", "öööö.öö", "jabber.jsmart.id" };
 class ADNSTest : public gloox::AsyncDNSHandler
@@ -51,7 +54,11 @@ int main( int, char** )
     for( int i = 0; i < 5; ++i )
       adns.resolve( &adt, subjects[i], ls, reinterpret_cast<void*>( i ) );
 
+#ifdef _WIN32
+    Sleep( 15000 );
+#else
     sleep( 15 );
+#endif
 
     if( 0 )
     {
@@ -78,3 +85,10 @@ int main( int, char** )
   }
 
 }
+
+#else // HAVE_PTHREAD
+int main( int, char** )
+{
+  printf( "This build does not support threading. Async DNS disabled.\n" );
+}
+#endif

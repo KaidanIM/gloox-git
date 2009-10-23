@@ -117,7 +117,9 @@ libgloox_la_SOURCES = adhoc.cpp \
                         tlsopensslbase.cpp\
                         tlsopensslclient.cpp \
                         tlsopensslserver.cpp \
-                        tlsschannel.cpp \
+                        tlsschannelbase.cpp \
+                        tlsschannelclient.cpp \
+                        tlsschannelserver.cpp \
                         uniquemucroom.cpp \
                         util.cpp \
                         vcard.cpp \
@@ -297,7 +299,9 @@ noinst_HEADERS =        config.h \
                         tlsopensslbase.h \
                         tlsopensslclient.h \
                         tlsopensslserver.h \
-                        tlsschannel.h
+                        tlsschannelbase.h \
+                        tlsschannelclient.h \
+                        tlsschannelserver.h
 
 EXTRA_DIST = version.rc
 

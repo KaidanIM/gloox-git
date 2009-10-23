@@ -26,7 +26,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp asyncdns \
           searchquery search \
           sha shim \
           simanager simanagersi stanzaextensionfactory subscription \
-          tag tlsgnutls tlsopenssl\
+          tag tlsgnutls tlsopenssl tlsschannel \
           uniquemucroomunique \
           vcard vcardupdate \
           xpath \
