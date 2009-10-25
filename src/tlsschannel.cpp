@@ -213,6 +213,9 @@ namespace gloox
 
   void SChannel::cleanup()
   {
+    if( !m_mutex.trylock() )
+      return;
+
     m_buffer = "";
     if( !m_cleanedup )
     {
@@ -222,6 +225,8 @@ namespace gloox
       DeleteSecurityContext( &m_context );
       FreeCredentialsHandle( &m_credHandle );
     }
+
+    m_mutex.unlock();
   }
 
   bool SChannel::handshake()
