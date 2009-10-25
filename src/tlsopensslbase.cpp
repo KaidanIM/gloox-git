@@ -145,8 +145,13 @@ namespace gloox
 
   void OpenSSLBase::cleanup()
   {
+    if( !m_mutex.trylock() )
+      return;
+
     m_secure = false;
     m_valid = false;
+
+    m_mutex.unlock();
   }
 
   void OpenSSLBase::doTLSOperation( TLSOperation op )
