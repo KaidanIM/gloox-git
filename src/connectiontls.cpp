@@ -198,7 +198,6 @@ namespace gloox
       m_log.log( LogLevelWarning, LogAreaClassConnectionTLS, "TLS handshake failed" );
       if( m_tlsHandler )
         m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
-      disconnect();
     }
   }
 
