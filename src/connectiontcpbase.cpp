@@ -148,18 +148,28 @@ namespace gloox
 
   void ConnectionTCPBase::cleanup()
   {
+    if( !m_sendMutex.trylock() )
+      return;
+
+    if( !m_recvMutex.trylock() )
+    {
+      m_sendMutex.unlock();
+      return;
+    }
+
     if( m_socket >= 0 )
     {
       DNS::closeSocket( m_socket, m_logInstance );
       m_socket = -1;
     }
 
-    util::MutexGuard sm( m_sendMutex );
-    util::MutexGuard rm( m_recvMutex );
     m_state = StateDisconnected;
     m_cancel = true;
     m_totalBytesIn = 0;
     m_totalBytesOut = 0;
+
+    m_recvMutex.unlock(),
+    m_sendMutex.unlock();
   }
 
   int ConnectionTCPBase::localPort() const
