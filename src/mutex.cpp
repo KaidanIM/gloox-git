@@ -39,6 +39,7 @@ namespace gloox
         MutexImpl();
         ~MutexImpl();
         void lock();
+        bool trylock();
         void unlock();
       private:
         MutexImpl( const MutexImpl& );
@@ -79,6 +80,15 @@ namespace gloox
 #endif
     }
 
+    bool Mutex::MutexImpl::trylock()
+    {
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+      return TryEnterCriticalSection( &m_cs );
+#elif defined( HAVE_PTHREAD )
+      return !( pthread_mutex_trylock( &m_mutex ) );
+#endif
+    }
+
     void Mutex::MutexImpl::unlock()
     {
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
@@ -101,6 +111,11 @@ namespace gloox
     void Mutex::lock()
     {
       m_mutex->lock();
+    }
+
+    bool Mutex::trylock()
+    {
+      return m_mutex->trylock();
     }
 
     void Mutex::unlock()
