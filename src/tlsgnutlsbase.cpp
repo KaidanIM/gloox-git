@@ -89,6 +89,9 @@ namespace gloox
 
   void GnuTLSBase::cleanup()
   {
+    if( !m_mutex.trylock() )
+      return;
+
     TLSHandler* handler = m_handler;
     m_handler = 0;
     gnutls_bye( *m_session, GNUTLS_SHUT_RDWR );
@@ -103,6 +106,8 @@ namespace gloox
     m_session = 0;
     m_session = new gnutls_session_t;
     m_handler = handler;
+
+    m_mutex.unlock();
   }
 
   bool GnuTLSBase::handshake()

@@ -16,6 +16,7 @@
 #define TLSBASE_H__
 
 #include "gloox.h"
+#include "mutex.h"
 #include "tlshandler.h"
 
 namespace gloox
@@ -136,6 +137,7 @@ namespace gloox
       std::string m_clientCerts;
       std::string m_server;
       CertInfo m_certInfo;
+      util::Mutex m_mutex;
       bool m_secure;
       bool m_valid;
       bool m_initLib;
