@@ -49,6 +49,12 @@ namespace gloox
         void lock();
 
         /**
+         * Tries to locks the mutex.
+         * @return @b True if the attempt was successful, @b false otherwise.
+         */
+        bool trylock();
+
+        /**
          * Releases the mutex.
          */
         void unlock();
