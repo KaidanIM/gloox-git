@@ -23,3 +23,9 @@
 /* Comment out if you don't have setsockopt() */
 #define HAVE_SETSOCKOPT 1
 
+#ifdef _MSC_VER
+#pragma comment( lib, "Dnsapi.lib" )
+#pragma comment( lib, "Secur32.lib" )
+#pragma comment( lib, "Crypt32.lib" )
+#pragma comment( lib, "ws2_32.lib" )
+#endif

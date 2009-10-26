@@ -24,7 +24,7 @@
 # include <winsock.h>
 #endif
 
-#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <sys/select.h>

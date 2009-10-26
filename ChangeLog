@@ -1,7 +1,7 @@
 v0.9.9.12 -- xx yyy 2009
 ------------------------
 - removed apparent openssl chunk size limit
-
+- win32 compile fixes (WIN32 --> _WIN32)
 
 v0.9.9.11 -- 22 Oct 2009
 ------------------------
