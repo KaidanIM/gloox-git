@@ -43,10 +43,10 @@ SChannelTest::SChannelTest()
  : m_clientHandshake( false ), m_clientHandshakeResult( false ),
    m_serverHandshake( false ), m_serverHandshakeResult( false )
 {
-  m_client = new SChannelClient( this, "anon.camaya.net" );
+  m_client = new SChannelClient( this, "foo" );
   m_client->init();
   m_server = new SChannelServer( this );
-  m_server->setSubject( "anon.camaya.net" );
+  m_server->setSubject( "bar" );
   m_server->init();
 }
 

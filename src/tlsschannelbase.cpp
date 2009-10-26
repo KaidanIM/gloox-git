@@ -20,7 +20,8 @@
 namespace gloox
 {
   SChannelBase::SChannelBase( TLSHandler* th, const std::string& server )
-    : TLSBase( th, server ), m_cleanedup( true ), m_haveCredentialsHandle( false )
+    : TLSBase( th, server ), m_cleanedup( true ), m_haveCredentialsHandle( false ),
+      m_store( 0 ), m_cert( 0 )
   {
     //printf(">> SChannelBase::SChannelBase()\n");
   }
@@ -32,16 +33,34 @@ namespace gloox
     //printf(">> SChannelBase::~SChannelBase()\n");
   }
 
-  bool SChannelBase::init( const std::string& clientKey,
-                           const std::string& clientCerts,
-                           const StringList& cacerts )
+  bool SChannelBase::init( const std::string& /*clientKey*/,
+                           const std::string& /*clientCerts*/,
+                           const StringList& /*cacerts*/ )
   {
-    m_clientKey = clientKey;
-    m_clientCerts = clientCerts;
-    m_cacerts = cacerts;
+    memset( &m_tlsCred, 0, sizeof( SCHANNEL_CRED ) );
+    m_tlsCred.dwVersion = SCHANNEL_CRED_VERSION;
+    m_tlsCred.grbitEnabledProtocols = SP_PROT_TLS1_SERVER;
 
-    if( !privateInit() )
-      return false;
+    if( !m_subject.empty() )
+    {
+      m_store = CertOpenSystemStore( 0, "MY" );
+      if( !m_store )
+        return false;
+
+      int length = MultiByteToWideChar( CP_UTF8, 0, m_subject.c_str(), m_subject.length(), 0, 0 );
+      LPWSTR wsubject = new WCHAR[length+1];
+      wsubject[length] = L'\0';
+      length = MultiByteToWideChar( CP_UTF8, 0, m_subject.c_str(), m_subject.length(), wsubject, length );
+      m_cert = CertFindCertificateInStore( m_store, PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                          0, CERT_FIND_SUBJECT_STR, wsubject, 0 );
+      delete[] wsubject;
+
+      if( !m_cert )
+        return false;
+    }
+
+    m_tlsCred.cCreds = 1;
+    m_tlsCred.paCred = &m_cert;
 
     m_valid = true;
     return true;
@@ -250,10 +269,6 @@ namespace gloox
 
     m_mutex.unlock();
   }
-
-  void SChannelBase::setCACerts( const StringList& /*cacerts*/ ) {}
-
-  void SChannelBase::setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {}
 
   void SChannelBase::setSizes()
   {

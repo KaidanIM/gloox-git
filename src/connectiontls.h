@@ -103,7 +103,6 @@ namespace gloox
        * certificate.
        * @param clientKey The absolute path to the user's private key in PEM format.
        * @param clientCerts A path to a certificate bundle in PEM format.
-       * @note This function is a wrapper around TLSBase::setClientCert().
        */
       void setClientCert( const std::string& clientKey, const std::string& clientCerts )
       {

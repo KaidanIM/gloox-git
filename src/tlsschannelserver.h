@@ -55,12 +55,7 @@ namespace gloox
 
     private:
       void handshakeStage();
-      virtual bool privateInit();
       virtual void privateCleanup();
-
-      HCERTSTORE  m_store;
-      PCCERT_CONTEXT m_cert;
-      SCHANNEL_CRED m_tlsCred;
 
   };
 }
