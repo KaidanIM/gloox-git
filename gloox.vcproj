@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				PreprocessorDefinitions="DLL_EXPORT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -574,7 +575,15 @@
 				>
 			</File>
 			<File
-				RelativePath="src\tlsschannel.cpp"
+				RelativePath="src\tlsschannelbase.cpp"
+				>
+			</File>
+			<File
+				RelativePath="src\tlsschannelclient.cpp"
+				>
+			</File>
+			<File
+				RelativePath="src\tlsschannelserver.cpp"
 				>
 			</File>
 			<File
@@ -1232,7 +1241,15 @@
 				>
 			</File>
 			<File
-				RelativePath="src\tlsschannel.h"
+				RelativePath="src\tlsschannelbase.h"
+				>
+			</File>
+			<File
+				RelativePath="src\tlsschannelclient.h"
+				>
+			</File>
+			<File
+				RelativePath="src\tlsschannelserver.h"
 				>
 			</File>
 			<File
