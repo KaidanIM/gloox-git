@@ -83,7 +83,7 @@ namespace gloox
     bool Mutex::MutexImpl::trylock()
     {
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-      return TryEnterCriticalSection( &m_cs );
+      return TryEnterCriticalSection( &m_cs ) ? true : false;
 #elif defined( HAVE_PTHREAD )
       return !( pthread_mutex_trylock( &m_mutex ) );
 #endif
