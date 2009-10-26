@@ -161,7 +161,7 @@ namespace gloox
       if( !(*it).nick().empty() )
         i->addAttribute( "nick", (*it).nick() );
 
-      MUCRoomRole rol;
+      MUCRoomRole rol = RoleInvalid;
       if( (*it).role() != RoleInvalid )
         rol = (*it).role();
       else if( m_role != RoleInvalid )
@@ -169,7 +169,7 @@ namespace gloox
       if( rol != RoleInvalid )
         i->addAttribute( "role", util::lookup( rol, roleValues ) );
 
-      MUCRoomAffiliation aff;
+      MUCRoomAffiliation aff = AffiliationInvalid;
       if( (*it).affiliation() != AffiliationInvalid )
         aff = (*it).affiliation();
       else if( m_affiliation != AffiliationInvalid )
