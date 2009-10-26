@@ -14,7 +14,7 @@
 
 #ifdef HAVE_WINTLS
 
-#include <stdio.h> // just for debugging output
+// #include <stdio.h> // just for debugging output
 
 namespace gloox
 {
@@ -42,7 +42,7 @@ namespace gloox
       return true;
     }
 
-    //printf(">> SChannelClient::handshake()\n");
+//     printf(">> SChannelClient::handshake()\n");
     SECURITY_STATUS error;
     ULONG return_flags;
     TimeStamp t;
@@ -61,7 +61,7 @@ namespace gloox
     /* initialize TLS credential */
     memset( &tlscred, 0, sizeof( SCHANNEL_CRED ) );
     tlscred.dwVersion = SCHANNEL_CRED_VERSION;
-    tlscred.grbitEnabledProtocols = SP_PROT_TLS1;
+    tlscred.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
     /* acquire credentials */
     error = AcquireCredentialsHandle( 0,
                                       UNISP_NAME,
@@ -72,7 +72,7 @@ namespace gloox
                                       0,
                                       &m_credHandle,
                                       &t );
-    //print_error(error, "handshake() ~ AcquireCredentialsHandle()");
+//     print_error(error, "SChannelClient::handshake() ~ AcquireCredentialsHandle()");
     if( error != SEC_E_OK )
     {
       cleanup();
@@ -97,21 +97,22 @@ namespace gloox
                                          hname,
                                          request,
                                          0,
-                                         SECURITY_NETWORK_DREP,
+                                         0,
                                          0,
                                          0,
                                          &m_context,
                                          &obufs,
                                          &return_flags,
-                                         NULL );
-      //print_error(error, "handshake() ~ InitializeSecurityContext()");
+                                         0 );
+//       print_error(error, "SChannelClient::handshake() ~ InitializeSecurityContext()");
 
       if( error == SEC_I_CONTINUE_NEEDED )
       {
         m_cleanedup = false;
         //std::cout << "obuf[1].cbBuffer: " << obuf[0].cbBuffer << "\n";
-        std::string senddata( static_cast<char*>( obuf[0].pvBuffer), obuf[0].cbBuffer );
+        std::string senddata( static_cast<char*>( obuf[0].pvBuffer ), obuf[0].cbBuffer );
         FreeContextBuffer( obuf[0].pvBuffer );
+        m_haveCredentialsHandle = true;
         m_handler->handleEncryptedData( this, senddata );
         return true;
       }
@@ -126,7 +127,7 @@ namespace gloox
 
   void SChannelClient::handshakeStage()
   {
-    //printf(" >> handshakeStage\n");
+//     printf(" >> SChannelClient::handshakeStage\n");
 
     SECURITY_STATUS error;
     ULONG a;
@@ -184,7 +185,7 @@ namespace gloox
                                          &obufs,
                                          &a,
                                          &t );
-      //print_error(error, "handshake() ~ InitializeSecurityContext()");
+//       print_error(error, "SChannelClient::handshakeStage() ~ InitializeSecurityContext()");
       if( error == SEC_E_OK )
       {
         // EXTRA STUFF??
@@ -212,7 +213,7 @@ namespace gloox
          */
 
         // STUFF TO SEND??
-        if( obuf[0].cbBuffer != 0 && obuf[0].pvBuffer != NULL )
+        if( obuf[0].cbBuffer != 0 && obuf[0].pvBuffer != 0 )
         {
           std::string senddata( static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer );
           FreeContextBuffer( obuf[0].pvBuffer );

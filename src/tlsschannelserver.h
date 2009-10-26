@@ -25,6 +25,7 @@
 #include <windows.h>
 #include <security.h>
 #include <schnlsp.h>
+#include <wincrypt.h>
 
 namespace gloox
 {
@@ -41,9 +42,8 @@ namespace gloox
       /**
        * Constructor.
        * @param th The TLSHandler to handle TLS-related events.
-       * @param server The server to use in certificate verification.
        */
-      SChannelServer( TLSHandler* th, const std::string& server = EmptyString  );
+      SChannelServer( TLSHandler* th  );
 
       /**
        * Virtual destructor.
@@ -55,6 +55,12 @@ namespace gloox
 
     private:
       void handshakeStage();
+      virtual bool privateInit();
+      virtual void privateCleanup();
+
+      HCERTSTORE  m_store;
+      PCCERT_CONTEXT m_cert;
+      SCHANNEL_CRED m_tlsCred;
 
   };
 }

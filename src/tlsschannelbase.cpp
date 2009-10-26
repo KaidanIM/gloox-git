@@ -15,7 +15,7 @@
 
 #ifdef HAVE_WINTLS
 
-#include <stdio.h> // just for debugging output
+// #include <stdio.h> // just for debugging output
 
 namespace gloox
 {
@@ -32,9 +32,24 @@ namespace gloox
     //printf(">> SChannelBase::~SChannelBase()\n");
   }
 
+  bool SChannelBase::init( const std::string& clientKey,
+                           const std::string& clientCerts,
+                           const StringList& cacerts )
+  {
+    m_clientKey = clientKey;
+    m_clientCerts = clientCerts;
+    m_cacerts = cacerts;
+
+    if( !privateInit() )
+      return false;
+
+    m_valid = true;
+    return true;
+  }
+
   bool SChannelBase::encrypt( const std::string& data )
   {
-    if( !m_handler )
+    if( !m_handler || !m_valid )
       return false;
 
     //printf(">> SChannelBase::encrypt()\n");
@@ -46,7 +61,7 @@ namespace gloox
 
     PBYTE e_iobuffer = static_cast<PBYTE>( LocalAlloc( LMEM_FIXED, cbIoBufferLength ) );
 
-    if( e_iobuffer == NULL )
+    if( e_iobuffer == 0 )
     {
       //printf("**** Out of memory (2)\n");
       cleanup();
@@ -109,7 +124,7 @@ namespace gloox
   int SChannelBase::decrypt( const std::string& data )
   {
 
-    if( !m_handler )
+    if( !m_handler || !m_valid )
       return 0;
 
     //printf(">> SChannelBase::decrypt()\n");
@@ -121,12 +136,14 @@ namespace gloox
       return 0;
     }
 
+//     printf( "-------------------------m_buffer size is now %d\n", m_buffer.length());
+
     SecBuffer buffer[4];
     SecBufferDesc buffer_desc;
     DWORD cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
 
     PBYTE e_iobuffer = static_cast<PBYTE>( LocalAlloc( LMEM_FIXED, cbIoBufferLength ) );
-    if( e_iobuffer == NULL )
+    if( e_iobuffer == 0 )
     {
       //printf("**** Out of memory (2)\n");
       cleanup();
@@ -155,23 +172,25 @@ namespace gloox
       buffer_desc.pBuffers        = buffer;
 
       unsigned long processed_data = buffer[0].cbBuffer;
+//       printf("feeding %d bytes to DecryptMessage()\n", buffer[0].cbBuffer );
       e_status = DecryptMessage( &m_context, &buffer_desc, 0, 0 );
+//         print_error(e_status, "SChannelBase::decrypt() ~ DecryptMessage()");
 
       // print_error(e_status, "decrypt() ~ DecryptMessage()");
       // for (int n=0; n<4; n++)
       //     printf("buffer[%d].cbBuffer: %d   \t%d\n", n, buffer[n].cbBuffer, buffer[n].BufferType);
 
       // Locate data and (optional) extra buffers.
-      SecBuffer* pDataBuffer  = NULL;
-      SecBuffer* pExtraBuffer = NULL;
+      SecBuffer* pDataBuffer  = 0;
+      SecBuffer* pExtraBuffer = 0;
       for( int i = 1; i < 4; i++ )
       {
-        if( pDataBuffer == NULL && buffer[i].BufferType == SECBUFFER_DATA )
+        if( pDataBuffer == 0 && buffer[i].BufferType == SECBUFFER_DATA )
         {
           pDataBuffer = &buffer[i];
           //printf("buffer[%d].BufferType = SECBUFFER_DATA\n",i);
         }
-        if( pExtraBuffer == NULL && buffer[i].BufferType == SECBUFFER_EXTRA )
+        if( pExtraBuffer == 0 && buffer[i].BufferType == SECBUFFER_EXTRA )
         {
           pExtraBuffer = &buffer[i];
         }
@@ -181,7 +200,7 @@ namespace gloox
         std::string decrypted( reinterpret_cast<const char*>( pDataBuffer->pvBuffer ),
                                 pDataBuffer->cbBuffer );
         m_handler->handleDecryptedData( this, decrypted );
-        if( pExtraBuffer == NULL )
+        if( pExtraBuffer == 0 )
         {
           m_buffer.erase( 0, processed_data );
         }
@@ -194,7 +213,7 @@ namespace gloox
       }
       else if( e_status == SEC_E_INCOMPLETE_MESSAGE )
       {
-        break;
+        m_buffer.erase( 0, processed_data );
       }
       else
       {
@@ -214,7 +233,10 @@ namespace gloox
 
   void SChannelBase::cleanup()
   {
-    m_buffer = "";
+    if( !m_mutex.trylock() )
+      return;
+
+    m_buffer = EmptyString;
     if( !m_cleanedup )
     {
       m_valid = false;
@@ -223,6 +245,10 @@ namespace gloox
       DeleteSecurityContext( &m_context );
       FreeCredentialsHandle( &m_credHandle );
     }
+
+    privateCleanup();
+
+    m_mutex.unlock();
   }
 
   void SChannelBase::setCACerts( const StringList& /*cacerts*/ ) {}
@@ -233,6 +259,7 @@ namespace gloox
   {
     if( QueryContextAttributes( &m_context, SECPKG_ATTR_STREAM_SIZES, &m_sizes ) == SEC_E_OK )
     {
+//       m_sizes.cbMaximumMessage = 86400;
       //std::cout << "set_sizes success\n";
     }
     else
@@ -246,7 +273,7 @@ namespace gloox
   int SChannelBase::filetime2int( FILETIME t )
   {
     SYSTEMTIME stUTC;
-    FileTimeToSystemTime(&t, &stUTC);
+    FileTimeToSystemTime( &t, &stUTC );
     std::tm ts;
     ts.tm_year = stUTC.wYear - 1900;
     ts.tm_mon = stUTC.wMonth - 1;
@@ -268,12 +295,12 @@ namespace gloox
     CERT_CHAIN_POLICY_PARA policyParameter;
     CERT_CHAIN_POLICY_STATUS policyStatus;
 
-    PCCERT_CONTEXT remoteCertContext = NULL;
-    PCCERT_CHAIN_CONTEXT chainContext = NULL;
+    PCCERT_CONTEXT remoteCertContext = 0;
+    PCCERT_CHAIN_CONTEXT chainContext = 0;
     CERT_CHAIN_PARA chainParameter;
     PSTR serverName = const_cast<char*>( m_server.c_str() );
 
-    PWSTR uServerName = NULL;
+    PWSTR uServerName = 0;
     DWORD csizeServerName;
 
     LPSTR Usages[] = {
@@ -296,10 +323,10 @@ namespace gloox
 
       // unicode conversation
       // calculating unicode server name size
-      csizeServerName = MultiByteToWideChar( CP_ACP, 0, serverName, -1, NULL, 0 );
+      csizeServerName = MultiByteToWideChar( CP_ACP, 0, serverName, -1, 0, 0 );
       uServerName = reinterpret_cast<WCHAR *>( LocalAlloc( LMEM_FIXED,
                                                              csizeServerName * sizeof( WCHAR ) ) );
-      if( uServerName == NULL )
+      if( uServerName == 0 )
       {
         //printf("SEC_E_INSUFFICIENT_MEMORY ~ Not enough memory!!!\n");
         break;
@@ -320,8 +347,8 @@ namespace gloox
       chainParameter.RequestedUsage.Usage.cUsageIdentifier     = cUsages;
       chainParameter.RequestedUsage.Usage.rgpszUsageIdentifier = Usages;
 
-      if( !CertGetCertificateChain( NULL, remoteCertContext, NULL, remoteCertContext->hCertStore,
-                                    &chainParameter, 0, NULL, &chainContext ) )
+      if( !CertGetCertificateChain( 0, remoteCertContext, 0, remoteCertContext->hCertStore,
+                                    &chainParameter, 0, 0, &chainContext ) )
       {
 //         DWORD status = GetLastError();
 //         printf("Error 0x%x returned by CertGetCertificateChain!!!\n", status);
@@ -423,34 +450,46 @@ namespace gloox
 
   void SChannelBase::certData()
   {
-    PCCERT_CONTEXT remoteCertContext = NULL;
+    PCCERT_CONTEXT remoteCertContext = 0;
     CHAR certString[1000];
+    m_certInfo.status = CertOk;
 
     // getting server's certificate
     if( QueryContextAttributes( &m_context, SECPKG_ATTR_REMOTE_CERT_CONTEXT,
                                 (PVOID)&remoteCertContext ) != SEC_E_OK )
     {
+      m_certInfo.status = CertInvalid;
       return;
     }
 
-    // setting certificat's lifespan
+    // setting certificate's lifespan
     m_certInfo.date_from = filetime2int( remoteCertContext->pCertInfo->NotBefore );
+    if( m_certInfo.date_from > time( 0 ) )
+      m_certInfo.status |= CertNotActive;
+
     m_certInfo.date_to = filetime2int( remoteCertContext->pCertInfo->NotAfter );
+    if( m_certInfo.date_to < time( 0 ) )
+      m_certInfo.status |= CertExpired;
 
     if( !CertNameToStrA( remoteCertContext->dwCertEncodingType,
                         &remoteCertContext->pCertInfo->Subject,
-                        CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
+                        /*CERT_X500_NAME_STR |*/ CERT_NAME_STR_NO_PLUS_FLAG,
                         certString, sizeof( certString ) ) )
     {
+      m_certInfo.status = CertInvalid;
       return;
     }
     m_certInfo.server = certString;
 
+    if( certString != m_server )
+      m_certInfo.status = CertInvalid;
+
     if( !CertNameToStrA( remoteCertContext->dwCertEncodingType,
                        &remoteCertContext->pCertInfo->Issuer,
-                       CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
+                       /*CERT_X500_NAME_STR |*/ CERT_NAME_STR_NO_PLUS_FLAG,
                        certString, sizeof( certString ) ) )
     {
+      m_certInfo.status = CertInvalid;
       return;
     }
     m_certInfo.issuer = certString;
@@ -466,12 +505,17 @@ namespace gloox
 #if 0
   void SChannelBase::print_error( int errorcode, const char* place )
   {
-    printf( "Win error at %s.\n", place );
+    if( errorcode != SEC_E_OK )
+      printf( "Win error at %s.\n", place );
     switch( errorcode )
     {
       case SEC_E_OK:
-        printf( "\tValue:\tSEC_E_OK\n" );
-        printf( "\tDesc:\tNot really an error. Everything is fine.\n" );
+//         printf( "\tValue:\tSEC_E_OK\n" );
+//         printf( "\tDesc:\tNot really an error. Everything is fine.\n" );
+        break;
+      case SEC_E_MESSAGE_ALTERED:
+        printf( "\tValue:\tSEC_E_MESSAGE_ALTERED\n" );
+        printf( "\tDesc:\tThe message has been altered.\n" );
         break;
       case SEC_E_INSUFFICIENT_MEMORY:
         printf( "\tValue:\tSEC_E_INSUFFICIENT_MEMORY\n" );
@@ -522,6 +566,11 @@ namespace gloox
         printf( "\tValue:\tSEC_E_TARGET_UNKNOWN\n" );
         printf( "\tDesc:\tThe target was not recognized.\n" );
         break;
+      case SEC_I_CONTEXT_EXPIRED:
+        printf( "\tValue:\tSEC_E_CONTEXT_EXPIRED\n" );
+        printf( "\tDesc:\tThe message sender has finished using the connection and has initiated "
+                "a shutdown.\n" );
+        break;
       case SEC_E_UNSUPPORTED_FUNCTION:
         printf( "\tValue:\tSEC_E_UNSUPPORTED_FUNCTION\n" );
         printf( "\tDesc:\tAn invalid context attribute flag (ISC_REQ_DELEGATE or "
@@ -532,6 +581,10 @@ namespace gloox
         printf( "\tDesc:\tThe principal that received the authentication request "
                 "is not the same as the...\n" );
         break;
+      case SEC_E_OUT_OF_SEQUENCE:
+        printf( "\tValue:\tSEC_E_OUT_OF_SEQUENCE\n" );
+        printf( "\tDesc:\tThe message was not received in the correct sequence.\n" );
+        break;
       case SEC_I_COMPLETE_AND_CONTINUE:
         printf( "\tValue:\tSEC_I_COMPLETE_AND_CONTINUE\n" );
         printf( "\tDesc:\tThe client must call CompleteAuthToken and then pass the output...\n" );
@@ -540,6 +593,11 @@ namespace gloox
         printf( "\tValue:\tSEC_I_COMPLETE_NEEDED\n" );
         printf( "\tDesc:\tThe client must finish building the message and then "
                 "call the CompleteAuthToken function.\n" );
+        break;
+      case SEC_I_RENEGOTIATE:
+        printf( "\tValue:\tSEC_I_RENEGOTIATE\n" );
+        printf( "\tDesc:\tThe remote party requires a new handshake sequence or the "
+                "application has just initiated a shutdown.\n" );
         break;
       case SEC_I_CONTINUE_NEEDED:
         printf( "\tValue:\tSEC_I_CONTINUE_NEEDED\n" );

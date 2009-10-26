@@ -52,6 +52,9 @@ namespace gloox
        * @param clientCerts A path to a certificate bundle in PEM format.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        * @return @b False if initialization failed, @b true otherwise.
+       * @note The arguments are not used in the SChannel (native on Windows) implementation,
+       * init() needs to be called nonetheless. Use setSubject() to set client/server
+       * key/certificate.
        * @since 1.0
        */
       virtual bool init( const std::string& clientKey = EmptyString,
@@ -66,6 +69,20 @@ namespace gloox
        * @param init Whether or not to intialize the underlying TLS library.
        */
       void setInitLib( bool init ) { m_initLib = init; }
+
+      /**
+       * Sets the subject/common name to search the system certificate store for. Used only by the
+       * SChannel implementation (Windows). Required for SChannel server, optional for SChannel client.
+       * The system 'MY' certificate store will be searched for the @b subject (substring match) for a
+       * private key/certificate pair which will be used.
+       * @note On the server-side, initialization
+       * will fail if @b subject is not set or if no associated key/certificate could be found.
+       * On the client-side initialization will fail if a @b subject was set for which no
+       * key/certificate pair could be found. Setting no @b subject on the client-side is fine.
+       * @note setSubject() must be called before init() to be effective.
+       * @param subject The to use.
+       */
+      virtual void setSubject( const std::string& subject ) { m_subject = subject; }
 
       /**
        * Use this function to feed unencrypted data to the encryption implementation.
@@ -136,6 +153,7 @@ namespace gloox
       std::string m_clientKey;
       std::string m_clientCerts;
       std::string m_server;
+      std::string m_subject;
       CertInfo m_certInfo;
       util::Mutex m_mutex;
       bool m_secure;
