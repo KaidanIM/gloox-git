@@ -56,15 +56,12 @@ namespace gloox
                          const StringList& cacerts = StringList() );
 
       // reimplemented from TLSBase
-      virtual void setCACerts( const StringList& cacerts );
-
-      // reimplemented from TLSBase
-      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
-
-      // reimplemented from TLSBase
       virtual void cleanup();
 
     private:
+      virtual void setCACerts( const StringList& cacerts );
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
+
       virtual void getCertInfo();
 
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );

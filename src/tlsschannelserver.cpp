@@ -20,7 +20,7 @@
 namespace gloox
 {
   SChannelServer::SChannelServer( TLSHandler* th )
-    : SChannelBase( th, EmptyString ), m_cert( 0 )
+    : SChannelBase( th, EmptyString )
   {
     //printf(">> SChannelServer::SChannelServer()\n");
   }
@@ -30,33 +30,6 @@ namespace gloox
     m_handler = 0;
     cleanup();
     //printf(">> SChannelServer::~SChannelServer()\n");
-  }
-
-  bool SChannelServer::privateInit()
-  {
-    memset( &m_tlsCred, 0, sizeof( SCHANNEL_CRED ) );
-    m_tlsCred.dwVersion = SCHANNEL_CRED_VERSION;
-    m_tlsCred.grbitEnabledProtocols = SP_PROT_TLS1_SERVER;
-
-    m_store = CertOpenSystemStore( 0, "MY" );
-    if( !m_store )
-      return false;
-
-    int length = MultiByteToWideChar( CP_UTF8, 0, m_subject.c_str(), m_subject.length(), 0, 0 );
-    LPWSTR wsubject = new WCHAR[length+1];
-    wsubject[length] = L'\0';
-    length = MultiByteToWideChar( CP_UTF8, 0, m_subject.c_str(), m_subject.length(), wsubject, length );
-    m_cert = CertFindCertificateInStore( m_store, PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-                                         0, CERT_FIND_SUBJECT_STR, wsubject, 0 );
-    delete[] wsubject;
-
-    if( !m_cert )
-      return false;
-
-    m_tlsCred.cCreds = 1;
-    m_tlsCred.paCred = &m_cert;
-
-    return true;
   }
 
   bool SChannelServer::handshake()

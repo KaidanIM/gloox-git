@@ -65,12 +65,6 @@ namespace gloox
       // reimplemented from TLSBase
       virtual bool handshake();
 
-      // reimplemented from TLSBase
-      virtual void setCACerts( const StringList& cacerts );
-
-      // reimplemented from TLSBase
-      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
-
     protected:
       virtual bool setType() = 0;
       virtual int handshakeFunction() = 0;
@@ -83,6 +77,8 @@ namespace gloox
     private:
       void pushFunc();
       virtual bool privateInit() { return true; }
+      virtual void setCACerts( const StringList& cacerts );
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
       enum TLSOperation
       {

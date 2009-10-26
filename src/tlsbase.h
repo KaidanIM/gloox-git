@@ -122,30 +122,10 @@ namespace gloox
       virtual bool isSecure() const { return m_secure; }
 
       /**
-       * Use this function to set a number of trusted root CA certificates which shall be
-       * used to verify a servers certificate.
-       * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
-       */
-      virtual void setCACerts( const StringList& cacerts ) = 0;
-
-      /**
        * This function is used to retrieve certificate and connection info of a encrypted connection.
        * @return Certificate information.
        */
       virtual const CertInfo& fetchTLSInfo() const { return m_certInfo; }
-
-      /**
-       * Use this function to set the user's certificate and private key. The certificate will
-       * be presented to the server upon request and can be used for SASL EXTERNAL authentication.
-       * The user's certificate file should be a bundle of more than one certificate in PEM format.
-       * The first one in the file should be the user's certificate, each cert following that one
-       * should have signed the previous one.
-       * @note These certificates are not necessarily the same as those used to verify the server's
-       * certificate.
-       * @param clientKey The absolute path to the user's private key in PEM format.
-       * @param clientCerts A path to a certificate bundle in PEM format.
-       */
-      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts ) = 0;
 
     protected:
       TLSHandler* m_handler;

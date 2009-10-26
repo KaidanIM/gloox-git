@@ -79,13 +79,7 @@ namespace gloox
       virtual bool isSecure() const;
 
       // reimplemented from TLSBase
-      virtual void setCACerts( const StringList& cacerts );
-
-      // reimplemented from TLSBase
       virtual const CertInfo& fetchTLSInfo() const;
-
-      // reimplemented from TLSBase
-      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
       /**
        * Returns an ORed list of supported TLS types.
@@ -95,6 +89,7 @@ namespace gloox
 
     private:
       TLSBase* m_impl;
+
   };
 }
 

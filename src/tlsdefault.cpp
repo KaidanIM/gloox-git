@@ -132,21 +132,9 @@ namespace gloox
     return m_impl ? m_impl->isSecure() : false;
   }
 
-  void TLSDefault::setCACerts( const StringList& cacerts )
-  {
-    if( m_impl )
-      m_impl->setCACerts( cacerts );
-  }
-
   const CertInfo& TLSDefault::fetchTLSInfo() const
   {
     return m_impl ? m_impl->fetchTLSInfo() : m_certInfo;
-  }
-
-  void TLSDefault::setClientCert( const std::string& clientKey, const std::string& clientCerts )
-  {
-    if( m_impl )
-      m_impl->setClientCert( clientKey, clientCerts );
   }
 
 }

@@ -62,12 +62,6 @@ namespace gloox
       // reimplemented from TLSBase
       virtual bool handshake();
 
-      // reimplemented from TLSBase
-      virtual void setCACerts( const StringList& /*cacerts*/ ) {}
-
-      // reimplemented from TLSBase
-      virtual void setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {}
-
     protected:
       virtual void getCertInfo() {}
 

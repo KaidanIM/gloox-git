@@ -64,16 +64,8 @@ namespace gloox
       // reimplemented from TLSBase
       virtual void cleanup();
 
-      // reimplemented from TLSBase
-      virtual void setCACerts( const StringList& cacerts );
-
-      // reimplemented from TLSBase
-      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
-
     protected:
       virtual void handshakeStage() = 0;
-      virtual bool privateInit()
-        { return true; }
       virtual void privateCleanup() {}
 
       void setSizes();
@@ -98,8 +90,12 @@ namespace gloox
       bool m_cleanedup;
       bool m_haveCredentialsHandle;
 
+      HCERTSTORE m_store;
+      PCCERT_CONTEXT m_cert;
+      SCHANNEL_CRED m_tlsCred;
+
       // windows error outputs
-      void print_error( int errorcode, const char* place = 0 );
+//       void print_error( int errorcode, const char* place = 0 );
 
   };
 }
