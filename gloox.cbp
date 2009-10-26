@@ -262,8 +262,12 @@
 		<Unit filename="src\tlsopensslclient.h" />
 		<Unit filename="src\tlsopensslserver.cpp" />
 		<Unit filename="src\tlsopensslserver.h" />
-		<Unit filename="src\tlsschannel.cpp" />
-		<Unit filename="src\tlsschannel.h" />
+		<Unit filename="src\tlsschannelbase.cpp" />
+		<Unit filename="src\tlsschannelbase.h" />
+		<Unit filename="src\tlsschannelclient.cpp" />
+		<Unit filename="src\tlsschannelclient.h" />
+		<Unit filename="src\tlsschannelserver.cpp" />
+		<Unit filename="src\tlsschannelserver.h" />
 		<Unit filename="src\uniquemucroom.cpp" />
 		<Unit filename="src\uniquemucroom.h" />
 		<Unit filename="src\util.cpp" />
