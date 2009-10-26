@@ -51,10 +51,9 @@ namespace gloox
       virtual ~SChannelBase();
 
       // reimplemented from TLSBase
-      virtual bool init( const std::string& /*clientKey*/ = EmptyString,
-                         const std::string& /*clientCerts*/ = EmptyString,
-                         const StringList& /*cacerts*/ = StringList() )
-        { return true; }
+      virtual bool init( const std::string& clientKey = EmptyString,
+                         const std::string& clientCerts = EmptyString,
+                         const StringList& cacerts = StringList() );
 
       // reimplemented from TLSBase
       virtual bool encrypt( const std::string& data );
@@ -73,6 +72,10 @@ namespace gloox
 
     protected:
       virtual void handshakeStage() = 0;
+      virtual bool privateInit()
+        { return true; }
+      virtual void privateCleanup() {}
+
       void setSizes();
 
       int filetime2int( FILETIME t );
@@ -96,7 +99,7 @@ namespace gloox
       bool m_haveCredentialsHandle;
 
       // windows error outputs
-//       void print_error( int errorcode, const char* place = 0 );
+      void print_error( int errorcode, const char* place = 0 );
 
   };
 }

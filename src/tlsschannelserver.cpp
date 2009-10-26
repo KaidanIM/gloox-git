@@ -14,12 +14,13 @@
 
 #ifdef HAVE_WINTLS
 
-#include <stdio.h> // just for debugging output
+// #include <stdio.h> // just for debugging output
+// #include <iostream>
 
 namespace gloox
 {
-  SChannelServer::SChannelServer( TLSHandler* th, const std::string& server )
-    : SChannelBase( th, server )
+  SChannelServer::SChannelServer( TLSHandler* th )
+    : SChannelBase( th, EmptyString ), m_cert( 0 )
   {
     //printf(">> SChannelServer::SChannelServer()\n");
   }
@@ -31,9 +32,36 @@ namespace gloox
     //printf(">> SChannelServer::~SChannelServer()\n");
   }
 
+  bool SChannelServer::privateInit()
+  {
+    memset( &m_tlsCred, 0, sizeof( SCHANNEL_CRED ) );
+    m_tlsCred.dwVersion = SCHANNEL_CRED_VERSION;
+    m_tlsCred.grbitEnabledProtocols = SP_PROT_TLS1_SERVER;
+
+    m_store = CertOpenSystemStore( 0, "MY" );
+    if( !m_store )
+      return false;
+
+    int length = MultiByteToWideChar( CP_UTF8, 0, m_subject.c_str(), m_subject.length(), 0, 0 );
+    LPWSTR wsubject = new WCHAR[length+1];
+    wsubject[length] = L'\0';
+    length = MultiByteToWideChar( CP_UTF8, 0, m_subject.c_str(), m_subject.length(), wsubject, length );
+    m_cert = CertFindCertificateInStore( m_store, PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                         0, CERT_FIND_SUBJECT_STR, wsubject, 0 );
+    delete[] wsubject;
+
+    if( !m_cert )
+      return false;
+
+    m_tlsCred.cCreds = 1;
+    m_tlsCred.paCred = &m_cert;
+
+    return true;
+  }
+
   bool SChannelServer::handshake()
   {
-    if( !m_handler )
+    if( !m_handler || !m_valid )
       return false;
 
     if( m_haveCredentialsHandle )
@@ -42,37 +70,32 @@ namespace gloox
       return true;
     }
 
-    //printf(">> SChannelServer::handshake()\n");
+//     printf(">> SChannelServer::handshake()\n");
     SECURITY_STATUS error;
     ULONG return_flags;
     TimeStamp t;
-    SecBuffer obuf[1];
-    SecBufferDesc obufs;
-    SCHANNEL_CRED tlscred;
+    SecBuffer ibuf[2], obuf[1];
+    SecBufferDesc ibufs, obufs;
     ULONG request = ISC_REQ_ALLOCATE_MEMORY
                     | ISC_REQ_CONFIDENTIALITY
                     | ISC_REQ_EXTENDED_ERROR
                     | ISC_REQ_INTEGRITY
                     | ISC_REQ_REPLAY_DETECT
                     | ISC_REQ_SEQUENCE_DETECT
-                    | ISC_REQ_STREAM
-                    | ISC_REQ_MANUAL_CRED_VALIDATION;
+                    | ISC_REQ_STREAM;
 
-    /* initialize TLS credential */
-    memset( &tlscred, 0, sizeof( SCHANNEL_CRED ) );
-    tlscred.dwVersion = SCHANNEL_CRED_VERSION;
-    tlscred.grbitEnabledProtocols = SP_PROT_TLS1;
+
     /* acquire credentials */
     error = AcquireCredentialsHandle( 0,
                                       UNISP_NAME,
-                                      SECPKG_CRED_OUTBOUND,
+                                      SECPKG_CRED_INBOUND,
                                       0,
-                                      &tlscred,
+                                      &m_tlsCred,
                                       0,
                                       0,
                                       &m_credHandle,
                                       &t );
-    //print_error(error, "handshake() ~ AcquireCredentialsHandle()");
+//     print_error(error, "SChannelServer::handshake() ~ AcquireCredentialsHandle()");
     if( error != SEC_E_OK )
     {
       cleanup();
@@ -82,36 +105,50 @@ namespace gloox
     else
     {
       /* initialize buffers */
+      ibuf[0].cbBuffer = static_cast<unsigned long>( m_buffer.size() );
+      ibuf[0].pvBuffer = static_cast<void*>( const_cast<char*>( m_buffer.c_str() ) );
+      //std::cout << "Size: " << m_buffer.size() << "\n";
+      ibuf[1].cbBuffer = 0;
+      ibuf[1].pvBuffer = 0;
       obuf[0].cbBuffer = 0;
       obuf[0].pvBuffer = 0;
-      obuf[0].BufferType = SECBUFFER_TOKEN;
-      /* initialize buffer descriptors */
-      obufs.ulVersion = SECBUFFER_VERSION;
-      obufs.cBuffers = 1;
-      obufs.pBuffers = obuf;
-      /* negotiate security */
-      SEC_CHAR* hname = const_cast<char*>( m_server.c_str() );
 
-      error = InitializeSecurityContextA( &m_credHandle,
+      ibuf[0].BufferType = SECBUFFER_TOKEN;
+      ibuf[1].BufferType = SECBUFFER_EMPTY;
+      obuf[0].BufferType = SECBUFFER_EMPTY;
+      /* initialize buffer descriptors */
+      ibufs.ulVersion = obufs.ulVersion = SECBUFFER_VERSION;
+      ibufs.cBuffers = 2;
+      obufs.cBuffers = 1;
+      ibufs.pBuffers = ibuf;
+      obufs.pBuffers = obuf;
+
+//       std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
+//       std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
+//       std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
+
+      error = AcceptSecurityContext( &m_credHandle,
                                          0,
-                                         hname,
+                                         &ibufs,
                                          request,
-                                         0,
-                                         SECURITY_NETWORK_DREP,
-                                         0,
                                          0,
                                          &m_context,
                                          &obufs,
                                          &return_flags,
-                                         NULL );
-      //print_error(error, "handshake() ~ InitializeSecurityContext()");
+                                         &t );
+//       print_error(error, "SChannelServer::handshake() ~ AcceptSecurityContext()");
 
       if( error == SEC_I_CONTINUE_NEEDED )
       {
+//        std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
+//         std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
+//         std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
         m_cleanedup = false;
+        m_buffer = EmptyString;
         //std::cout << "obuf[1].cbBuffer: " << obuf[0].cbBuffer << "\n";
-        std::string senddata( static_cast<char*>( obuf[0].pvBuffer), obuf[0].cbBuffer );
+        std::string senddata( static_cast<char*>( obuf[0].pvBuffer ), obuf[0].cbBuffer );
         FreeContextBuffer( obuf[0].pvBuffer );
+        m_haveCredentialsHandle = true;
         m_handler->handleEncryptedData( this, senddata );
         return true;
       }
@@ -126,7 +163,7 @@ namespace gloox
 
   void SChannelServer::handshakeStage()
   {
-    //printf(" >> handshakeStage\n");
+//     printf(" >> SChannelServer::handshakeStage\n");
 
     SECURITY_STATUS error;
     ULONG a;
@@ -141,8 +178,6 @@ namespace gloox
                     | ISC_REQ_SEQUENCE_DETECT
                     | ISC_REQ_STREAM
                     | ISC_REQ_MANUAL_CRED_VALIDATION;
-
-    SEC_CHAR* hname = const_cast<char*>( m_server.c_str() );
 
     do
     {
@@ -165,28 +200,37 @@ namespace gloox
       ibufs.pBuffers = ibuf;
       obufs.pBuffers = obuf;
 
-      /*
-       * std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
-       * std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
-       * std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
-       */
+
+//        std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
+//        std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
+//        std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
+
 
       /* negotiate security */
-      error = InitializeSecurityContextA( &m_credHandle,
+      error = AcceptSecurityContext( &m_credHandle,
                                          &m_context,
-                                         hname,
-                                         request,
-                                         0,
-                                         0,
                                          &ibufs,
+                                         request,
                                          0,
                                          0,
                                          &obufs,
                                          &a,
                                          &t );
-      //print_error(error, "handshake() ~ InitializeSecurityContext()");
+//       print_error(error, "SChannelServer::handshakeStage() ~ AcceptSecurityContext()");
+
+//       std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
+//       std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
+//       std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
+
       if( error == SEC_E_OK )
       {
+        // STUFF TO SEND??
+        if( obuf[0].cbBuffer != 0 && obuf[0].pvBuffer != 0 )
+        {
+          std::string senddata( static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer );
+          FreeContextBuffer( obuf[0].pvBuffer );
+          m_handler->handleEncryptedData( this, senddata );
+        }
         // EXTRA STUFF??
         if( ibuf[1].BufferType == SECBUFFER_EXTRA )
         {
@@ -205,14 +249,10 @@ namespace gloox
       }
       else if( error == SEC_I_CONTINUE_NEEDED )
       {
-        /*
-         * std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
-         * std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
-         * std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
-         */
+          m_buffer = EmptyString;
 
         // STUFF TO SEND??
-        if( obuf[0].cbBuffer != 0 && obuf[0].pvBuffer != NULL )
+        if( obuf[0].cbBuffer != 0 && obuf[0].pvBuffer != 0 )
         {
           std::string senddata( static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer );
           FreeContextBuffer( obuf[0].pvBuffer );
@@ -240,6 +280,7 @@ namespace gloox
       }
       else if( error == SEC_E_INCOMPLETE_MESSAGE )
       {
+//         print_error(error, "SChannelClient::handshakeStage() ~ InitializeSecurityContext()");
         break;
       }
       else
@@ -250,6 +291,14 @@ namespace gloox
       }
     }
     while( true );
+  }
+
+  void SChannelServer::privateCleanup()
+  {
+    if( m_cert )
+      CertFreeCertificateContext( m_cert );
+    if( m_store )
+      CertCloseStore( m_store, 0 );
   }
 
 }

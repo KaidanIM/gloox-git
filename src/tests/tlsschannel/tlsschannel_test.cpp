@@ -43,9 +43,10 @@ SChannelTest::SChannelTest()
  : m_clientHandshake( false ), m_clientHandshakeResult( false ),
    m_serverHandshake( false ), m_serverHandshakeResult( false )
 {
-  m_client = new SChannelClient( this, "foo" );
+  m_client = new SChannelClient( this, "anon.camaya.net" );
   m_client->init();
   m_server = new SChannelServer( this );
+  m_server->setSubject( "anon.camaya.net" );
   m_server->init();
 }
 
@@ -65,21 +66,21 @@ bool SChannelTest::handshake()
 
 void SChannelTest::loop()
 {
-  while( m_clientToServer.length() )
+  while( !m_clientToServer.empty() )
   {
 //     printf( "we have %d bytes for the server\n", m_clientToServer.length() );
     m_server->decrypt( m_clientToServer );
     m_clientToServer = "";
 //     printf( "we have %d bytes left for the server\n", m_clientToServer.length() );
   }
-  while( m_serverToClient.length() )
+  while( !m_serverToClient.empty() )
   {
 //     printf( "we have %d bytes for the client\n", m_serverToClient.length() );
     m_client->decrypt( m_serverToClient );
     m_serverToClient = "";
 //     printf( "we have %d bytes left for the client\n", m_serverToClient.length() );
   }
-  while( m_serverDecrypted.length() )
+  while( !m_serverDecrypted.empty() )
   {
 //     printf( "we have %d bytes for the server to encrypt\n", m_serverDecrypted.length() );
     m_server->encrypt( m_serverDecrypted );
@@ -90,54 +91,45 @@ void SChannelTest::loop()
 
 void SChannelTest::handleEncryptedData( const TLSBase* base, const std::string& data )
 {
-  const SChannelClient *c = dynamic_cast<const SChannelClient*>( base );
-  if( c )
+  if( base == m_client )
   {
-//     printf( "recv encrypted data from client: %d\n", data.length() );
+//     printf( "recvd encrypted data from client: %d\n", data.length() );
     m_clientToServer += data;
     return;
   }
-
-  const SChannelServer *s = dynamic_cast<const SChannelServer*>( base );
-  if( s )
+  else if( base == m_server )
   {
-//     printf( "recv encrypted data from server: %d\n", data.length() );
+//     printf( "recvd encrypted data from server: %d\n", data.length() );
     m_serverToClient += data;
   }
 }
 
 void SChannelTest::handleDecryptedData( const TLSBase* base, const std::string& data )
 {
-  const SChannelClient *c = dynamic_cast<const SChannelClient*>( base );
-  if( c )
+  if( base == m_client )
   {
-//     printf( "recv decrypted data from client: %d\n", data.length() );
+//     printf( "recvd decrypted data from client: %d\n", data.length() );
     m_clientDecrypted += data;
     return;
   }
-
-  const SChannelServer *s = dynamic_cast<const SChannelServer*>( base );
-  if( s )
+  else if( base == m_server )
   {
-//     printf( "recv decrypted data from server: %d\n", data.length() );
+//     printf( "recvd decrypted data from server: %d\n", data.length() );
     m_serverDecrypted += data;
   }
 }
 
-void SChannelTest::handleHandshakeResult( const TLSBase* base, bool success, CertInfo& /*certinfo*/ )
+void SChannelTest::handleHandshakeResult( const TLSBase* base, bool success, CertInfo& certinfo )
 {
-//   printfCert( certinfo );
-  const SChannelClient *c = dynamic_cast<const SChannelClient*>( base );
-  if( c )
+  printfCert( certinfo );
+  if( base == m_client )
   {
 //     printf( "recv handshake result from client: %d\n", success );
     m_clientHandshakeResult = true;
     m_clientHandshake = success;
     return;
   }
-
-  const SChannelServer *s = dynamic_cast<const SChannelServer*>( base );
-  if( s )
+  else if( base == m_server )
   {
 //     printf( "recv handshake result from server: %d\n", success );
     m_serverHandshakeResult = true;
@@ -145,12 +137,15 @@ void SChannelTest::handleHandshakeResult( const TLSBase* base, bool success, Cer
   }
 }
 
-void SChannelTest::printfCert( CertInfo &certinfo )
+void SChannelTest::printfCert( CertInfo &info )
 {
-  printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
-          certinfo.status, certinfo.issuer.c_str(), certinfo.server.c_str(),
-          certinfo.protocol.c_str(), certinfo.mac.c_str(), certinfo.cipher.c_str(),
-          certinfo.compression.c_str() );
+      time_t from( info.date_from );
+      time_t to( info.date_to );
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n"
+              "from: %s\nto: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str(), ctime( &from ), ctime( &to ) );
 }
 
 std::string SChannelTest::send( const std::string& txt )
@@ -158,12 +153,18 @@ std::string SChannelTest::send( const std::string& txt )
 //   printf( "sending %s\n", txt.c_str() );
 
   m_client->encrypt( txt );
-  while( m_clientDecrypted.empty() )
-    loop();
+  m_server->decrypt( m_clientToServer );
+  m_clientToServer = EmptyString;
+  m_server->encrypt( m_serverDecrypted );
+  m_serverDecrypted = EmptyString;
+  m_client->decrypt( m_serverToClient );
+  m_serverToClient = EmptyString;
+//   while( m_clientDecrypted.empty() )
+//     loop();
 
 //   printf( "recv'ed %s\n", m_clientDecrypted.c_str() );
   const std::string t = m_clientDecrypted;
-  m_clientDecrypted = "";
+  m_clientDecrypted = EmptyString;
   return t;
 }
 
