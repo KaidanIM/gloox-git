@@ -15,7 +15,7 @@
 
 #ifdef HAVE_WINTLS
 
-// #include <stdio.h> // just for debugging output
+#include <stdio.h> // just for debugging output
 
 namespace gloox
 {
@@ -72,7 +72,8 @@ namespace gloox
       return false;
 
     //printf(">> SChannelBase::encrypt()\n");
-    std::string data_copy = data;
+    size_t currentPos = 0;
+    const size_t inputSize = data.size();
 
     SecBuffer buffer[4];
     SecBufferDesc buffer_desc;
@@ -80,7 +81,7 @@ namespace gloox
 
     PBYTE e_iobuffer = static_cast<PBYTE>( LocalAlloc( LMEM_FIXED, cbIoBufferLength ) );
 
-    if( e_iobuffer == 0 )
+    if( !e_iobuffer )
     {
       //printf("**** Out of memory (2)\n");
       cleanup();
@@ -91,14 +92,12 @@ namespace gloox
     PBYTE e_message = e_iobuffer + m_sizes.cbHeader;
     do
     {
-      const size_t size = ( data_copy.size() > m_sizes.cbMaximumMessage )
+      const size_t size = ( ( inputSize - currentPos ) > m_sizes.cbMaximumMessage )
                          ? m_sizes.cbMaximumMessage
-                         : data_copy.size();
-      memcpy( e_message, data_copy.data(), size );
-      if( data_copy.size() > m_sizes.cbMaximumMessage )
-        data_copy.erase( 0, m_sizes.cbMaximumMessage );
-      else
-        data_copy = EmptyString;
+                         : ( inputSize - currentPos );
+      memcpy( e_message, data.data() + currentPos, size );
+      currentPos += size;
+
 
       buffer[0].pvBuffer     = e_iobuffer;
       buffer[0].cbBuffer     = m_sizes.cbHeader;
@@ -108,7 +107,7 @@ namespace gloox
       buffer[1].cbBuffer     = size;
       buffer[1].BufferType   = SECBUFFER_DATA;
 
-      buffer[2].pvBuffer     = static_cast<char*>(buffer[1].pvBuffer) + buffer[1].cbBuffer;
+      buffer[2].pvBuffer     = static_cast<char*>( buffer[1].pvBuffer ) + buffer[1].cbBuffer;
       buffer[2].cbBuffer     = m_sizes.cbTrailer;
       buffer[2].BufferType   = SECBUFFER_STREAM_TRAILER;
 
@@ -121,21 +120,22 @@ namespace gloox
       SECURITY_STATUS e_status = EncryptMessage( &m_context, 0, &buffer_desc, 0 );
       if( SUCCEEDED( e_status ) )
       {
-        std::string encrypted( reinterpret_cast<const char*>(e_iobuffer),
+        std::string encrypted( reinterpret_cast<const char*>( e_iobuffer ),
                                buffer[0].cbBuffer + buffer[1].cbBuffer + buffer[2].cbBuffer );
         m_handler->handleEncryptedData( this, encrypted );
-        //if (data_copy.size() <= m_sizes.cbMaximumMessage) data_copy = EmptyString;
       }
       else
       {
         LocalFree( e_iobuffer );
         if( !m_secure )
           m_handler->handleHandshakeResult( this, false, m_certInfo );
+
         cleanup();
         return false;
       }
     }
-    while( data_copy.size() > 0 );
+    while( currentPos < inputSize - 1 );
+
     LocalFree( e_iobuffer );
     return true;
   }
@@ -163,7 +163,7 @@ namespace gloox
     bool wantNewBufferSize = false;
 
     PBYTE e_iobuffer = static_cast<PBYTE>( LocalAlloc( LMEM_FIXED, cbIoBufferLength ) );
-    if( e_iobuffer == 0 )
+    if( !e_iobuffer )
     {
       //printf("**** Out of memory (2)\n");
       cleanup();
@@ -212,12 +212,12 @@ namespace gloox
       SecBuffer* pExtraBuffer = 0;
       for( int i = 1; i < 4; i++ )
       {
-        if( pDataBuffer == 0 && buffer[i].BufferType == SECBUFFER_DATA )
+        if( !pDataBuffer && buffer[i].BufferType == SECBUFFER_DATA )
         {
           pDataBuffer = &buffer[i];
           //printf("buffer[%d].BufferType = SECBUFFER_DATA\n",i);
         }
-        if( pExtraBuffer == 0 && buffer[i].BufferType == SECBUFFER_EXTRA )
+        if( !pExtraBuffer && buffer[i].BufferType == SECBUFFER_EXTRA )
         {
           pExtraBuffer = &buffer[i];
         }
@@ -227,17 +227,17 @@ namespace gloox
         std::string decrypted( reinterpret_cast<const char*>( pDataBuffer->pvBuffer ),
                                 pDataBuffer->cbBuffer );
         m_handler->handleDecryptedData( this, decrypted );
-        if( pExtraBuffer == 0 )
-        {
-//           printf( "no extra in buffer\n");
-          m_buffer.erase( 0, processed_data );
-        }
-        else
+        if( pExtraBuffer )
         {
 //           printf("got extra, removing first %d - %d = %d bytes\n", processed_data, pExtraBuffer->cbBuffer, processed_data - pExtraBuffer->cbBuffer );
           //std::cout << "m_buffer.size() = " << pExtraBuffer->cbBuffer << std::endl;
           m_buffer.erase( 0, processed_data - pExtraBuffer->cbBuffer );
           //std::cout << "m_buffer.size() = " << m_buffer.size() << std::endl;
+        }
+        else
+        {
+//           printf( "no extra in buffer\n");
+          m_buffer.erase( 0, processed_data );
         }
 
         cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
@@ -296,14 +296,8 @@ namespace gloox
 
   void SChannelBase::setSizes()
   {
-    if( QueryContextAttributes( &m_context, SECPKG_ATTR_STREAM_SIZES, &m_sizes ) == SEC_E_OK )
+    if( QueryContextAttributes( &m_context, SECPKG_ATTR_STREAM_SIZES, &m_sizes ) != SEC_E_OK )
     {
-//       m_sizes.cbMaximumMessage = 86400;
-      //std::cout << "set_sizes success\n";
-    }
-    else
-    {
-      //std::cout << "set_sizes no success\n";
       cleanup();
       m_handler->handleHandshakeResult( this, false, m_certInfo );
     }
@@ -365,7 +359,7 @@ namespace gloox
       csizeServerName = MultiByteToWideChar( CP_ACP, 0, serverName, -1, 0, 0 );
       uServerName = reinterpret_cast<WCHAR *>( LocalAlloc( LMEM_FIXED,
                                                              csizeServerName * sizeof( WCHAR ) ) );
-      if( uServerName == 0 )
+      if( !uServerName )
       {
         //printf("SEC_E_INSUFFICIENT_MEMORY ~ Not enough memory!!!\n");
         break;
@@ -373,7 +367,7 @@ namespace gloox
 
       // convert into unicode
       csizeServerName = MultiByteToWideChar( CP_ACP, 0, serverName, -1, uServerName, csizeServerName );
-      if( csizeServerName == 0 )
+      if( !csizeServerName )
       {
         //printf("SEC_E_WRONG_PRINCIPAL\n");
         break;
@@ -507,12 +501,10 @@ namespace gloox
     m_certInfo.date_from = filetime2int( remoteCertContext->pCertInfo->NotBefore );
     if( m_certInfo.date_from > time( 0 ) )
       m_certInfo.status |= CertNotActive;
-    printf("from: %d\n", m_certInfo.date_from );
 
     m_certInfo.date_to = filetime2int( remoteCertContext->pCertInfo->NotAfter );
     if( m_certInfo.date_to < time( 0 ) )
       m_certInfo.status |= CertExpired;
-    printf("to: %d\n", m_certInfo.date_to );
 
     if( !CertNameToStrA( remoteCertContext->dwCertEncodingType,
                         &remoteCertContext->pCertInfo->Subject,
