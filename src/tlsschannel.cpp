@@ -94,9 +94,9 @@ namespace gloox
       else
       {
         LocalFree( e_iobuffer );
-        cleanup();
         if( !m_secure )
           m_handler->handleHandshakeResult( this, false, m_certInfo );
+        cleanup();
         return false;
       }
     }
