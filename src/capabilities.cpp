@@ -55,7 +55,7 @@ namespace gloox
       return m_ver;
 
     SHA sha;
-    sha.feed( generate( m_disco->identities(), m_disco->features(), m_disco->form() ) );
+    sha.feed( generate( m_disco->identities(), m_disco->features( true ), m_disco->form() ) );
     const std::string& hash = Base64::encode64( sha.binary() );
     m_disco->removeNodeHandlers( const_cast<Capabilities*>( this ) );
     m_disco->registerNodeHandler( const_cast<Capabilities*>( this ), m_node + '#' + hash );
