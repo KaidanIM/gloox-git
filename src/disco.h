@@ -538,6 +538,12 @@ namespace gloox
       void setForm( DataForm* form );
 
       /**
+       * Returns the DataForm set by setForm(). Used by Capabilities.
+       * @return The DataForm, or 0.
+       */
+      const DataForm* form() const { return m_form; }
+
+      /**
        * Use this function to register an @ref DiscoHandler with the Disco
        * object. This is only necessary if you want to receive Disco-set requests. Else
        * a one-time registration happens when calling getDiscoInfo() and getDiscoItems(), respectively.
