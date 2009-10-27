@@ -160,6 +160,7 @@ namespace gloox
     SecBuffer buffer[4];
     SecBufferDesc buffer_desc;
     DWORD cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
+    bool wantNewBufferSize = false;
 
     PBYTE e_iobuffer = static_cast<PBYTE>( LocalAlloc( LMEM_FIXED, cbIoBufferLength ) );
     if( e_iobuffer == 0 )
@@ -172,9 +173,16 @@ namespace gloox
     }
     SECURITY_STATUS e_status;
 
-    // copy data chunk from tmp string into encryption memory buffer
     do
     {
+      if( wantNewBufferSize )
+      {
+//         printf( "reallocating to %d byts\n", cbIoBufferLength );
+        e_iobuffer = static_cast<PBYTE>( LocalReAlloc( e_iobuffer, cbIoBufferLength, 0 ) );
+        wantNewBufferSize = false;
+      }
+
+      // copy data chunk from tmp string into encryption memory buffer
       memcpy( e_iobuffer, m_buffer.data(), m_buffer.size() >
               cbIoBufferLength ? cbIoBufferLength : m_buffer.size() );
 
@@ -191,9 +199,9 @@ namespace gloox
       buffer_desc.pBuffers        = buffer;
 
       unsigned long processed_data = buffer[0].cbBuffer;
-//       printf("feeding %d bytes to DecryptMessage()\n", buffer[0].cbBuffer );
+//       printf("feeding %d of %d bytes to DecryptMessage()\n", buffer[0].cbBuffer, m_buffer.size() );
       e_status = DecryptMessage( &m_context, &buffer_desc, 0, 0 );
-//         print_error(e_status, "SChannelBase::decrypt() ~ DecryptMessage()");
+//       print_error(e_status, "SChannelBase::decrypt() ~ DecryptMessage()");
 
       // print_error(e_status, "decrypt() ~ DecryptMessage()");
       // for (int n=0; n<4; n++)
@@ -221,24 +229,40 @@ namespace gloox
         m_handler->handleDecryptedData( this, decrypted );
         if( pExtraBuffer == 0 )
         {
+//           printf( "no extra in buffer\n");
           m_buffer.erase( 0, processed_data );
         }
         else
         {
+//           printf("got extra, removing first %d - %d = %d bytes\n", processed_data, pExtraBuffer->cbBuffer, processed_data - pExtraBuffer->cbBuffer );
           //std::cout << "m_buffer.size() = " << pExtraBuffer->cbBuffer << std::endl;
-          m_buffer.erase( 0, m_buffer.size() - pExtraBuffer->cbBuffer );
+          m_buffer.erase( 0, processed_data - pExtraBuffer->cbBuffer );
           //std::cout << "m_buffer.size() = " << m_buffer.size() << std::endl;
         }
+
+        cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
+        wantNewBufferSize = true;
       }
       else if( e_status == SEC_E_INCOMPLETE_MESSAGE )
       {
-        m_buffer.erase( 0, processed_data );
+        if( cbIoBufferLength < 200000 && m_buffer.size() > cbIoBufferLength )
+        {
+          cbIoBufferLength += 1000;
+          wantNewBufferSize = true;
+        }
+        else
+        {
+          cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
+          wantNewBufferSize = true;
+          break;
+        }
       }
       else
       {
         //std::cout << "decrypt !!!ERROR!!!\n";
         if( !m_secure )
           m_handler->handleHandshakeResult( this, false, m_certInfo );
+
         cleanup();
         break;
       }
@@ -416,9 +440,11 @@ namespace gloox
       switch( conn_info.dwProtocol )
       {
         case SP_PROT_TLS1_CLIENT:
+        case SP_PROT_TLS1_SERVER:
           m_certInfo.protocol = "TLSv1";
           break;
         case SP_PROT_SSL3_CLIENT:
+        case SP_PROT_SSL3_SERVER:
           m_certInfo.protocol = "SSLv3";
           break;
         default:
@@ -473,7 +499,7 @@ namespace gloox
     if( QueryContextAttributes( &m_context, SECPKG_ATTR_REMOTE_CERT_CONTEXT,
                                 (PVOID)&remoteCertContext ) != SEC_E_OK )
     {
-      m_certInfo.status = CertInvalid;
+      m_certInfo.status |= CertInvalid;
       return;
     }
 
@@ -481,30 +507,32 @@ namespace gloox
     m_certInfo.date_from = filetime2int( remoteCertContext->pCertInfo->NotBefore );
     if( m_certInfo.date_from > time( 0 ) )
       m_certInfo.status |= CertNotActive;
+    printf("from: %d\n", m_certInfo.date_from );
 
     m_certInfo.date_to = filetime2int( remoteCertContext->pCertInfo->NotAfter );
     if( m_certInfo.date_to < time( 0 ) )
       m_certInfo.status |= CertExpired;
+    printf("to: %d\n", m_certInfo.date_to );
 
     if( !CertNameToStrA( remoteCertContext->dwCertEncodingType,
                         &remoteCertContext->pCertInfo->Subject,
                         /*CERT_X500_NAME_STR |*/ CERT_NAME_STR_NO_PLUS_FLAG,
                         certString, sizeof( certString ) ) )
     {
-      m_certInfo.status = CertInvalid;
+      m_certInfo.status |= CertInvalid;
       return;
     }
     m_certInfo.server = certString;
 
     if( certString != m_server )
-      m_certInfo.status = CertInvalid;
+      m_certInfo.status |= CertInvalid;
 
     if( !CertNameToStrA( remoteCertContext->dwCertEncodingType,
                        &remoteCertContext->pCertInfo->Issuer,
                        /*CERT_X500_NAME_STR |*/ CERT_NAME_STR_NO_PLUS_FLAG,
                        certString, sizeof( certString ) ) )
     {
-      m_certInfo.status = CertInvalid;
+      m_certInfo.status |= CertInvalid;
       return;
     }
     m_certInfo.issuer = certString;
