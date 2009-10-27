@@ -19,7 +19,7 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Os" />
-			<Add option="-DBUILDING_DLL=1" />
+			<Add option="-DDLL_EXPORT" />
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
