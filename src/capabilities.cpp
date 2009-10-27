@@ -15,6 +15,7 @@
 
 #include "base64.h"
 #include "disco.h"
+#include "dataform.h"
 #include "sha.h"
 #include "tag.h"
 
@@ -22,7 +23,8 @@ namespace gloox
 {
 
   Capabilities::Capabilities( Disco* disco )
-    : StanzaExtension( ExtCaps ), m_disco( disco ), m_node( GLOOX_CAPS_NODE ), m_valid( false )
+    : StanzaExtension( ExtCaps ), m_disco( disco ), m_node( GLOOX_CAPS_NODE ),
+      m_hash( "sha-1" ), m_valid( false )
   {
     if( m_disco )
       m_valid = true;
@@ -37,6 +39,7 @@ namespace gloox
 
     m_node = tag->findAttribute( "node" );
     m_ver = tag->findAttribute( "ver" );
+    m_hash = tag->findAttribute( "hash" );
     m_valid = true;
   }
 
@@ -51,8 +54,17 @@ namespace gloox
     if( !m_disco )
       return m_ver;
 
+    SHA sha;
+    sha.feed( generate( m_disco->identities(), m_disco->features(), m_disco->form() ) );
+    const std::string& hash = Base64::encode64( sha.binary() );
+    m_disco->removeNodeHandlers( const_cast<Capabilities*>( this ) );
+    m_disco->registerNodeHandler( const_cast<Capabilities*>( this ), m_node + '#' + hash );
+    return hash;
+  }
+
+  std::string Capabilities::generate( const Disco::IdentityList& il, const StringList& features, const DataForm* form )
+  {
     StringList sl;
-    const Disco::IdentityList& il = m_disco->identities();
     Disco::IdentityList::const_iterator it = il.begin();
     for( ; it != il.end(); ++it )
     {
@@ -75,7 +87,7 @@ namespace gloox
       s += '<';
     }
 
-    StringList f = m_disco->features( true );
+    StringList f = features;
     f.sort();
     it2 = f.begin();
     for( ; it2 != f.end(); ++it2 )
@@ -83,11 +95,48 @@ namespace gloox
       s += (*it2);
       s += '<';
     }
-    SHA sha;
-    sha.feed( s );
-    const std::string& hash = Base64::encode64( sha.binary() );
-    m_disco->registerNodeHandler( const_cast<Capabilities*>( this ), m_node + '#' + hash );
-    return hash;
+
+    if( form )
+    {
+      DataForm::FieldList::const_iterator it3 = form->fields().begin();
+      typedef std::map<std::string, StringList> MapSSL;
+
+      MapSSL m;
+      for( ; it3 != form->fields().end(); ++it3 )
+      {
+        if( (*it3)->name() == "FORM_TYPE" )
+        {
+          s += (*it3)->value();
+          s += '<';
+        }
+        else
+          m.insert( std::make_pair( (*it3)->name(), (*it3)->values() ) );
+      }
+
+      MapSSL::iterator it4 = m.begin();
+      for( ; it4 != m.end(); ++it4 )
+      {
+        s += it4->first;
+        s += '<';
+        it2 = it4->second.begin();
+        for( ; it2 != it4->second.end(); ++it2 )
+        {
+          s += (*it2);
+          s += '<';
+        }
+      }
+    }
+    return s;
+  }
+
+  std::string Capabilities::generate( const Disco::Info* info )
+  {
+    return info ? generate( info->identities(), info->features(), info->form() ) : EmptyString;
+  }
+
+  std::string Capabilities::generate( const Disco* disco )
+  {
+    return disco ? generate( disco->identities(), disco->features(), disco->form() ) : EmptyString;
   }
 
   const std::string& Capabilities::filterString() const
@@ -103,7 +152,7 @@ namespace gloox
 
     Tag* t = new Tag( "c" );
     t->setXmlns( XMLNS_CAPS );
-    t->addAttribute( "hash", "sha-1" );
+    t->addAttribute( "hash", m_hash );
     t->addAttribute( "node", m_node );
     t->addAttribute( "ver", ver() );
     return t;

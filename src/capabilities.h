@@ -102,8 +102,27 @@ namespace gloox
                                                     const std::string& node = EmptyString );
 
     private:
+      /**
+       * Returns the hash function used for creating the caps info.
+       * @return The current hash function's name.
+       */
+      const std::string& hash() const { return m_hash; }
+
+      /**
+       * Use this function to set the hash function to use.
+       * @param hash The hash function.
+       * @todo Convert to using an enum and make public.
+       */
+      void setHash( const std::string& hash ) { m_hash = hash; }
+
+      static std::string generate( const Disco::IdentityList& identities,
+                                   const StringList& features, const DataForm* form = 0 );
+      static std::string generate( const Disco::Info* info );
+      static std::string generate( const Disco* disco );
+
       Disco* m_disco;
       std::string m_node;
+      std::string m_hash;
       std::string m_ver;
       bool m_valid;
   };
