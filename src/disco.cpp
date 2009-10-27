@@ -147,6 +147,9 @@ namespace gloox
     for( ; it_f != m_features.end(); ++it_f )
       new Tag( t, "feature", "var", (*it_f) );
 
+    if( m_form )
+      t->addChild( m_form->tag() );
+
     return t;
   }
   // ---- ~Disco::Info ----
@@ -339,7 +342,7 @@ namespace gloox
             i->setIdentities( il );
             i->setFeatures( m_features );
             if( m_form )
-              i->setForm( m_form );
+              i->setForm( new DataForm( *m_form ) );
           }
 
           re.addExtension( i );
