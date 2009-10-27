@@ -111,6 +111,20 @@ namespace gloox
       }
 
       /**
+       * Sets the subject/common name to search the system certificate store for. Used only by the
+       * SChannel implementation (Windows). Required for SChannel server, optional for SChannel client.
+       * The system 'MY' certificate store will be searched for the @b subject (substring match) for a
+       * private key/certificate pair which will be used.
+       * @note On the server-side, initialization (init())
+       * will fail if @b subject is not set or if no associated key/certificate could be found.
+       * On the client-side initialization will fail if a @b subject was set for which no
+       * key/certificate pair could be found. Setting no @b subject on the client-side is fine.
+       * @note setSubject() must be called before init() to be effective.
+       * @param subject The to use.
+       */
+      virtual void setSubject( const std::string& subject ) { m_subject = subject; }
+
+      /**
        * Sets the transport connection.
        * @param connection The transport connection to use.
        */
@@ -187,6 +201,7 @@ namespace gloox
       StringList m_cacerts;
       std::string m_clientCerts;
       std::string m_clientKey;
+      std::string m_subject;
 
     private:
       ConnectionTLS& operator=( const ConnectionTLS& );
