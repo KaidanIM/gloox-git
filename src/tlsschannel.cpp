@@ -120,6 +120,7 @@ namespace gloox
       SecBuffer buffer[4];
       SecBufferDesc buffer_desc;
       DWORD cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
+      bool wantNewBufferSize = false;
 
       PBYTE e_iobuffer = static_cast<PBYTE>( LocalAlloc( LMEM_FIXED, cbIoBufferLength ) );
       if( e_iobuffer == NULL )
@@ -132,9 +133,15 @@ namespace gloox
       }
       SECURITY_STATUS e_status;
 
-      // copy data chunk from tmp string into encryption memory buffer
       do
       {
+        if( wantNewBufferSize )
+        {
+          e_iobuffer = static_cast<PBYTE>( LocalReAlloc( e_iobuffer, cbIoBufferLength, 0 ) );
+          wantNewBufferSize = false;
+        }
+
+        // copy data chunk from tmp string into encryption memory buffer
         memcpy( e_iobuffer, m_buffer.data(), m_buffer.size() >
                cbIoBufferLength ? cbIoBufferLength : m_buffer.size() );
 
@@ -182,13 +189,26 @@ namespace gloox
           else
           {
             //std::cout << "m_buffer.size() = " << pExtraBuffer->cbBuffer << std::endl;
-            m_buffer.erase( 0, m_buffer.size() - pExtraBuffer->cbBuffer );
+            m_buffer.erase( 0, processed_data - pExtraBuffer->cbBuffer );
             //std::cout << "m_buffer.size() = " << m_buffer.size() << std::endl;
+
+            cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
+            wantNewBufferSize = true;
           }
         }
         else if( e_status == SEC_E_INCOMPLETE_MESSAGE )
         {
-          break;
+          if( cbIoBufferLength < 200000 && m_buffer.size() > cbIoBufferLength )
+          {
+            cbIoBufferLength += 1000;
+            wantNewBufferSize = true;
+          }
+          else
+          {
+            cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
+            wantNewBufferSize = true;
+            break;
+          }
         }
         else
         {
