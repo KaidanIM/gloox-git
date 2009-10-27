@@ -194,9 +194,9 @@ namespace gloox
         else
         {
           //std::cout << "decrypt !!!ERROR!!!\n";
-          cleanup();
           if( !m_secure )
             m_handler->handleHandshakeResult( this, false, m_certInfo );
+          cleanup();
           break;
         }
       }
