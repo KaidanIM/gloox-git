@@ -47,7 +47,11 @@ SChannelTest::SChannelTest()
   m_client->init();
   m_server = new SChannelServer( this );
   m_server->setSubject( "bar" );
-  m_server->init();
+  if( !m_server->init() )
+  {
+    printf( "server init failed. do you have a private key/cetificate installed and provided the correct subject?\n" );
+    exit( 1 );
+  }
 }
 
 SChannelTest::~SChannelTest()
