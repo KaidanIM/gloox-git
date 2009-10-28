@@ -164,9 +164,6 @@ namespace gloox
     if( q && q->roster().size() )
       mergePush( q->roster() );
 
-//     if( m_rosterListener )
-//       m_rosterListener->handleItemAdded( jid );
-
     IQ re( IQ::Result, JID(), iq.id() );
     m_parent->send( re );
     return true;
@@ -255,13 +252,6 @@ namespace gloox
 
     IQ iq( IQ::Set, JID(), m_parent->getID() );
     iq.addExtension( new Query( jid, name, groups) );
-//     Tag* i = new Tag( iq.query(), "item", "jid", jid.bare() );
-//     if( !name.empty() )
-//       i->addAttribute( "name", name );
-
-//     StringList::const_iterator it = groups.begin();
-//     for( ; it != groups.end(); ++it )
-//       new Tag( i, "group", (*it) );
 
     m_parent->send( iq, this, AddRosterItem );
   }
@@ -328,9 +318,6 @@ namespace gloox
       }
       case Subscription::Subscribed:
       {
-//         Subscription p( Subscription::Subscribe, s10n.from().bareJID() );
-//         m_parent->send( p );
-
         m_rosterListener->handleItemSubscribed( s10n.from() );
         break;
       }
@@ -348,9 +335,6 @@ namespace gloox
 
       case Subscription::Unsubscribed:
       {
-//         Subscription p( Subscription::Unsubscribe, s10n.from().bareJID() );
-//         m_parent->send( p );
-
         m_rosterListener->handleItemUnsubscribed( s10n.from() );
         break;
       }
@@ -414,7 +398,6 @@ namespace gloox
         else
         {
           (*itr).second->setData( *(*it) );
-//           (*it) = 0;
           if( m_rosterListener )
             m_rosterListener->handleItemUpdated( (*it)->jid() );
         }
