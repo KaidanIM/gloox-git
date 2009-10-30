@@ -22,7 +22,10 @@ namespace gloox
   class TLSHandler;
 
   /**
-   * @brief This is an abstraction of the various TLS implementations.
+   * @brief This is an abstraction of the various TLS backends.
+   *
+   * You should use an instance of this class should you whish to use TLS encryption.
+   * TLS support for the main XMPP connection is managed by Client/ClientBase directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -95,6 +98,7 @@ namespace gloox
 
     private:
       TLSBase* m_impl;
+
   };
 }
 

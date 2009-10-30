@@ -51,7 +51,7 @@ namespace gloox
 
       /**
        * Reimplement this function if you want to be notified about the result
-       * of an disco#items query.
+       * of a disco#items query.
        * @param from The sender of the disco#items result.
        * @param items The Items.
        * @param context A context identifier.
@@ -73,7 +73,6 @@ namespace gloox
        * stanzas of type 'set' in the disco namespace.
        * @param iq The full IQ.
        * @return Returns @b true if the stanza was handled and answered, @b false otherwise.
-       * @todo Replace the stanza with decoded values.
        */
       virtual bool handleDiscoSet( const IQ& iq ) { (void)iq; return false; }
 

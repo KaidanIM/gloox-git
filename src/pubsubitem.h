@@ -33,7 +33,6 @@ namespace gloox
      *
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0
-     * @todo Make this a container for arbitrary payload.
      */
     class GLOOX_API Item
     {

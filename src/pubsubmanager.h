@@ -35,8 +35,7 @@ namespace gloox
      * @brief This manager is used to interact with PubSub services (XEP-0060).
      *
      * @note PubSub support in gloox is still relatively young and you are most
-     * welcome to ask questions, criticize the API and so on. For contact
-     * information, see below.
+     * welcome to ask questions, criticize the API and so on.
      *
      * A ResultHandler is used to receive a request's result. Depending on the
      * context, this can be a notification that an item has been succesfully
@@ -65,7 +64,7 @@ namespace gloox
      * To interact with PubSub services, you will need to
      * instantiate a PubSub::Manager and
      * implement the ResultHandler virtual interfaces to be notified of the
-     * result of requests and pass these along to these requests.
+     * result of requests.
      *
      * @note A null ResultHandler to a query is not allowed and is a no-op.
      *
@@ -82,7 +81,7 @@ namespace gloox
 
         /**
          * Initialize the manager.
-         * @param parent Client to which this manager belongs to.
+         * @param parent Client to which this manager belongs.
          */
         Manager( ClientBase* parent );
 
@@ -98,9 +97,9 @@ namespace gloox
          * @param node ID of the node to subscribe to.
          * @param handler The ResultHandler.
          * @param jid JID to subscribe. If empty, the client's JID will be used
-         *        (ie self subscription).
+         *        (ie. self subscription).
          * @param type SubscriptionType of the subscription (Collections only).
-         * @param depth Subscription depth. For 'all', use 0 (Collections only!).
+         * @param depth Subscription depth. For 'all', use 0 (Collections only).
          * @param expire Subscription expiry. Defaults to the empty string.
          * @return The IQ ID used in the request.
          *

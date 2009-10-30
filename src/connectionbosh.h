@@ -34,12 +34,12 @@ namespace gloox
    * @code
    * Client *c = new Client( ... );
    * c->setConnectionImpl( new ConnectionBOSH( c,
-   *                                new ConnectionTCP( c->logInstance(), httpServer, httpPort ),
+   *                                new ConnectionTCPClient( c->logInstance(), httpServer, httpPort ),
    *                                c->logInstance(), boshHost, xmpphost, xmppPort ) );
    * @endcode
    *
    * Make sure to pass the BOSH connection manager's host/port to the transport connection
-   * (ConnectionTCP in this case), and the XMPP server's host and port to the BOSH connection.
+   * (ConnectionTCPClient in this case), and the XMPP server's host and port to the BOSH connection.
    * You must also pass to BOSH the address of the BOSH server you are dealing with, this is used
    * in the HTTP Host header.
    *
@@ -47,7 +47,7 @@ namespace gloox
    * those of the proxy. In all cases, boshHost should be set to the hostname (not IP address) of
    * the server running the BOSH connection manager.
    *
-   * The reason why ConnectionBOSH doesn't manage its own ConnectionTCP is that it allows it
+   * The reason why ConnectionBOSH doesn't manage its own ConnectionTCPClient is that it allows it
    * to be used with other transports (like chained SOCKS5/HTTP proxies, or ConnectionTLS
    * for HTTPS).
    *
@@ -55,7 +55,7 @@ namespace gloox
    * ClientBase::setTls( TLSDisabled ).
    *
    * Sample configurations for different servers can be found in the bosh_example.cpp file included
-   * with gloox in the @b src/examples directory.
+   * with gloox in the @b src/examples/ directory.
    *
    * @author Matthew Wild <mwild1@gmail.com>
    * @author Jakob Schroeter <js@camaya.net>

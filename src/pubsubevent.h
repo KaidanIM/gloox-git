@@ -26,7 +26,7 @@ namespace gloox
   {
 
     /**
-     * @brief This is an implementation of a PubSub Notification StanzaExtension.
+     * @brief This is an implementation of a PubSub Notification as a StanzaExtension.
      *
      * @author Vincent Thomasset <vthomasset@gmail.com>
      * @since 1.0
