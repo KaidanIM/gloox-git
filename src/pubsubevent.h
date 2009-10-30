@@ -26,7 +26,7 @@ namespace gloox
   {
 
     /**
-     * @brief This is an implementation of a PubSub Notification StanzaExtension.
+     * @brief This is an implementation of a PubSub Notification as a StanzaExtension.
      *
      * @author Vincent Thomasset <vthomasset@gmail.com>
      * @since 1.0
@@ -130,7 +130,7 @@ namespace gloox
         /**
          * Returns the subscription state. Only set for subscription notifications
          * (type() == EventSubscription).
-         * @return @btrue if the subscription request was approved, @b false otherwise.
+         * @return @b True if the subscription request was approved, @b false otherwise.
          */
         bool subscription() { return m_subscription; }
 

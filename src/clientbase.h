@@ -66,6 +66,7 @@ namespace gloox
    * @brief This is the common base class for a Jabber/XMPP Client and a Jabber Component.
    *
    * It manages connection establishing, authentication, filter registration and invocation.
+   * You should normally use Client for client connections and Component for component connections.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
@@ -723,7 +724,7 @@ namespace gloox
       void setAuthed( bool authed ) { m_authed = authed; }
 
       /**
-       * If authentication faailed, this function tells ClientBase
+       * If authentication failed, this function tells ClientBase
        * the reason.
        * @param e The reason for the authentication failure.
        */

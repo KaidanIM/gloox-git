@@ -185,7 +185,8 @@ namespace gloox
     if( m_connection->state() >= StateConnecting )
       return true;
 
-    m_logInstance.dbg( LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION + ", connecting..." );
+    m_logInstance.dbg( LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION + ", connecting to "
+                                               + m_server + ":" + util::int2string( m_port ) + "..." );
     m_block = block;
     ConnectionError ret = m_connection->connect();
     if( ret != ConnNoError )
