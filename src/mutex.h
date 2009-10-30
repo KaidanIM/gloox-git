@@ -49,8 +49,11 @@ namespace gloox
         void lock();
 
         /**
-         * Tries to locks the mutex.
+         * Tries to lock the mutex.
          * @return @b True if the attempt was successful, @b false otherwise.
+         * @note This function also returns @b true if mutex support is not available, ie. if gloox
+         * is compiled without pthreads on non-Windows platforms. Make sure threads/mutexes are available
+         * if your code relies on trylock().
          */
         bool trylock();
 

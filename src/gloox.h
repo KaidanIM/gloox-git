@@ -32,8 +32,7 @@
  *
  * The design of gloox follows the so-called observer pattern, which basically means that everything is
  * event-driven. There are two ways you can connect to the Jabber/XMPP network using gloox, either as
- * client or as component. A third way, as server, is not supported by gloox, even though it might be
- * possible to get something going.
+ * client or as component. For a C++ XMPP server library see <http://camaya.net/glooxd>.
  *
  * @note Section 11.5 of the XMPP specification (RFC 3290) requires that only UTF-8 is used as encoding
  * for any traffic sent over the wire. Since gloox cannot know which encoding is used in any given input,
@@ -54,12 +53,12 @@
  * {
  *   public:
  *     // reimplemented from PresenceHandler
- *     virtual void handlePresence( Presence* presence );
+ *     virtual void handlePresence( const Presence& presence );
  *
  *   [...]
  * };
  *
- * void MyClass::handlePresence( Presence* presence )
+ * void MyClass::handlePresence( const Presence& presence )
  * {
  *   // extract further information from the Presence object
  * }
@@ -76,7 +75,7 @@
  * }
  * @endcode
  *
- * Now, everytime a presence stanza (not subscription stanza) is received, handlePresence() is called
+ * Now, every time a presence stanza (not subscription stanza) is received, handlePresence() is called
  * with the current stanza as argument. You can then use the extensive getters of the Stanza class to
  * extract stanza data.
  *
@@ -168,8 +167,10 @@
  * }
  * @endcode
  *
- * @note gloox does not (and will not) support the style of connection which is usually used on port
+ * @note gloox does not officially support the style of connection which is usually used on port
  * 5223, i.e. SSL encryption before any XML is sent, because it's a legacy method and not standard XMPP.
+ * However, gloox includes a ConnectionTLS class that, as a side-effect, allows you to establish such
+ * connections..
  *
  * @note @link gloox::Client::connect() Client::connect() @endlink by default blocks until the
  * connection ends (either @link gloox::Client::disconnect() Client::disconnect() @endlink is called
@@ -215,11 +216,11 @@
  * @code
  * Client* client = new Client( ... );
  * client->connect( false );
- * int sock = dynamic_cast<ConnectionTCPClient*>( client->connectionImpl() )->socket();
+ * int sock = static_cast<ConnectionTCPClient*>( client->connectionImpl() )->socket();
  *
  * [...]
  * @endcode
- *
+ * Obviously this will only work as long as you haven't set a different type of connection using setConnectionImpl().
  *
  * @note This has changed in 0.9. ClientBase::fileDescriptor() is no longer available.
  *
@@ -240,8 +241,7 @@
  *
  * Also defined in RFC 3921: Privacy Lists. A Privacy List can be used to explicitely block or allow
  * sending of stanzas from and to contacts, respectively. You can define rules based on JID, stanza type,
- * etc. Needless to say that gloox implements Privacy Lists as well. ;) The
- * @link gloox::PrivacyManager PrivacyManager @endlink class and the
+ * etc. The @link gloox::PrivacyManager PrivacyManager @endlink class and the
  * @link gloox::PrivacyListHandler PrivacyListHandler @endlink virtual interface allow for full
  * flexibility in Privacy List handling.
  *
@@ -662,7 +662,7 @@ namespace gloox
                                      * or the server offered no auth mechanisms at all. */
     ConnTlsFailed,                  /**< The server's certificate could not be verified or the TLS
                                      * handshake did not complete successfully. */
-    ConnTlsNotAvailable,            /**< The server didn't offer TLS while it was set to be required
+    ConnTlsNotAvailable,            /**< The server didn't offer TLS while it was set to be required,
                                      * or TLS was not compiled in.
                                      * @since 0.9.4 */
     ConnCompressionFailed,          /**< Negotiating/initializing compression failed.

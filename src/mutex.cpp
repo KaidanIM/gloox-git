@@ -86,6 +86,8 @@ namespace gloox
       return TryEnterCriticalSection( &m_cs ) ? true : false;
 #elif defined( HAVE_PTHREAD )
       return !( pthread_mutex_trylock( &m_mutex ) );
+#else
+      return true;
 #endif
     }
 

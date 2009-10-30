@@ -958,9 +958,6 @@ namespace gloox
       return true;
     }
 
-    /**
-     * @todo Track context info for Unsubscription result.
-     */
     void Manager::handleIqID( const IQ& iq, int context )
     {
       const JID& service = iq.from();

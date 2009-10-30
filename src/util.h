@@ -189,7 +189,7 @@ namespace gloox
     }
 
     /**
-     * Does some fancy escaping. (& --> &amp;, etc).
+     * Does some fancy escaping. (& --> &amp;amp;, etc).
      * @param what A string to escape.
      * @return The escaped string.
      */
