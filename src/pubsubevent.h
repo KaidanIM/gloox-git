@@ -130,7 +130,7 @@ namespace gloox
         /**
          * Returns the subscription state. Only set for subscription notifications
          * (type() == EventSubscription).
-         * @return @btrue if the subscription request was approved, @b false otherwise.
+         * @return @b True if the subscription request was approved, @b false otherwise.
          */
         bool subscription() { return m_subscription; }
 
