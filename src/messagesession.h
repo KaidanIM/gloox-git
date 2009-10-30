@@ -31,7 +31,7 @@ namespace gloox
   /**
    * @brief An abstraction of a message session between any two entities.
    *
-   * This is an alternative interface to raw, old-style messaging. The original interface, using the simple
+   * This is an alternative interface to unmanaged messaging. The original interface, using the simple
    * MessageHandler-derived interface, is based on an all-or-nothing approach. Once registered with
    * ClientBase, a handler receives all message stanzas sent to this client and has to do any filtering
    * on its own.
