@@ -349,6 +349,9 @@ namespace gloox
     if( m_encryption )
       m_encryption->cleanup();
 
+    if( m_compression )
+      m_compression->cleanup();
+
     m_encryptionActive = false;
     m_compressionActive = false;
 
