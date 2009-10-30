@@ -51,12 +51,14 @@ namespace gloox
 
   CompressionZlib::~CompressionZlib()
   {
-    inflateEnd( &m_zinflate );
-    deflateEnd( &m_zdeflate );
+    cleanup();
   }
 
   void CompressionZlib::compress( const std::string& data )
   {
+    if( !m_valid )
+      init();
+
     if( !m_valid || !m_handler || data.empty() )
       return;
 
@@ -88,6 +90,9 @@ namespace gloox
 
   void CompressionZlib::decompress( const std::string& data )
   {
+    if( !m_valid )
+      init();
+
     if( !m_valid || !m_handler || data.empty() )
       return;
 
@@ -112,6 +117,17 @@ namespace gloox
     delete[] out;
 
     m_handler->handleDecompressedData( result );
+  }
+
+  void CompressionZlib::cleanup()
+  {
+    if( !m_valid )
+      return;
+
+    inflateEnd( &m_zinflate );
+    deflateEnd( &m_zdeflate );
+
+    m_valid = false;
   }
 
 }
