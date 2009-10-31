@@ -165,13 +165,13 @@ void GnuTLSTest::printfCert( CertInfo &certinfo )
 
 std::string GnuTLSTest::send( const std::string& txt )
 {
-  printf( "sending %d\n", txt.length() );
+//   printf( "sending %d\n", txt.length() );
 
   m_client->encrypt( txt );
   while( m_clientDecrypted.empty() )
     loop();
 
-  printf( "recv'ed %d\n", m_clientDecrypted.length() );
+//   printf( "recv'ed %d\n", m_clientDecrypted.length() );
   const std::string t = m_clientDecrypted;
   m_clientDecrypted = "";
   return t;
