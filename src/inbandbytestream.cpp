@@ -12,10 +12,12 @@
 
 
 #include "inbandbytestream.h"
+#include "base64.h"
 #include "bytestreamdatahandler.h"
 #include "disco.h"
 #include "clientbase.h"
-#include "base64.h"
+#include "error.h"
+#include "message.h"
 #include "util.h"
 
 #include <cstdlib>
@@ -68,6 +70,7 @@ namespace gloox
   {
     static const std::string filter = "/iq/open[@xmlns='" + XMLNS_IBB + "']"
                                       "|/iq/data[@xmlns='" + XMLNS_IBB + "']"
+                                      "|/message/data[@xmlns='" + XMLNS_IBB + "']"
                                       "|/iq/close[@xmlns='" + XMLNS_IBB + "']";
     return filter;
   }
@@ -102,6 +105,7 @@ namespace gloox
     {
       m_clientbase->registerStanzaExtension( new IBB() );
       m_clientbase->registerIqHandler( this, ExtIBB );
+      m_clientbase->registerMessageHandler( this );
     }
 
     m_open = false;
@@ -114,6 +118,7 @@ namespace gloox
 
     if( m_clientbase )
     {
+      m_clientbase->removeMessageHandler( this );
       m_clientbase->removeIqHandler( this, ExtIBB );
       m_clientbase->removeIDHandler( this );
     }
@@ -178,26 +183,64 @@ namespace gloox
       return true;
     }
 
-    if( ++m_lastChunkReceived != i->seq() )
+    if( ( m_lastChunkReceived + 1 ) != i->seq() )
     {
       m_open = false;
+      returnError( iq.from(), iq.id(), StanzaErrorTypeModify, StanzaErrorItemNotFound );
       return false;
     }
 
     if( i->data().empty() )
     {
       m_open = false;
+      returnError( iq.from(), iq.id(), StanzaErrorTypeModify, StanzaErrorBadRequest );
       return false;
     }
 
     returnResult( iq.from(), iq.id() );
     m_handler->handleBytestreamData( this, i->data() );
+    m_lastChunkReceived++;
     return true;
+  }
+
+  void InBandBytestream::handleMessage( const Message& msg, MessageSession* /*session*/ )
+  {
+    if( msg.from() != m_target || !m_handler )
+      return;
+
+    const IBB* i = msg.findExtension<IBB>( ExtIBB );
+    if( !i )
+      return;
+
+    if( !m_open )
+      return;
+
+    if( m_lastChunkReceived != i->seq() )
+    {
+      m_open = false;
+      return;
+    }
+
+    if( i->data().empty() )
+    {
+      m_open = false;
+      return;
+    }
+
+    m_handler->handleBytestreamData( this, i->data() );
+    m_lastChunkReceived++;
   }
 
   void InBandBytestream::returnResult( const JID& to, const std::string& id )
   {
     IQ iq( IQ::Result, to, id );
+    m_clientbase->send( iq );
+  }
+
+  void InBandBytestream::returnError( const JID& to, const std::string& id, StanzaErrorType type, StanzaError error )
+  {
+    IQ iq( IQ::Error, to, id );
+    iq.addExtension( new Error( type, error ) );
     m_clientbase->send( iq );
   }
 
