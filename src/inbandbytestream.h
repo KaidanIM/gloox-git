@@ -16,13 +16,15 @@
 
 #include "bytestream.h"
 #include "iqhandler.h"
+#include "messagehandler.h"
 #include "gloox.h"
 
 namespace gloox
 {
 
-  class ClientBase;
   class BytestreamDataHandler;
+  class ClientBase;
+  class Message;
 
   /**
    * @brief An implementation of a single In-Band Bytestream (XEP-0047).
@@ -31,10 +33,14 @@ namespace gloox
    *
    * See SIProfileFT for a detailed description on how to implement file transfer.
    *
+   * @note This class can @b receive data wrapped in Message stanzas. This will only work if you
+   * are not using MessageSessions. However, it will always send
+   * data using IQ stanzas (which will always work).
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_API InBandBytestream : public Bytestream, public IqHandler
+  class GLOOX_API InBandBytestream : public Bytestream, public IqHandler, public MessageHandler
   {
 
     friend class SIProfileFT;
@@ -75,6 +81,9 @@ namespace gloox
 
       // reimplemented from IqHandler
       virtual void handleIqID( const IQ& iq, int context );
+
+      // reimplemented from MessageHandler
+      virtual void handleMessage( const Message& msg, MessageSession* session = 0 );
 
     private:
 #ifdef INBANDBYTESTREAM_TEST
@@ -191,6 +200,7 @@ namespace gloox
       InBandBytestream& operator=( const InBandBytestream& );
       void closed(); // by remote entity
       void returnResult( const JID& to, const std::string& id );
+      void returnError( const JID& to, const std::string& id, StanzaErrorType type, StanzaError error );
 
       ClientBase* m_clientbase;
       int m_blockSize;
