@@ -92,7 +92,7 @@ if test "$schannel" = "yes"; then
     *)
         schannel=no
         echo "*"
-        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Ignoring."
+        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW/cygwin. Ignoring."
         echo "*";;
   esac
   AC_MSG_CHECKING([if SChannel should be used])
