@@ -351,12 +351,12 @@ namespace gloox
     m_socks5BytestreamHandler->handleIncomingBytestream( s5b );
   }
 
-  void SOCKS5BytestreamManager::rejectSOCKS5Bytestream( const std::string& sid )
+  void SOCKS5BytestreamManager::rejectSOCKS5Bytestream( const std::string& sid, StanzaError reason )
   {
     AsyncTrackMap::iterator it = m_asyncTrackMap.find( sid );
     if( it != m_asyncTrackMap.end() )
     {
-      rejectSOCKS5Bytestream( (*it).second.from, (*it).second.id, StanzaErrorNotAcceptable );
+      rejectSOCKS5Bytestream( (*it).second.from, (*it).second.id, reason );
       m_asyncTrackMap.erase( it );
     }
   }
@@ -365,41 +365,26 @@ namespace gloox
                                                         const std::string& id,
                                                         StanzaError reason )
   {
-    IQ* iq = 0;
-    Error* error = 0;
+    IQ iq( IQ::Error, from, id );
 
     switch( reason )
     {
       case StanzaErrorForbidden:
+      case StanzaErrorNotAcceptable:
       {
-        iq = new IQ( IQ::Error, from, id );
-        error = new Error( StanzaErrorTypeAuth, StanzaErrorForbidden );
+        iq.addExtension( new Error( StanzaErrorTypeAuth, reason ) );
         break;
       }
       case StanzaErrorFeatureNotImplemented:
-      {
-        iq = new IQ( IQ::Error, from, id );
-        error = new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound );
-        break;
-      }
       case StanzaErrorNotAllowed:
-      {
-        iq = new IQ( IQ::Error, from, id );
-        error = new Error( StanzaErrorTypeCancel, StanzaErrorNotAllowed );
-        break;
-      }
-      case StanzaErrorNotAcceptable:
       default:
       {
-        iq = new IQ( IQ::Error, from, id );
-        error = new Error( StanzaErrorTypeAuth, StanzaErrorNotAcceptable );
+        iq.addExtension( new Error( StanzaErrorTypeCancel, reason ) );
         break;
       }
     }
 
-    iq->addExtension( error );
-    m_parent->send( *iq );
-    delete iq;
+    m_parent->send( iq );
   }
 
   void SOCKS5BytestreamManager::handleIqID( const IQ& iq, int context )

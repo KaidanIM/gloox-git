@@ -128,8 +128,9 @@ namespace gloox
       /**
        * Use this function to reject an incoming bytestream.
        * @param sid The stream's id as passed to BytestreamHandler::handleIncomingSOCKS5Bytestream().
+       * @param reason The reason for the reject.
        */
-      void rejectSOCKS5Bytestream( const std::string& sid );
+      void rejectSOCKS5Bytestream( const std::string& sid, StanzaError reason = StanzaErrorNotAcceptable );
 
       /**
        * Use this function to register an object that will receive new @b incoming bytestream
@@ -266,7 +267,7 @@ namespace gloox
       };
 
       SOCKS5BytestreamManager& operator=( const SOCKS5BytestreamManager&);
-      void rejectSOCKS5Bytestream( const JID& from, const std::string& id, StanzaError reason );
+      void rejectSOCKS5Bytestream( const JID& from, const std::string& id, StanzaError reason = StanzaErrorNotAcceptable );
       bool haveStream( const JID& from );
       const StreamHost* findProxy( const JID& from, const std::string& hostjid, const std::string& sid );
 
