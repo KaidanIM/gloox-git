@@ -233,6 +233,14 @@ namespace gloox
                       const std::string& text = EmptyString );
 
       /**
+       * Cancels the given bytestream. Most useful for SOCKS5 bytestreams where no proxies could be found.
+       * The given Bytestream will be deleted.
+       * @param bs The Bytestream to cancel.
+       * @note Can also be used with IBB.
+       */
+      void cancel( Bytestream* bs );
+
+      /**
        * To get rid of a bytestream (i.e., close and delete it), call this function.
        * The remote entity will be notified about the closing of the stream.
        * @param bs The bytestream to dispose. It will be deleted here.

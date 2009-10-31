@@ -153,6 +153,20 @@ namespace gloox
     }
   }
 
+  void SIProfileFT::cancel( Bytestream* bs )
+  {
+    if( !bs )
+      return;
+
+    if( m_id2sid.find( bs->sid() ) == m_id2sid.end() || !m_manager )
+      return;
+
+    if( bs->type() == Bytestream::S5B && m_socks5Manager )
+      m_socks5Manager->rejectSOCKS5Bytestream( bs->sid(), StanzaErrorServiceUnavailable );
+
+    dispose( bs );
+  }
+
   void SIProfileFT::setStreamHosts( StreamHostList hosts )
   {
     if( m_socks5Manager )
