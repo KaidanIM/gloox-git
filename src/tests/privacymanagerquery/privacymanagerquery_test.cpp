@@ -1,6 +1,7 @@
 #include "../../tag.h"
 #include "../../iq.h"
 #include "../../iqhandler.h"
+#include "../../messagehandler.h"
 #include "../../base64.h"
 #include "../../stanzaextensionfactory.h"
 using namespace gloox;
@@ -28,9 +29,11 @@ namespace gloox
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
       void removeIqHandler( IqHandler* ih, int exttype );
       void registerIqHandler( IqHandler* ih, int exttype );
+      void registerMessageHandler( MessageHandler* ) {}
       void registerStanzaExtension( StanzaExtension* ext );
       void removeStanzaExtension( int ext );
       void removeIDHandler( IqHandler* ) {}
+      void removeMessageHandler( MessageHandler* ) {}
     private:
       JID m_jid;
   };

@@ -170,7 +170,7 @@
  * @note gloox does not officially support the style of connection which is usually used on port
  * 5223, i.e. SSL encryption before any XML is sent, because it's a legacy method and not standard XMPP.
  * However, gloox includes a ConnectionTLS class that, as a side-effect, allows you to establish such
- * connections..
+ * connections.
  *
  * @note @link gloox::Client::connect() Client::connect() @endlink by default blocks until the
  * connection ends (either @link gloox::Client::disconnect() Client::disconnect() @endlink is called
