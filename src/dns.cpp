@@ -98,7 +98,7 @@ namespace gloox
     HEADER* hdr = (HEADER*)srvbuf.buf;
     unsigned char* here = srvbuf.buf + NS_HFIXEDSZ;
 
-    if( ( hdr->tc ) || ( srvbuf.len < NS_HFIXEDSZ ) )
+    if( srvbuf.len < NS_HFIXEDSZ )
       error = true;
 
     if( hdr->rcode >= 1 && hdr->rcode <= 5 )
