@@ -186,7 +186,7 @@ namespace gloox
       return true;
 
     m_logInstance.dbg( LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION + ", connecting to "
-                                               + m_server + ":" + util::int2string( m_port ) + "..." );
+                                               + m_server + "..." );
     m_block = block;
     ConnectionError ret = m_connection->connect();
     if( ret != ConnNoError )
