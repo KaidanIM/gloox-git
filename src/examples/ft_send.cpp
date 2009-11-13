@@ -229,7 +229,13 @@ int main( int argc, char** argv )
 {
   if( argc == 3 )
   {
-    FTTest *r = new FTTest( JID( argv[1] ), argv[2] );
+    JID j( argv[1] );
+    if( j.resource().empty() )
+    {
+      printf( "error: need full jid\n" );
+      return 1;
+    }
+    FTTest *r = new FTTest( j, argv[2] );
     r->start();
     delete( r );
   }
