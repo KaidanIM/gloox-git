@@ -1,6 +1,7 @@
 v0.9.9.13 -- xx yyy 2009
 ------------------------
 - fixed SHA1 hashes of 55 byte strings
+- fixed CFLAGS and LIBS in pkg-config file (#163)
 
 
 v0.9.9.12 -- 31 Oct 2009
