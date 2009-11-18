@@ -1,3 +1,8 @@
+v0.9.9.13 -- xx yyy 2009
+------------------------
+- fixed SHA1 hashes of 55 byte strings
+
+
 v0.9.9.12 -- 31 Oct 2009
 ------------------------
 - removed apparent openssl chunk size limit

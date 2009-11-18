@@ -59,6 +59,50 @@ int main( int /*argc*/, char** /*argv*/ )
   sha.reset();
 
   // -------
+  name = "54byte string";
+  sha.feed( std::string( 54, 'x' ) );
+  sha.finalize();
+  if( sha.hex() != "31045e7bb077ff8d188a776b196b980388735dbb" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), sha.hex().c_str() );
+  }
+  sha.reset();
+
+  // -------
+  name = "55byte string";
+  sha.feed( std::string( 55, 'x' ) );
+  sha.finalize();
+  if( sha.hex() != "cef734ba81a024479e09eb5a75b6ddae62e6abf1" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), sha.hex().c_str() );
+  }
+  sha.reset();
+
+  // -------
+  name = "56byte string";
+  sha.feed( std::string( 56, 'x' ) );
+  sha.finalize();
+  if( sha.hex() != "901305367c259952f4e7af8323f480d59f81335b" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), sha.hex().c_str() );
+  }
+  sha.reset();
+
+  // -------
+  name = "57byte string";
+  sha.feed( std::string( 57, 'x' ) );
+  sha.finalize();
+  if( sha.hex() != "025ecbd5d70f8fb3c5457cd96bab13fda305dc59" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), sha.hex().c_str() );
+  }
+  sha.reset();
+
+  // -------
   name = "many-step";
   sha.feed( "The" );
   sha.feed( " quick bro" );
