@@ -3,6 +3,7 @@ v1.0.1 -- xx yyy 2009
 - don't bail on DNS TCP queries
 - fixed µs timeout value (now defaults to 1.000.000)
 - omit port in initial greeting (usually -1 anyway)
+- fixed SHA1 hashes of 55 byte strings
 
 
 v1.0 -- 31 Oct 2009
