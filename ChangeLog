@@ -5,6 +5,7 @@ v1.0.1 -- xx yyy 2009
 - omit port in initial greeting (usually -1 anyway)
 - fixed SHA1 hashes of 55 byte strings (#164)
 - fixed CFLAGS and LIBS in pkg-config file (#163)
+- fixed SOCKS5Bytestream double close notification 
 
 
 v1.0 -- 31 Oct 2009
