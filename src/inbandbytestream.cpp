@@ -254,7 +254,7 @@ namespace gloox
     do
     {
       const std::string& id = m_clientbase->getID();
-      IQ iq( IQ::Set, m_target, id );
+      IQ iq( IQ::Set, m_clientbase->jid() == m_target ? m_initiator : m_target, id );
       iq.addExtension( new IBB( m_sid, ++m_sequence, data.substr( pos, m_blockSize ) ) );
       m_clientbase->send( iq, this, IBBData );
 
