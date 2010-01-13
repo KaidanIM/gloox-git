@@ -355,7 +355,7 @@ namespace gloox
 
   Tag* Tag::clone() const
   {
-    Tag *t = new Tag( name(), cdata(), m_incoming );
+    Tag *t = new Tag( name(), cdata(), false );
     t->m_attribs = m_attribs;
     t->m_type = m_type;
 
@@ -364,6 +364,8 @@ namespace gloox
     {
       t->addChild( (*it)->clone() );
     }
+
+    t->m_incoming = m_incoming;
 
     return t;
   }
