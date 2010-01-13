@@ -15,6 +15,8 @@
 #ifndef TLSHANDLER_H__
 #define TLSHANDLER_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox
@@ -26,7 +28,7 @@ namespace gloox
   /**
    * @brief An interface that allows for interacting with TLS implementations derived from TLSBase.
    *
-   * @author Jakob Schröter <js@camaya.net>
+   * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
   class GLOOX_API TLSHandler

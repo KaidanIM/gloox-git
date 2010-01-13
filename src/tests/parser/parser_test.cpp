@@ -370,6 +370,19 @@ class ParserTest : private TagHandler
 
 
 
+      //-------
+      name = "c&5 test";
+      data = "<tag1>name=&apos;c&amp;amp;5&apos;</tag1>";
+      p->feed( data );
+      if( ( m_tag == 0 ) ||
+            m_tag->cdata() != "name='c&amp;5'" )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s\n"
+                "                       cdata: %s\n", name.c_str(), data.c_str(), m_tag->cdata().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
 
 
 

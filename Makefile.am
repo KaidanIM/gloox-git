@@ -26,3 +26,7 @@ leaktest:
 
 examples:
 	make -C src examples
+
+includetest:
+	make -C src includetest
+

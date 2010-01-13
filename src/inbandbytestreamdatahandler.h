@@ -14,7 +14,8 @@
 #ifndef INBANDBYTESTREAMDATAHANDLER_H__
 #define INBANDBYTESTREAMDATAHANDLER_H__
 
-#include "macros.h"
+#include "gloox.h"
+#include "jid.h"
 
 #include <string>
 

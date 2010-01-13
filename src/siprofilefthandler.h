@@ -22,6 +22,7 @@ namespace gloox
 {
 
   class JID;
+  class SOCKS5Bytestream;
   class Stanza;
 
   /**

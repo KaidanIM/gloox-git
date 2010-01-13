@@ -15,10 +15,14 @@
 #ifndef PRIVATEXMLHANDLER_H__
 #define PRIVATEXMLHANDLER_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox
 {
+
+  class Tag;
 
   /**
    * @brief A virtual interface which can be reimplemented to store and receive private XML data.

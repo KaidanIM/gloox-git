@@ -15,6 +15,8 @@
 #ifndef MUCROOMCONFIGHANDLER_H__
 #define MUCROOMCONFIGHANDLER_H__
 
+#include "jid.h"
+#include "dataform.h"
 #include "gloox.h"
 
 #include <string>

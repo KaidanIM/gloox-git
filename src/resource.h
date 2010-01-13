@@ -14,6 +14,8 @@
 #ifndef RESOURCE_H__
 #define RESOURCE_H__
 
+#include "gloox.h"
+
 #include <string>
 
 namespace gloox

@@ -14,6 +14,8 @@
 #ifndef SIHANDLER_H__
 #define SIHANDLER_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox
