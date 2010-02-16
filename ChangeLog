@@ -1,8 +1,9 @@
-v0.9.9.13 -- xx yyy 2009
+v0.9.9.13 -- xx yyy 2010
 ------------------------
 - fixed SHA1 hashes of 55 byte strings
 - fixed CFLAGS and LIBS in pkg-config file (#163)
 - fixed double-unescape issue with incoming Tags
+- added includetest target
 
 
 v0.9.9.12 -- 31 Oct 2009
