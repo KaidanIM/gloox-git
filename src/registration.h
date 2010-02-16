@@ -98,22 +98,22 @@ namespace gloox
        */
       enum fieldEnum
       {
-        FieldUsername  =     1,
-        FieldNick      =     2,
-        FieldPassword  =     4,
-        FieldName      =     8,
-        FieldFirst     =    16,
-        FieldLast      =    32,
-        FieldEmail     =    64,
-        FieldAddress   =   128,
-        FieldCity      =   256,
-        FieldState     =   512,
-        FieldZip       =  1024,
-        FieldPhone     =  2048,
-        FieldUrl       =  4096,
-        FieldDate      =  8192,
-        FieldMisc      = 16384,
-        FieldText      = 32768
+        FieldUsername  =     1,     /**< Username requested */
+        FieldNick      =     2,     /**< Nickname requested */
+        FieldPassword  =     4,     /**< Password requested */
+        FieldName      =     8,     /**< Name requested */
+        FieldFirst     =    16,     /**< Given name requested */
+        FieldLast      =    32,     /**< Family name requested */
+        FieldEmail     =    64,     /**< Email address requested */
+        FieldAddress   =   128,     /**< Postal address requested */
+        FieldCity      =   256,     /**< Locality requested */
+        FieldState     =   512,     /**< State/Province requested */
+        FieldZip       =  1024,     /**< ZIP requested */
+        FieldPhone     =  2048,     /**< Phone no. requested */
+        FieldUrl       =  4096,     /**< Homepage or other URL requested */
+        FieldDate      =  8192,     /**< Date requested (unknown purpose; see XEP-0077) */
+        FieldMisc      = 16384,     /**< Misc data requested (unknown purpose; see XEP-0077) */
+        FieldText      = 32768      /**< Extra text requested (unknown purpose; see XEP-0077) */
       };
 
       /**
