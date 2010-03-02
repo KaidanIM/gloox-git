@@ -32,9 +32,11 @@ class RH : public PubSub::ResultHandler
                                     const JID&, const JID&,
                                                 const std::string&,
                                                 const DataForm*,
+                                                const std::string&,
                                                 const Error*) {}
     void handleSubscriptionOptionsResult( const std::string&,
                                           const JID&, const JID&,
+                                                      const std::string&,
                                                       const std::string&,
                                                       const Error* ) {}
     void handleSubscribers( const std::string&,

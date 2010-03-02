@@ -9,5 +9,5 @@ noinst_PROGRAMS = inbandbytestream_test
 inbandbytestream_test_SOURCES = inbandbytestream_test.cpp
 inbandbytestream_test_LDADD = ../../tag.o ../../stanza.o ../../prep.o ../../stanzaextensionfactory.o \
 			../../gloox.o ../../message.o ../../util.o ../../error.o ../../jid.o \
-			../../iq.o ../../base64.o ../../logsink.o
+			../../iq.o ../../base64.o ../../logsink.o ../../mutex.o
 inbandbytestream_test_CFLAGS = $(CPPFLAGS)
