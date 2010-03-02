@@ -280,7 +280,7 @@ namespace gloox
        * A convenience function that sends the given Presence stanza.
        * @param pres The Presence stanza to send.
        */
-      void send( Presence& pres );
+      void send( const Presence& pres );
 
       /**
        * Returns whether authentication has taken place and was successful.
@@ -999,6 +999,7 @@ namespace gloox
       MessageSessionHandler  * m_messageSessionHandlerNormal;
 
       util::Mutex m_iqHandlerMapMutex;
+      util::Mutex m_iqExtHandlerMapMutex;
 
       Parser m_parser;
       LogSink m_logInstance;
