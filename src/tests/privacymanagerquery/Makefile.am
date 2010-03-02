@@ -9,5 +9,5 @@ noinst_PROGRAMS = privacymanagerquery_test
 privacymanagerquery_test_SOURCES = privacymanagerquery_test.cpp
 privacymanagerquery_test_LDADD = ../../tag.o ../../stanza.o ../../prep.o ../../stanzaextensionfactory.o \
                         ../../gloox.o ../../message.o ../../util.o ../../error.o ../../jid.o \
-                        ../../iq.o ../../base64.o
+                        ../../iq.o ../../base64.o ../../mutex.o
 privacymanagerquery_test_CFLAGS = $(CPPFLAGS)

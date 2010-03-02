@@ -10,5 +10,5 @@ featureneg_test_SOURCES = featureneg_test.cpp
 featureneg_test_LDADD = ../../tag.o ../../dataform.o ../../dataformfieldcontainer.o ../../dataformreported.o \
                         ../../dataformitem.o ../../dataformfield.o ../../gloox.o ../../util.o \
                         ../../featureneg.o ../../stanzaextensionfactory.o ../../iq.o ../../message.o \
-                        ../../stanza.o ../../jid.o ../../prep.o
+                        ../../stanza.o ../../jid.o ../../prep.o ../../mutex.o
 featureneg_test_CFLAGS = $(CPPFLAGS)

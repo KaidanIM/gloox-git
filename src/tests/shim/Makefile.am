@@ -10,6 +10,6 @@ shim_test_SOURCES = shim_test.cpp
 shim_test_LDADD = ../../shim.o ../../gloox.o ../../tag.o \
                   ../../util.o ../../stanza.o ../../message.o \
                   ../../jid.o ../../prep.o \
-                  ../../stanzaextensionfactory.o
+                  ../../stanzaextensionfactory.o ../../mutex.o
 
 shim_test_CFLAGS = $(CPPFLAGS)

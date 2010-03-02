@@ -10,6 +10,6 @@ privatexml_test_SOURCES = privatexml_test.cpp
 privatexml_test_LDADD = ../../gloox.o ../../tag.o \
                   ../../util.o ../../stanza.o ../../message.o \
                   ../../jid.o ../../prep.o \
-                  ../../stanzaextensionfactory.o ../../iq.o
+                  ../../stanzaextensionfactory.o ../../iq.o ../../mutex.o
 
 privatexml_test_CFLAGS = $(CPPFLAGS)

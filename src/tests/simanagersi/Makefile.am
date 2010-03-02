@@ -10,5 +10,5 @@ simanagersi_test_SOURCES = simanagersi_test.cpp
 simanagersi_test_LDADD = ../../jid.o ../../tag.o \
                         ../../logsink.o ../../prep.o ../../util.o \
                         ../../gloox.o ../../iq.o ../../stanza.o \
-                        ../../error.o ../../stanzaextensionfactory.o
+                        ../../error.o ../../stanzaextensionfactory.o ../../mutex.o
 simanagersi_test_CFLAGS = $(CPPFLAGS)
