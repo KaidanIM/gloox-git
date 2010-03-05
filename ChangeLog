@@ -10,9 +10,10 @@ v1.0.1 -- xx yyy 2009
 - ClientBase: send IQ error response for unsupported features
 - ClientBase: fixed potential infinite loop on IQ error
 - ClientBase: fixed NTLM auth
-- mutex-protected SE handling
+- ClientBase, SEF: mutex-protected SE handling
 - PubSub: added 'subscribe & configure'
 - PubSub: added optional subid
+- SOCKS5BytestreamServer: expose local socket
 
 
 v1.0 -- 31 Oct 2009
