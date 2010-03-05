@@ -5,7 +5,14 @@ v1.0.1 -- xx yyy 2009
 - omit port in initial greeting (usually -1 anyway)
 - fixed SHA1 hashes of 55 byte strings (#164)
 - fixed CFLAGS and LIBS in pkg-config file (#163)
-- fixed SOCKS5Bytestream double close notification 
+- fixed SOCKS5Bytestream double close notification
+- tell gcrypt that we're using pthreads (if available)
+- ClientBase: send IQ error response for unsupported features
+- ClientBase: fixed potential infinite loop on IQ error
+- ClientBase: fixed NTLM auth
+- mutex-protected SE handling
+- PubSub: added 'subscribe & configure'
+- PubSub: added optional subid
 
 
 v1.0 -- 31 Oct 2009
