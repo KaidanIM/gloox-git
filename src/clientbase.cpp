@@ -1374,7 +1374,7 @@ namespace gloox
     IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq.id() );
     bool haveIdHandler = ( it_id != m_iqIDHandlers.end() );
     m_iqHandlerMapMutex.unlock();
-    if( haveIdHandler && iq.subtype() & ( iq.subtype() == IQ::Result || iq.subtype() == IQ::Error ) )
+    if( haveIdHandler && ( iq.subtype() == IQ::Result || iq.subtype() == IQ::Error ) )
     {
       (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
       if( (*it_id).second.del )
