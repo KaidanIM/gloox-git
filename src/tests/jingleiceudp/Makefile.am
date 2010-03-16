@@ -10,5 +10,5 @@ noinst_PROGRAMS = jingleiceudp_test
 jingleiceudp_test_SOURCES = jingleiceudp_test.cpp
 jingleiceudp_test_LDADD = ../../stanza.o ../../jid.o ../../tag.o ../../prep.o \
  		../../gloox.o ../../stanzaextensionfactory.o  ../../jingleiceudp.o \
-		../../iq.o ../../util.o ../../sha.o ../../base64.o
+		../../iq.o ../../util.o ../../sha.o ../../base64.o ../../mutex.o
 jingleiceudp_test_CFLAGS = $(CPPFLAGS)

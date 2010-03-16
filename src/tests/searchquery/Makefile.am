@@ -11,5 +11,5 @@ searchquery_test_LDADD = ../../stanza.o ../../jid.o ../../dataform.o ../../dataf
  		../../dataformreported.o ../../dataformitem.o ../../dataformfield.o ../../tag.o ../../prep.o \
  		../../gloox.o ../../stanzaextensionfactory.o \
 		../../iq.o ../../util.o ../../sha.o ../../base64.o \
-		../../error.o
+		../../error.o ../../mutex.o
 searchquery_test_CFLAGS = $(CPPFLAGS)

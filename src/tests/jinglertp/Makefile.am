@@ -11,5 +11,5 @@ jinglertp_test_SOURCES = jinglertp_test.cpp
 jinglertp_test_LDADD = ../../stanza.o ../../jid.o ../../tag.o ../../prep.o \
  		../../gloox.o ../../stanzaextensionfactory.o \
                 ../../jingledescription.o ../../jinglertp.o \
-		../../iq.o ../../util.o ../../sha.o ../../base64.o
+		../../iq.o ../../util.o ../../sha.o ../../base64.o ../../mutex.o
 jinglertp_test_CFLAGS = $(CPPFLAGS)

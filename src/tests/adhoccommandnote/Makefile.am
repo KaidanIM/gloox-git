@@ -11,5 +11,5 @@ adhoccommandnote_test_LDADD = ../../tag.o ../../stanza.o ../../gloox.o ../../iq.
 			../../error.o ../../jid.o ../../prep.o \
 			../../dataform.o ../../dataformfieldcontainer.o ../../dataformreported.o \
 			../../dataformitem.o ../../dataformfield.o \
-			../../softwareversion.o ../../stanzaextensionfactory.o
+			../../softwareversion.o ../../stanzaextensionfactory.o ../../mutex.o
 adhoccommandnote_test_CFLAGS = $(CPPFLAGS)

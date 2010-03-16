@@ -12,5 +12,5 @@ lastactivityquery_test_LDADD = ../../tag.o ../../stanza.o ../../prep.o ../../sta
                         ../../iq.o ../../base64.o ../../dataformfieldcontainer.o \
                         ../../dataform.o ../../dataformfield.o \
                         ../../dataformitem.o ../../dataformreported.o \
-                        ../../softwareversion.o
+                        ../../softwareversion.o ../../mutex.o
 lastactivityquery_test_CFLAGS = $(CPPFLAGS)

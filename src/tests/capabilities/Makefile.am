@@ -11,5 +11,5 @@ capabilities_test_LDADD = ../../tag.o ../../stanza.o ../../prep.o ../../stanzaex
 			../../gloox.o ../../base64.o ../../util.o ../../sha.o \
                         ../../jid.o ../../iq.o ../../error.o ../../softwareversion.o \
                         ../../dataform.o ../../dataformfieldcontainer.o ../../dataformreported.o \
-                        ../../dataformitem.o ../../dataformfield.o
+                        ../../dataformitem.o ../../dataformfield.o ../../mutex.o
 capabilities_test_CFLAGS = $(CPPFLAGS)
