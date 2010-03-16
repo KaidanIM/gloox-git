@@ -160,7 +160,6 @@ namespace gloox
             break;
           }
           case TrackSendAuth:
-            m_parent->selectResource( m_parent->jid().resource() );
             m_parent->setAuthed( true );
             m_parent->connected();
             break;
