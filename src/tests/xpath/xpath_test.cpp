@@ -922,19 +922,6 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
 
-// namespaces
-  name = "namespace";
-  Tag* nns = new Tag( "nns" );
-  Tag* ns = new Tag( nns, "ns" );
-  ns->setXmlns( "myns", "foo" );
-  printf( "my namespaced tag: %s\n", ns->tag().cdata() );
-  if( aaa->findCData( "//ddd" ) != "bcd" )
-  {
-    ++fail;
-    printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-//   printf( "--------------------------------------------------------------\n" );
 
 
 
