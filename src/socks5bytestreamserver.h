@@ -99,10 +99,10 @@ namespace gloox
       const std::string localInterface() const;
 
       /**
-       * Exposes the local socket.
-       * @return The local socket.
+       * Exposes the local server.
+       * @return The local server.
        */
-      int serverSocket() const { return m_tcpServer->socket(); }
+      ConnectionBase* server() const { return m_server; }
 
       // reimplemented from ConnectionHandler
       virtual void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection );
