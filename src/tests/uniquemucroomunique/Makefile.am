@@ -15,5 +15,5 @@ uniquemucroomunique_test_LDADD =../../tag.o ../../stanza.o \
 			../../dataformitem.o ../../dataformfield.o \
 			../../softwareversion.o ../../stanzaextensionfactory.o \
 			../../delayeddelivery.o ../../sha.o \
-			../../instantmucroom.o
+			../../instantmucroom.o ../../mutex.o
 uniquemucroomunique_test_CFLAGS = $(CPPFLAGS)

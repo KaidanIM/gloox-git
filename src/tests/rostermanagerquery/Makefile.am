@@ -16,5 +16,5 @@ rostermanagerquery_test_LDADD = ../../tag.o ../../stanza.o \
 			../../dataformitem.o ../../dataformfield.o \
 			../../softwareversion.o ../../stanzaextensionfactory.o \
 			../../rosteritem.o \
-			../../privacyitem.o
+			../../privacyitem.o ../../mutex.o
 rostermanagerquery_test_CFLAGS = $(CPPFLAGS)

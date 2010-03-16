@@ -11,5 +11,5 @@ registration_test_LDADD = ../../stanza.o ../../jid.o ../../dataform.o ../../data
  		../../dataformreported.o ../../dataformitem.o ../../dataformfield.o ../../tag.o ../../prep.o \
  		../../gloox.o ../../stanzaextensionfactory.o ../../oob.o \
 		../../iq.o ../../util.o ../../sha.o ../../base64.o \
-		../../error.o
+		../../error.o ../../mutex.o
 registration_test_CFLAGS = $(CPPFLAGS)

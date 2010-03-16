@@ -14,5 +14,5 @@ mucroommucadmin_test_LDADD = ../../tag.o ../../stanza.o \
                         ../../message.o ../../dataformfieldcontainer.o ../../dataformreported.o \
 			../../dataformitem.o ../../dataformfield.o \
 			../../softwareversion.o ../../stanzaextensionfactory.o \
-			../../delayeddelivery.o
+			../../delayeddelivery.o ../../mutex.o
 mucroommucadmin_test_CFLAGS = $(CPPFLAGS)

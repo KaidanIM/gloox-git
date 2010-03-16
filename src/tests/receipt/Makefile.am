@@ -10,6 +10,6 @@ receipt_test_SOURCES = receipt_test.cpp
 receipt_test_LDADD = ../../receipt.o ../../gloox.o ../../tag.o \
                   ../../util.o ../../stanza.o ../../message.o \
                   ../../jid.o ../../prep.o \
-                  ../../stanzaextensionfactory.o
+                  ../../stanzaextensionfactory.o ../../mutex.o
 
 receipt_test_CFLAGS = $(CPPFLAGS)
