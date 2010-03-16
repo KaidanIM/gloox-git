@@ -15,6 +15,7 @@ v1.0.1 -- xx yyy 2009
 - PubSub: added optional subid
 - SOCKS5BytestreamServer: expose local socket
 - RosterManager: don't use string-comparison on JIDs; use JID class
+- NonSASLAuth: fixed resource usage by deprecating ClientBase::m_selectedResource
 
 
 v1.0 -- 31 Oct 2009
