@@ -149,7 +149,7 @@ namespace gloox
        * Use this function to select a resource identifier that has been bound
        * previously by means of bindResource(). It is not necessary to call this function
        * if only one resource is bound. Use hasResourceBind() to find out if the
-       * server supports binding of multiple resources. selectResource() is a NOOP if it doesn't.
+       * server supports binding of multiple resources.
        * @param resource A resource string that has been bound previously.
        * @note If the resource string has not been bound previously, future sending of
        * stanzas will fail.

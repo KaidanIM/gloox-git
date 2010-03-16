@@ -793,8 +793,10 @@ namespace gloox
       LogSink m_logInstance;
       StringList m_cacerts;
 
-      std::string m_selectedResource;    /**< The currently selected resource.
-                                          * See Client::selectResource() and Client::binRessource(). */
+      GLOOX_DEPRECATED std::string m_selectedResource; /**< The currently selected resource.
+                                          * See Client::selectResource() and Client::bindRessource().
+                                          * @deprecated Not used anymore. Will be removed for 1.1.
+                                          * @todo Remove for 1.1 */
       std::string m_clientCerts;         /**< TLS client certificates. */
       std::string m_clientKey;           /**< TLS client private key. */
       std::string m_namespace;           /**< Default namespace. */
