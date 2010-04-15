@@ -1001,7 +1001,9 @@ namespace gloox
       MessageSessionHandler  * m_messageSessionHandlerNormal;
 
       util::Mutex m_iqHandlerMapMutex;
-      util::Mutex m_iqExtHandlerMapMutex;
+      util::Mutex m_iqExtHandlerMapMutex; // TODO Enable this mustex again. However
+                                          // it must be possible to register new IQ handlers
+                                          // while an IQ is being handled!
 
       Parser m_parser;
       LogSink m_logInstance;
