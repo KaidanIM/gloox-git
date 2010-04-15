@@ -145,9 +145,9 @@ namespace gloox
     m_iqIDHandlers.clear();
     m_iqHandlerMapMutex.unlock();
 
-    m_iqExtHandlerMapMutex.lock();
+//     m_iqExtHandlerMapMutex.lock();
     m_iqExtHandlers.clear();
-    m_iqExtHandlerMapMutex.unlock();
+//     m_iqExtHandlerMapMutex.unlock();
 
     // FIXME the same code is used in handleDisconnect()
     // try to minimise duplication
@@ -1103,7 +1103,7 @@ namespace gloox
     if( !ih )
       return;
 
-    util::MutexGuard m( m_iqExtHandlerMapMutex );
+//     util::MutexGuard m( m_iqExtHandlerMapMutex );
     typedef IqHandlerMap::const_iterator IQci;
     std::pair<IQci, IQci> g = m_iqExtHandlers.equal_range( exttype );
     for( IQci it = g.first; it != g.second; ++it )
@@ -1120,7 +1120,7 @@ namespace gloox
     if( !ih )
       return;
 
-    util::MutexGuard m( m_iqExtHandlerMapMutex );
+//     util::MutexGuard m( m_iqExtHandlerMapMutex );
     typedef IqHandlerMap::iterator IQi;
     std::pair<IQi, IQi> g = m_iqExtHandlers.equal_range( exttype );
     IQi it2;
@@ -1360,7 +1360,7 @@ namespace gloox
 //     }
 //     delete tag;
 
-    m_iqExtHandlerMapMutex.lock();
+//     m_iqExtHandlerMapMutex.lock();
     typedef IqHandlerMap::const_iterator IQci;
     const StanzaExtensionList& sel = iq.extensions();
     StanzaExtensionList::const_iterator itse = sel.begin();
@@ -1373,7 +1373,7 @@ namespace gloox
           handled = true;
       }
     }
-    m_iqExtHandlerMapMutex.unlock();
+//     m_iqExtHandlerMapMutex.unlock();
 
     if( !handled && ( iq.subtype() == IQ::Get || iq.subtype() == IQ::Set ) )
     {
