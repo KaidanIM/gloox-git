@@ -113,6 +113,8 @@ namespace gloox
 
   InBandBytestream::~InBandBytestream()
   {
+    m_handler = 0; // to prevent handleBytestreamClose() from being called in close()
+
     if( m_open )
       close();
 

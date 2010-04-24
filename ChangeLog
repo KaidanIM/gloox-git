@@ -16,6 +16,8 @@ v1.0.1 -- xx yyy 2009
 - SOCKS5BytestreamServer: expose local socket
 - RosterManager: don't use string-comparison on JIDs; use JID class
 - NonSASLAuth: fixed resource usage by deprecating ClientBase::m_selectedResource
+* InBandBytestream: don't call handler in dtor
+* util: fixed long2string()
 
 
 v1.0 -- 31 Oct 2009
