@@ -73,6 +73,7 @@ libgloox_la_SOURCES = adhoc.cpp \
                         messageeventfilter.cpp \
                         messagefilter.cpp \
                         messagesession.cpp \
+                        mucinvitationhandler.cpp \
                         mucinvite.cpp \
                         mucmessagesession.cpp \
                         mucroom.cpp \
