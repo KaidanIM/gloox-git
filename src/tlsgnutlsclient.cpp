@@ -39,6 +39,8 @@ namespace gloox
   void GnuTLSClient::cleanup()
   {
     GnuTLSBase::cleanup();
+    if( m_credentials )
+      gnutls_certificate_free_credentials( m_credentials );
     init();
   }
 
@@ -127,9 +129,11 @@ namespace gloox
     if( status & GNUTLS_CERT_SIGNER_NOT_CA )
       m_certInfo.status |= CertSignerNotCa;
     const gnutls_datum_t* certList = 0;
-    unsigned int certListSize;
+    unsigned int certListSize = 0;
     if( !error && ( ( certList = gnutls_certificate_get_peers( *m_session, &certListSize ) ) == 0 ) )
       error = true;
+
+    unsigned int certListSizeFull = certListSize;
 
     gnutls_x509_crt_t* cert = new gnutls_x509_crt_t[certListSize+1];
     for( unsigned int i=0; !error && ( i<certListSize ); ++i )
@@ -197,7 +201,7 @@ namespace gloox
     if( !gnutls_x509_crt_check_hostname( cert[0], m_server.c_str() ) )
       m_certInfo.status |= CertWrongPeer;
 
-    for( unsigned int i = 0; i < certListSize; ++i )
+    for( unsigned int i = 0; i < certListSizeFull; ++i )
       gnutls_x509_crt_deinit( cert[i] );
 
     delete[] cert;
