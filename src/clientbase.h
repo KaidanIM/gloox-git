@@ -363,7 +363,7 @@ namespace gloox
       void whitespacePing();
 
       /**
-       * Sends a XMPP Ping (XEP-0199) to the given JID.
+       * Sends a XMPP Ping (@xep{0199}) to the given JID.
        * @param to Then entity to ping.
        * @param eh An EventHandler to inform about the reply.
        * @since 0.9
