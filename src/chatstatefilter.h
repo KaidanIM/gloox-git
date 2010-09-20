@@ -34,6 +34,9 @@ namespace gloox
    * You MUST annouce this capability by use of Disco (associated namespace is XMLNS_CHAT_STATES).
    * (This is also required by the protocol specification.)
    *
+   * @note You must register ChatState as a StanzaExtension by calling
+   * ClientBase::registerStanzaExtension() for notifications to work.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
