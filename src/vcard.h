@@ -39,7 +39,7 @@ namespace gloox
        * @note @c AddrTypeDom and @c AddrTypeIntl are mutually exclusive. If both are present,
        * @c AddrTypeDom takes precendence.
        * @note Also note that not all adress types are applicable everywhere. For example,
-       * @c AddrTypeIsdn does not make sense for a postal address. Check XEP-0054
+       * @c AddrTypeIsdn does not make sense for a postal address. Check @xep{0054}
        * for details.
        */
       enum AddressType

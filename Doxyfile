@@ -24,7 +24,7 @@ DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 8
-ALIASES                =
+ALIASES                = xep{1}="<a href=\"http://xmpp.org/extensions/xep-\1.html\">XEP-\1</a>"
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 BUILTIN_STL_SUPPORT    = YES

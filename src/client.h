@@ -67,9 +67,9 @@ namespace gloox
    * include:
    * @li jabber:iq:roster: by default the server-side roster is fetched and handled. Use
    * @ref rosterManager() and @ref RosterManager to interact with the Roster.
-   * @li XEP-0092 (Software Version): If no version is specified, a name of "based on gloox" with
+   * @li @xep{0092} (Software Version): If no version is specified, a name of "based on gloox" with
    * gloox's current version is announced.
-   * @li XEP-0030 (Service Discovery): All supported/available services are announced. No items are
+   * @li @xep{0030} (Service Discovery): All supported/available services are announced. No items are
    * returned.
    * @note As of gloox 0.9, by default a priority of 0 is sent along with the initial presence.
    * @note As of gloox 0.9, initial presence is automatically sent. Presence: available, Priority: 0.
@@ -78,7 +78,7 @@ namespace gloox
    *
    * @section sasl_auth SASL Authentication
    *
-   * Besides the simple, IQ-based authentication (XEP-0078), gloox supports several SASL (Simple
+   * Besides the simple, IQ-based authentication (@xep{0078}), gloox supports several SASL (Simple
    * Authentication and Security Layer, RFC 2222) authentication mechanisms.
    * @li DIGEST-MD5: This mechanism is preferred over all other mechanisms if username and password are
    * provided to the Client instance. It is secure even without TLS encryption.
