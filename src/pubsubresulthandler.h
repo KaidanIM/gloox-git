@@ -160,7 +160,7 @@ namespace gloox
          * @param jid Subscribed entity.
          * @param node ID of the node.
          * @param options Options DataForm.
-         * @param subid An optional subscription ID.
+         * @param sid An optional subscription ID.
          * @param error Subscription options retrieval Error.
          *
          * @see Manager::getSubscriptionOptions
@@ -180,7 +180,7 @@ namespace gloox
          * @param service Service hosting the queried node.
          * @param jid Subscribed entity.
          * @param node ID of the queried node.
-         * @param subid An optional subscription ID.
+         * @param sid An optional subscription ID.
          * @param error Subscription options modification Error.
          *
          * @see Manager::setSubscriptionOptions
