@@ -402,7 +402,7 @@ namespace gloox
         m_ctx = DeleteItem;
         m_node = r->findAttribute( "node" );
         m_notify = r->hasAttribute( "notify", "1" ) || r->hasAttribute( "notify", "true" );
-        const TagList& l = p->children();
+        const TagList& l = r->children();
         TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
           m_items.push_back( new Item( (*it) ) );
