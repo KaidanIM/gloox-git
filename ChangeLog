@@ -22,6 +22,7 @@ v1.0.1 -- xx yyy 2009
 - VCard: made getters const (#186) (binary-incompatible change!)
 - PubsubManager: fixed using wrong Tag (#190)
 - Search: fixed search() (#193)
+- DNS: fix socket leak if no network connection is available (#192)
 
 
 v1.0 -- 31 Oct 2009

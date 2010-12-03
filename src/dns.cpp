@@ -409,6 +409,7 @@ namespace gloox
     {
       logInstance.dbg( LogAreaClassDns, "gethostbyname() failed for " + host + "." );
       cleanup( logInstance );
+      closeSocket( fd, logInstance );
       return -ConnDnsError;
     }
 
@@ -420,6 +421,7 @@ namespace gloox
     {
       logInstance.dbg( LogAreaClassDns, "gethostbyname() returned unexpected structure." );
       cleanup( logInstance );
+      closeSocket( fd, logInstance );
       return -ConnDnsError;
     }
     else
