@@ -301,7 +301,7 @@ namespace gloox
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
-        "errno: " + util::int2string( errno );
+        "errno: " + util::int2string( errno ) + ": " + strerror( errno );
 #endif
     logInstance.dbg( LogAreaClassDns, message );
 
@@ -353,7 +353,7 @@ namespace gloox
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() )
 #else
-          "errno: " + util::int2string( errno );
+          "errno: " + util::int2string( errno ) + ": " + strerror( errno );
 #endif
           + ". Falling back to IPPROTO_TCP: " + util::int2string( IPPROTO_TCP );
       logInstance.dbg( LogAreaClassDns, message );
@@ -381,7 +381,7 @@ namespace gloox
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
-          "errno: " + util::int2string( errno );
+          "errno: " + util::int2string( errno ) + ": " + strerror( errno );
 #endif
       logInstance.dbg( LogAreaClassDns, message );
 
@@ -443,7 +443,7 @@ namespace gloox
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
         "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
-        "errno: " + util::int2string( errno );
+        "errno: " + util::int2string( errno ) + ": " + strerror( errno );
 #endif
     logInstance.dbg( LogAreaClassDns, message );
 
@@ -465,7 +465,7 @@ namespace gloox
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
-          "errno: " + util::int2string( errno );
+          "errno: " + util::int2string( errno ) + ": " + strerror( errno );
 #endif
       logInstance.dbg( LogAreaClassDns, message );
     }
