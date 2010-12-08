@@ -1073,12 +1073,9 @@ namespace gloox
             case PublishItem:
             {
               const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
-              if( ps && ps->items().size())
-              {
-                const ItemList il = ps->items();
-                rh->handleItemPublication( id, service, "",
-                                           il, error );
-              }
+              rh->handleItemPublication( id, service, "",
+                                         ps ? ps->items() : ItemList(),
+                                         error );
               break;
             }
             case DeleteItem:
