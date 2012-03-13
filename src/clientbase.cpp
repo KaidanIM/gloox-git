@@ -94,7 +94,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
+      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false ), m_customConnection( false )
   {
     init();
   }
@@ -111,7 +111,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
+      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false ), m_customConnection( false )
   {
     init();
   }
@@ -186,7 +186,7 @@ namespace gloox
       m_compression = getDefaultCompression();
 
     m_logInstance.dbg( LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION + ", connecting to "
-                                               + m_server + ":" + util::int2string( m_port ) + "..." );
+                                               + m_server + ( ( m_customConnection )?( " using a custom connection" ):( ":" + util::int2string( m_port ) ) ) + "..." );
     m_block = block;
     ConnectionError ret = m_connection->connect();
     if( ret != ConnNoError )
@@ -974,6 +974,7 @@ namespace gloox
       delete m_connection;
     }
     m_connection = cb;
+    m_customConnection = true;
   }
 
   void ClientBase::setEncryptionImpl( TLSBase* tb )
