@@ -1022,6 +1022,7 @@ namespace gloox
 
       std::string m_ntlmDomain;
       bool m_autoMessageSession;
+      bool m_customConnection;
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       CredHandle m_credHandle;
