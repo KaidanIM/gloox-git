@@ -312,6 +312,78 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       // -------
+      name = "mixed content 4";
+      data = "<tag1><tag2>foo</tag2>&apos;<tag3>bar</tag3></tag1>";
+      p->feed( data );
+      if( m_tag == 0 || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "mixed content 5";
+      data = "<tag1><tag2>foo</tag2>  <tag3>bar</tag3></tag1>";
+      p->feed( data );
+      if( m_tag == 0 || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "mixed content 6";
+      data = "<tag1><tag2>foo</tag2>something<tag3>bar</tag3></tag1>";
+      p->feed( data );
+      if( m_tag == 0 || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "mixed content 7";
+      data = "<tag1><tag2>foo</tag2>something<tag3>bar</tag3>somethingelse<tag4>bar</tag4></tag1>";
+      p->feed( data );
+      if( m_tag == 0 || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "mixed content 8";
+      data = "<tag1><tag2>foo</tag2>some&apos;thing<tag3>bar</tag3>something&amp;else<tag4>bar</tag4></tag1>";
+      p->feed( data );
+      if( m_tag == 0 || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "mixed content 9";
+      data = "<tag1><tag2>foo</tag2>&apos;thing<tag3>bar</tag3>something&amp;else<tag4>bar</tag4>&quot;<tag5>bar</tag5></tag1>";
+      p->feed( data );
+      if( m_tag == 0 || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
       name = "apos inside quotes in attrib value";
       data = "<tag1 name=\"foo'bar\">cdata3</tag1>";
       p->feed( data );
