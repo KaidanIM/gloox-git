@@ -80,7 +80,7 @@ namespace gloox
     if( !m_username.empty() )
       m_bare = m_username + '@';
     else
-      m_bare = EmptyString;
+      m_bare = ""/*EmptyString*/;
     m_bare += m_server;
   }
 
