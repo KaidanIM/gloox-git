@@ -163,7 +163,7 @@ namespace gloox
   bool InBandBytestream::handleIq( const IQ& iq ) // data or open request, always 'set'
   {
     const IBB* i = iq.findExtension<IBB>( ExtIBB );
-    if( !i || !m_handler || iq.subtype() != IQ::Set )
+    if( !i || !m_handler || iq.subtype() != IQ::Set || i->sid() != this->sid() )
       return false;
 
     if( !m_open )
