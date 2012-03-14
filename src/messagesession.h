@@ -163,7 +163,8 @@ namespace gloox
        * JID that has no resource. This 'upgrade' will only happen once.
        * @param types ORed list of Message::MessageType values this MessageSession shall receive.
        * Defaults to 0 which means any type is received.
-       * @param honorTID Indicates whether thread IDs should be honored when matching incoming messages to MessageSessions. The default is usually fine.
+       * @param honorTID Indicates whether thread IDs should be honored when matching incoming messages to MessageSessions.
+       * The default (@b true) is usually fine.
        */
       MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade = true, int types = 0, bool honorTID = true );
 
@@ -265,7 +266,9 @@ namespace gloox
        * This function resets the session's target JID to its bare form such that
        * subsequently sent messages will be sent to that bare JID. The server will
        * determine the best resource to deliver to. Useful if the target
-       * resource changed presence to e.g. away or offline.
+       * resource changed presence to e.g. away or offline. This does not automatically
+       * set the wantResourceTracking option. If you need escalation, be sure to set
+       * this option in the constructor.
        */
       void resetResource();
 
@@ -298,7 +301,7 @@ namespace gloox
 
       std::string m_thread;
       int m_types;
-      bool m_wantUpgrade;
+      bool m_wantResourceTracking;
       bool m_hadMessages;
       bool m_honorThreadID;
 
