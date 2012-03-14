@@ -127,7 +127,7 @@ namespace gloox
     }
     xml += m_name;
     xml += "='";
-    xml += util::escape( m_value );
+    util::appendEscaped( xml, m_value );
     xml += '\'';
 
     return xml;
@@ -333,7 +333,7 @@ namespace gloox
             xml += (*it_n)->tag->xml();
             break;
           case TypeString:
-            xml += util::escape( *((*it_n)->str) );
+            util::appendEscaped( xml, *((*it_n)->str) );
             break;
         }
       }

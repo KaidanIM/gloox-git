@@ -2,6 +2,8 @@
 #include "../../iq.h"
 #include "../../iqhandler.h"
 #include "../../jid.h"
+#include "../../mutex.h"
+#include "../../mutexguard.h"
 
 #include <stdio.h>
 #include <locale.h>
@@ -70,19 +72,19 @@ class AdhocTest : public ClientBase, public AdhocCommandProvider, public AdhocHa
       if( m_test == 5 && command.node() == "foocmd" )
         m_result = true;
     }
-    virtual void handleAdhocSupport( const JID& /*remote*/, bool support )
+    virtual void handleAdhocSupport( const JID& /*remote*/, bool support, int /*context*/ )
     {
       if( m_test == 1 || m_test == 2 )
         m_result = support;
     }
-    virtual void handleAdhocCommands( const JID& /*remote*/, const StringMap& commands )
+    virtual void handleAdhocCommands( const JID& /*remote*/, const StringMap& commands, int /*context*/ )
     {
       if( m_test == 3 && commands.find( "node" ) != commands.end()
           && (*(commands.find( "node" ))).second == "name" )
         m_result = true;
     }
-    virtual void handleAdhocError( const JID& /*remote*/, const Error* /*error*/ ) {}
-    virtual void handleAdhocExecutionResult( const JID& /*remote*/, const Adhoc::Command& /*command*/ )
+    virtual void handleAdhocError( const JID& /*remote*/, const Error* /*error*/, int /*context*/ ) {}
+    virtual void handleAdhocExecutionResult( const JID& /*remote*/, const Adhoc::Command& /*command*/, int /*context*/ )
     {
       if( m_test == 4 )
         m_result = true;

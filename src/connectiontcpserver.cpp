@@ -14,6 +14,8 @@
 
 #include "gloox.h"
 
+#include "config.h"
+
 #include "connectiontcpserver.h"
 #include "connectiontcpclient.h"
 #include "connectionhandler.h"
@@ -86,6 +88,22 @@ namespace gloox
 
     if( m_socket < 0 )
       return ConnIoError;
+
+#ifdef HAVE_SETSOCKOPT
+    int buf = 0;
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+    int bufbytes = sizeof( int );
+#else
+    socklen_t bufbytes = sizeof( int );
+#endif
+    if( ( getsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, (char*)&buf, &bufbytes ) != -1 ) &&
+        ( m_bufsize > buf ) )
+      setsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, (char*)&m_bufsize, sizeof( m_bufsize ) );
+
+    if( ( getsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, (char*)&buf, &bufbytes ) != -1 ) &&
+        ( m_bufsize > buf ) )
+      setsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, (char*)&m_bufsize, sizeof( m_bufsize ) );
+#endif
 
     struct sockaddr_in local;
     local.sin_family = AF_INET;

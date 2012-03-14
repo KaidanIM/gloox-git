@@ -18,5 +18,6 @@ discoinfo_test_LDADD =../../connectiontcpclient.o ../../connectiontcpbase.o \
 			../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
 			../../dataformfield.o ../../eventdispatcher.o \
-			../../softwareversion.o
+			../../softwareversion.o \
+			../../atomicrefcount.o
 discoinfo_test_CFLAGS = $(CPPFLAGS)

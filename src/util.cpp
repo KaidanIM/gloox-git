@@ -59,6 +59,8 @@ namespace gloox
 
     static const std::string escape_seqs[] = { "amp;", "lt;", "gt;", "apos;", "quot;" };
 
+    static const std::string escape_seqs_full[] = { "&amp;", "&lt;", "&gt;", "&apos;", "&quot;" };
+
     static const unsigned escape_size = 5;
 
     const std::string escape( std::string what )
@@ -79,23 +81,86 @@ namespace gloox
       return what;
     }
 
+    void appendEscaped( std::string& target, const std::string& data )
+    {
+      size_t rangeStart = 0, rangeCount = 0;
+      size_t length = data.length();
+      const char* dataPtr = data.data();
+      for( size_t val, i = 0; i < length; ++i )
+      {
+        const char current = dataPtr[i];
+        for( val = 0; val < escape_size; ++val )
+        {
+          if( current == escape_chars[val] )
+          {
+            // We have a character that needs to be escaped.
+            if( rangeCount > 0 )
+            {
+              // We have a range of the data that needs to be appended
+              // before we escape the current character.
+              // NOTE: Use "data" (std::string) here not dataPtr (const char*).
+              //  Both have the same content, but there isn't
+              //  an append override that takes const char*, pos, n
+              //  (so a temporary std::string would be created)
+              target.append( data, rangeStart, rangeCount );
+            }
+            target.append( escape_seqs_full[val] );
+            rangeStart = i + 1;
+            rangeCount = 0;
+            break;
+          }
+        }
+
+        if( rangeStart <= i )
+        {
+          // current did not need to be escaped
+          ++rangeCount;
+        }
+      }
+
+      if( rangeCount > 0 )
+      {
+        // Append the remaining pending range of data that does
+        // not need to be escaped.
+        // NOTE: See previous comment on using data not dataPtr for append.
+        target.append( data, rangeStart, rangeCount );
+      }
+    }
+
     bool checkValidXMLChars( const std::string& data )
     {
       if( data.empty() )
         return true;
 
-      std::string::const_iterator it = data.begin();
-      for( ; it != data.end()
-             && ( (unsigned char)(*it) == 0x09
-                  || (unsigned char)(*it) == 0x0a
-                  || (unsigned char)(*it) == 0x0d
-                  || ( (unsigned char)(*it) >= 0x20
-                     && (unsigned char)(*it) != 0xc0
-                     && (unsigned char)(*it) != 0xc1
-                     && (unsigned char)(*it) < 0xf5 ) ); ++it )
-        ;
+      const char* dataPtr = data.data();
+      const char* end = dataPtr + data.length();
+      for( ; dataPtr != end; ++dataPtr )
+      {
+        unsigned char current = (unsigned char) *dataPtr;
+        if( current < 0x20 )
+        {
+          if( current == 0x09
+              || current == 0x0a
+              || current == 0x0d )
+            // Valid character
+            continue;
+          else
+            // Invalid character
+            break;
+        }
+        else if( current >= 0xf5 )
+          // Invalid character
+          break;
+        else if( current == 0xc0
+                 || current == 0xc1 )
+          // Invalid character
+          break;
+        else
+          // Valid character
+          continue;
+      }
 
-      return ( it == data.end() );
+      return ( dataPtr == end );
     }
 
     void replaceAll( std::string& target, const std::string& find, const std::string& replace )

@@ -20,5 +20,6 @@ rostermanagerquery_test_LDADD = ../../rostermanager.o ../../connectiontcpclient.
 			../../capabilities.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
 			../../dataformfield.o ../../eventdispatcher.o\
-			../../softwareversion.o
+			../../softwareversion.o \
+			../../atomicrefcount.o
 rostermanagerquery_test_CFLAGS = $(CPPFLAGS)

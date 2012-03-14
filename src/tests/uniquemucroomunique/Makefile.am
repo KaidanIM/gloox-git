@@ -18,5 +18,6 @@ uniquemucroomunique_test_LDADD =../../connectiontcpclient.o ../../connectiontcpb
 			../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
 			../../dataformfield.o ../../mucroom.o ../../delayeddelivery.o ../../mucmessagesession.o \
-			../../instantmucroom.o ../../softwareversion.o
+			../../instantmucroom.o ../../softwareversion.o \
+			../../atomicrefcount.o
 uniquemucroomunique_test_CFLAGS = $(CPPFLAGS)

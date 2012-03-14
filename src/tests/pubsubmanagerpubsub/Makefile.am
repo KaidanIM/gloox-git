@@ -18,6 +18,7 @@ pubsubmanagerpubsub_test_LDADD =../../connectiontcpclient.o ../../connectiontcpb
 			../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
 			../../dataformfield.o ../../delayeddelivery.o ../../pubsubitem.o ../../shim.o \
-			../../softwareversion.o 
+			../../softwareversion.o \
+			../../atomicrefcount.o
 
 pubsubmanagerpubsub_test_CFLAGS = $(CPPFLAGS)

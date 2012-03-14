@@ -18,5 +18,6 @@ mucroommuc_test_LDADD =../../connectiontcpclient.o ../../connectiontcpbase.o \
                         ../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../dataform.o \
                         ../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
                         ../../dataformfield.o ../../mucroom.o ../../delayeddelivery.o ../../mucmessagesession.o \
-                        ../../softwareversion.o
+                        ../../softwareversion.o \
+                        ../../atomicrefcount.o
 mucroommuc_test_CFLAGS = $(CPPFLAGS)
