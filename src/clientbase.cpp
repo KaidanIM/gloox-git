@@ -94,7 +94,8 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false ), m_customConnection( false )
+      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false ), m_customConnection( false ),
+      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long)&m_nextId ) & 0xFFFF ) )
   {
     init();
   }
@@ -111,7 +112,8 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false ), m_customConnection( false )
+      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false ), m_customConnection( false ),
+      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long)&m_nextId ) & 0xFFFF ) )
   {
     init();
   }
@@ -141,9 +143,9 @@ namespace gloox
     m_iqIDHandlers.clear();
     m_iqHandlerMapMutex.unlock();
 
-//     m_iqExtHandlerMapMutex.lock();
+    m_iqExtHandlerMapMutex.lock();
     m_iqExtHandlers.clear();
-//     m_iqExtHandlerMapMutex.unlock();
+    m_iqExtHandlerMapMutex.unlock();
 
     delete m_connection;
     delete m_encryption;
@@ -941,9 +943,8 @@ namespace gloox
 
   const std::string ClientBase::getID()
   {
-    static unsigned int uniqueBaseID = (unsigned int)time( 0 );
     char r[21+1];
-    sprintf( r, "uid:%08x:%08x", uniqueBaseID, rand() );
+    sprintf( r, "uid:%08x:%08x", m_uniqueBaseId, m_nextId.increment() );
     std::string ret( r, 21 );
     return ret;
   }
@@ -1150,7 +1151,7 @@ namespace gloox
     if( !ih )
       return;
 
-//     util::MutexGuard m( m_iqExtHandlerMapMutex );
+    util::MutexGuard m( m_iqExtHandlerMapMutex );
     typedef IqHandlerMap::const_iterator IQci;
     std::pair<IQci, IQci> g = m_iqExtHandlers.equal_range( exttype );
     for( IQci it = g.first; it != g.second; ++it )
@@ -1167,7 +1168,7 @@ namespace gloox
     if( !ih )
       return;
 
-//     util::MutexGuard m( m_iqExtHandlerMapMutex );
+    util::MutexGuard m( m_iqExtHandlerMapMutex );
     typedef IqHandlerMap::iterator IQi;
     std::pair<IQi, IQi> g = m_iqExtHandlers.equal_range( exttype );
     IQi it2;
@@ -1407,7 +1408,7 @@ namespace gloox
 //     }
 //     delete tag;
 
-//     m_iqExtHandlerMapMutex.lock();
+    m_iqExtHandlerMapMutex.lock();
     typedef IqHandlerMap::const_iterator IQci;
     const StanzaExtensionList& sel = iq.extensions();
     StanzaExtensionList::const_iterator itse = sel.begin();
@@ -1420,7 +1421,7 @@ namespace gloox
           handled = true;
       }
     }
-//     m_iqExtHandlerMapMutex.unlock();
+    m_iqExtHandlerMapMutex.unlock();
 
     if( !handled && ( iq.subtype() == IQ::Get || iq.subtype() == IQ::Set ) )
     {

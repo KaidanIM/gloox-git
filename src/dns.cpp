@@ -168,7 +168,10 @@ namespace gloox
     DNS_STATUS status = DnsQuery_UTF8( dname.c_str(), DNS_TYPE_SRV, DNS_QUERY_STANDARD, NULL, &pRecord, NULL );
     if( status == ERROR_SUCCESS )
     {
-      DNS_RECORD* pRec = pRecord;
+      // NOTE: DnsQuery_UTF8 and DnsQuery_A really should have been defined with
+      // PDNS_RECORDA instead of PDNS_RECORD, since that's what it is (even with _UNICODE defined).
+      // We'll correct for that mistake with a cast.
+      DNS_RECORDA* pRec = (DNS_RECORDA*)pRecord;
       do
       {
         if( pRec->wType == DNS_TYPE_SRV )
@@ -391,8 +394,9 @@ namespace gloox
 
 #ifdef HAVE_SETSOCKOPT
     int timeout = 5000;
+    int reuseaddr = 1;
     setsockopt( fd, SOL_SOCKET, SO_SNDTIMEO, (char*)&timeout, sizeof( timeout ) );
-    setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, (char*)&timeout, sizeof( timeout ) );
+    setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, (char*)&reuseaddr, sizeof( reuseaddr ) );
 #endif
 
     return (int)fd;

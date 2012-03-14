@@ -21,6 +21,7 @@
 #include "discohandler.h"
 #include "iqhandler.h"
 #include "stanzaextension.h"
+#include "mutex.h"
 
 #include <string>
 #include <list>
@@ -372,16 +373,18 @@ namespace gloox
        * This function queries the given remote entity for Adhoc Commands support.
        * @param remote The remote entity's JID.
        * @param ah The object handling the result of this request.
+       * @param context A user defined context.
        */
-      void checkSupport( const JID& remote, AdhocHandler* ah );
+      void checkSupport( const JID& remote, AdhocHandler* ah, int context = 0 );
 
       /**
        * Retrieves a list of commands from the remote entity. You should check whether the remote
        * entity actually supports Adhoc Commands by means of checkSupport().
        * @param remote The remote entity's JID.
        * @param ah The object handling the result of this request.
+       * @param context A user defined context.
        */
-      void getCommands( const JID& remote, AdhocHandler* ah );
+      void getCommands( const JID& remote, AdhocHandler* ah, int context = 0 );
 
       /**
        * Executes or continues the given command on the given remote entity.
@@ -392,8 +395,9 @@ namespace gloox
        * @param remote The remote entity's JID.
        * @param command The command to execute.
        * @param ah The object handling the result of this request.
+       * @param context A user defined context.
        */
-      void execute( const JID& remote, const Adhoc::Command* command, AdhocHandler* ah );
+      void execute( const JID& remote, const Adhoc::Command* command, AdhocHandler* ah, int context = 0 );
 
       /**
        * Use this function to respond to an execution request submitted by means
@@ -412,7 +416,7 @@ namespace gloox
       /**
        * Using this function, you can register a AdhocCommandProvider -derived object as
        * handler for a specific Ad-hoc Command as defined in @xep{0050}.
-       * @param acp The obejct to register as handler for the specified command.
+       * @param acp The object to register as handler for the specified command.
        * @param command The node name of the command. Will be announced in disco#items.
        * @param name The natural-language name of the command. Will be announced in disco#items.
        */
@@ -471,9 +475,11 @@ namespace gloox
         AdhocContext context;
         std::string session;
         AdhocHandler* ah;
+        int handlerContext;
       };
       typedef std::map<std::string, TrackStruct> AdhocTrackMap;
       AdhocTrackMap m_adhocTrackMap;
+      util::Mutex m_adhocTrackMapMutex;
 
       ClientBase* m_parent;
 

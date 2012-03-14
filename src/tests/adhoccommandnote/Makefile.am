@@ -17,5 +17,6 @@ adhoccommandnote_test_LDADD = ../../adhoc.o ../../connectiontcpclient.o ../../co
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
 			../../sha.o ../../error.o ../../clientbase.o ../../jid.o \
 			../../dataform.o ../../dataformfieldcontainer.o ../../dataformreported.o \
-			../../dataformitem.o ../../dataformfield.o ../../eventdispatcher.o ../../softwareversion.o
+			../../dataformitem.o ../../dataformfield.o ../../eventdispatcher.o ../../softwareversion.o \
+			../../atomicrefcount.o
 adhoccommandnote_test_CFLAGS = $(CPPFLAGS)

@@ -20,6 +20,7 @@
 #include "clientbase.h"
 #include "dataform.h"
 #include "util.h"
+#include "mutexguard.h"
 
 namespace gloox
 {
@@ -227,6 +228,10 @@ namespace gloox
 
   Adhoc::~Adhoc()
   {
+    m_adhocTrackMapMutex.lock();
+    m_adhocTrackMap.clear();
+    m_adhocTrackMapMutex.unlock();
+
     if( !m_parent || !m_parent->disco() )
       return;
 
@@ -306,27 +311,32 @@ namespace gloox
     if( context != ExecuteAdhocCommand )
       return;
 
+    m_adhocTrackMapMutex.lock();
     AdhocTrackMap::iterator it = m_adhocTrackMap.find( iq.id() );
-    if( it == m_adhocTrackMap.end() || (*it).second.context != context
+    bool haveIdHandler = ( it != m_adhocTrackMap.end() );
+    m_adhocTrackMapMutex.unlock();
+    if( !haveIdHandler || (*it).second.context != context
         || (*it).second.remote != iq.from() )
       return;
 
     switch( iq.subtype() )
     {
       case IQ::Error:
-        (*it).second.ah->handleAdhocError( iq.from(), iq.error() );
+        (*it).second.ah->handleAdhocError( iq.from(), iq.error(), (*it).second.handlerContext );
         break;
       case IQ::Result:
       {
         const Adhoc::Command* ac = iq.findExtension<Adhoc::Command>( ExtAdhocCommand );
         if( ac )
-          (*it).second.ah->handleAdhocExecutionResult( iq.from(), *ac );
+          (*it).second.ah->handleAdhocExecutionResult( iq.from(), *ac, (*it).second.handlerContext );
         break;
       }
       default:
         break;
     }
+    m_adhocTrackMapMutex.lock();
     m_adhocTrackMap.erase( it );
+    m_adhocTrackMapMutex.unlock();
   }
 
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
@@ -345,6 +355,8 @@ namespace gloox
     if( context != CheckAdhocSupport )
       return;
 
+    util::MutexGuard m( m_adhocTrackMapMutex );
+
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end() && (*it).second.context != context
                                        && (*it).second.remote  != from; ++it )
@@ -352,7 +364,7 @@ namespace gloox
     if( it == m_adhocTrackMap.end() )
       return;
 
-    (*it).second.ah->handleAdhocSupport( from, info.hasFeature( XMLNS_ADHOC_COMMANDS ) );
+    (*it).second.ah->handleAdhocSupport( from, info.hasFeature( XMLNS_ADHOC_COMMANDS ), (*it).second.handlerContext );
     m_adhocTrackMap.erase( it );
   }
 
@@ -360,6 +372,8 @@ namespace gloox
   {
     if( context != FetchAdhocCommands )
       return;
+
+    util::MutexGuard m( m_adhocTrackMapMutex );
 
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
@@ -373,7 +387,7 @@ namespace gloox
         {
           commands[(*it2)->node()] = (*it2)->name();
         }
-        (*it).second.ah->handleAdhocCommands( from, commands );
+        (*it).second.ah->handleAdhocCommands( from, commands, (*it).second.handlerContext );
 
         m_adhocTrackMap.erase( it );
         break;
@@ -383,19 +397,21 @@ namespace gloox
 
   void Adhoc::handleDiscoError( const JID& from, const Error* error, int context )
   {
+    util::MutexGuard m( m_adhocTrackMapMutex );
+
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
     {
       if( (*it).second.context == context && (*it).second.remote == from )
       {
-        (*it).second.ah->handleAdhocError( from, error );
+        (*it).second.ah->handleAdhocError( from, error, (*it).second.handlerContext );
 
         m_adhocTrackMap.erase( it );
       }
     }
   }
 
-  void Adhoc::checkSupport( const JID& remote, AdhocHandler* ah )
+  void Adhoc::checkSupport( const JID& remote, AdhocHandler* ah, int context )
   {
     if( !remote || !ah || !m_parent || !m_parent->disco() )
       return;
@@ -404,12 +420,15 @@ namespace gloox
     track.remote = remote;
     track.context = CheckAdhocSupport;
     track.ah = ah;
+    track.handlerContext = context;
     const std::string& id = m_parent->getID();
+    m_adhocTrackMapMutex.lock();
     m_adhocTrackMap[id] = track;
+    m_adhocTrackMapMutex.unlock();
     m_parent->disco()->getDiscoInfo( remote, EmptyString, this, CheckAdhocSupport, id );
   }
 
-  void Adhoc::getCommands( const JID& remote, AdhocHandler* ah )
+  void Adhoc::getCommands( const JID& remote, AdhocHandler* ah, int context )
   {
     if( !remote || !ah || !m_parent || !m_parent->disco() )
       return;
@@ -418,12 +437,15 @@ namespace gloox
     track.remote = remote;
     track.context = FetchAdhocCommands;
     track.ah = ah;
+    track.handlerContext = context;
     const std::string& id = m_parent->getID();
+    m_adhocTrackMapMutex.lock();
     m_adhocTrackMap[id] = track;
+    m_adhocTrackMapMutex.unlock();
     m_parent->disco()->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands, id );
   }
 
-  void Adhoc::execute( const JID& remote, const Adhoc::Command* command, AdhocHandler* ah )
+  void Adhoc::execute( const JID& remote, const Adhoc::Command* command, AdhocHandler* ah, int context )
   {
     if( !remote || !command || !m_parent || !ah )
       return;
@@ -437,7 +459,10 @@ namespace gloox
     track.context = ExecuteAdhocCommand;
     track.session = command->sessionID();
     track.ah = ah;
+    track.handlerContext = context;
+    m_adhocTrackMapMutex.lock();
     m_adhocTrackMap[id] = track;
+    m_adhocTrackMapMutex.unlock();
 
     m_parent->send( iq, this, ExecuteAdhocCommand );
   }

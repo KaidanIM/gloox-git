@@ -44,6 +44,29 @@ for libpath in $split_libs ; do
     LDFLAGS="-L$libpath $LDFLAGS"
 done
 
+dnl Check for GCC atomic builtins
+AC_MSG_CHECKING([whether GCC atomic builtins are available])
+echo 'int main(int argc, char* argv[]) { int i; __sync_add_and_fetch(&i, 1); __sync_sub_and_fetch(&i, 1); return 0; } ' > check_atomicbuiltins.c
+if test -z "`${CC} check_atomicbuiltins.c -o check_atomicbuiltins 2>&1`" ; then
+	HAVE_GCC_ATOMIC_BUILTINS=yes
+	AC_DEFINE(HAVE_GCC_ATOMIC_BUILTINS, 1, [Define to 1 if GCC atomic builtins are available])
+	AC_MSG_RESULT([yes])
+	if test $cross_compiling == "yes"; then
+		# Some platforms don't seem to be fully happy for libraries using GCC atomic builtins
+		#  unless -lgcc and -lgcc_s are explicitly included.
+		# (Errors like
+		# ld: hidden symbol `__sync_add_and_fetch_4' in .../libgcc.a(linux-atomic.o) is referenced by DSO
+		# ld: final link failed: Nonrepresentable section on output)
+		LDFLAGS="$LDFLAGS -lgcc -lgcc_s"
+	fi
+else
+	HAVE_GCC_ATOMIC_BUILTINS=no
+	AC_MSG_RESULT([no])
+fi
+rm -f check_atomicbuiltins.*
+AC_SUBST(HAVE_GCC_ATOMIC_BUILTINS,$HAVE_GCC_ATOMIC_BUILTINS)
+
+
 dnl Checks for libraries.
 
 dnl Libidn

@@ -28,6 +28,7 @@
 #include "compressiondatahandler.h"
 #include "connectiondatahandler.h"
 #include "parser.h"
+#include "atomicrefcount.h"
 
 #include <string>
 #include <list>
@@ -862,7 +863,7 @@ namespace gloox
     public:
 #endif
       /**
-       * @brief This is an implementation of an XMPP Ping (XEP-199).
+       * @brief This is an implementation of an XMPP Ping (@xep{199}).
        *
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
@@ -1001,9 +1002,7 @@ namespace gloox
       MessageSessionHandler  * m_messageSessionHandlerNormal;
 
       util::Mutex m_iqHandlerMapMutex;
-      util::Mutex m_iqExtHandlerMapMutex; // TODO Enable this mutex again. However
-                                          // it must be possible to register new IQ handlers
-                                          // while an IQ is being handled!
+      util::Mutex m_iqExtHandlerMapMutex;
 
       Parser m_parser;
       LogSink m_logInstance;
@@ -1023,6 +1022,9 @@ namespace gloox
       std::string m_ntlmDomain;
       bool m_autoMessageSession;
       bool m_customConnection;
+
+      int m_uniqueBaseId;
+      util::AtomicRefCount m_nextId;
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       CredHandle m_credHandle;

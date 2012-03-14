@@ -11,5 +11,5 @@ adhoc_test_LDADD = ../../tag.o ../../stanza.o ../../gloox.o ../../iq.o ../../uti
 			../../error.o ../../jid.o ../../prep.o \
 			../../dataform.o ../../dataformfieldcontainer.o ../../dataformreported.o \
 			../../dataformitem.o ../../dataformfield.o \
-			../../softwareversion.o
+			../../softwareversion.o ../../mutex.o
 adhoc_test_CFLAGS = $(CPPFLAGS)

@@ -190,10 +190,23 @@ namespace gloox
 
     /**
      * Does some fancy escaping. (& --> &amp;amp;, etc).
+     * @note If you intend to append the result of escape
+     *  to another string, use the faster appendEscaped.
      * @param what A string to escape.
      * @return The escaped string.
      */
     GLOOX_API const std::string escape( std::string what );
+
+    /**
+     * Append the data to the target, doing any necessary escaping
+     * along the way (& --> &amp;amp;, etc).
+     * This method is faster than calling "escape" and appending the
+     * return value, especially for source strings that don't need
+     * any escaping.
+     * @param target The string to append the data to.
+     * @param data The string to append that might need escaping.
+     */
+    GLOOX_API void appendEscaped( std::string& target, const std::string& data );
 
     /**
      * Checks whether the given input is valid UTF-8.
