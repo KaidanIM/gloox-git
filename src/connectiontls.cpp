@@ -14,6 +14,8 @@
 #include "connectiontls.h"
 #include "tlsdefault.h"
 
+#include <cstdio>
+
 namespace gloox
 {
 
@@ -198,6 +200,9 @@ namespace gloox
       m_log.log( LogLevelWarning, LogAreaClassConnectionTLS, "TLS handshake failed" );
       if( m_tlsHandler )
         m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
+      cleanup();
+      if( m_handler )
+        m_handler->handleDisconnect( this, ConnTlsFailed );
     }
   }
 
