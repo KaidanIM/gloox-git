@@ -61,7 +61,7 @@ namespace gloox
       /**
        * Enables/disables initialization of the underlying TLS library. By default,
        * initialization is performed. You may want to switch it off if the TLS library
-       * is used elsewhere in your applicationas well and you have no control over the
+       * is used elsewhere in your application as well and you have no control over the
        * initialization.
        * @param init Whether or not to intialize the underlying TLS library.
        */
