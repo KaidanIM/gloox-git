@@ -54,7 +54,7 @@ namespace gloox
       /**
        * Disconnects from the server.
        */
-      void disconnect() { ClientBase::disconnect( ConnUserDisconnected ); }
+      virtual void disconnect() { ClientBase::disconnect( ConnUserDisconnected ); }
 
     protected:
       // reimplemented from ClientBase
