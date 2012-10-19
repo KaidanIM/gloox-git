@@ -71,7 +71,7 @@ dnl Checks for libraries.
 
 dnl Libidn
 AC_ARG_WITH(libidn, AC_HELP_STRING([--with-libidn=[DIR]],
-      [Support IDN (needs GNU Libidn)]),
+                                   [Support IDN (needs GNU Libidn)]),
       libidn=$withval, libidn=yes)
 if test "$libidn" != "no"; then
   if test "$libidn" != "yes"; then
@@ -125,7 +125,7 @@ fi
 dnl GnuTLS
 if test "$ssl" = "no"; then
   AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
-        [Support Stream Encryption (needs GnuTLS)]),
+                                     [Support Stream Encryption (needs GnuTLS)]),
         gnutls=$withval, gnutls=yes)
   if test "$gnutls" != "no"; then
     if test "$gnutls" != "yes"; then
@@ -150,7 +150,7 @@ fi
 dnl OpenSSL
 if test "$ssl" = "no"; then
   AC_ARG_WITH(openssl, AC_HELP_STRING([--with-openssl=[DIR]],
-        [Support Stream Encryption (needs OpenSSL)]),
+                                      [Support Stream Encryption (needs OpenSSL)]),
         openssl=$withval, openssl=yes)
   if test "$openssl" != "no"; then
     if test "$openssl" != "yes"; then
@@ -175,7 +175,7 @@ fi
 
 dnl Zlib
 AC_ARG_WITH(zlib, AC_HELP_STRING([--with-zlib=[DIR]],
-      [Support Stream Compression (needs Zlib)]),
+                                 [Support Stream Compression (needs Zlib)]),
       zlib=$withval, zlib=yes)
 if test "$zlib" != "no"; then
   if test "$zlib" != "yes"; then
@@ -300,7 +300,8 @@ fi
 dnl Debug
 debug="no"
 AC_ARG_ENABLE( debug,
-               [  --enable-debug          turn on debugging [default=no]],
+               [AC_HELP_STRING([--enable-debug],
+                               [turn on debugging [default=no]])],
                [debug="yes"] )
 if test "x$debug" = "xyes"; then
       CPPFLAGS="$CPPFLAGS -g3 -fno-inline -DDEBUG"
@@ -311,7 +312,8 @@ AC_MSG_RESULT($debug)
 dnl getaddrinfo
 getaddrinfo="no"
 AC_ARG_ENABLE( getaddrinfo,
-               [  --enable-getaddrinfo    use getaddrinfo for dns lookups [default=no]],
+               [AC_HELP_STRING([--enable-getaddrinfo],
+                               [use getaddrinfo for dns lookups [default=no]])],
                [getaddrinfo="yes"] )
 if test "x$getaddrinfo" = "xyes"; then
     AC_CHECK_FUNCS(getaddrinfo,,getaddrinfo="no")
@@ -327,6 +329,25 @@ AC_CHECK_FUNCS(setsockopt,,[AC_CHECK_LIB(socket,setsockopt)])
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE
+
+dnl Want mdns support?
+AC_ARG_ENABLE([mdns],
+              [AC_HELP_STRING([--enable-mdns],
+                              [use mdns [default=no]])],
+              [enable_mdns=yes],
+              [enable_mdns=no])
+if test "$enable_mdns" = yes; then
+  AC_DEFINE([HAVE_MDNS], [], [enable mdns support])
+  AC_CHECK_HEADER(dns_sd.h,
+                  AC_CHECK_LIB(dns_sd, DNSServiceCreateConnection,
+                               [LIBS="${LIBS} -ldns_sd"], enable_mdns=no),
+                  enable_mdns=no)
+else
+  MAYBE_LIB_mdns=
+fi
+AC_SUBST(MAYBE_LIB_mdns)
+AC_MSG_CHECKING([if mDNS support should be built])
+AC_MSG_RESULT($enable_mdns)
 
 dnl build tests?
 want_tests=yes
