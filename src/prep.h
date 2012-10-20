@@ -42,7 +42,7 @@ namespace gloox
      * @param node The string to apply the profile to.
      * @param out The prepped string. In case of an error this string is not touched.
      * If LibIDN is not available the string is returned unchanged.
-     * @return @b True if prepping was successful, @b false otherwise or of LibIDN
+     * @return @b True if prepping was successful, @b false otherwise or if LibIDN
      * is not available.
      */
     bool nodeprep( const std::string& node, std::string& out );
@@ -52,7 +52,7 @@ namespace gloox
      * @param domain The string to apply the profile to.
      * @param out The prepped string. In case of an error this string is not touched.
      * If LibIDN is not available the string is returned unchanged.
-     * @return @b True if prepping was successful, @b false otherwise or of LibIDN
+     * @return @b True if prepping was successful, @b false otherwise or if LibIDN
      * is not available.
      */
     bool nameprep( const std::string& domain, std::string& out );
@@ -62,7 +62,7 @@ namespace gloox
      * @param resource The string to apply the profile to.
      * @param out The prepped string. In case of an error this string is not touched.
      * If LibIDN is not available the string is returned unchanged.
-     * @return @b True if prepping was successful, @b false otherwise or of LibIDN
+     * @return @b True if prepping was successful, @b false otherwise or if LibIDN
      * is not available.
      */
     bool resourceprep( const std::string& resource, std::string& out );
@@ -73,7 +73,7 @@ namespace gloox
      * @param domain The string to convert.
      * @param out The converted string. In case of an error this string is not touched.
      * If LibIDN is not available the string is returned unchanged.
-     * @return @b True if prepping was successful, @b false otherwise or of LibIDN
+     * @return @b True if prepping was successful, @b false otherwise or if LibIDN
      * is not available.
      */
     bool idna( const std::string& domain, std::string& out );
