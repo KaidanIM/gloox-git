@@ -144,6 +144,12 @@ namespace gloox
   void SOCKS5Bytestream::handleConnect( const ConnectionBase* /*connection*/ )
   {
     m_manager->acknowledgeStreamHost( true, m_proxy, m_sid );
+
+    if( !m_open )
+    {
+      m_open = true;
+      m_handler->handleBytestreamOpen( this );
+    }
   }
 
   void SOCKS5Bytestream::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError /*reason*/ )

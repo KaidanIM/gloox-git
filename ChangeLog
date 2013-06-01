@@ -25,6 +25,9 @@ v1.0.1 -- xx yyy 2009
 - Search: fixed search() (#193)
 - DNS: fix socket leak if no network connection is available (#192)
 - PubsubManager: unconditionally call handleItemPublication() (#194)
+- SOCKS5Bytestream: Don't wait for incoming data, notify about open stream immediately upon
+    connection (patch by Erik Horemans)
+
 
 
 v1.0 -- 31 Oct 2009
