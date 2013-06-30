@@ -5,12 +5,8 @@
  * It lists the API changes that were made and how to change your code to achieve the same
  * (or better) functionality as with the earlier version.
  *
- * @section contents Contents
- * @ref upgrading_09_10 <br>
- * @ref deprecated_10 <br>
- * @ref removed_10 <br>
- * @ref semantics_10 <br>
- *
+ * @tableofcontents
+ * 
  * @section upgrading_09_10 1. Upgrading from 0.9.x to 1.0
  *
  * Besides the changes detailed below, a major change is that the Stanza class now is an abstract
@@ -320,4 +316,9 @@
  * Further, the function has been renamed to
  * @link gloox::SIProfileFT::declineFT() declineFT() @endlink.
  *
+ * @section upgrading_10_101 2. Upgrading from to 1.0 to 1.0.1
+ * 
+ * NB: 1.0.1 is not binary-compatible to 1.0. The reason for that is the addition of support for XEP-0174, which made it
+ * necessary to add a parameter to @link gloox::ClientBase::handleStartNode( const Tag* ) ClientBase::handleStartNode() @endlink.
+ * 
  */

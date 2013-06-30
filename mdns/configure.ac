@@ -63,7 +63,7 @@ else
 	HAVE_GCC_ATOMIC_BUILTINS=no
 	AC_MSG_RESULT([no])
 fi
-rm -f check_atomicbuiltins.*
+rm -f check_atomicbuiltins*
 AC_SUBST(HAVE_GCC_ATOMIC_BUILTINS,$HAVE_GCC_ATOMIC_BUILTINS)
 
 
@@ -134,7 +134,7 @@ if test "$ssl" = "no"; then
     fi
     AC_CHECK_HEADER(gnutls/gnutls.h,
     AC_CHECK_LIB(gnutls, gnutls_check_version,
-            [gnutls=yes LIBS="${LIBS} `pkg-config gnutls --libs`"], gnutls=no),
+            [gnutls=yes LIBS="${LIBS} `pkg-config gnutls --libs` -lgcrypt"], gnutls=no),
             gnutls=no)
   fi
   if test "$gnutls" != "no" ; then

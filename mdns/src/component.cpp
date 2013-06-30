@@ -32,7 +32,7 @@ namespace gloox
     m_disco->setIdentity( "component", "generic" );
   }
 
-  void Component::handleStartNode()
+  void Component::handleStartNode( const Tag* /*start*/ )
   {
     if( m_sid.empty() )
       return;

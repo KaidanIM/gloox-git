@@ -314,6 +314,7 @@
  * @li @xep{0145} @link gloox::Annotations Annotations @endlink
  * @li @xep{0153} @link gloox::VCardUpdate vCard-based Avatars @endlink
  * @li @xep{0172} @link gloox::Nickname User Nickname @endlink
+ * @li @xep{0174} @link gloox::LinkLocal::Manager Link-local Messaging @endlink
  * @li @xep{0184} @link gloox::Receipt Message Receipts @endlink
  * @li @xep{0199} @link gloox::ClientBase::xmppPing() XMPP Ping @endlink
  * @li @xep{0203} @link gloox::DelayedDelivery Delayed Delivery @endlink (new spec)
@@ -1017,6 +1018,7 @@ namespace gloox
     LogAreaClassSOCKS5Bytestream      = 0x000800, /**< Log messages from SOCKS5Bytestream. */
     LogAreaClassConnectionBOSH        = 0x001000, /**< Log messages from ConnectionBOSH */
     LogAreaClassConnectionTLS         = 0x002000, /**< Log messages from ConnectionTLS */
+    LogAreaLinkLocalManager           = 0x004000, /**< Log messages from LinkLocalManager */
     LogAreaAllClasses                 = 0x01FFFF, /**< All log messages from all the classes. */
     LogAreaXmlIncoming                = 0x020000, /**< Incoming XML. */
     LogAreaXmlOutgoing                = 0x040000, /**< Outgoing XML. */

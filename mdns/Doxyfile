@@ -190,7 +190,8 @@ PREDEFINED             = HAVE_TLS \
                          HAVE_OPENSSL \
                          HAVE_ZLIB \
                          HAVE_WINTLS \
-                         HAVE_WINDNS
+                         HAVE_WINDNS \
+                         HAVE_MDNS
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
