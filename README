@@ -5,7 +5,7 @@ For build instructions on Windows CE/Mobile see README.wince.
 For build instructions on Symbian/Nokia S60 see README.symbian.
 
 
-For API documentation run doxygen, or go to http://camaya.net/api/gloox/
+For API documentation run make apidox, run doxygen directly, or go to http://camaya.net/api/gloox/
 
 If you plan to contribute to gloox, please be aware of the following:
 

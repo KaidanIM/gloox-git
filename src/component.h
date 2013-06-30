@@ -58,7 +58,7 @@ namespace gloox
 
     protected:
       // reimplemented from ClientBase
-      virtual void handleStartNode();
+      virtual void handleStartNode( const Tag* start );
 
       // reimplemented from ClientBase
       virtual bool handleNormalNode( Tag* tag );
