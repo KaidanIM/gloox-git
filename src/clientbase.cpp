@@ -224,7 +224,7 @@ namespace gloox
       }
 
       m_sid = tag->findAttribute( "id" );
-      handleStartNode();
+      handleStartNode( tag );
     }
     else if( tag->name() == "error" && tag->xmlns() == XMLNS_STREAM )
     {

@@ -129,7 +129,7 @@ namespace gloox
        * until data was available.
        * @return The state of the connection.
        */
-      ConnectionError recv( int timeout = -1 );
+      virtual ConnectionError recv( int timeout = -1 );
 
       /**
        * Reimplement this function to provide a username for connection purposes.
@@ -820,6 +820,13 @@ namespace gloox
        */
       bool hasTls();
 
+      /**
+       * Sends the given data unchecked over the underlying transport connection. Use at your own risk.
+       * The server will check any data received anyway and disconnect if something is wrong.
+       * @param xml The data to send.
+       */
+      void send( const std::string& xml );
+      
       JID m_jid;                         /**< The 'self' JID. */
       JID m_authzid;                     /**< An optional authorization ID. See setAuthzid(). */
       std::string m_authcid;             /**< An alternative authentication ID. See setAuthcid(). */
@@ -911,8 +918,10 @@ namespace gloox
 
       /**
        * This function is called right after the opening &lt;stream:stream&gt; was received.
+       * @param start The complete stream opening tag. Note that the XML representation (Tag::xml())
+       * will contain a closed stream tag. The original is open.
        */
-      virtual void handleStartNode() = 0;
+      virtual void handleStartNode( const Tag* start ) = 0;
 
       /**
        * This function is called for each Tag. Only stream initiation/negotiation should
@@ -936,7 +945,6 @@ namespace gloox
       void notifySubscriptionHandlers( Subscription& s10n );
       void notifyTagHandlers( Tag* tag );
       void notifyOnDisconnect( ConnectionError e );
-      void send( const std::string& xml );
       void addFrom( Tag* tag );
       void addNamespace( Tag* tag );
 

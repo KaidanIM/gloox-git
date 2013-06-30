@@ -25,7 +25,7 @@ class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
       registerConnectionListener( this );
     }
     virtual ~ClientBaseTest() {}
-    virtual void handleStartNode() { m_handleStartNodeCalled = true; }
+    virtual void handleStartNode( const Tag* /*tag*/ ) { m_handleStartNodeCalled = true; }
     virtual bool handleNormalNode(gloox::Tag*) { return true; }
     virtual void rosterFilled() {}
 /*    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
