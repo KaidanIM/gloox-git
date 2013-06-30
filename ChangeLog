@@ -1,5 +1,13 @@
-v1.0.1 -- xx yyy 2009
+v1.0.2 -- xx yyy 2013
 ---------------------
+- SOCKS5Bytestream: Don't wait for incoming data, notify about open stream immediately upon
+connection (patch by Erik Horemans)
+
+
+
+v1.0.1 -- 29 Jun 2013
+---------------------
+- Added support for Serverless Messaging (XEP-0174)
 - TLSOpenSSLServer: compilation fix 
 - don't bail on DNS TCP queries
 - fixed µs timeout value (now defaults to 1.000.000)
@@ -25,13 +33,12 @@ v1.0.1 -- xx yyy 2009
 - Search: fixed search() (#193)
 - DNS: fix socket leak if no network connection is available (#192)
 - PubsubManager: unconditionally call handleItemPublication() (#194)
-- SOCKS5Bytestream: Don't wait for incoming data, notify about open stream immediately upon
-    connection (patch by Erik Horemans)
+- configure: Added -lgcrypt (dependency of GNUTLS)
 
 
 
 v1.0 -- 31 Oct 2009
--------------------
+---------------------
 
 general changes and additions:
 - XEP-0020 (Feature Negotiation) wrapper

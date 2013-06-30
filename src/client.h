@@ -396,7 +396,7 @@ namespace gloox
 
       };
 
-      virtual void handleStartNode() {}
+      virtual void handleStartNode( const Tag* /*start*/ ) {}
       virtual bool handleNormalNode( Tag* tag );
       virtual void disconnect( ConnectionError reason );
       virtual void handleIqIDForward( const IQ& iq, int context );
