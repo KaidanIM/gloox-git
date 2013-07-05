@@ -564,6 +564,9 @@ namespace gloox
   /** Message Receipt namespace (@xep{0172}) */
   GLOOX_API extern const std::string XMLNS_NICKNAME;
 
+  /** Jabber RPC namespace (@xep{0009}) */
+  GLOOX_API extern const std::string XMLNS_JABBER_RPC;
+
   /** Jingle namespace (@xep{0166}) */
   GLOOX_API extern const std::string XMLNS_JINGLE;
 
