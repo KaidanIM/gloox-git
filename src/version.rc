@@ -20,7 +20,7 @@ VS_VERSION_INFO VERSIONINFO
             VALUE "OriginalFilename", "gloox.dll\0"
             VALUE "CompanyName", "Jakob Schroeter\0"
             VALUE "LegalCopyright", "Copyright (C) 2004-2013 Jakob Schroeter\0"
-            VALUE "Licence", "GPL\0"
+            VALUE "Licence", "GPLv3\0"
             VALUE "Info", "http://camaya.net/gloox\0"
         END
     END
