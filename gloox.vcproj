@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\gloox-1.0\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
@@ -87,7 +87,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -172,6 +172,10 @@
 			</File>
 			<File
 				RelativePath="src\annotations.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\atomicrefcount.cpp"
 				>
 			</File>
 			<File
@@ -578,6 +582,10 @@
 			</File>
 			<File
 				RelativePath="src\annotationshandler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\atomicrefcount.h"
 				>
 			</File>
 			<File
