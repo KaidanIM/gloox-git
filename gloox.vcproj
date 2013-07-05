@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="gloox 1.0"
+	Name="gloox-1.0"
 	ProjectGUID="{4DDB9C8A-C4A7-4518-A470-0B88629D8B66}"
 	RootNamespace="gloox10"
 	TargetFrameworkVersion="196613"
