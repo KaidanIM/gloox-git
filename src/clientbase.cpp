@@ -94,7 +94,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false ), m_customConnection( false ),
+      m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
       m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long)&m_nextId ) & 0xFFFF ) )
   {
     init();
@@ -112,7 +112,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false ), m_customConnection( false ),
+      m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
       m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long)&m_nextId ) & 0xFFFF ) )
   {
     init();

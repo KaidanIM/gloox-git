@@ -1028,7 +1028,6 @@ namespace gloox
       SaslMechanism m_selectedSaslMech;
 
       std::string m_ntlmDomain;
-      bool m_autoMessageSession;
       bool m_customConnection;
 
       int m_uniqueBaseId;
