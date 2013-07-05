@@ -1,9 +1,10 @@
-v1.0.2 -- xx yyy 2013
+v1.0.2 -- 05 Jul 2013
 ---------------------
 - SOCKS5Bytestream: Don't wait for incoming data, notify about open stream immediately upon
 connection (patch by Erik Horemans)
-- fixed/updated Code::Blocks and VS project files
+- fixed/updated Code::Blocks and VS project files (fixes #197, #198)
 - fixed memory leak in ClientBase (fixes #204)
+- fixed memory leak in prep::idna()
 
 
 
