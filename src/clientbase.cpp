@@ -147,6 +147,8 @@ namespace gloox
     m_iqExtHandlers.clear();
     m_iqExtHandlerMapMutex.unlock();
 
+    util::clearList( m_presenceExtensions );
+
     delete m_connection;
     delete m_encryption;
     delete m_compression;
