@@ -72,6 +72,6 @@ namespace gloox
     }
 
   }
-  
+
 }
 

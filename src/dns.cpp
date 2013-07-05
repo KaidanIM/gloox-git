@@ -156,7 +156,7 @@ namespace gloox
     return servers;
   }
 
-#elif defined( _WIN32 ) && defined( HAVE_WINDNS_H )
+#elif defined( _WIN32 ) && defined( HAVE_WINDNS_H ) && !defined( __MINGW32__ )
   DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
                              const std::string& domain, const LogSink& logInstance )
   {
