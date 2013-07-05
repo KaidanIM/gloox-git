@@ -2,6 +2,8 @@ v1.0.3 -- xx yyy 2013
 ---------------------
 - Changed license to GPLv3
 - removed space from VS project name (gloox-1.0)
+- VCardUpdate: fixed handling of empty hash (fixes #203)
+- VCardUpdate: added hasPhoto() to inidicate whether there was a photo tag
 
 
 

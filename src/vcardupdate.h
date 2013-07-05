@@ -63,6 +63,16 @@ namespace gloox
        * @return The avatar's SHA hash.
        */
       const std::string& hash() const { return m_hash; }
+      
+      /**
+       * Indicates whether the VCard update contained a @c photo tag
+       * (which might have been empty).
+       * This function is only useful for incoming VCardUpdate objects.
+       * @return @b True if the VCard update contained a @c photo
+       * tag (empty or non-empty), @b false otherwise.
+       * @since 1.0.3
+       */
+      bool hasPhoto() { return m_hasPhoto; }
 
       // reimplemented from StanzaExtension
       virtual const std::string& filterString() const;
@@ -87,6 +97,7 @@ namespace gloox
       bool m_notReady;
       bool m_noImage;
       bool m_valid;
+      bool m_hasPhoto;
 
   };
 
