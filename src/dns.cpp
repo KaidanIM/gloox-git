@@ -292,9 +292,9 @@ namespace gloox
       }
 
       if( res->ai_canonname )
-        logInstance.dbg( LogAreaClassDns, std::string("Connecting to ").append(res->ai_canonname).append(" (").append(ip).append("), port  ").append(port));
+        logInstance.dbg( LogAreaClassDns, std::string( "Connecting to " ).append( res->ai_canonname ).append( " (" ).append( ip ).append( "), port  " ).append( port ) );
       else
-        logInstance.dbg( LogAreaClassDns, std::string("Connecting to ").append(ip).append(":").append(port));
+        logInstance.dbg( LogAreaClassDns, std::string( "Connecting to " ).append( ip ).append( ":" ).append( port ) );
 
       return fd;
     }
