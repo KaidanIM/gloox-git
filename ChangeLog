@@ -4,6 +4,7 @@ v1.0.3 -- xx yyy 2013
 - removed space from VS project name (--> gloox-1.0)
 - VCardUpdate: fixed handling of empty hash (#203)
 - VCardUpdate: added hasPhoto() to inidicate whether there was a photo tag (#203)
+- compilation fixed when using getaddrinfo (patch by Roy van Dam)
 
 
 
