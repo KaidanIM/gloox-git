@@ -1084,12 +1084,9 @@ namespace gloox
       {
         std::string when;
         bool privMsg = false;
-        bool history = false;
         if( msg.when() )
-        {
           when = msg.when()->stamp();
-          history = true;
-        }
+
         if( msg.subtype() & ( Message::Chat | Message::Normal ) )
           privMsg = true;
 
