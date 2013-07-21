@@ -103,6 +103,7 @@ namespace gloox
       if( rc == IDNA_SUCCESS )
       {
         out = prepped;
+        free( prepped );
         return true;
       }
       if( rc != IDNA_MALLOC_ERROR )
