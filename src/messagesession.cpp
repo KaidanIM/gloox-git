@@ -59,6 +59,11 @@ namespace gloox
       m_messageHandler->handleMessage( msg, this );
   }
 
+  void MessageSession::send( const std::string& message )
+  {
+    send( message, EmptyString );
+  }
+
   void MessageSession::send( const std::string& message, const std::string& subject, const StanzaExtensionList& sel )
   {
     if( !m_hadMessages )
