@@ -220,6 +220,12 @@ namespace gloox
         { m_messageHandler = 0; }
 
       /**
+       * A convenience function to quickly send a message.
+       * @param message The message to send.
+       */
+      virtual void send( const std::string& message );
+
+      /**
        * A convenience function to quickly send a message (optionally with subject). This is
        * the preferred way to send a message from a MessageSession.
        * @param message The message to send.
