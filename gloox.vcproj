@@ -508,10 +508,6 @@
 				>
 			</File>
 			<File
-				RelativePath="src\tlsgnutlsserver.cpp"
-				>
-			</File>
-			<File
 				RelativePath="src\tlsgnutlsserveranon.cpp"
 				>
 			</File>
@@ -1095,10 +1091,6 @@
 			</File>
 			<File
 				RelativePath="src\tlsgnutlsclientanon.h"
-				>
-			</File>
-			<File
-				RelativePath="src\tlsgnutlsserver.h"
 				>
 			</File>
 			<File
