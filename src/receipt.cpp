@@ -29,9 +29,13 @@ namespace gloox
   }
 
   Receipt::Receipt( const Tag* tag )
-    : StanzaExtension( ExtReceipt ),
-      m_rcpt( receiptType( tag->name() ) )
+    : StanzaExtension( ExtReceipt ), m_rcpt( Invalid )
   {
+    if( !tag )
+      return;
+
+    m_rcpt = receiptType( tag->name() );
+    m_id = tag->findAttribute( "id" );
   }
 
   const std::string& Receipt::filterString() const
@@ -47,7 +51,10 @@ namespace gloox
     if( m_rcpt == Invalid )
       return 0;
 
-    return new Tag( util::lookup( m_rcpt, receiptValues ), XMLNS, XMLNS_RECEIPTS );
+    Tag* tag = new Tag( util::lookup( m_rcpt, receiptValues ), XMLNS, XMLNS_RECEIPTS );
+    if ( !m_id.empty() )
+      tag->addAttribute( "id", m_id );
+    return tag;
   }
 
 }
