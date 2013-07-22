@@ -1,10 +1,14 @@
-v1.0.3 -- xx yyy 2013
+v1.0.3 -- 22 Jul 2013
 ---------------------
 - Changed license to GPLv3
 - removed space from VS project name (--> gloox-1.0)
 - VCardUpdate: fixed handling of empty hash (#203)
 - VCardUpdate: added hasPhoto() to inidicate whether there was a photo tag (#203)
 - compilation fixed when using getaddrinfo (patch by Roy van Dam)
+- Receipt: recognize id attribute (patch by Dídac Pérez) (#208)
+- MessageSession: added MS::send( string& ) to properly provide a base for MUCMS::send( string& ) (#206)
+- really fixed memory leak in prep::idna()
+- gloox.vcproj: removed not-yet-present tlsgnutlsserver.cpp/.h
 
 
 
