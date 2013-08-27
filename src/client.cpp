@@ -107,6 +107,7 @@ namespace gloox
       m_rosterManager( 0 ), m_auth( 0 ),
       m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_forceNonSasl( false ), m_manageRoster( true ),
+      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smMax( 0 ), m_smHandled( 0 ),
       m_streamFeatures( 0 )
   {
     m_jid.setServer( server );
@@ -118,6 +119,7 @@ namespace gloox
       m_rosterManager( 0 ), m_auth( 0 ),
       m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_forceNonSasl( false ), m_manageRoster( true ),
+      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smMax( 0 ), m_smHandled( 0 ),
       m_streamFeatures( 0 )
   {
     m_jid = jid;
@@ -295,6 +297,21 @@ namespace gloox
         setAuthed( true );
         header();
       }
+      else if( name == "enabled" && xmlns == XMLNS_STREAM_MANAGEMENT )
+      {
+        m_smMax = atoi( tag->findAttribute( "max" ).c_str() );
+        m_smId = tag->findAttribute( "id" );
+        m_smResume = ( tag->findAttribute( "resume" ) == "true" ) ? true : false;
+        m_smLocation = tag->findAttribute( "location" );
+      }
+      else if( name == "resumed" && xmlns == XMLNS_STREAM_MANAGEMENT )
+      {
+        // TODO: Check 'previd' and 'h' values
+      }
+      else if( name == "failed" && xmlns == XMLNS_STREAM_MANAGEMENT )
+      {
+        // TODO: somehow communicate failure/unavailability of stream management to the client
+      }
       else
         return false;
     }
@@ -333,6 +350,9 @@ namespace gloox
     if( tag->hasChild( "compression", XMLNS, XMLNS_STREAM_COMPRESS ) )
       features |= getCompressionMethods( tag->findChild( "compression" ) );
 
+    if( tag->hasChild( "sm", XMLNS, XMLNS_STREAM_MANAGEMENT ) )
+      features |= StreamFeatureStreamManagement;
+    
     if( features == 0 )
       features = StreamFeatureIqAuth;
 
@@ -479,6 +499,19 @@ namespace gloox
       default:
         break;
     }
+  }
+  
+  void Client::enableStreamManagement( bool resume )
+  {
+    if( !( m_streamFeatures & StreamFeatureStreamManagement && m_resourceBound ) )
+      return;
+
+    Tag* e = new Tag( "enable" );
+    e->setXmlns( XMLNS_STREAM_MANAGEMENT );
+    if( resume )
+      e->addAttribute( "resume", "true" );
+    
+    send( e );
   }
 
   void Client::createSession()

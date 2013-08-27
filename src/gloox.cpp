@@ -107,6 +107,7 @@ namespace gloox
 
   const std::string XMLNS_SHIM              = "http://jabber.org/protocol/shim";
   const std::string XMLNS_ATTENTION         = "urn:xmpp:attention:0";
+  const std::string XMLNS_STREAM_MANAGEMENT = "urn:xmpp:sm:3";
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";
