@@ -182,6 +182,15 @@ namespace gloox
       const std::string& resource() const { return m_jid.resource(); }
 
       /**
+       * This function asks the server to enable Stream Management (@xep{0198}).
+       * Optionally, stream resumption can be enabled.
+       * @note This function is a no-op if called before a resource has been bound or if the
+       * server doesn't support @xep{0198}.
+       * @param resume Tells the server whether to enable stream resumption. Defaults to @b false.
+       */
+      void enableStreamManagement( bool resume = false );
+
+      /**
        * Returns the current priority.
        * @return The priority of the current resource.
        */
@@ -431,6 +440,12 @@ namespace gloox
       bool m_resourceBound;
       bool m_forceNonSasl;
       bool m_manageRoster;
+      
+      std::string m_smId;
+      std::string m_smLocation;
+      bool m_smResume;
+      int m_smMax;
+      unsigned int m_smHandled;
 
       int m_streamFeatures;
 

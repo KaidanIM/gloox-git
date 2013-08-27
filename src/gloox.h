@@ -588,6 +588,9 @@ namespace gloox
   /** Attention namespace (@xep{0224}) */
   GLOOX_API extern const std::string XMLNS_ATTENTION;
 
+  /** Stream Management namespace (@xep{0198}) */
+  GLOOX_API extern const std::string XMLNS_STREAM_MANAGEMENT;
+
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
@@ -704,9 +707,10 @@ namespace gloox
                                            * Authentication). */
     StreamFeatureCompressZlib     =   64, /**< The server supports @xep{0138} (Stream
                                            * Compression) (Zlib). */
-    StreamFeatureCompressDclz     =  128  /**< The server supports @xep{0138} (Stream
+    StreamFeatureCompressDclz     =  128, /**< The server supports @xep{0138} (Stream
                                            * Compression) (LZW/DCLZ). */
-    // SASLMechanism below must be adjusted accordingly.
+    StreamFeatureStreamManagement =  256  /**< The server supports @xep{0198} (Stream Management). */
+    // SaslMechanism below must be adjusted accordingly.
   };
 
   /**
@@ -716,13 +720,13 @@ namespace gloox
   enum SaslMechanism
   {
     SaslMechNone           =     0, /**< Invalid SASL Mechanism. */
-    SaslMechDigestMd5      =   256, /**< SASL Digest-MD5 according to RFC 2831. */
-    SaslMechPlain          =   512, /**< SASL PLAIN according to RFC 2595 Section 6. */
-    SaslMechAnonymous      =  1024, /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
+    SaslMechDigestMd5      =   512, /**< SASL Digest-MD5 according to RFC 2831. */
+    SaslMechPlain          =  1024, /**< SASL PLAIN according to RFC 2595 Section 6. */
+    SaslMechAnonymous      =  2048, /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
                                      * RFC 2245 Section 6. */
-    SaslMechExternal       =  2048, /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
-    SaslMechGssapi         =  4096, /**< SASL GSSAPI (Win32 only). */
-    SaslMechNTLM           =  8192, /**< SASL NTLM (Win32 only). */
+    SaslMechExternal       =  4096, /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
+    SaslMechGssapi         =  8192, /**< SASL GSSAPI (Win32 only). */
+    SaslMechNTLM           = 16384, /**< SASL NTLM (Win32 only). */
     SaslMechAll            = 65535  /**< Includes all supported SASL mechanisms. */
   };
 
