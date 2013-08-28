@@ -182,13 +182,37 @@ namespace gloox
       const std::string& resource() const { return m_jid.resource(); }
 
       /**
-       * This function asks the server to enable Stream Management (@xep{0198}).
-       * Optionally, stream resumption can be enabled.
-       * @note This function is a no-op if called before a resource has been bound or if the
-       * server doesn't support @xep{0198}.
-       * @param resume Tells the server whether to enable stream resumption. Defaults to @b false.
+       * This function enables Stream Management (@xep{0198}) if the server supports it.
+       * Optionally, stream resumption can be disabled.
+       * @note You can use this function at any time. However, gloox will make sure Stream Management
+       * requests are sent only when allowed by the specification.
+       * @param enable Enable or disable Stream Management. Note: once enabled on a connection, Stream
+       * Management can not be disabled for that connection.
+       * @param resume Tells the server whether to enable stream resumption. Defaults to @b true.
+       * @note This function is part of @xep{0198}.
+       * @since 1.0.4
        */
-      void enableStreamManagement( bool resume = false );
+      void setStreamManagement( bool enabled = true, bool resume = true );
+      
+      /**
+       * Use this function to send an unrequested 'ack' to the server to let it know the number of handled stanzas.
+       * You may use this function at any time. However, gloox will also reply to incoming 'ack requests' automatically.
+       * These automatic 'acks' are not announced anywhere in gloox.
+       * This function is a no-op if called in situations where sending an ack is not
+       * allowed by the protocol.
+       * @note This function is part of @xep{0198}.
+       * @since 1.0.4
+       */
+      void ackStreamManagement();
+      
+      /**
+       * Use this function to request the number of handled stanzas from the server.
+       * You may use this function at any time. gloox does not send any such requests
+       * automatically.
+       * @note This function is part of @xep{0198}.
+       * @since 1.0.4
+       */
+      void reqStreamManagement();
 
       /**
        * Returns the current priority.
@@ -422,6 +446,7 @@ namespace gloox
       virtual void rosterFilled();
       virtual void cleanup();
       bool bindOperation( const std::string& resource, bool bind );
+      void sendStreamManagement();
 
       void init();
 
@@ -444,8 +469,8 @@ namespace gloox
       std::string m_smId;
       std::string m_smLocation;
       bool m_smResume;
+      bool m_smWanted;
       int m_smMax;
-      unsigned int m_smHandled;
 
       int m_streamFeatures;
 

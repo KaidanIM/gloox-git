@@ -636,6 +636,20 @@ namespace gloox
     StreamEventAuthentication,      /**< The Client is about to authenticate. */
     StreamEventSessionInit,         /**< The Client is about to create a session. */
     StreamEventResourceBinding,     /**< The Client is about to bind a resource to the stream. */
+    StreamEventSMEnable,            /**< The Client is about to request Stream Management (@xep{0198}).
+                                     * @since 1.0.4 */
+    StreamEventSMResume,            /**< The Client is about to request resumption by means of Stream Management
+                                     * (@xep{0198}).
+                                     * @since 1.0.4 */
+    StreamEventSMResumed,           /**< The stream has successfully been resumed by means of Stream Management
+                                     * (@xep{0198}).
+                                     * @since 1.0.4 */
+    StreamEventSMEnableFailed,      /**< The attempt to enable Stream Management
+                                     * (@xep{0198}) failed. This is not critical.
+                                     * @since 1.0.4 */
+    StreamEventSMResumeFailed,      /**< The attempt to resume an aborted session by means of Stream Management
+                                     * (@xep{0198}) failed. This is not critical.
+                                     * @since 1.0.4 */
     StreamEventSessionCreation,     /**< The Client is about to create a session.
                                      * @since 0.9.1 */
     StreamEventRoster,              /**< The Client is about to request the roster. */
@@ -808,7 +822,7 @@ namespace gloox
     StreamErrorXmlNotWellFormed,    /**< The initiating entity has sent XML that is not well-formed as
                                      * defined by [XML]. */
     StreamErrorUndefined            /**< An undefined/unknown error occured. Also used if a diconnect was
-     * user-initiated. Also set before and during a established connection
+                                     * user-initiated. Also set before and during a established connection
                                      * (where obviously no error occured). */
   };
 

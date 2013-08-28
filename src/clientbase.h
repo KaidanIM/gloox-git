@@ -865,6 +865,23 @@ namespace gloox
 
       int m_availableSaslMechs;          /**< The SASL mechanisms the server offered. */
 
+      /**
+       * An enum for the Stream Management state machine.
+       */
+      enum SMContext
+      {
+        CtxSMInvalid,                    /**< Initial value. */
+        CtxSMFailed,                      /**< Either of the above failed. */
+        CtxSMEnable,                     /**< 'enable' request sent */
+        CtxSMResume,                     /**< 'resume' request sent */
+        CtxSMEnabled,                    /**< Stream Management successfully enabled. */
+        CtxSMResumed                     /**< Stream successfully resumed. */
+      };
+
+      SMContext m_smContext;             /**< The Stream Management state. Used in @xep{0198}. */
+      int m_smHandled;                   /**< The number of handled stanzas. Used in @xep{0198}.
+                                          * You should NOT mess with this. */
+
     private:
 #ifdef CLIENTBASE_TEST
     public:
