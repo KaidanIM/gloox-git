@@ -2,7 +2,7 @@ v1.0.4 -- xx yyy 2013
 ---------------------
 - Fix some iterator usage for portability related to erase (patch by Daniel Bowen)
 - Ensure setting a connection does not leave a deleted value in the member variable for a time (patch by Daniel Bowen)
-- Add operator< to JID so that it can be in a map (patch by Daniel Bowen)
+- Add operator< and relatives to JID so that it can be in a map (patch by Daniel Bowen)
 - Sandboxing on Apple doesn't like getprotobyname (patch by Daniel Bowen)
 
 
