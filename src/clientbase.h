@@ -870,7 +870,7 @@ namespace gloox
     public:
 #endif
       /**
-       * @brief This is an implementation of an XMPP Ping (@xep{199}).
+       * @brief This is an implementation of an XMPP Ping (@xep{0199}).
        *
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
