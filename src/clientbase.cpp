@@ -149,9 +149,9 @@ namespace gloox
 
     util::clearList( m_presenceExtensions );
 
-    delete m_connection;
-    delete m_encryption;
-    delete m_compression;
+    setConnectionImpl( 0 );
+    setEncryptionImpl( 0 );
+    setCompressionImpl( 0 );
     delete m_seFactory;
     m_seFactory = 0; // to avoid usage when Disco gets deleted below
     delete m_disco;
@@ -970,32 +970,29 @@ namespace gloox
     return myMajor >= major;
   }
 
-  void ClientBase::setConnectionImpl( ConnectionBase* cb )
+  void ClientBase::setConnectionImpl( ConnectionBase* connection )
   {
-    if( m_connection )
-    {
-      delete m_connection;
-    }
-    m_connection = cb;
+    ConnectionBase* old = m_connection;
+    m_connection = connection;
     m_customConnection = true;
+    if( old )
+      delete old;
   }
 
-  void ClientBase::setEncryptionImpl( TLSBase* tb )
+  void ClientBase::setEncryptionImpl( TLSBase* encryption )
   {
-    if( m_encryption )
-    {
-      delete m_encryption;
-    }
-    m_encryption = tb;
+    TLSBase* old = m_encryption;
+    m_encryption = encryption;
+    if( old )
+      delete old;
   }
 
-  void ClientBase::setCompressionImpl( CompressionBase* cb )
+  void ClientBase::setCompressionImpl( CompressionBase* compression )
   {
-    if( m_compression )
-    {
-      delete m_compression;
-    }
-    m_compression = cb;
+    CompressionBase* old = m_compression;
+    m_compression = compression;
+    if( old )
+      delete old;
   }
 
   void ClientBase::handleStreamError( Tag* tag )
@@ -1244,11 +1241,21 @@ namespace gloox
   {
     if( th )
     {
-      TagHandlerList::iterator it = m_tagHandlers.begin();
-      for( ; it != m_tagHandlers.end(); ++it )
+      for( TagHandlerList::iterator it = m_tagHandlers.begin(); it != m_tagHandlers.end(); )
       {
         if( (*it).th == th && (*it).tag == tag && (*it).xmlns == xmlns )
-          m_tagHandlers.erase( it );
+        {
+          // Normally we'd just assign it to the return value of the .erase() call,
+          // which is either the next element, or .end().  However,
+          // it's only since C++11 that this works; C++03 version returns void.
+          // So instead, we do a post-increment. this increments the iterator to point
+          // to the next element, then passes a copy of the old iterator (that is to the item to be deleted)
+          m_tagHandlers.erase( it++ );
+        }
+        else
+        {
+          ++it;
+        }
       }
     }
   }

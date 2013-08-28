@@ -344,6 +344,7 @@ namespace gloox
 #endif
 
     int protocol = IPPROTO_TCP;
+#if !defined( __APPLE__ )  // Sandboxing on Apple doesn't like you to use getprotobyname
     struct protoent* prot;
     if( ( prot = getprotobyname( "tcp" ) ) != 0 )
     {
@@ -362,6 +363,7 @@ namespace gloox
 
       // Do not return an error. We'll fall back to IPPROTO_TCP.
     }
+#endif // !defined( __APPLE__ )
 
     return getSocket( PF_INET, SOCK_STREAM, protocol, logInstance );
   }

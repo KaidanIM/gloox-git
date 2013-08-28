@@ -140,6 +140,35 @@ namespace gloox
       bool operator!=( const JID& right ) const { return full() != right.full(); }
 
       /**
+       * Compares two JIDs to see if the left is less than the right.
+       * Needed for JID to be a key in a map.
+       * @param right The second JID.
+       * @since 1.0.4
+       */
+      bool operator<( const JID& right ) const { return full() < right.full(); }
+
+      /**
+       * Compares two JIDs to see if the left is less than or equal to the right.
+       * @param right The second JID.
+       * @since 1.0.4
+       */
+      bool operator<=( const JID& right ) const { return full() <= right.full(); }
+
+      /**
+       * Compares two JIDs to see if the left is greater than the right.
+       * @param right The second JID.
+       * @since 1.0.4
+       */
+      bool operator>( const JID& right ) const { return full() > right.full(); }
+
+      /**
+       * Compares two JIDs to see if the left is greater than the right.
+       * @param right The second JID.
+       * @since 1.0.4
+       */
+      bool operator>=( const JID& right ) const { return full() >= right.full(); }
+
+      /**
        * Converts to  @b true if the JID is valid, @b false otherwise.
        */
       operator bool() const { return m_valid; }

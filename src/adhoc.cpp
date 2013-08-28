@@ -398,15 +398,22 @@ namespace gloox
   void Adhoc::handleDiscoError( const JID& from, const Error* error, int context )
   {
     util::MutexGuard m( m_adhocTrackMapMutex );
-
-    AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
-    for( ; it != m_adhocTrackMap.end(); ++it )
+    for( AdhocTrackMap::iterator it = m_adhocTrackMap.begin(); it != m_adhocTrackMap.end(); )
     {
       if( (*it).second.context == context && (*it).second.remote == from )
       {
         (*it).second.ah->handleAdhocError( from, error, (*it).second.handlerContext );
 
-        m_adhocTrackMap.erase( it );
+          // Normally we'd just assign it to the return value of the .erase() call,
+          // which is either the next element, or .end().  However,
+          // it's only since C++11 that this works; C++03 version returns void.
+          // So instead, we do a post-increment. this increments the iterator to point
+          // to the next element, then passes a copy of the old iterator (that is to the item to be deleted)
+        m_adhocTrackMap.erase( it++ );
+      }
+      else
+      {
+        ++it;
       }
     }
   }
