@@ -107,7 +107,7 @@ namespace gloox
       m_rosterManager( 0 ), m_auth( 0 ),
       m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_forceNonSasl( false ), m_manageRoster( true ),
-      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smMax( 0 ), m_smHandled( 0 ),
+      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smMax( 0 ),
       m_streamFeatures( 0 )
   {
     m_jid.setServer( server );
@@ -119,7 +119,7 @@ namespace gloox
       m_rosterManager( 0 ), m_auth( 0 ),
       m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_forceNonSasl( false ), m_manageRoster( true ),
-      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smMax( 0 ), m_smHandled( 0 ),
+      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smMax( 0 ),
       m_streamFeatures( 0 )
   {
     m_jid = jid;
@@ -299,18 +299,49 @@ namespace gloox
       }
       else if( name == "enabled" && xmlns == XMLNS_STREAM_MANAGEMENT )
       {
+        m_smContext = CtxSMEnabled;
         m_smMax = atoi( tag->findAttribute( "max" ).c_str() );
         m_smId = tag->findAttribute( "id" );
-        m_smResume = ( tag->findAttribute( "resume" ) == "true" ) ? true : false;
+        const std::string res = tag->findAttribute( "resume" );
+        m_smResume = ( ( res == "true" || res == "1" ) && !m_smId.empty() ) ? true : false;
         m_smLocation = tag->findAttribute( "location" );
       }
       else if( name == "resumed" && xmlns == XMLNS_STREAM_MANAGEMENT )
       {
-        // TODO: Check 'previd' and 'h' values
+        m_smContext = CtxSMResumed;
+        if( tag->findAttribute( "previd" ) != m_smId )
+        {
+          // Unexpected. Do something smart
+        }
+        
+        notifyStreamEvent( StreamEventSMResumed );
+        int h = atoi( tag->findAttribute( "h" ).c_str() );
+      }
+      else if( name == "a" && xmlns == XMLNS_STREAM_MANAGEMENT )
+      {
+        if( m_smContext == CtxSMEnabled || m_smContext == CtxSMResumed )
+        {
+          // check 'h' attribute and resend from queue, if necessary.
+        }
+      }
+      else if( name == "r" && xmlns == XMLNS_STREAM_MANAGEMENT )
+      {
+        ackStreamManagement();
       }
       else if( name == "failed" && xmlns == XMLNS_STREAM_MANAGEMENT )
       {
-        // TODO: somehow communicate failure/unavailability of stream management to the client
+        switch( m_smContext )
+        {
+          case CtxSMEnable:
+            notifyStreamEvent( StreamEventSMEnableFailed );
+            break;
+          case CtxSMResume:
+            notifyStreamEvent( StreamEventSMResumeFailed );
+            break;
+          default:
+            break;
+        }
+        m_smContext = CtxSMFailed;
       }
       else
         return false;
@@ -482,7 +513,7 @@ namespace gloox
 
         m_jid = rb->jid();
         m_resourceBound = true;
-        m_selectedResource = m_jid.resource();
+        m_selectedResource = m_jid.resource(); // TODO: remove for 1.1
         notifyOnResourceBind( m_jid.resource() );
 
         if( m_streamFeatures & StreamFeatureSession )
@@ -501,19 +532,71 @@ namespace gloox
     }
   }
   
-  void Client::enableStreamManagement( bool resume )
+  void Client::setStreamManagement( bool enable, bool resume )
   {
-    if( !( m_streamFeatures & StreamFeatureStreamManagement && m_resourceBound ) )
+    m_smWanted = enable;
+    m_smResume = resume;
+
+    if( !m_smWanted )
+    {
+      m_smHandled = 0;
+      m_smId = EmptyString;
+      m_smLocation = EmptyString;
+      m_smMax = 0;
+      m_smResume = false;
+      return;
+    }
+
+    if( m_smWanted && m_resourceBound )
+      sendStreamManagement();
+  }
+  
+  void Client::sendStreamManagement()
+  {
+    if( !m_smWanted )
       return;
 
-    Tag* e = new Tag( "enable" );
-    e->setXmlns( XMLNS_STREAM_MANAGEMENT );
-    if( resume )
-      e->addAttribute( "resume", "true" );
-    
-    send( e );
+    if( m_smContext == CtxSMEnabled )
+    {
+      notifyStreamEvent( StreamEventSMResume );
+      Tag* r = new Tag( "resume" );
+      r->setXmlns( XMLNS_STREAM_MANAGEMENT );
+      r->addAttribute( "h", m_smHandled );
+      r->addAttribute( "previd", m_smId );
+      send( r );
+      m_smContext = CtxSMResume;
+    }
+    else if( m_smContext == CtxSMInvalid )
+    {
+      notifyStreamEvent( StreamEventSMEnable );
+      Tag* e = new Tag( "enable" );
+      e->setXmlns( XMLNS_STREAM_MANAGEMENT );
+      if( m_smResume )
+        e->addAttribute( "resume", "true" );
+      send( e );
+      m_smContext = CtxSMEnable;
+    }
+  }
+  
+  void Client::ackStreamManagement()
+  {
+    if( m_smContext >= CtxSMEnabled )
+    {
+      Tag* a = new Tag( "a", "xmlns", XMLNS_STREAM_MANAGEMENT );
+      a->addAttribute( "h", m_smHandled );
+      send( a );
+    }
   }
 
+  void Client::reqStreamManagement()
+  {
+    if( m_smContext >= CtxSMEnabled )
+    {
+      Tag* r = new Tag( "r", "xmlns", XMLNS_STREAM_MANAGEMENT );
+      send( r );
+    }
+  }
+  
   void Client::createSession()
   {
     notifyStreamEvent( StreamEventSessionCreation );

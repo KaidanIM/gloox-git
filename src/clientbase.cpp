@@ -88,7 +88,7 @@ namespace gloox
     : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
       m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ), m_port( port ),
-      m_availableSaslMechs( SaslMechAll ),
+      m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
@@ -106,7 +106,7 @@ namespace gloox
       m_password( password ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
       m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ),
-      m_port( port ), m_availableSaslMechs( SaslMechAll ),
+      m_port( port ), m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
@@ -245,6 +245,8 @@ namespace gloox
             m_seFactory->addExtensions( iq, tag );
             notifyIqHandlers( iq );
             ++m_stats.iqStanzasReceived;
+            if( m_smContext >= CtxSMEnabled )
+              ++m_smHandled;
           }
           else if( tag->name() == "message" )
           {
@@ -252,6 +254,8 @@ namespace gloox
             m_seFactory->addExtensions( msg, tag );
             notifyMessageHandlers( msg );
             ++m_stats.messageStanzasReceived;
+            if( m_smContext >= CtxSMEnabled )
+              ++m_smHandled;
           }
           else if( tag->name() == "presence" )
           {
@@ -271,9 +275,11 @@ namespace gloox
               notifyPresenceHandlers( pres );
               ++m_stats.presenceStanzasReceived;
             }
+            if( m_smContext >= CtxSMEnabled )
+              ++m_smHandled;
           }
           else
-            m_logInstance.err( LogAreaClassClientbase, "Received invalid stanza." );
+            m_logInstance.err( LogAreaClassClientbase, "Invalid stanza received: " + tag->name() );
         }
         else
         {
