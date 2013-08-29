@@ -148,7 +148,7 @@ namespace gloox
 
       /**
        * Switches usage of SASL on/off. Default: on. SASL should only be disabled if there are
-       * problems with using it.
+       * problems with using it, and if an alternative authentication method exists.
        * @param sasl Whether to switch SASL usage on or off.
        */
       void setSasl( bool sasl ) { m_sasl = sasl; }
@@ -826,14 +826,16 @@ namespace gloox
        * @param xml The data to send.
        */
       void send( const std::string& xml );
-      
+     
       /**
        * This function checks if there are any unacknowledged Tags in the send queue and resends
        * as necessary.
+       * @param handled The sequence number of the last handled stanza.
+       * @param resend Whether to resend unhandled stanzas.
        * @note This function is part of @xep{0198}. You should not need to use it directly.
        * @since 1.0.4
        */
-      void resend( int handled );
+      void checkQueue( int handled, bool resend );
       
       JID m_jid;                         /**< The 'self' JID. */
       JID m_authzid;                     /**< An optional authorization ID. See setAuthzid(). */
@@ -952,11 +954,13 @@ namespace gloox
        * This function is called for each Tag. Only stream initiation/negotiation should
        * be done here.
        * @param tag A Tag to handle.
+       * @return Returns @b true if the tag has been handled inside the function, @b false otherwise.
        */
       virtual bool handleNormalNode( Tag* tag ) = 0;
       virtual void rosterFilled() = 0;
       virtual void cleanup() {}
       virtual void handleIqIDForward( const IQ& iq, int context ) { (void) iq; (void) context; }
+      void send( Tag* tag, bool queue, bool del );
 
       void parse( const std::string& data );
       void init();

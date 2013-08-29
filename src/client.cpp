@@ -178,7 +178,11 @@ namespace gloox
       {
         if( m_authed )
         {
-          if( m_streamFeatures & StreamFeatureBind )
+          if( m_streamFeatures & StreamFeatureStreamManagement && m_smWanted && m_smContext >= CtxSMEnabled )
+          {
+            sendStreamManagement();
+          }
+          else if( m_streamFeatures & StreamFeatureBind && m_smContext < CtxSMEnabled )
           {
             notifyStreamEvent( StreamEventResourceBinding );
             bindResource( resource() );
@@ -299,30 +303,36 @@ namespace gloox
       }
       else if( name == "enabled" && xmlns == XMLNS_STREAM_MANAGEMENT )
       {
+        printf( "Client: Enable detected\n" );
         m_smContext = CtxSMEnabled;
         m_smMax = atoi( tag->findAttribute( "max" ).c_str() );
         m_smId = tag->findAttribute( "id" );
         const std::string res = tag->findAttribute( "resume" );
         m_smResume = ( ( res == "true" || res == "1" ) && !m_smId.empty() ) ? true : false;
         m_smLocation = tag->findAttribute( "location" );
+
+        if( m_streamFeatures & StreamFeatureSession )
+          createSession();
+        else
+          connected();
       }
-      else if( name == "resumed" && xmlns == XMLNS_STREAM_MANAGEMENT )
+      else if( name == "resumed" && xmlns == XMLNS_STREAM_MANAGEMENT && m_smContext == CtxSMResume )
       {
-        m_smContext = CtxSMResumed;
-        if( tag->findAttribute( "previd" ) != m_smId )
+        printf( "Client: Resume detected\n" );
+        if( tag->findAttribute( "previd" ) == m_smId )
         {
-          // Unexpected. Do something smart
+          printf( "Client: Resume detected, SMID recognized\n" );
+          m_smContext = CtxSMResumed;
+          notifyStreamEvent( StreamEventSMResumed );
+          int h = atoi( tag->findAttribute( "h" ).c_str() );
+          connected();
+          checkQueue( h, true );
         }
-        
-        notifyStreamEvent( StreamEventSMResumed );
+      }
+      else if( name == "a" && xmlns == XMLNS_STREAM_MANAGEMENT && m_smContext >= CtxSMEnabled )
+      {
         int h = atoi( tag->findAttribute( "h" ).c_str() );
-      }
-      else if( name == "a" && xmlns == XMLNS_STREAM_MANAGEMENT )
-      {
-        if( m_smContext == CtxSMEnabled || m_smContext == CtxSMResumed )
-        {
-          // check 'h' attribute and resend from queue, if necessary.
-        }
+        checkQueue( h, false );
       }
       else if( name == "r" && xmlns == XMLNS_STREAM_MANAGEMENT )
       {
@@ -516,7 +526,9 @@ namespace gloox
         m_selectedResource = m_jid.resource(); // TODO: remove for 1.1
         notifyOnResourceBind( m_jid.resource() );
 
-        if( m_streamFeatures & StreamFeatureSession )
+        if( m_streamFeatures & StreamFeatureStreamManagement && m_smWanted )
+          sendStreamManagement();
+        else if( m_streamFeatures & StreamFeatureSession )
           createSession();
         else
           connected();
@@ -539,7 +551,6 @@ namespace gloox
 
     if( !m_smWanted )
     {
-      m_smHandled = 0;
       m_smId = EmptyString;
       m_smLocation = EmptyString;
       m_smMax = 0;
@@ -556,17 +567,7 @@ namespace gloox
     if( !m_smWanted )
       return;
 
-    if( m_smContext == CtxSMEnabled )
-    {
-      notifyStreamEvent( StreamEventSMResume );
-      Tag* r = new Tag( "resume" );
-      r->setXmlns( XMLNS_STREAM_MANAGEMENT );
-      r->addAttribute( "h", m_smHandled );
-      r->addAttribute( "previd", m_smId );
-      send( r );
-      m_smContext = CtxSMResume;
-    }
-    else if( m_smContext == CtxSMInvalid )
+    if( m_smContext == CtxSMInvalid )
     {
       notifyStreamEvent( StreamEventSMEnable );
       Tag* e = new Tag( "enable" );
@@ -575,6 +576,17 @@ namespace gloox
         e->addAttribute( "resume", "true" );
       send( e );
       m_smContext = CtxSMEnable;
+      m_smHandled = 0;
+    }
+    else if( m_smContext == CtxSMEnabled )
+    {
+      notifyStreamEvent( StreamEventSMResume );
+      Tag* r = new Tag( "resume" );
+      r->setXmlns( XMLNS_STREAM_MANAGEMENT );
+      r->addAttribute( "h", m_smHandled );
+      r->addAttribute( "previd", m_smId );
+      send( r );
+      m_smContext = CtxSMResume;
     }
   }
   
@@ -675,7 +687,7 @@ namespace gloox
   {
     if( m_authed )
     {
-      if( m_manageRoster )
+      if( m_manageRoster && m_smContext != CtxSMResumed )
       {
         notifyStreamEvent( StreamEventRoster );
         m_rosterManager->fill();
@@ -699,6 +711,14 @@ namespace gloox
 
   void Client::disconnect()
   {
+    m_smContext = CtxSMInvalid;
+    m_smHandled = 0;
+    m_smId = EmptyString;
+    m_smLocation = EmptyString;
+    m_smMax = 0;
+    m_smResume = false;
+    m_smWanted = false;
+
     disconnect( ConnUserDisconnected );
   }
 

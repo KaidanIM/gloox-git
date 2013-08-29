@@ -150,6 +150,15 @@ namespace gloox
     m_iqExtHandlerMapMutex.unlock();
 
     util::clearList( m_presenceExtensions );
+    printf( "~ClientBase(): # in send queue: %d\n", m_smQueue.size() );
+    SMQueueMap::iterator it = m_smQueue.begin();
+    while( it != m_smQueue.end() )
+    {
+      if( (*it).second ) 
+        printf( "~ClientBase: in queue loop: #%d: %s\n", (*it).first, (*it).second->xml().substr( 0, 20 ).c_str() );
+      ++it;
+    }
+    util::clearMap( m_smQueue );
 
     setConnectionImpl( 0 );
     setEncryptionImpl( 0 );
@@ -398,8 +407,13 @@ namespace gloox
 
     m_encryptionActive = false;
     m_compressionActive = false;
+    m_smSent = 0;
 
     notifyOnDisconnect( reason );
+    
+#ifdef CLIENTBASE_TEST
+    m_nextId.reset();
+#endif
   }
 
   void ClientBase::parse( const std::string& data )
@@ -806,7 +820,7 @@ namespace gloox
     Tag* tag = iq.tag();
     addFrom( tag );
     addNamespace( tag );
-    send( tag );
+    send( tag, true, false );
   }
 
   void ClientBase::send( const Message& msg )
@@ -815,7 +829,7 @@ namespace gloox
     Tag* tag = msg.tag();
     addFrom( tag );
     addNamespace( tag );
-    send( tag );
+    send( tag, true, false );
   }
 
   void ClientBase::send( const Subscription& sub )
@@ -824,7 +838,7 @@ namespace gloox
     Tag* tag = sub.tag();
     addFrom( tag );
     addNamespace( tag );
-    send( tag );
+    send( tag, true, false );
   }
 
   void ClientBase::send( const Presence& pres )
@@ -836,13 +850,21 @@ namespace gloox
       tag->addChild( (*it)->tag() );
     addFrom( tag );
     addNamespace( tag );
-    send( tag );
+    send( tag, true, false );
   }
 
   void ClientBase::send( Tag* tag )
   {
     if( !tag )
       return;
+      
+    send( tag, false, true );
+  }
+  
+  void ClientBase::send( Tag* tag, bool queue, bool del )
+  {
+    if( !tag )
+    return;
 
     send( tag->xml() );
 
@@ -851,9 +873,9 @@ namespace gloox
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
       
-    if( m_smContext >= CtxSMEnabled )
+    if( queue && m_smContext >= CtxSMEnabled )
       m_smQueue.insert( std::make_pair( m_smSent++, tag ) );
-    else
+    else if( del )
       delete tag;
   }
 
@@ -872,25 +894,38 @@ namespace gloox
     }
   }
   
-  void ClientBase::resend( int handled )
+  void ClientBase::checkQueue( int handled, bool resend )
   {
-    if( m_smContext < CtxSMEnabled )
+#ifdef CLIENTBASE_TEST
+    printf( "ClientBase::checkQueue(): m_smContext: %d\n", m_smContext );
+#endif
+
+    if( m_smContext < CtxSMEnabled || handled < 0 )
       return;
+      
+#ifdef CLIENTBASE_TEST
+    printf( "ClientBase::checkQueue(): before # in send queue: %d\n", m_smQueue.size() );
+#endif
 
     SMQueueMap::iterator it = m_smQueue.begin();
-    for( ; it != m_smQueue.end(); ++it )
+    while( it != m_smQueue.end() )
     {
-      if( (*it).first > handled )
+      printf( "in queue loop: #%d: %s\n", (*it).first, (*it).second->xml().substr( 0, 20 ).c_str() );
+      if( (*it).first <= handled )
       {
-        send( (*it).second );
         delete (*it).second;
         m_smQueue.erase( it++ );
       }
-      else
+      else if( resend && (*it).first > handled )
       {
+        printf( "checkQueue(): queue pos: %d, handled: %d\n", (*it).first,  handled );
+        send( (*it).second, false, false );
         ++it;
       }
     }
+#ifdef CLIENTBASE_TEST
+    printf( "ClientBase::checkQueue(): after # in send queue: %d\n", m_smQueue.size() );
+#endif
   }
 
   void ClientBase::addFrom( Tag* tag )
@@ -977,10 +1012,14 @@ namespace gloox
 
   const std::string ClientBase::getID()
   {
+#ifdef CLIENTBASE_TEST // to create predictable UIDs in test mode
+    return "uid" + util::int2string( m_nextId.increment() );
+#else
     char r[21+1];
     sprintf( r, "uid:%08x:%08x", m_uniqueBaseId, m_nextId.increment() );
     std::string ret( r, 21 );
     return ret;
+#endif
   }
 
   bool ClientBase::checkStreamVersion( const std::string& version )

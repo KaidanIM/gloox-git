@@ -7,7 +7,7 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = client_test
 
 client_test_SOURCES = client_test.cpp
-client_test_LDADD = ../../client.o ../../clientbase.o ../../connectiontcpbase.o ../../connectiontcpclient.o \
+client_test_LDADD = ../../client.o ../../connectiontcpbase.o ../../connectiontcpclient.o \
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o ../../jid.o \
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopensslclient.o ../../tlsopensslbase.o ../../tlsopensslserver.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
