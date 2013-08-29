@@ -4,6 +4,7 @@ v1.0.4 -- xx yyy 2013
 - Ensure setting a connection does not leave a deleted value in the member variable for a time (patch by Daniel Bowen)
 - Add operator< and relatives to JID so that it can be in a map (patch by Daniel Bowen)
 - Sandboxing on Apple doesn't like getprotobyname (patch by Daniel Bowen)
+- MessageSession::send(): removed default argument of 2nd parameter to remove ambiguity of MS::send( string ) (#206) (source incompatible!)
 
 
 

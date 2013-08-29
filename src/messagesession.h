@@ -233,7 +233,7 @@ namespace gloox
        * @param sel An optional list of StanzaExtensions. The extensions will be owned by the message-to-be-sent;
        * do not attempt to re-use or delete them.
        */
-      virtual void send( const std::string& message, const std::string& subject = EmptyString,
+      virtual void send( const std::string& message, const std::string& subject,
                          const StanzaExtensionList& sel = StanzaExtensionList() );
 
       /**
