@@ -28,7 +28,7 @@ namespace gloox
   class IQ;
 
   /**
-   * @brief This class implements a basic Jabber Client.
+   * @brief This class implements a basic Jabber/XMPP Client.
    *
    * It supports @ref sasl_auth as well as TLS (Encryption), which can be
    * switched on/off separately. They are used automatically if the server supports them.
@@ -36,7 +36,7 @@ namespace gloox
    * To use, create a new Client instance and feed it connection credentials, either in the Constructor or
    * afterwards using the setters. You should then register packet handlers implementing the corresponding
    * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler, SubscriptionHandler),
-   * and call @ref connect() to establish the connection to the server.<br>
+   * and call @ref connect() to establish the connection to the server.
    *
    * @note While the MessageHandler interface is still available (and will be in future versions)
    * it is now recommended to use the new @link gloox::MessageSession MessageSession @endlink for any
@@ -92,6 +92,10 @@ namespace gloox
    * availability is likely to be lifted in the future.)
    *
    * Of course, all these mechanisms are not tried unless the server offers them.
+   * 
+   * @section stream_management Stream Management (@xep{0198})
+   * 
+   * // TODO: fill in the blanks
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
