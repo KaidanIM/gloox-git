@@ -37,7 +37,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         tlsopensslserver.cpp compressiondefault.cpp \
                         connectiontlsserver.cpp atomicrefcount.cpp linklocalmanager.cpp linklocalclient.cpp
 
-libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
+libgloox_la_LDFLAGS = -version-info 9:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS)
 
