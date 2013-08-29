@@ -95,7 +95,8 @@ namespace gloox
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
-      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long)&m_nextId ) & 0xFFFF ) )
+      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long) & m_nextId ) & 0xFFFF ) ),
+      m_smSent( 0 )
   {
     init();
   }
@@ -113,7 +114,8 @@ namespace gloox
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
-      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long)&m_nextId ) & 0xFFFF ) )
+      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long) & m_nextId ) & 0xFFFF ) ),
+      m_smSent( 0 )
   {
     init();
   }
@@ -848,8 +850,11 @@ namespace gloox
 
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
-
-    delete tag;
+      
+    if( m_smContext >= CtxSMEnabled )
+      m_smQueue.insert( std::make_pair( m_smSent++, tag ) );
+    else
+      delete tag;
   }
 
   void ClientBase::send( const std::string& xml )
@@ -864,6 +869,27 @@ namespace gloox
         m_connection->send( xml );
 
       logInstance().dbg( LogAreaXmlOutgoing, xml );
+    }
+  }
+  
+  void ClientBase::resend( int handled )
+  {
+    if( m_smContext < CtxSMEnabled )
+      return;
+
+    SMQueueMap::iterator it = m_smQueue.begin();
+    for( ; it != m_smQueue.end(); ++it )
+    {
+      if( (*it).first > handled )
+      {
+        send( (*it).second );
+        delete (*it).second;
+        m_smQueue.erase( it++ );
+      }
+      else
+      {
+        ++it;
+      }
     }
   }
 
