@@ -1,4 +1,4 @@
-v1.0.4 -- xx yyy 2013
+v1.0.4 -- 30 Aug 2013
 ---------------------
 - added support for Stream Management (XEP-0198)
 - Fix some iterator usage for portability related to erase (patch by Daniel Bowen)
