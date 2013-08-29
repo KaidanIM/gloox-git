@@ -827,6 +827,14 @@ namespace gloox
        */
       void send( const std::string& xml );
       
+      /**
+       * This function checks if there are any unacknowledged Tags in the send queue and resends
+       * as necessary.
+       * @note This function is part of @xep{0198}. You should not need to use it directly.
+       * @since 1.0.4
+       */
+      void resend( int handled );
+      
       JID m_jid;                         /**< The 'self' JID. */
       JID m_authzid;                     /**< An optional authorization ID. See setAuthzid(). */
       std::string m_authcid;             /**< An alternative authentication ID. See setAuthcid(). */
@@ -1001,6 +1009,7 @@ namespace gloox
       typedef std::multimap<const int, IqHandler*>         IqHandlerMap;
       typedef std::map<const std::string, TrackStruct>     IqTrackMap;
       typedef std::map<const std::string, MessageHandler*> MessageHandlerMap;
+      typedef std::map<int, Tag*>                          SMQueueMap;
       typedef std::list<MessageSession*>                   MessageSessionList;
       typedef std::list<MessageHandler*>                   MessageHandlerList;
       typedef std::list<PresenceHandler*>                  PresenceHandlerList;
@@ -1012,6 +1021,7 @@ namespace gloox
       IqHandlerMapXmlns        m_iqNSHandlers;
       IqHandlerMap             m_iqExtHandlers;
       IqTrackMap               m_iqIDHandlers;
+      SMQueueMap               m_smQueue;
       MessageSessionList       m_messageSessions;
       MessageHandlerList       m_messageHandlers;
       PresenceHandlerList      m_presenceHandlers;
@@ -1049,6 +1059,8 @@ namespace gloox
 
       int m_uniqueBaseId;
       util::AtomicRefCount m_nextId;
+      
+      int m_smSent;
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
       CredHandle m_credHandle;
