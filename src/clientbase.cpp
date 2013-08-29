@@ -150,14 +150,6 @@ namespace gloox
     m_iqExtHandlerMapMutex.unlock();
 
     util::clearList( m_presenceExtensions );
-    printf( "~ClientBase(): # in send queue: %d\n", m_smQueue.size() );
-    SMQueueMap::iterator it = m_smQueue.begin();
-    while( it != m_smQueue.end() )
-    {
-      if( (*it).second ) 
-        printf( "~ClientBase: in queue loop: #%d: %s\n", (*it).first, (*it).second->xml().substr( 0, 20 ).c_str() );
-      ++it;
-    }
     util::clearMap( m_smQueue );
 
     setConnectionImpl( 0 );
@@ -896,21 +888,12 @@ namespace gloox
   
   void ClientBase::checkQueue( int handled, bool resend )
   {
-#ifdef CLIENTBASE_TEST
-    printf( "ClientBase::checkQueue(): m_smContext: %d\n", m_smContext );
-#endif
-
     if( m_smContext < CtxSMEnabled || handled < 0 )
       return;
       
-#ifdef CLIENTBASE_TEST
-    printf( "ClientBase::checkQueue(): before # in send queue: %d\n", m_smQueue.size() );
-#endif
-
     SMQueueMap::iterator it = m_smQueue.begin();
     while( it != m_smQueue.end() )
     {
-      printf( "in queue loop: #%d: %s\n", (*it).first, (*it).second->xml().substr( 0, 20 ).c_str() );
       if( (*it).first <= handled )
       {
         delete (*it).second;
@@ -918,14 +901,10 @@ namespace gloox
       }
       else if( resend && (*it).first > handled )
       {
-        printf( "checkQueue(): queue pos: %d, handled: %d\n", (*it).first,  handled );
         send( (*it).second, false, false );
         ++it;
       }
     }
-#ifdef CLIENTBASE_TEST
-    printf( "ClientBase::checkQueue(): after # in send queue: %d\n", m_smQueue.size() );
-#endif
   }
 
   void ClientBase::addFrom( Tag* tag )

@@ -427,7 +427,7 @@ int main( int /*argc*/, char** /*argv*/ )
   c->setTls( TLSDisabled );
   c->setCompression( false );
   c->setStreamManagement( true, true );
-  c->setLog( true );
+//   c->setLog( true );
   c->connect();
   //   printf( "connected: %d, disconnected: %d, reason: %d\n", c->connected(), c->disconnected(), c->disconnectReason() );
   if( c->connected() != 1 || c->disconnected() != 1 || c->disconnectReason() != ConnIoError )
