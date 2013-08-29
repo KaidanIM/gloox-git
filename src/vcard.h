@@ -428,7 +428,7 @@ namespace gloox
        * Sets a URI to a photo.
        * @param extval The URI to the photo.
        */
-      void setPhoto( const std::string& extval );
+      void setPhotoUri( const std::string& extval );
 
       /**
        * Sets the photo directly.

@@ -236,7 +236,7 @@ namespace gloox
     m_N = true;
   }
 
-  void VCard::setPhoto( const std::string& extval )
+  void VCard::setPhotoUri( const std::string& extval )
   {
     if( !extval.empty() )
     {
