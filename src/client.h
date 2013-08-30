@@ -95,7 +95,16 @@ namespace gloox
    * 
    * @section stream_management Stream Management (@xep{0198})
    * 
-   * // TODO: fill in the blanks
+   * To enable Stream Management, call @ref setStreamManagement() with the first parameter set to @b true 
+   * at any time. This will tell the server to enable Stream Management, if available. Once switched on,
+   * Stream Management can not be disabled for a given active stream. However, setting the first
+   * parameter to @b false it can be disabled inside gloox so that Stream Management will not be used
+   * for subsequent connections.
+   * 
+   * To enable the stream resumption feature, pass @b true as the second parameter. Upon re-connect after an
+   *  unexpected (i.e. not user-triggered) disconnect, gloox will try to resume the stream
+   *  and re-send any lost stanzas automatically.
+   * 
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
