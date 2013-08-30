@@ -160,9 +160,6 @@ void RosterManagerTest::send( const IQ& iq, IqHandler*, int ctx )
       Tag* r = new Tag( "iq" );
       Tag* q = new Tag( r, "query" );
       q->setXmlns( XMLNS_ROSTER );
-      Tag* i = new Tag( q, "item", "jid", "jid1" );
-      i = new Tag( q, "item", "jid", "jid2" );
-      i = new Tag( q, "item", "jid", "jid3" );
       re.addExtension( new RosterManager::Query( q ) );
       delete r;
       m_rm->handleIqID( re, ctx );
