@@ -93,9 +93,9 @@ namespace gloox
    *
    * Of course, all these mechanisms are not tried unless the server offers them.
    * 
-   * @section stream_management Stream Management (@xep{0198})
+   * @section stream_management Stream Management
    * 
-   * To enable Stream Management, call @ref setStreamManagement() with the first parameter set to @b true 
+   * To enable Stream Management (@xep{0198}), call @ref setStreamManagement() with the first parameter set to @b true 
    * at any time. This will tell the server to enable Stream Management, if available. Once switched on,
    * Stream Management can not be disabled for a given active stream. However, setting the first
    * parameter to @b false it can be disabled inside gloox so that Stream Management will not be used
