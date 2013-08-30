@@ -47,11 +47,11 @@ namespace gloox
       void removeIqHandler( IqHandler* ih, const int ext );
       void removeIDHandler( IqHandler* ) {}
       void registerStanzaExtension( StanzaExtension* se );
-      void removeStanzaExtension( int ext ) {}
-      virtual void handleFlexibleOfflineSupport( bool support ) {}
-      virtual void handleFlexibleOfflineMsgNum( int num ) {}
-      virtual void handleFlexibleOfflineMessageHeaders( const Disco::ItemList& headers ) {}
-      virtual void handleFlexibleOfflineResult( FlexibleOfflineResult foResult ) {}
+      void removeStanzaExtension( int /*ext*/ ) {}
+      virtual void handleFlexibleOfflineSupport( bool /*support*/ ) {}
+      virtual void handleFlexibleOfflineMsgNum( int /*num*/ ) {}
+      virtual void handleFlexibleOfflineMessageHeaders( const Disco::ItemList& /*headers*/ ) {}
+      virtual void handleFlexibleOfflineResult( FlexibleOfflineResult /*foResult*/ ) {}
       const JID& jid() const { return g_jid; }
       void setTest( int test );
       bool ok();

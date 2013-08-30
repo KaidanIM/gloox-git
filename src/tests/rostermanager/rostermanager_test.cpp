@@ -328,7 +328,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ri )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), ri->jid().c_str() );
+    printf( "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
   }
 
   // -------
@@ -366,7 +366,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ri )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), ri->jid().c_str() );
+    printf( "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
   }
 
   // -------

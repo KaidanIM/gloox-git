@@ -126,7 +126,7 @@ namespace gloox
         break;
     }
   }
-  void ClientBase::handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult )
+  void ClientBase::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult pxResult )
   {
     switch( m_test )
     {
@@ -149,7 +149,6 @@ int main( int /*argc*/, char** /*argv*/ )
   t1 = new Tag( "foo" );
   t1->setXmlns( "test" );
   new Tag( t1, "foobar" );
-  Tag *t;
   ClientBase* cb = new ClientBase();
   PrivateXML px( cb );
 

@@ -60,7 +60,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
   public:
     RegistrationTest();
     ~RegistrationTest();
-    virtual void handleRegistrationFields( const gloox::JID& from, int fields,
+    virtual void handleRegistrationFields( const gloox::JID& /*from*/, int fields,
                                            std::string instructions )
     {
       if( m_test == 2 && fields & ( gloox::Registration::FieldUsername | gloox::Registration::FieldPassword
@@ -80,7 +80,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
       m_test = 0;
     }
 
-    virtual void handleRegistrationResult( const gloox::JID& from, gloox::RegistrationResult regResult )
+    virtual void handleRegistrationResult( const gloox::JID& /*from*/, gloox::RegistrationResult regResult )
     {
       if( ( m_test == 4 || m_test == 6 || m_test == 7 || m_test == 8 )
             && regResult == gloox::RegistrationSuccess )
@@ -89,7 +89,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
       m_test = 0;
     }
 
-    virtual void handleDataForm( const gloox::JID& from, const gloox::DataForm& form )
+    virtual void handleDataForm( const gloox::JID& /*from*/, const gloox::DataForm& form )
     {
       if( m_test == 5 && form )
         m_result = true;
@@ -97,7 +97,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
       m_test = 0;
     }
 
-    virtual void handleOOB( const gloox::JID& from, const gloox::OOB& oob )
+    virtual void handleOOB( const gloox::JID& /*from*/, const gloox::OOB& /*oob*/ )
     {
     }
 

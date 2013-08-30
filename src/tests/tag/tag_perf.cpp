@@ -55,7 +55,7 @@ static char values[sz_max];
 
 static void randomize( const int size )
 {
-  srand( time(NULL) );
+  srand( time( 0 ) );
   for (int i = 0; i < size-1; ++i)
   {
     values[i] = rand() % 96 + 32;

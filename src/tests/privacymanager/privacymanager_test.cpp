@@ -50,11 +50,11 @@ namespace gloox
       void setTest( int test );
       bool ok();
 
-      virtual void handlePrivacyListNames( const std::string& active, const std::string& def,
-                                           const StringList& lists ) {}
-      virtual void handlePrivacyList( const std::string& name, const PrivacyList& items ) {}
-      virtual void handlePrivacyListChanged( const std::string& name ) {}
-      virtual void handlePrivacyListResult( const std::string& id, PrivacyListResult plResult ) {}
+      virtual void handlePrivacyListNames( const std::string& /*active*/, const std::string& /*def*/,
+                                           const StringList& /*lists*/ ) {}
+      virtual void handlePrivacyList( const std::string& /*name*/, const PrivacyList& /*items*/ ) {}
+      virtual void handlePrivacyListChanged( const std::string& /*name*/ ) {}
+      virtual void handlePrivacyListResult( const std::string& /*id*/, PrivacyListResult /*plResult*/ ) {}
 
     private:
       Disco* m_disco;
