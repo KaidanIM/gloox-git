@@ -7,7 +7,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           dataform dataformfield \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
           error \
-          featureneg flexoffline flexofflineoffline \
+          featureneg flexoffline flexofflineoffline forward \
           gpgencrypted gpgsigned \
           inbandbytestreamibb inbandbytestream iq \
           jid \

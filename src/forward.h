@@ -10,19 +10,27 @@
   This software is distributed without any warranty.
 */
 
+
 #ifndef FORWARD_H__
 #define FORWARD_H__
 
-#include "delayeddelivery.h"
-#include "stanza.h"
+#include "stanzaextension.h"
 
 #include <string>
 
 namespace gloox
 {
+
+  class DelayedDelivery;
+  class Stanza;
+
   /**
    * @brief This is an implementation of Stanza Forwarding (@xep{0297}) as a StanzaExtension.
    *
+   * @note At this point, Forward can only hold forwarded Messages, not IQ or Presence.
+   * However, Forward can be used inside any type of stanza (&lt;message&gt;, &lt;iq&gt;,
+   * or &lt;presence&gt;).
+   * 
    * XEP-Version: 0.5
    *
    * @author Jakob Schroeter <js@camaya.net>
@@ -34,14 +42,18 @@ namespace gloox
     public:
 
       /**
-       * Creates a forwarding Stanza, embedding the given Stanza and DelayedDelivery objects.
-       * @param stanza The forwarded Stanza.
-       * @param delay The date/time the forwarded stanza was received at by the forwarder.
+       * Creates a forwarding StanzaExtension, embedding the given Stanza and DelayedDelivery objects.
+       * @param stanza The forwarded Stanza. This Forward instance will own the Stanza object.
+       * @param delay The date/time the forwarded stanza was received at by the forwarder. This
+       * Forward instance will own the DelayedDelivery object.
        */
       Forward( Stanza* stanza, DelayedDelivery* delay );
       
       /**
        * Creates a forwarding Stanza from the given Tag. The original Tag will be ripped off.
+       * If a valid Stanza is conatined (as a child) in the Tag it will be parsed, too.
+       * It can then be accessed through embeddedStanza(). The Tag that the Stanza was built from
+       * is available through embeddedTag().
        * @param tag The Tag to parse.
        */
       Forward( const Tag* tag );
@@ -55,7 +67,7 @@ namespace gloox
        * This function returns a pointer to a DelayedDelivery StanzaExtension which indicates
        * when the forwarder originally received the forwarded stanza.
        * 
-       * @return A pointer to a DelayedDelivery object.
+       * @return A pointer to a DelayedDelivery object. May be 0.
        */
       const DelayedDelivery* when() const { return m_delay; }
 
@@ -68,23 +80,17 @@ namespace gloox
       // reimplemented from Stanza
       virtual Tag* tag() const;
 
-      /**
-       * Returns an XPath expression that describes a path to child elements of a
-       * stanza that an extension handles.
-       *
-       * @return The extension's filter string.
-       */
+      // reimplemented from Stanza
       const std::string& filterString() const;
       
+      // reimplemented from Stanza
       StanzaExtension* newInstance( const Tag* tag ) const
       {
         return new Forward( tag );
       }
 
-      StanzaExtension* clone() const
-      {
-        return new Forward( this->m_stanza, this->m_delay );
-      }
+      // reimplemented from Stanza
+      StanzaExtension* clone() const;
 
     private:
       Stanza* m_stanza;

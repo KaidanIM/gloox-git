@@ -34,6 +34,7 @@ namespace gloox
   {
 
     friend class ClientBase;
+    friend class Forward;
 
     public:
 

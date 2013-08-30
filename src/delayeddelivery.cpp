@@ -31,6 +31,7 @@ namespace gloox
   {
     if( !tag || !tag->hasAttribute( "stamp" ) )
       return;
+
     if( !( tag->name() == "x" && tag->hasAttribute( XMLNS, XMLNS_X_DELAY ) ) )
       if( !( tag->name() == "delay" && tag->hasAttribute( XMLNS, XMLNS_DELAY ) ) )
         return;
