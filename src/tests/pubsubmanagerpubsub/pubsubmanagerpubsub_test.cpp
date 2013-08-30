@@ -9,8 +9,6 @@ using namespace gloox;
 static const JID jid( "aaa@bbb.ccc" );
 static const std::string node( "node" );
 
-static const Tag* tag;
-
 #define PUBSUBMANAGER_TEST
 #include "../../pubsubmanager.cpp"
 #include "../../pubsubmanager.h"

@@ -60,8 +60,8 @@ class ConnectionImpl : public ConnectionBase
       : ConnectionBase( cdh ), m_pos( 0 ) {}
     virtual ~ConnectionImpl() {}
     virtual ConnectionError connect() { m_state = StateConnected; return ConnNoError; }
-    virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; }
-    virtual bool send( const std::string& data ) { return true; }
+    virtual ConnectionError recv( int /*timeout = -1*/ ) { return ConnNoError; }
+    virtual bool send( const std::string& /*data*/ ) { return true; }
     virtual ConnectionError receive()
     {
       ConnectionError ce = ConnNoError;

@@ -14,8 +14,6 @@ static double divider = 1000000;
 static int num = 10000;
 static double t;
 
-static JID * jid;
-
 static void printTime ( const char * testName, struct timeval tv1, struct timeval tv2 )
 {
   t = tv2.tv_sec - tv1.tv_sec;

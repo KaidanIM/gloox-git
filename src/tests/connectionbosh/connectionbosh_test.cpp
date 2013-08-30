@@ -30,7 +30,7 @@ namespace gloox
 //         printf( "FakeConnection::newInstance(): %d\n", g_test );
         return new FakeConnection();
       }
-      virtual void getStatistics( long int &totalIn, long int &totalOut ) {}
+      virtual void getStatistics( long int& /*totalIn*/, long int& /*totalOut*/ ) {}
       void setTest( int test ) { g_test = test; }
   };
 
@@ -73,7 +73,7 @@ namespace gloox
 
     return ConnNoError;
   }
-  bool FakeConnection::send( const std::string& data )
+  bool FakeConnection::send( const std::string& /*data*/ )
   {
 //     printf( "FakeConnection::send(): %d\n", g_test );
     return true;
@@ -96,7 +96,7 @@ namespace gloox
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
       virtual void handleConnect( const ConnectionBase* connection );
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
-      virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+      virtual void handleLog( LogLevel /*level*/, LogArea area, const std::string& /*message*/ )
       {
 //         printf("%d: ", int( time( 0 ) ) );
         switch(area)
@@ -122,7 +122,7 @@ namespace gloox
       bool m_stopLoop;
   };
 
-  void FakeClientBase::handleConnect( const ConnectionBase* connection )
+  void FakeClientBase::handleConnect( const ConnectionBase* /*connection*/ )
   {
 //     printf( "FakeClientBase::handleConnect(): %d\n", g_test );
     m_stopLoop = true;
@@ -133,7 +133,7 @@ namespace gloox
       ++g_test;
     }
   }
-  void FakeClientBase::handleReceivedData( const ConnectionBase* connection, const std::string& data )
+  void FakeClientBase::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& /*data*/ )
   {
 //     printf( "FakeClientBase::handleReceivedData(): %d\n", g_test );
     m_stopLoop = true;
@@ -150,7 +150,7 @@ namespace gloox
 //     else
 //       printf( "RECEIVED UNHANDLED: %s\n", data.c_str() );
   }
-  void FakeClientBase::handleDisconnect( const ConnectionBase* connection, ConnectionError reason )
+  void FakeClientBase::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError /*reason*/ )
   {
 //     printf( "FakeClientBase::handleDisconnect(): %d\n", g_test );
     m_stopLoop = true;
