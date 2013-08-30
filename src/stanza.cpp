@@ -66,6 +66,20 @@ namespace gloox
     util::clearList( m_extensionList );
   }
 
+  Stanza* Stanza::embeddedStanza() const
+  {
+    StanzaExtensionList::const_iterator it = m_extensionList.begin();
+    for( ; it != m_extensionList.end() && (*it)->embeddedStanza(); ++it ) ;
+    return it != m_extensionList.end() ? (*it)->embeddedStanza() : 0;
+  }
+  
+  Tag* Stanza::embeddedTag() const
+  {
+    StanzaExtensionList::const_iterator it = m_extensionList.begin();
+    for( ; it != m_extensionList.end() && (*it)->embeddedTag(); ++it ) ;
+    return it != m_extensionList.end() ? (*it)->embeddedTag() : 0;
+  }
+  
   void Stanza::setLang( StringMap** map,
                         std::string& defaultLang,
                         const Tag* tag )
