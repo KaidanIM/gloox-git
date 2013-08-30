@@ -246,6 +246,8 @@ namespace gloox
           {
             IQ iq( tag );
             m_seFactory->addExtensions( iq, tag );
+            if( iq.hasEmbeddedStanza() )
+              m_seFactory->addExtensions( *iq.embeddedStanza(), iq.embeddedTag() );
             notifyIqHandlers( iq );
             ++m_stats.iqStanzasReceived;
             if( m_smContext >= CtxSMEnabled )
@@ -255,6 +257,8 @@ namespace gloox
           {
             Message msg( tag );
             m_seFactory->addExtensions( msg, tag );
+            if( msg.hasEmbeddedStanza() )
+              m_seFactory->addExtensions( *msg.embeddedStanza(), msg.embeddedTag() );
             notifyMessageHandlers( msg );
             ++m_stats.messageStanzasReceived;
             if( m_smContext >= CtxSMEnabled )
@@ -268,6 +272,8 @@ namespace gloox
             {
               Subscription sub( tag );
               m_seFactory->addExtensions( sub, tag );
+              if( sub.hasEmbeddedStanza() )
+                m_seFactory->addExtensions( *sub.embeddedStanza(), sub.embeddedTag() );
               notifySubscriptionHandlers( sub );
               ++m_stats.s10nStanzasReceived;
             }
@@ -275,6 +281,8 @@ namespace gloox
             {
               Presence pres( tag );
               m_seFactory->addExtensions( pres, tag );
+              if( pres.hasEmbeddedStanza() )
+                m_seFactory->addExtensions( *pres.embeddedStanza(), pres.embeddedTag() );
               notifyPresenceHandlers( pres );
               ++m_stats.presenceStanzasReceived;
             }

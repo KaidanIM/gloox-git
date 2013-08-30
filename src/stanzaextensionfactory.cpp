@@ -84,7 +84,11 @@ namespace gloox
       {
         StanzaExtension* se = (*ite)->newInstance( (*it) );
         if( se )
+        {
           stanza.addExtension( se );
+          if( se->embeddedStanza() )
+            stanza.setEmbeddedStanza();
+        }
       }
     }
   }

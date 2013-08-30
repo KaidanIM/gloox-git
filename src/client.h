@@ -102,8 +102,8 @@ namespace gloox
    * for subsequent connections.
    * 
    * To enable the stream resumption feature, pass @b true as the second parameter. Upon re-connect after an
-   *  unexpected (i.e. not user-triggered) disconnect, gloox will try to resume the stream
-   *  and re-send any lost stanzas automatically.
+   * unexpected (i.e. not user-triggered) disconnect, gloox will try to resume the stream
+   * and re-send any lost stanzas automatically.
    * 
    *
    * @author Jakob Schroeter <js@camaya.net>

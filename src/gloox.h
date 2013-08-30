@@ -316,11 +316,13 @@
  * @li @xep{0172} @link gloox::Nickname User Nickname @endlink
  * @li @xep{0174} @link gloox::LinkLocal::Manager Link-local Messaging @endlink
  * @li @xep{0184} @link gloox::Receipt Message Receipts @endlink
+ * @li @xep{0198} Stream Management (integrated into @link gloox::Client @endlink)
  * @li @xep{0199} @link gloox::ClientBase::xmppPing() XMPP Ping @endlink
  * @li @xep{0203} @link gloox::DelayedDelivery Delayed Delivery @endlink (new spec)
  * @li @xep{0206} @link gloox::ConnectionBOSH see BOSH @endlink
  * @li @xep{0224} @link gloox::Attention Attention @endlink
  * @li @xep{0256} @link gloox::LastActivity::Query Last Activity in Presence @endlink
+ * @li @xep{0297} @link gloox::Forward Stanza Forwarding @endlink
  *
  * Further extensions can easily be implemented using
  * @link gloox::StanzaExtension StanzaExtensions @endlink.
@@ -590,6 +592,9 @@ namespace gloox
 
   /** Stream Management namespace (@xep{0198}) */
   GLOOX_API extern const std::string XMLNS_STREAM_MANAGEMENT;
+
+  /** Stanza Forwarding namespace (@xep{0297}) */
+  GLOOX_API extern const std::string XMLNS_STANZA_FORWARDING;
 
 
   /** Supported stream version (major). */
