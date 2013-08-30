@@ -10,8 +10,13 @@
   This software is distributed without any warranty.
 */
 
-#include "util.h"
+
 #include "forward.h"
+
+#include "delayeddelivery.h"
+#include "message.h"
+#include "stanza.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -27,7 +32,17 @@ namespace gloox
     : StanzaExtension( ExtForward ), 
       m_stanza( 0 ), m_tag( 0 ), m_delay( 0 )
   {
+    if( !tag || !( tag->name() == "forward" && tag->hasAttribute( XMLNS, XMLNS_X_DELAY ) ) )
+      return;
+
+    m_delay = new DelayedDelivery( tag->findChild( "delay" ) );
+
+    Tag* m = tag->findChild( "message" );
+    if( !m )
+      return;
     
+    m_tag = m->clone();
+    m_stanza = new Message( m );
   }
 
   Forward::~Forward()
@@ -47,6 +62,9 @@ namespace gloox
   
   Tag* Forward::tag() const
   {
+    if( !m_stanza )
+      return 0;
+
     Tag* f = new Tag( "forwarded" );
     f->setXmlns( XMLNS_STANZA_FORWARDING );
     if( m_delay )
@@ -57,4 +75,12 @@ namespace gloox
     return f;
   }
 
+  StanzaExtension* Forward::clone() const
+  {
+    if( !m_tag || !m_delay )
+      return 0;
+    
+    return new Forward( new Message( m_tag ), static_cast<DelayedDelivery*>( m_delay->clone() ) );
+  }
+  
 }

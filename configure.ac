@@ -413,6 +413,7 @@ src/tests/error/Makefile
 src/tests/featureneg/Makefile
 src/tests/flexofflineoffline/Makefile
 src/tests/flexoffline/Makefile
+src/tests/forward/Makefile
 src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
 src/tests/inbandbytestreamibb/Makefile
