@@ -22,6 +22,7 @@ namespace gloox
 {
 
   class Tag;
+  class Stanza;
 
   /**
    * Supported Stanza extension types.
@@ -86,6 +87,7 @@ namespace gloox
                                      * (@xep{0060}) */
     ExtSHIM,                        /**< An extension dealing with Stanza Headers and Internet Metadata (@xep{0131}). */
     ExtAttention,                   /**< An extension dealing with Attention (@xep{0224}). */
+    ExtForward,                     /**< An extension dealing with Stanza Forwarding (@xep{0297}). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
@@ -188,6 +190,16 @@ namespace gloox
        * Virtual destructor.
        */
       virtual ~StanzaExtension() {}
+
+      /**
+       * 
+       */
+      virtual Stanza* embeddedStanza() const { return 0; }
+      
+      /**
+       * 
+       */
+      virtual Tag* embeddedTag() const { return 0; }
 
       /**
        * Returns an XPath expression that describes a path to child elements of a

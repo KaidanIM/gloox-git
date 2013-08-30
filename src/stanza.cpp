@@ -24,12 +24,12 @@ namespace gloox
 {
 
   Stanza::Stanza( const JID& to )
-    : m_xmllang( "default" ), m_to( to )
+    : m_xmllang( "default" ), m_to( to ), m_hasEmbeddedStanza( false )
   {
   }
 
   Stanza::Stanza( Tag* tag )
-    : m_xmllang( "default" )
+    : m_xmllang( "default" ), m_hasEmbeddedStanza( false )
   {
     if( !tag )
       return;

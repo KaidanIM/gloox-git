@@ -118,6 +118,26 @@ namespace gloox
       void removeExtensions();
 
       /**
+       * 
+       */
+      void setEmbeddedStanza() { m_hasEmbeddedStanza = true; }
+
+      /**
+       * 
+       */
+      bool hasEmbeddedStanza() const { return m_hasEmbeddedStanza; }
+      
+      /**
+       * 
+       */
+      virtual Stanza* embeddedStanza() const { return 0; }
+      
+      /**
+       * 
+       */
+      virtual Tag* embeddedTag() const { return 0; }
+
+      /**
        * Creates a Tag representation of the Stanza. The Tag is completely
        * independent of the Stanza and will not be updated when the Stanza
        * is modified.
@@ -166,6 +186,8 @@ namespace gloox
 
     private:
       Stanza( const Stanza& );
+      
+      bool m_hasEmbeddedStanza;
 
   };
 
