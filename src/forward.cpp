@@ -18,14 +18,14 @@ namespace gloox
 
   Forward::Forward( Stanza *stanza, DelayedDelivery *delay )
     : StanzaExtension( ExtForward ),
-      m_stanza( stanza ), m_delay( delay )
+      m_stanza( stanza ), m_tag( 0 ), m_delay( delay )
   {
-    ;
+    
   }
   
   Forward::Forward( const Tag* tag )
     : StanzaExtension( ExtForward ), 
-      m_stanza( 0 ), m_delay( 0 )
+      m_stanza( 0 ), m_tag( 0 ), m_delay( 0 )
   {
     
   }
@@ -33,10 +33,8 @@ namespace gloox
   Forward::~Forward()
   {
     delete m_delay;
-    m_delay = 0;
-
     delete m_stanza;
-    m_stanza = 0;
+    delete m_tag;
   }
 
   const std::string& Forward::filterString() const

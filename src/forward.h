@@ -47,31 +47,24 @@ namespace gloox
       Forward( const Tag* tag );
 
       /**
-       * Destructor.
+       * Virtual destructor.
        */
       virtual ~Forward();
 
       /**
-       * Convenience function that returns a pointer to a DelayedDelivery StanzaExtension, if the
-       * message contains one.
-       * Make sure you have registered a DelayedDelivery instance with your ClientBase (this is not done automatically),
-       * otherwise this method will always return 0.
-       * @return A pointer to a DelayedDelivery object, or 0.
+       * This function returns a pointer to a DelayedDelivery StanzaExtension which indicates
+       * when the forwarder originally received the forwarded stanza.
+       * 
+       * @return A pointer to a DelayedDelivery object.
        */
-      const DelayedDelivery* when() const
-      {
-        return m_delay;
-      }
+      const DelayedDelivery* when() const { return m_delay; }
 
-      /**
-       * Get forwarded message.
-       * @result A pointer to the forwarded Stanza, or 0.
-       */
-      Stanza* embeddedStanza() const
-      {
-        return m_stanza;
-      }
-
+      // reimplemented from Stanza
+      virtual Stanza* embeddedStanza() const { return m_stanza; }
+      
+      // reimplemented from Stanza
+      virtual Tag* embeddedTag() const { return m_tag; }
+      
       // reimplemented from Stanza
       virtual Tag* tag() const;
 
@@ -94,9 +87,10 @@ namespace gloox
       }
 
     private:
+      Stanza* m_stanza;
+      Tag* m_tag;
+      DelayedDelivery* m_delay;
 
-      Stanza* m_stanza;         // Forwarded stanza
-      DelayedDelivery* m_delay;  // Delayed delivery
   };
 
 }

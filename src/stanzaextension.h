@@ -192,12 +192,18 @@ namespace gloox
       virtual ~StanzaExtension() {}
 
       /**
-       * 
+       * This function returns the embedded Stanza, if any.
+       * You only have to reimplement it if your protocol flow contains embedded Stanzas.
+       *
+       * @return The embedded Stanza. May be 0.
        */
       virtual Stanza* embeddedStanza() const { return 0; }
       
       /**
-       * 
+       * This function returns the embedded Tag that the embedded Stanza is based on, if any.
+       * You only have to reimplement it if your protocol flow contains embedded Stanzas.
+       *
+       * @return The embedded Tag. May be 0.
        */
       virtual Tag* embeddedTag() const { return 0; }
 
