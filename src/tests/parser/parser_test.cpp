@@ -43,7 +43,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->name() != "tag" )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -55,7 +55,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->name() != "tag1" || !m_tag->hasChild( "child" ) )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -70,7 +70,7 @@ class ParserTest : private TagHandler
             !m_tag->hasChild( "child" ) )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -96,7 +96,7 @@ class ParserTest : private TagHandler
       if( tfail )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
         tfail = false;
       }
       delete m_tag;
@@ -111,7 +111,7 @@ class ParserTest : private TagHandler
             m_tag->cdata() != "cdata" )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -124,7 +124,7 @@ class ParserTest : private TagHandler
             m_tag->name() != "tag4" )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -137,7 +137,7 @@ class ParserTest : private TagHandler
             m_tag->name() != "tag4" )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -150,7 +150,7 @@ class ParserTest : private TagHandler
             m_tag->name() != "tag4" )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -164,7 +164,7 @@ class ParserTest : private TagHandler
             !m_tag->hasChild( "child" ) )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -184,7 +184,7 @@ class ParserTest : private TagHandler
             !m_tag->hasAttribute( "xmlns", "jabber:client" ) )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
     //   printf( "stanza: %s\n", m_tag->xml().c_str() );
       delete m_tag;
@@ -200,7 +200,7 @@ class ParserTest : private TagHandler
             !m_tag->hasAttribute( "version", "1.0" )*/ )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
     //   printf( "stanza: %s\n", m_tag->xml().c_str() );
       delete m_tag;
@@ -215,7 +215,7 @@ class ParserTest : private TagHandler
             !m_tag->hasAttribute( "version", "1.0" )*/ )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
     //   printf( "stanza: %s\n", m_tag->xml().c_str() );
       delete m_tag;
@@ -227,7 +227,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) != 0 )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
     //   printf( "stanza: %s\n", m_tag->xml().c_str() );
       delete m_tag;
@@ -268,7 +268,7 @@ class ParserTest : private TagHandler
       if( tfail )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
         printf( "got: %s\n", m_tag->xml().c_str() );
         tfail = false;
       }
@@ -282,7 +282,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -294,7 +294,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -306,7 +306,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -318,7 +318,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -330,7 +330,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -342,7 +342,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -354,7 +354,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -366,7 +366,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -378,7 +378,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -390,7 +390,7 @@ class ParserTest : private TagHandler
       if( m_tag == 0 )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -401,7 +401,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
 
       // -------
@@ -410,7 +410,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
 
       // -------
@@ -419,7 +419,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
 
       // -------
@@ -428,7 +428,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
 
       // -------
@@ -438,7 +438,7 @@ class ParserTest : private TagHandler
       if( !m_tag )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -450,7 +450,7 @@ class ParserTest : private TagHandler
       if( !m_tag )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -461,7 +461,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
 
       // -------
@@ -471,7 +471,7 @@ class ParserTest : private TagHandler
       if( !m_tag )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -483,7 +483,7 @@ class ParserTest : private TagHandler
       if( !m_tag )
       {
         ++fail;
-        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -496,7 +496,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || m_tags.size() != 3 )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       m_multiple = false;
 //       util::clearList( m_tags );
@@ -520,7 +520,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abcdefg" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -533,7 +533,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "123abcdefg456" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -545,7 +545,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
       {
         ++fail;
-        printf( "test '%s' failed: %s\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -557,13 +557,13 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "TA[abc&amp;&&lt;]]defg]]></tag1>";
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -575,20 +575,20 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "DA";
       i = -1;
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "TA[abc&amp;&&lt;]]defg]]></tag1>";
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -600,20 +600,20 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "TA[abc&amp;&&lt;]]defg]";
       i = -1;
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "]></tag1>";
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -625,13 +625,13 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "p;</tag1>";
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "&" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -643,20 +643,20 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "m";
       i = -1;
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "p;</tag1>";
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "&" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -668,20 +668,20 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "5";
       i = -1;
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = ";</tag1>";
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "A" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        fprintf( stderr, "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -692,7 +692,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -703,7 +703,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s\n", name.c_str(), data.c_str() );
+        fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -714,7 +714,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -725,7 +725,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -736,7 +736,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -747,7 +747,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -758,7 +758,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -769,7 +769,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -780,7 +780,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -791,7 +791,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -802,7 +802,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -813,7 +813,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -824,7 +824,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -835,7 +835,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -846,7 +846,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -857,7 +857,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -868,7 +868,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -879,7 +879,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -890,7 +890,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -901,7 +901,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -912,7 +912,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -923,7 +923,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -934,7 +934,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -945,7 +945,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -956,7 +956,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -967,7 +967,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -978,7 +978,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -989,7 +989,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1000,7 +1000,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1011,7 +1011,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1022,7 +1022,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1033,7 +1033,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1044,7 +1044,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1055,7 +1055,7 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1066,7 +1066,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "<" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1077,7 +1077,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != ">" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1088,7 +1088,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "'" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1099,7 +1099,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "&" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1110,7 +1110,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "\"" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1121,7 +1121,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "ሴ><'&\"" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1132,7 +1132,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "ሴC\"+" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1144,7 +1144,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "&<>'\"  <>'\"  <><>'\"  <><>'\"" )
       {
         ++fail;
-        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1156,7 +1156,7 @@ class ParserTest : private TagHandler
             || m_tag->attributes().front()->xmlns() != "foobar" )
       {
         ++fail;
-        printf( "test '%s' failed: \n%s\n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str(),
+        fprintf( stderr, "test '%s' failed: \n%s\n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str(),
                 m_tag->attributes().front()->xmlns().c_str() );
       }
       delete m_tag;
@@ -1168,7 +1168,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) == -1 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1180,7 +1180,7 @@ class ParserTest : private TagHandler
             || m_tag->xmlns() != "foobar" )
       {
         ++fail;
-        printf( "test '%s' failed (%d): \n%s\n", name.c_str(), i, data.c_str()/*, m_tag->xml().c_str()*/ );
+        fprintf( stderr, "test '%s' failed (%d): \n%s\n", name.c_str(), i, data.c_str()/*, m_tag->xml().c_str()*/ );
       }
       delete m_tag;
       m_tag = 0;
@@ -1191,7 +1191,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) == -1 || m_tag )
       {
         ++fail;
-        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1202,7 +1202,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns() != "foobar" )
       {
         ++fail;
-        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1213,7 +1213,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns( "foo" ) != "bar" )
       {
         ++fail;
-        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1230,7 +1230,7 @@ class ParserTest : private TagHandler
             || m_tag->xml() != data )
       {
         ++fail;
-        printf( "test '%s' failed (%d): \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed (%d): \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1250,7 +1250,7 @@ class ParserTest : private TagHandler
             || m_tag->children().front()->children().front()->xmlns() != "ggg" )
       {
         ++fail;
-        printf( "test '%s' failed (%d): \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
+        fprintf( stderr, "test '%s' failed (%d): \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -1266,7 +1266,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) < 0 )
       {
         ++fail;
-        printf( "test '%s' failed (%d)", name.c_str(), i );
+        fprintf( stderr, "test '%s' failed (%d)", name.c_str(), i );
       }
       delete m_tag;
       m_tag = 0;
@@ -1303,7 +1303,7 @@ class ParserTest : private TagHandler
       }
       else
       {
-        printf( "Parser: %d test(s) failed\n", fail );
+        fprintf( stderr, "Parser: %d test(s) failed\n", fail );
         return 1;
       }
 

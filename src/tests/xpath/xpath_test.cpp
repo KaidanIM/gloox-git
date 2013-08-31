@@ -27,7 +27,7 @@ void printResult( const std::string& name, ConstTagList& result )
 //   if( !t || t->toString() != name )
 //   {
 //     ++fail;
-//     printf( "test 'lexer: %s' failed: %s\n", name.c_str(), t->toString().c_str() );
+//     fprintf( stderr, "test 'lexer: %s' failed: %s\n", name.c_str(), t->toString().c_str() );
 //   }
 //   printf( "str: %s\n", t->toString().c_str() );
 //   printf( "xml: %s\n", t->xml().c_str() );
@@ -77,7 +77,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //   if( t != 0 )
 //   {
 //     ++fail;
-//     printf( "test '%s' failed\n", name.c_str() );
+//     fprintf( stderr, "test '%s' failed\n", name.c_str() );
 //   }
 //   delete t;
 
@@ -87,7 +87,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //   if( t != 0 )
 //   {
 //     ++fail;
-//     printf( "test 'lexer: %s' failed\n", name.c_str() );
+//     fprintf( stderr, "test 'lexer: %s' failed\n", name.c_str() );
 //   }
 //   delete t;
 
@@ -177,7 +177,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "/" ) != 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -185,7 +185,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "//" ) != 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -193,7 +193,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "aaa" ) != aaa )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -201,7 +201,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "/aaa" ) != aaa )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -209,7 +209,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "/aaa/bbb" ) != bbb )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -217,7 +217,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "/aaa/ccc" ) != ccc )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -225,7 +225,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "/aaa/ccc/ddd" ) != ddd )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -233,7 +233,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "//aaa" ) != aaa )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -241,7 +241,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "//eee" ) != eee )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -249,7 +249,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "//bbb" ) != bbb )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -257,7 +257,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( bbb->findTag( "/aaa" ) != aaa )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -265,7 +265,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "/abc" ) != 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -273,7 +273,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "/bbb" ) != 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -281,7 +281,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( aaa->findTag( "aaa" ) != aaa )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -289,7 +289,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( bbb->findTag( "bbb" ) != bbb )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -300,7 +300,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -311,7 +311,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -324,7 +324,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -334,7 +334,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -345,7 +345,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -357,7 +357,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -367,7 +367,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -377,7 +377,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -387,7 +387,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -397,7 +397,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -408,7 +408,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -419,7 +419,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -430,7 +430,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -441,7 +441,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -452,7 +452,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -463,7 +463,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 //   printf( "--------------------------------------------------------------\n" );
@@ -476,7 +476,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //   {
 //     ++fail;
 //     printResult( name, result );
-//     printf( "test '%s' failed\n", name.c_str() );
+//     fprintf( stderr, "test '%s' failed\n", name.c_str() );
 //   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -488,7 +488,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -499,7 +499,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -510,7 +510,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -523,7 +523,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -534,7 +534,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -553,7 +553,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -565,7 +565,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -577,7 +577,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -589,7 +589,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -602,7 +602,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -614,7 +614,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -635,7 +635,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -647,7 +647,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -659,7 +659,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -671,7 +671,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -683,7 +683,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -695,7 +695,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -707,7 +707,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -719,7 +719,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -731,7 +731,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -743,7 +743,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -755,7 +755,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "deepsearch + predicate + literal 2: //bbb[@name='test@test2']";
@@ -766,7 +766,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -778,7 +778,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -790,7 +790,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -801,7 +801,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -813,7 +813,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -824,7 +824,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -836,7 +836,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //   {
 //     ++fail;
 //     printResult( name, result );
-//     printf( "test '%s' failed\n", name.c_str() );
+//     fprintf( stderr, "test '%s' failed\n", name.c_str() );
 //   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -848,7 +848,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //   {
 //     ++fail;
 //     printResult( name, result );
-//     printf( "test '%s' failed\n", name.c_str() );
+//     fprintf( stderr, "test '%s' failed\n", name.c_str() );
 //   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -863,7 +863,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -872,7 +872,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     ++fail;
     printResult( name, result );
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
 
@@ -935,7 +935,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "XPath: %d test(s) failed\n", fail );
+    fprintf( stderr, "XPath: %d test(s) failed\n", fail );
     return 1;
   }
 

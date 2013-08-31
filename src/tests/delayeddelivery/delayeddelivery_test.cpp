@@ -25,7 +25,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( d->tag() != 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   d = 0;
@@ -36,7 +36,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( d->reason() != "reason" || d->stamp() != "invalidstamp" || d->from() != j )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   d = 0;
@@ -51,7 +51,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || t->cdata() != "reason" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   delete t;
@@ -64,7 +64,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( d->reason() != "reason" || d->stamp() != "invalidstamp" || d->from() != j )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   delete t;
@@ -80,7 +80,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || t->cdata() != "reason" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   delete t;
@@ -101,7 +101,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "DelayedDelivery: %d test(s) failed\n", fail );
+    fprintf( stderr, "DelayedDelivery: %d test(s) failed\n", fail );
     return 1;
   }
 

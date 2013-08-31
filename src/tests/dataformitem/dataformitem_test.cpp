@@ -22,7 +22,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t->xml() != "<item/>" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   delete t;
@@ -38,7 +38,7 @@ int main( int /*argc*/, char** /*argv*/ )
        "<value>value</value></field></item>" )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
   delete f;
   delete t;
@@ -77,7 +77,7 @@ int main( int /*argc*/, char** /*argv*/ )
        "</item>" )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
   delete f;
   delete t;
@@ -98,7 +98,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "DataFormItem: %d test(s) failed\n", fail );
+    fprintf( stderr, "DataFormItem: %d test(s) failed\n", fail );
     return 1;
   }
 

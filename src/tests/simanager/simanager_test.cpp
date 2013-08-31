@@ -123,7 +123,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !cb->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -146,7 +146,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "SIManager: %d test(s) failed\n", fail );
+    fprintf( stderr, "SIManager: %d test(s) failed\n", fail );
     return 1;
   }
 

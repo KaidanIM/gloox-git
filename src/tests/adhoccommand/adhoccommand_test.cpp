@@ -26,7 +26,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || ac.node() != "somecmd" || ac.action() != Adhoc::Command::Execute )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -42,7 +42,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || ac.action() != Adhoc::Command::Execute )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -63,7 +63,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || ac.action() != Adhoc::Command::Execute || ac.form() == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -81,7 +81,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -93,7 +93,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Adhoc::Command: %d test(s) failed\n", fail );
+    fprintf( stderr, "Adhoc::Command: %d test(s) failed\n", fail );
     return 1;
   }
 

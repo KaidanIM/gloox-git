@@ -28,7 +28,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || i->to().full() != "you@example.net/gloox" || i->id() != "id1" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -41,7 +41,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || i->to().full() != "you@example.net/gloox" || i->id() != "id1" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -54,7 +54,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || i->to().full() != "you@example.net/gloox" || i->id() != "id1" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -67,7 +67,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || i->to().full() != "you@example.net/gloox" || i->id() != "id1" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -81,7 +81,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -95,7 +95,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -109,7 +109,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -123,7 +123,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -138,7 +138,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "query", "xmlns", "mynamespace" ) )
 //     {
 //       ++fail;
-//       printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+//       fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
 //     }
 //     delete i;
 //   }
@@ -153,7 +153,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //         || !i->hasChild( "testtag", "xmlns", "mynamespace" ) )
 //     {
 //       ++fail;
-//       printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+//       fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
 //     }
 //     delete i;
 //   }
@@ -169,7 +169,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //         || !i->hasAttribute( "from", "blah@example.net/foo" ) )
 //     {
 //       ++fail;
-//       printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+//       fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
 //     }
 //     delete i;
 //   }
@@ -184,7 +184,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //        || iq->children().size() != 0 )
 //   {
 //     ++fail;
-//     printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+//     fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
 //   }
 //   delete i;
 //   i = 0;
@@ -205,7 +205,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "IQ: %d test(s) failed\n", fail );
+    fprintf( stderr, "IQ: %d test(s) failed\n", fail );
     return 1;
   }
 

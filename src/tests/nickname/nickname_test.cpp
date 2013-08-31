@@ -20,7 +20,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !n.nick().empty() || n.tag() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -32,7 +32,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( n.nick() != "foo" || !t )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -45,7 +45,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t->xml() != "<nick xmlns='http://jabber.org/protocol/nick'>foo</nick>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -59,7 +59,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Nickname: %d test(s) failed\n", fail );
+    fprintf( stderr, "Nickname: %d test(s) failed\n", fail );
     return 1;
   }
 

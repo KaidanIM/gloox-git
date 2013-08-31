@@ -17,7 +17,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
-    printf( "items test failed\n" );
+    fprintf( stderr, "items test failed\n" );
   }
   delete tag;
   delete t;
@@ -40,7 +40,7 @@ int main()
     if( t )
       printf ( "%s\n", t->xml().c_str() );
       printf ( "%s\n", tag->xml().c_str() );
-    printf( "items from collection test failed\n" );
+    fprintf( stderr, "items from collection test failed\n" );
   }
   delete tag;
   delete t;
@@ -67,7 +67,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
-    printf( "items w/ payload test failed\n" );
+    fprintf( stderr, "items w/ payload test failed\n" );
   }
   delete tag;
   delete t;
@@ -89,7 +89,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
-    printf( "items w/ subscription id test failed\n" );
+    fprintf( stderr, "items w/ subscription id test failed\n" );
   }
   delete tag;
   delete t;
@@ -107,7 +107,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag || pse->type() != PubSub::EventItemsRetract )
   {
     ++failed;
-    printf( "retract test failed\n" );
+    fprintf( stderr, "retract test failed\n" );
   }
   delete pse;
   delete t;
@@ -124,7 +124,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
-    printf( "retract w/ subscription id test failed\n" );
+    fprintf( stderr, "retract w/ subscription id test failed\n" );
   }
   delete pse;
   delete t;
@@ -146,7 +146,7 @@ int main()
     ++failed;
     printf("t: %s\n", t->xml().c_str() );
     printf("tag: %s\n", tag->xml().c_str() );
-    printf( "'subscription successful' test failed\n" );
+    fprintf( stderr, "'subscription successful' test failed\n" );
   }
   delete pse;
   delete t;
@@ -164,7 +164,7 @@ int main()
       || pse->node() != "princely_musings" || pse->jid().full() != "foo@bar.com" || pse->subscription())
   {
     ++failed;
-    printf( "'subscription failed' test failed\n" );
+    fprintf( stderr, "'subscription failed' test failed\n" );
   }
   delete pse;
   delete t;
@@ -183,7 +183,7 @@ int main()
     if( tmp )
       printf( "t1: %s\n", tmp->xml().c_str() );
     printf( "t2: %s\n", tag->xml().c_str() );
-    printf( "configuration w/o payload failed\n" );
+    fprintf( stderr, "configuration w/o payload failed\n" );
   }
   delete tmp;
   delete pse;
@@ -205,7 +205,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
-    printf( "configuration w/ payload failed\n" );
+    fprintf( stderr, "configuration w/ payload failed\n" );
   }
   delete t;
   delete pse;
@@ -222,7 +222,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
-    printf( "delete node test failed\n" );
+    fprintf( stderr, "delete node test failed\n" );
   }
   delete pse;
   delete tag;
@@ -239,7 +239,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
-    printf( "purge node id test failed\n" );
+    fprintf( stderr, "purge node id test failed\n" );
   }
   delete pse;
   delete tag;
@@ -260,7 +260,7 @@ int main()
     if( tmp )
       printf( "t1: %s\n", tmp->xml().c_str() );
     printf( "t2: %s\n", tag->xml().c_str() );
-    printf( "collection test failed\n" );
+    fprintf( stderr, "collection test failed\n" );
   }
   delete tmp;
   delete pse;
@@ -281,7 +281,7 @@ int main()
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
-    printf( "collection w/ payload failed\n" );
+    fprintf( stderr, "collection w/ payload failed\n" );
   }
   delete t;
   delete pse;
@@ -304,7 +304,7 @@ int main()
 
   if( failed )
   {
-    printf( "PubSub::Event: %d test(s) failed\n", failed );
+    fprintf( stderr, "PubSub::Event: %d test(s) failed\n", failed );
     return 1;
   }
   else

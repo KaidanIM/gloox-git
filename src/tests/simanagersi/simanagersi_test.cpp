@@ -76,7 +76,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -97,7 +97,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !t->hasChild( "bar" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete t;
     t = 0;
@@ -121,7 +121,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t || *t != *s )
     {
       ++fail;
-      printf( "test '%s' failed:\n%s\n%s\n", name.c_str(), t->xml().c_str(), s->xml().c_str() );
+      fprintf( stderr, "test '%s' failed:\n%s\n%s\n", name.c_str(), t->xml().c_str(), s->xml().c_str() );
     }
     delete s;
     delete t;
@@ -141,7 +141,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( se == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete f;
   }
@@ -155,7 +155,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 

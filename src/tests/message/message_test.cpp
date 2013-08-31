@@ -30,7 +30,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->id() != "id1" || i->body() != "the body" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -44,7 +44,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->id() != "id1" || i->body() != "the body" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -58,7 +58,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->id() != "id1" || i->body() != "the body" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -72,7 +72,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->id() != "id1" || i->body() != "the body" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -86,7 +86,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->id() != "id1" || i->body() != "the body" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -105,7 +105,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -126,7 +126,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || m.from() != "foo@bar.com" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -145,7 +145,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -165,7 +165,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
     i = 0;
@@ -197,7 +197,7 @@ int main( int /*argc*/, char** /*argv*/ )
    || i->subject( "fr" ) != "sujet" )
   {
     ++fail;
-    printf( "test '%s' failed: %s, %s, %s, %s, %s, %s, %s, %s\n", name.c_str(),
+    fprintf( stderr, "test '%s' failed: %s, %s, %s, %s, %s, %s, %s, %s\n", name.c_str(),
             i->body().c_str(),  i->body( "default" ).c_str(),
             i->body( "xyz" ).c_str(),  i->body( "fr" ).c_str(),
             i->subject().c_str(),  i->subject( "default" ).c_str(),
@@ -232,7 +232,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Message: %d test(s) failed\n", fail );
+    fprintf( stderr, "Message: %d test(s) failed\n", fail );
     return 1;
   }
 

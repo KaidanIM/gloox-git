@@ -27,17 +27,17 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->instructions() != instructions )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   if( f->title() != title )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   if( f->type() != TypeForm )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -52,7 +52,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "DataForm: %d test(s) failed\n", fail );
+    fprintf( stderr, "DataForm: %d test(s) failed\n", fail );
     return 1;
   }
 

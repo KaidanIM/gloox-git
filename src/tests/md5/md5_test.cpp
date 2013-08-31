@@ -22,7 +22,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     printf( "expect: d41d8cd98f00b204e9800998ecf8427e\n" );
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
   }
   md5.reset();
 
@@ -34,7 +34,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     printf( "expect: 9e107d9d372bb6826bd81d3542a419d6\n" );
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
   }
   md5.reset();
 
@@ -46,7 +46,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     printf( "expect: 1055d3e698d289f2af8663725127bd4b\n" );
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
   }
   md5.reset();
 
@@ -59,7 +59,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     printf( "expect: 9e107d9d372bb6826bd81d3542a419d6\n" );
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
   }
   md5.reset();
 
@@ -75,7 +75,7 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     printf( "expect: 9e107d9d372bb6826bd81d3542a419d6\n" );
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), md5.hex().c_str() );
   }
   md5.reset();
 
@@ -88,7 +88,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "MD5: %d test(s) failed\n", fail );
+    fprintf( stderr, "MD5: %d test(s) failed\n", fail );
     return 1;
   }
 

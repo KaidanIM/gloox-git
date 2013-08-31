@@ -25,7 +25,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !di.node().empty() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -40,7 +40,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || di.node() != "somenode" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -67,7 +67,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || item->name() != "name1" || item->node() != "node1" || item->jid() != "jid1" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -85,7 +85,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -97,7 +97,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Disco::Items: %d test(s) failed\n", fail );
+    fprintf( stderr, "Disco::Items: %d test(s) failed\n", fail );
     return 1;
   }
 

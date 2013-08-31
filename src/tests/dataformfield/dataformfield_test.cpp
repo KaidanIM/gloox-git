@@ -19,7 +19,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->type() != DataFormField::TypeTextSingle )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -30,7 +30,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->type() != DataFormField::TypeBoolean )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -42,7 +42,7 @@ int main( int /*argc*/, char** /*argv*/ )
       f->value() != "fieldValue" || f->label() != "fieldLabel" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -53,7 +53,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->type() != DataFormField::TypeInvalid )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -66,7 +66,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->name() != name )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -79,7 +79,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->required() != req )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -91,7 +91,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->label() != name )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -103,7 +103,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->value() != name )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -119,7 +119,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->values() != val )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -135,7 +135,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f->options() != opt )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
   f = 0;
@@ -150,7 +150,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( *ft != *t )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -181,7 +181,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( r->name() != "field" || !r->hasAttribute( "type", "list-multi" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -190,7 +190,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !r->hasAttribute( "label", "blabla label" ) || !r->hasAttribute( "var", "features" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -199,7 +199,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !r->hasChild( "option" ) || !r->findChild( "option" )->hasAttribute( "label", "lock" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -208,7 +208,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !r->hasChild( "option", "label", "stock" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -217,7 +217,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !r->hasChild( "option", "label", "smoking barrel" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -226,7 +226,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !r->findChild( "option" )->findChild( "value" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -235,7 +235,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( r->findChild( "option" )->findChild( "value" )->cdata() != "lock" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -250,7 +250,7 @@ int main( int /*argc*/, char** /*argv*/ )
           !(*it)->hasChildWithCData( "value", "smoking barrel" ) ) )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
       printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
       printf( "       t: %s\n", t->xml().c_str() );
     }
@@ -260,7 +260,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !r->hasChildWithCData( "value", "lock" ) || !r->hasChildWithCData( "value", "stock" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
     printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
     printf( "       t: %s\n", t->xml().c_str() );
   }
@@ -282,7 +282,7 @@ int main( int /*argc*/, char** /*argv*/ )
                                                "label='label'><value>1</value></field>" )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
   delete f;
   delete t;
@@ -304,7 +304,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "DataFormField: %d test(s) failed\n", fail );
+    fprintf( stderr, "DataFormField: %d test(s) failed\n", fail );
     return 1;
   }
 

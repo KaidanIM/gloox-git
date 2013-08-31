@@ -27,7 +27,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t->name() != "toe" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -36,7 +36,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->name() != "cod" || c->cdata() != "foobar" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -47,7 +47,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( *z != *c )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -58,7 +58,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( *t != *c )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -69,7 +69,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( *t == *c )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -82,7 +82,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( *t == *c )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -98,7 +98,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( *d == *c )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete d;
@@ -116,7 +116,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( *d != *c )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete d;
@@ -130,7 +130,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( l.size() != 2 || (*it) != v || *(++it) != v2 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -140,7 +140,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if ( util::escape( "&<>'\"" ) != "&amp;&lt;&gt;&apos;&quot;" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   //-------
@@ -149,7 +149,7 @@ int main( int /*argc*/, char** /*argv*/ )
                     "</uni><vie v3='3v' v32='3v2'><xep x3='3x'/></vie><vie/></toe>" )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -159,7 +159,7 @@ int main( int /*argc*/, char** /*argv*/ )
                     "</uni><vie v3='3v' v32='3v2'><xep x3='3x'/></vie><vie/></toe>" )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -168,7 +168,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || !u->hasChild( "yps" ) )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -177,7 +177,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || !t->hasAttribute( "foo" ) || !t->hasAttribute( "foo", "bar" ) )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -185,7 +185,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t->findAttribute( "test" ) != "bacd" || t->findAttribute( "foo" ) != "bar" )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -194,7 +194,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c != u )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -203,7 +203,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c != u )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -212,7 +212,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c != u )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -221,7 +221,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c != u )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -230,7 +230,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c != u )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
   //-------
@@ -242,7 +242,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( *c != *d )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), d->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), d->xml().c_str() );
   }
   delete c;
   c = 0;
@@ -260,7 +260,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->xml() != "<abc>cdata1<fgh/>cdata2<xyz/>cdata3</abc>" )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), c->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), c->xml().c_str() );
   }
   delete c;
   c = 0;
@@ -271,7 +271,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( tag1 )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), tag1.xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), tag1.xml().c_str() );
   }
 
   //-------
@@ -280,7 +280,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !tag2 )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), d->xml().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), d->xml().c_str() );
   }
 
   //-------
@@ -291,7 +291,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t.xml() != "<abc xmlns='foo'/>" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
     }
   }
 
@@ -306,7 +306,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t.xml() != "<abc xmlns='foo'><xyz:def xmlns:xyz='foobar'/></abc>" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
     }
   }
 
@@ -321,7 +321,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t.xml() != "<abc xmlns:xyz='foo' xyz:foo='bar'/>" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
     }
   }
 
@@ -332,7 +332,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t.xml() != "<foo abc='&amp;amp;'/>" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
     }
   }
 
@@ -348,7 +348,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t.hasChild( "test" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
     }
 
     name = "remove child 2";
@@ -356,7 +356,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t.hasChild( "abc", "xmlns", "foobar" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
     }
 
     name = "remove attrib 1";
@@ -364,7 +364,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t.hasAttribute( "attr1", "value1") )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
     }
 
     name = "remove attrib 2";
@@ -372,7 +372,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t.hasAttribute( "attr2", "value2") )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
     }
   }
 
@@ -384,7 +384,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( check || t.hasAttribute( "nul" ) )
     {
       ++fail;
-      printf( "test '%s' failed:%s\n", name.c_str(), t.xml().c_str() );
+      fprintf( stderr, "test '%s' failed:%s\n", name.c_str(), t.xml().c_str() );
     }
   }
 
@@ -400,14 +400,14 @@ int main( int /*argc*/, char** /*argv*/ )
           || i == 0xc1 || i >= 0xf5 ) && a )
       {
         ++fail;
-        printf( "test '%s' (branch 1) failed (i == %02X)\n", name.c_str(), i );
+        fprintf( stderr, "test '%s' (branch 1) failed (i == %02X)\n", name.c_str(), i );
       }
       else if( ( i == 0x09 || i == 0x0a || i == 0x0d
                  || ( i >= 0x20 && i < 0xc0 )
                  || ( i > 0xc1 && i < 0xf5 ) ) && !a )
       {
         ++fail;
-        printf( "test '%s' (branch 2) failed (i == %02X)\n", name.c_str(), i );
+        fprintf( stderr, "test '%s' (branch 2) failed (i == %02X)\n", name.c_str(), i );
       }
 //       printf( "i: 0x%02X, a: %d, value: %s\n", i, (bool)a, std::string( 1, i ).c_str() );
     }
@@ -445,7 +445,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Tag: %d test(s) failed\n", fail );
+    fprintf( stderr, "Tag: %d test(s) failed\n", fail );
     return 1;
   }
 

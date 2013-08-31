@@ -23,7 +23,7 @@ using namespace gloox;
     if( !t || t->xml() != "<rule condition='deliver' action='notify' value='direct'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -37,7 +37,7 @@ using namespace gloox;
     if( !t || t->xml() != "<rule condition='deliver' action='error' value='gateway'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -51,7 +51,7 @@ using namespace gloox;
     if( !t || t->xml() != "<rule condition='deliver' action='drop' value='stored'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -65,7 +65,7 @@ using namespace gloox;
     if( !t || t->xml() != "<rule condition='expire-at' action='notify' value='foodate'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -79,7 +79,7 @@ using namespace gloox;
     if( !t || t->xml() != "<rule condition='match-resource' action='alert' value='exact'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -93,7 +93,7 @@ using namespace gloox;
     if( !t || t->xml() != "<rule condition='deliver' action='drop' value='direct'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -107,7 +107,7 @@ using namespace gloox;
     if( !t || t->xml() != "<rule condition='expire-at' action='notify' value='foodate'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -121,7 +121,7 @@ using namespace gloox;
     if( !t || t->xml() != "<rule condition='match-resource' action='alert' value='other'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -137,7 +137,7 @@ using namespace gloox;
   }
   else
   {
-    printf( "AMP::Rule: %d test(s) failed\n", fail );
+    fprintf( stderr, "AMP::Rule: %d test(s) failed\n", fail );
     return 1;
   }
 

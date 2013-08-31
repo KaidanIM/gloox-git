@@ -102,7 +102,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( false )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -116,7 +116,7 @@ int main( int /*argc*/, char** /*argv*/ )
   delete la;
   delete cb;
 
-  printf( "LastActivity: " );
+  printf( "Forward: " );
   if( fail == 0 )
   {
     printf( "OK\n" );
@@ -124,7 +124,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 

@@ -24,7 +24,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t || t->xml() != "<unique xmlns='" + XMLNS_MUC_UNIQUE + "'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -42,7 +42,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || uq.name() != "foo" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -59,7 +59,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -68,7 +68,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !fail )
     printf( "OK\n" );
   else
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
 
   return fail;
 }

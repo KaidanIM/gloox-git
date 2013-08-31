@@ -129,7 +129,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( it->checkResult() != 2 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -141,7 +141,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !it->checkResult() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -153,7 +153,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !it->checkResult() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -167,7 +167,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( it->checkResult() != 2 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -181,7 +181,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( it->checkResult() != 2 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -195,7 +195,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !it->checkResult() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -209,7 +209,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "InBandBytestream: %d test(s) failed\n", fail );
+    fprintf( stderr, "InBandBytestream: %d test(s) failed\n", fail );
     return 1;
   }
 

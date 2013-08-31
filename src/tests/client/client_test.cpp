@@ -288,7 +288,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->connected() != 1 || c->disconnected() != 1 || c->disconnectReason() != ConnUserDisconnected )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -306,7 +306,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->connected() != 0 || c->disconnected() != 1 || c->disconnectReason() != ConnAuthenticationFailed )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -324,7 +324,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->connected() != 0 || c->disconnected() != 1 || c->disconnectReason() != ConnIoError )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -343,7 +343,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || c->streamErrorReason() != StreamErrorXmlNotWellFormed )
   {
     ++fail;
-    printf( "test '%s' failed: %d, %d\n", name.c_str(), c->disconnectReason(), c->streamErrorReason() );
+    fprintf( stderr, "test '%s' failed: %d, %d\n", name.c_str(), c->disconnectReason(), c->streamErrorReason() );
   }
   delete c;
   c = 0;
@@ -362,7 +362,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( c->connected() != 0 || c->disconnected() != i || c->disconnectReason() != ConnIoError )
     {
       ++fail;
-      printf( "test '%s' failed, %d, %d, %d\n", name.c_str(),
+      fprintf( stderr, "test '%s' failed, %d, %d, %d\n", name.c_str(),
               c->connected(), c->disconnected(),
               c->disconnectReason() );
       break;
@@ -385,7 +385,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( c->connected() != i || c->disconnected() != i || c->disconnectReason() != ConnUserDisconnected )
     {
       ++fail;
-      printf( "test '%s' failed, %d, %d, %d\n", name.c_str(),
+      fprintf( stderr, "test '%s' failed, %d, %d, %d\n", name.c_str(),
               c->connected(), c->disconnected(),
               c->disconnectReason() );
       break;
@@ -410,7 +410,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->connected() != 1 || c->disconnected() != 1 || c->disconnectReason() != ConnUserDisconnected )
   {
     ++fail;
-    printf( "test '%s' failed, %d, %d, %d\n", name.c_str(),
+    fprintf( stderr, "test '%s' failed, %d, %d, %d\n", name.c_str(),
             c->connected(), c->disconnected(),
             c->disconnectReason() );
   }
@@ -433,7 +433,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->connected() != 1 || c->disconnected() != 1 || c->disconnectReason() != ConnIoError )
   {
     ++fail;
-    printf( "test '%s' part 1 failed, %d, %d, %d\n", name.c_str(),
+    fprintf( stderr, "test '%s' part 1 failed, %d, %d, %d\n", name.c_str(),
             c->connected(), c->disconnected(),
             c->disconnectReason() );
   }
@@ -446,7 +446,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( c->connected() != 2 || c->disconnected() != 2 || c->disconnectReason() != ConnIoError )
     {
       ++fail;
-      printf( "test '%s' part 2 failed, %d, %d, %d\n", name.c_str(),
+      fprintf( stderr, "test '%s' part 2 failed, %d, %d, %d\n", name.c_str(),
               c->connected(), c->disconnected(),
               c->disconnectReason() );
     }
@@ -476,7 +476,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Client: %d test(s) failed\n", fail );
+    fprintf( stderr, "Client: %d test(s) failed\n", fail );
     return 1;
   }
 

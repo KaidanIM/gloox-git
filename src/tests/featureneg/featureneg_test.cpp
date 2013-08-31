@@ -25,7 +25,7 @@ using namespace gloox;
     if( t )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -41,7 +41,7 @@ using namespace gloox;
                           "</feature>" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     // t re-used in next test
   }
@@ -54,7 +54,7 @@ using namespace gloox;
     if( !t2 || *t2 != *t )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete t2;
     delete t;
@@ -73,7 +73,7 @@ using namespace gloox;
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -87,7 +87,7 @@ using namespace gloox;
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -98,7 +98,7 @@ using namespace gloox;
   }
   else
   {
-    printf( "FeatureNeg: %d test(s) failed\n", fail );
+    fprintf( stderr, "FeatureNeg: %d test(s) failed\n", fail );
     return 1;
   }
 

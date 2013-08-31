@@ -36,7 +36,7 @@ int main()
     if( se == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete f;
   }
@@ -47,7 +47,7 @@ int main()
 
   printf( "PubSub::Manager::PubSub: " );
   if( fail )
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
   else
     printf( "OK\n" );
 

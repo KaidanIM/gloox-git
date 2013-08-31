@@ -154,7 +154,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !at->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -164,7 +164,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( at->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -174,7 +174,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !at->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -185,7 +185,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !at->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   ah->registerAdhocCommandProvider( at, "foocmd", "fooname" );
@@ -201,7 +201,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !at->checkResult() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -217,7 +217,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Adhoc: %d test(s) failed\n", fail );
+    fprintf( stderr, "Adhoc: %d test(s) failed\n", fail );
     return 1;
   }
 

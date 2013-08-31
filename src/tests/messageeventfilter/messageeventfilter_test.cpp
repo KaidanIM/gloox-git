@@ -106,7 +106,7 @@ int main( int /*argc*/, char** /*argv*/ )
                          | gloox::MessageEventDisplayed | gloox::MessageEventComposing ) )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete f;
     f = 0;
@@ -129,7 +129,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise offline event 2";
@@ -138,7 +138,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise delivered event 1";
@@ -147,7 +147,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise delivered event 2";
@@ -156,7 +156,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise displayed event 1";
@@ -165,7 +165,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise displayed event 2";
@@ -174,7 +174,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise composing event 1";
@@ -183,7 +183,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise composing event 2";
@@ -192,7 +192,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise cancel event 1";
@@ -201,7 +201,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   name = "raise cancel event 2";
@@ -210,7 +210,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ms->ok() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   delete f;
@@ -233,7 +233,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "MessageEventFilter: %d test(s) failed\n", fail );
+    fprintf( stderr, "MessageEventFilter: %d test(s) failed\n", fail );
     return 1;
   }
 
