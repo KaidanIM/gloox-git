@@ -90,7 +90,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->recv() != ConnNotConnected )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -106,7 +106,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !c->handleStartNodeCalled() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -123,7 +123,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !c->versionOK() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -140,7 +140,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->versionOK() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -155,7 +155,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->versionOK() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -173,7 +173,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !c->sidOK() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -197,7 +197,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "ClientBase: %d test(s) failed\n", fail );
+    fprintf( stderr, "ClientBase: %d test(s) failed\n", fail );
     return 1;
   }
 

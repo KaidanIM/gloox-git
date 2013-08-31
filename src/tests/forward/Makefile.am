@@ -4,14 +4,14 @@
 
 AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual 
 
-noinst_PROGRAMS = lastactivity_test
+noinst_PROGRAMS = forward_test
 
-lastactivity_test_SOURCES = forward_test.cpp
-lastactivity_test_LDADD = ../../jid.o ../../tag.o \
+forward_test_SOURCES = forward_test.cpp
+forward_test_LDADD = ../../jid.o ../../tag.o \
                         ../../logsink.o ../../prep.o ../../util.o \
                         ../../gloox.o ../../iq.o ../../stanza.o \
                         ../../error.o ../../dataformfieldcontainer.o \
                         ../../dataform.o ../../dataformfield.o \
                         ../../dataformitem.o ../../softwareversion.o \
                         ../../dataformreported.o
-lastactivity_test_CFLAGS = $(CPPFLAGS)
+forward_test_CFLAGS = $(CPPFLAGS)

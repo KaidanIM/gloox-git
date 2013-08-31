@@ -25,7 +25,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !di.node().empty() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -43,7 +43,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !di.node().empty() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -61,7 +61,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || di.node() != "somenode" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -76,7 +76,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || di.node() != "somenode" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -90,7 +90,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( di.node() != "othernode" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -117,7 +117,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !di.hasFeature( "foo1" ) || !di.hasFeature( "foo2" ) || !di.hasFeature( "foo3" ) )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -135,7 +135,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -147,7 +147,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Disco::Info: %d test(s) failed\n", fail );
+    fprintf( stderr, "Disco::Info: %d test(s) failed\n", fail );
     return 1;
   }
 

@@ -27,7 +27,7 @@ int main( int /*argc*/, char** /*argv*/ )
     || e->appError()->xml() != "<unsupported xmlns='errorNS' feature='f'/>"
     || e->text() != "shit happens" )
   {
-    printf( "failed: '%s' test\n", name.c_str() );
+    fprintf( stderr, "failed: '%s' test\n", name.c_str() );
     printf( "type == %d, should be %d\n", e->type(), StanzaErrorTypeAuth );
     printf( "err == %d, should be %d\n", e->error(), StanzaErrorFeatureNotImplemented );
     printf( "xml: %s\n", e->appError()->xml().c_str() );
@@ -47,7 +47,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Error: %d test(s) failed\n", fail );
+    fprintf( stderr, "Error: %d test(s) failed\n", fail );
     return 1;
   }
 

@@ -248,7 +248,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() || !rmt->checkResult2() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -260,7 +260,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -269,7 +269,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ri || ri->name() != "fooname" || ri->groups().size() != 1 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -286,7 +286,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ri || ri->name() != "foof" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -297,7 +297,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -306,7 +306,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ri || ri->name() != "foof" || ri->groups().size() != 3 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -316,7 +316,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -325,7 +325,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ri )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
   }
 
   // -------
@@ -335,7 +335,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -344,7 +344,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ri || ri->name() != "" || ri->groups().size() != 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -354,7 +354,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -363,7 +363,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ri )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
   }
 
   // -------
@@ -376,7 +376,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -390,7 +390,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -404,7 +404,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -426,7 +426,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "RosterManager: %d test(s) failed\n", fail );
+    fprintf( stderr, "RosterManager: %d test(s) failed\n", fail );
     return 1;
   }
 

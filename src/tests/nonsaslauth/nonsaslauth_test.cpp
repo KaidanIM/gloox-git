@@ -176,7 +176,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( nsat->checkResult() != 4 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -188,7 +188,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( nsat->checkResult() != 5 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -204,7 +204,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "NonSaslAuth: %d test(s) failed\n", fail );
+    fprintf( stderr, "NonSaslAuth: %d test(s) failed\n", fail );
     return 1;
   }
 

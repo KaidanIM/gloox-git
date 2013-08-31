@@ -23,7 +23,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -40,7 +40,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t->xml() != "<headers xmlns='"+ XMLNS_SHIM + "'><header name='created'>yesterday</header><header name='name'>foo</header></headers>" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
 
     name = "headers to tag to headers, part 2/2";
@@ -48,7 +48,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( s.headers() != hl )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -67,7 +67,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( se == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete f;
   }
@@ -81,7 +81,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 

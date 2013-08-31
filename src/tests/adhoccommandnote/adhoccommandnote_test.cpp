@@ -26,7 +26,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || t->xml() != "<note type='info'>content</note>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -41,7 +41,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || t->xml() != "<note type='warn'>content</note>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -56,7 +56,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || t->xml() != "<note type='error'>content</note>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -71,7 +71,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || t->xml() != "<note type='error'>content</note>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -88,7 +88,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( *t != *b )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -106,7 +106,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( *t != *b )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -123,7 +123,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Adhoc::Command::Note: %d test(s) failed\n", fail );
+    fprintf( stderr, "Adhoc::Command::Note: %d test(s) failed\n", fail );
     return 1;
   }
 

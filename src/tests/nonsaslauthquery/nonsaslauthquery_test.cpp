@@ -89,7 +89,7 @@ int main( int /*argc*/, char** /*argv*/ )
                           "<username>user</username></query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -113,7 +113,7 @@ int main( int /*argc*/, char** /*argv*/ )
                           "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete nq;
     delete q;
@@ -143,7 +143,7 @@ int main( int /*argc*/, char** /*argv*/ )
          "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete nq;
     delete q;
@@ -164,7 +164,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( se == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete f;
   }
@@ -177,7 +177,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "NonSaslAuth::Query: %d test(s) failed\n", fail );
+    fprintf( stderr, "NonSaslAuth::Query: %d test(s) failed\n", fail );
     return 1;
   }
 

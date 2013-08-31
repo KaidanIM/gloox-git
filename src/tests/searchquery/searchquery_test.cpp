@@ -58,7 +58,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t || t->xml() != "<query xmlns='" + XMLNS_SEARCH + "'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -86,7 +86,7 @@ int main( int /*argc*/, char** /*argv*/ )
          || sq.fields() != ( SearchFieldFirst | SearchFieldLast | SearchFieldNick | SearchFieldEmail ) )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     delete d;
@@ -108,7 +108,7 @@ int main( int /*argc*/, char** /*argv*/ )
          || !sq.form() )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete t;
     delete d;
@@ -125,7 +125,7 @@ int main( int /*argc*/, char** /*argv*/ )
        "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -144,7 +144,7 @@ int main( int /*argc*/, char** /*argv*/ )
          "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -164,7 +164,7 @@ int main( int /*argc*/, char** /*argv*/ )
          "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     delete d;
@@ -205,7 +205,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || srl.size() != 2 )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete t;
     delete d;
@@ -226,7 +226,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -240,7 +240,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 

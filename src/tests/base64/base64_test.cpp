@@ -22,7 +22,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( sample != Base64::decode64( b ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   b = "";
   sample = "";
@@ -34,7 +34,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( sample != Base64::decode64( b ) )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), b.c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), b.c_str() );
   }
   b = "";
   sample = "";
@@ -49,7 +49,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Base64: %d test(s) failed\n", fail );
+    fprintf( stderr, "Base64: %d test(s) failed\n", fail );
     return 1;
   }
 

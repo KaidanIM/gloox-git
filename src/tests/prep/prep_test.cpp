@@ -18,7 +18,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( prep::nodeprep( t, result ) || !result.empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -27,7 +27,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( prep::resourceprep( t, result ) || !result.empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -36,7 +36,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( prep::nameprep( t, result ) || !result.empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -45,7 +45,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( prep::idna( t, result ) || !result.empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -55,7 +55,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::nodeprep( t1, result ) && result == t1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -64,7 +64,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::resourceprep( t1, result ) && result == t1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -73,7 +73,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::nameprep( t1, result ) && result == t1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -82,7 +82,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::idna( t1, result ) && result == t1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -93,7 +93,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::nodeprep( t2, result ) && result == t3 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -102,7 +102,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::resourceprep( t2, result ) && result == t2 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -111,7 +111,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::nameprep( t2, result ) && result == t3 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -120,7 +120,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::idna( "www.dömäin.de", result ) && result == "www.xn--dmin-moa0i.de" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -142,7 +142,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Prep: %d test(s) failed\n", fail );
+    fprintf( stderr, "Prep: %d test(s) failed\n", fail );
     return 1;
   }
 

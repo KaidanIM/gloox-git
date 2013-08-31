@@ -53,7 +53,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t.data() != a )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -63,7 +63,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t.data() != b )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -73,7 +73,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t.data() != c )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -83,7 +83,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t.data() != d )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -95,7 +95,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t.data() != a + b + c + d )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -114,7 +114,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "CompressionZlib: %d test(s) failed\n", fail );
+    fprintf( stderr, "CompressionZlib: %d test(s) failed\n", fail );
     return 1;
   }
 

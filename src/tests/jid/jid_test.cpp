@@ -18,7 +18,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.bare() != "abc@server.dom" || j.username() != "abc" || j.server() != "server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -28,7 +28,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || j.resource() != "res" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -37,7 +37,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.full() != "server.dom/res" || j.server() != "server.dom" || j.resource() != "res" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -46,7 +46,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.full() != "server.dom" || j.server() != "server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -55,7 +55,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.bare() != "abc@server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -64,7 +64,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.bare() != "abc@server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -73,7 +73,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.resource() != "rEsOurCe" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -82,7 +82,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.username() != "abc" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -91,7 +91,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.server() != "server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -101,7 +101,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.bareJID() != t1.bareJID() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -116,7 +116,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !j.full().empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -125,7 +125,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !jid1 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -134,7 +134,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( jid2 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -143,7 +143,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( e != "1\\202\\223\\264\\275\\2f6\\3a7\\3c8\\3e9\\4010\\5c" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -152,7 +152,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f != "1 2\"3&4'5/6:7<8>9@10\\" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -171,7 +171,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "JID: %d test(s) failed\n", fail );
+    fprintf( stderr, "JID: %d test(s) failed\n", fail );
     return 1;
   }
 
