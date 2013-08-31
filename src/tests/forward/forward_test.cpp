@@ -1,108 +1,69 @@
 #include "../../gloox.h"
 #include "../../jid.h"
-#include "../../tag.h"
-#include "../../iqhandler.h"
-#include "../../lastactivityhandler.h"
-#include "../../disco.h"
+#include "../../delayeddelivery.h"
+#include "../../forward.h"
+#include "../../message.h"
+#include "../../messagehandler.h"
+#include "../../client.h"
+#include "../../attention.h"
 
-#include <stdio.h>
 #include <locale.h>
 #include <string>
 #include <cstdio> // [s]print[f]
 
-const std::string& g_dir = "test.dir";
-const std::string& g_inst = "the instructions";
-const std::string& g_profile = "test-prof";
+using namespace gloox;
 
-gloox::Tag* t1 = 0;
-gloox::Tag* t2 = 0;
-const gloox::JID to( "abc@def.gh/ijk" );
 
-namespace gloox
-{
-
-//   class Disco
-//   {
-//     public:
-//       Disco();
-//       ~Disco();
-//       void addFeature( const std::string& feature );
-//       void removeFeature( const std::string& feature );
-//   };
-//   Disco::Disco() {}
-//   Disco::~Disco() {}
-//   void Disco::addFeature( const std::string& /*feature*/ ) {}
-//   void Disco::removeFeature( const std::string& /*feature*/ ) {}
-
-  class ClientBase : public LastActivityHandler
+  class ForwardTest : public MessageHandler
   {
     public:
-      ClientBase();
-      ~ClientBase();
-      const std::string getID();
-      Disco* disco();
-      void send( IQ& iq, IqHandler* = 0 , int = 0 );
-      void trackID( IqHandler *ih, const std::string& id, int context );
-      void registerIqHandler( IqHandler *ih, int ext );
-      void removeIqHandler( IqHandler* ih, int ext );
-      void removeIDHandler( IqHandler* ) {}
-      void registerStanzaExtension( StanzaExtension* ) {}
-      void removeStanzaExtension( int ) {}
-      virtual void handleLastActivityResult( const JID&, long int, const std::string& ) {}
-      virtual void handleLastActivityError( const JID&, StanzaError ) {}
-      void setTest( int test );
-      bool ok();
-    private:
-      Disco* m_disco;
-      int m_test;
-      bool m_ok;
-  };
-  ClientBase::ClientBase() : m_disco( new Disco( this ) ), m_test( 0 ), m_ok( false ) {}
-  ClientBase::~ClientBase() { delete m_disco; }
-  const std::string ClientBase::getID() { return "id"; }
-  Disco* ClientBase::disco() { return m_disco; }
-  void ClientBase::send( IQ& iq, IqHandler*, int )
-  {
-    Tag* tag = iq.tag();
-    switch( m_test )
-    {
-      case 1:
+      ForwardTest() : cb( "foo" )
       {
-        break;
+        cb.registerMessageHandler( this );
+        cb.registerStanzaExtension( new Forward() );
+        cb.registerStanzaExtension( new Attention() );
       }
-    }
-    delete tag;
-  }
-  void ClientBase::trackID( IqHandler* /*ih*/, const std::string& /*id*/, int /*context*/ ) {}
-  void ClientBase::registerIqHandler( IqHandler* /*ih*/, int /*ext*/ ) {}
-  void ClientBase::removeIqHandler( IqHandler* /*ih*/, int /*ext*/ ) {}
-  void ClientBase::setTest( int test ) { m_test = test; }
-  bool ClientBase::ok() { bool t = m_ok; m_ok = false; return t; }
-}
+      ~ForwardTest() {}
+      void testTag( Tag* tag ) { cb.handleTag( tag ); }
+      virtual void handleMessage( const Message& msg, MessageSession* )
+      {
+        Tag* m = msg.tag();
+        m_xml = m->xml();
+//         printf( "msg: %s\n", m->xml().c_str() );
+        delete m;
+      }
+      const std::string& getXml() { return m_xml; }
+    private:
+      Client cb;
+      std::string m_xml;
+  };
 
-#define CLIENTBASE_H__
-#define DISCO_H__
-#include "../../disco.cpp"
-#include "../../lastactivity.h"
-#include "../../lastactivity.cpp"
+
 int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
 
-  gloox::LastActivity* la = 0;
-
-  gloox::ClientBase* cb = new gloox::ClientBase();
-  la = new gloox::LastActivity( cb );
-
+  Message m( Message::Chat, JID( "a@b/c" ), "body test", "subject" );
+  Message* fm = new Message( Message::Headline, JID( "d@e/f" ), "headline test", "headline subject" );
+  fm->addExtension( new Attention() );
+  DelayedDelivery* d = new DelayedDelivery( JID( "from@me/res" ), "thestamp" );
+  Forward* f = new Forward( fm, d );
+  m.addExtension( f );
+  
+  Tag* tag = m.tag();
+  ForwardTest t;
+  t.testTag( tag );
+  
+  
+  
 
   // -------
-  name = "request si";
-  cb->setTest( 1 );
-  if( false )
+  name = "create Forward 1";
+  if( tag->xml() != t.getXml() )
   {
     ++fail;
-    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed:\n%s\n---\n%s\n", name.c_str(), tag->xml().c_str(), t.getXml().c_str() );
   }
 
 
@@ -112,9 +73,6 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
 
-
-  delete la;
-  delete cb;
 
   printf( "Forward: " );
   if( fail == 0 )

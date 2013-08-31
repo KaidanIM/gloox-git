@@ -56,7 +56,7 @@ namespace gloox
        * is available through embeddedTag().
        * @param tag The Tag to parse.
        */
-      Forward( const Tag* tag );
+      Forward( const Tag* tag = 0 );
 
       /**
        * Virtual destructor.
