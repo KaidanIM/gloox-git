@@ -25,14 +25,13 @@ namespace gloox
     : StanzaExtension( ExtForward ),
       m_stanza( stanza ), m_tag( 0 ), m_delay( delay )
   {
-    
   }
   
   Forward::Forward( const Tag* tag )
     : StanzaExtension( ExtForward ), 
       m_stanza( 0 ), m_tag( 0 ), m_delay( 0 )
   {
-    if( !tag || !( tag->name() == "forward" && tag->hasAttribute( XMLNS, XMLNS_X_DELAY ) ) )
+    if( !tag || !( tag->name() == "forwarded" && tag->hasAttribute( XMLNS, XMLNS_STANZA_FORWARDING ) ) )
       return;
 
     m_delay = new DelayedDelivery( tag->findChild( "delay" ) );
@@ -54,9 +53,9 @@ namespace gloox
 
   const std::string& Forward::filterString() const
   {
-    static const std::string filter = "/message/forward[@xmlns='" + XMLNS_STANZA_FORWARDING + "']"
-                                      "|/iq/forward[@xmlns='" + XMLNS_STANZA_FORWARDING + "']"
-                                      "|/presence/forward[@xmlns='" + XMLNS_STANZA_FORWARDING + "']";
+    static const std::string filter = "/message/forwarded[@xmlns='" + XMLNS_STANZA_FORWARDING + "']"
+                                      "|/iq/forwarded[@xmlns='" + XMLNS_STANZA_FORWARDING + "']"
+                                      "|/presence/forwarded[@xmlns='" + XMLNS_STANZA_FORWARDING + "']";
     return filter;
   }
   
