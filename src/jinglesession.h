@@ -231,7 +231,7 @@ namespace gloox
             /**
              *
              */
-            void setResponder( const std::string& responder ) { m_responder = responder; }
+            void setResponder( const JID& jid ) { m_responder = jid; }
 
             /**
              *
