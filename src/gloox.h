@@ -572,17 +572,14 @@ namespace gloox
   /** Jingle namespace (@xep{0166}) */
   GLOOX_API extern const std::string XMLNS_JINGLE;
 
-  /** Jingle Audio via RTP namespace (@xep{0167}) */
-  GLOOX_API extern const std::string XMLNS_JINGLE_AUDIO_RTP;
+  /** Jingle error namespace (@xep{0166}) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_ERRORS;
 
   /** Jingle ICE-UDP Transport namespace (@xep{0176}) */
   GLOOX_API extern const std::string XMLNS_JINGLE_ICE_UDP;
 
-  /** Jingle Raw UDP Transport namespace (@xep{0177}) */
-  GLOOX_API extern const std::string XMLNS_JINGLE_RAW_UDP;
-
-  /** Jingle Video via RTP namespace (@xep{0180}) */
-  GLOOX_API extern const std::string XMLNS_JINGLE_VIDEO_RTP;
+  /** Jingle Raw UDP Transport namespace (@xep{0234}) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_FILE_TRANSFER;
 
   /** Stanza Headers and Internet Metadata (SHIM) namespace (@xep{0131}) */
   GLOOX_API extern const std::string XMLNS_SHIM;
@@ -595,6 +592,9 @@ namespace gloox
 
   /** Stanza Forwarding namespace (@xep{0297}) */
   GLOOX_API extern const std::string XMLNS_STANZA_FORWARDING;
+
+  /** Message Carbons namespace (@xep{0280}) */
+  GLOOX_API extern const std::string XMLNS_MESSAGE_CARBONS;
 
 
   /** Supported stream version (major). */
