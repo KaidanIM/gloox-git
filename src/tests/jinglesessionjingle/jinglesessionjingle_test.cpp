@@ -181,15 +181,14 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
 
-  printf( "Jingle::Session::Jingle: " );
   if( fail == 0 )
   {
-    printf( "OK\n" );
+    printf( "Jingle::Session::Jingle: OK\n" );
     return 0;
   }
   else
   {
-    fprintf( stderr, "%d test(s) failed\n", fail );
+    fprintf( stderr, "Jingle::Session::Jingle: %d test(s) failed\n", fail );
     return 1;
   }
 
