@@ -188,15 +188,19 @@ namespace gloox
 
     Tag* Session::Jingle::tag() const
     {
-      if( m_action == InvalidAction || m_sid.empty() || !m_initiator )
+      if( m_action == InvalidAction || m_sid.empty() )
         return 0;
 
       Tag* t = new Tag( "jingle" );
       t->setXmlns( XMLNS_JINGLE );
       t->addAttribute( "action", util::lookup( m_action, actionValues ) );
-      t->addAttribute( "initiator", m_initiator.full() );
-      if( m_responder )
+
+      if( m_initiator && m_action == SessionInitiate )
+        t->addAttribute( "initiator", m_initiator.full() );
+
+      if( m_responder && m_action == SessionAccept )
         t->addAttribute( "responder", m_responder.full() );
+
       t->addAttribute( "sid", m_sid );
 
       PluginList::const_iterator it = m_plugins.begin();
@@ -222,7 +226,7 @@ namespace gloox
 
       m_initiator = m_parent->jid();
 
-      m_parent->registerStanzaExtension( new Jingle() );
+//       m_parent->registerIqHandler( this, ExtJingle );
 
       m_valid = true;
     }
@@ -230,12 +234,13 @@ namespace gloox
     Session::Session( ClientBase* parent, const Session::Jingle* jingle, SessionHandler* jsh )
       : m_parent( parent ), m_state( Ended ), m_handler( jsh ), m_valid( false )
     {
-      if( !m_parent || !m_handler || !jingle || jingle->action() != SessionInitiate )
+      if( !m_parent || !m_handler /*|| !jingle || jingle->action() != SessionInitiate*/ )
         return;
 
+//       m_parent->registerIqHandler( this, ExtJingle );
       m_callee = m_parent->jid();
-      m_initiator = jingle->initiator();
-      m_state = Pending;
+//       m_initiator = jingle->initiator();
+//       m_state = Pending;
       m_sid = jingle->sid();
 
       m_valid = true;
@@ -249,7 +254,7 @@ namespace gloox
 
     bool Session::initiate( const PluginList& plugins )
     {
-      if( !m_valid || !m_parent || !plugins.empty() || !m_initiator
+      if( !m_valid || !m_parent || plugins.empty() || !m_initiator
           || m_state >= Pending )
         return false;
 
@@ -263,7 +268,7 @@ namespace gloox
 
     bool Session::accept( const Content* content )
     {
-      if( !m_valid || !m_parent || !content || !m_initiator
+      if( !m_valid || !m_parent || !content /*|| !m_initiator*/
           || m_state > Pending )
         return false;
 
@@ -291,7 +296,7 @@ namespace gloox
 
     bool Session::terminate( Session::Reason* reason )
     {
-      if( !m_valid || !m_parent || m_state < Pending || !m_initiator )
+      if( !m_valid || !m_parent || m_state < Pending /*|| !m_initiator*/ )
         return false;
 
       m_state = Ended;
@@ -340,10 +345,10 @@ namespace gloox
         }
         case SessionInitiate:
         {
-          IQ re( IQ::Error, iq.from(), iq.id() );
-          Tag* e = new Tag( "unknown-session" );
-          e->setXmlns( XMLNS_JINGLE_ERRORS );
-          re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound, e) );
+          m_state = Pending;
+          m_initiator = j->initiator();
+          m_handler->handleSessionStateChange( this, j );
+          IQ re( IQ::Result, iq.from(), iq.id() );
           m_parent->send( re );
           break;
         }

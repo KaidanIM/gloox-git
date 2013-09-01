@@ -40,7 +40,7 @@ namespace gloox
        * Reimplement this function if you want to be notified about incoming IQs.
        * @param iq The complete IQ stanza.
        * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
-       * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
+       * the obligatory 'result' answer. If you return @b false, an 'error' will be sent.
        * @since 1.0
        */
       virtual bool handleIq( const IQ& iq ) = 0;

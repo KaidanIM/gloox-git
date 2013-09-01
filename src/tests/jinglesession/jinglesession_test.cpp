@@ -9,7 +9,7 @@
 #include <string>
 #include <cstdio> // [s]print[f]
 
-gloox::JID g_jid( "foof" );
+gloox::JID remote_jid( "foo@bar" );
 
 namespace gloox
 {
@@ -29,9 +29,8 @@ namespace gloox
       virtual ~ClientBase() {}
       const JID& jid() const { return m_jid; }
       const std::string getID();
-      virtual void send( IQ& ) = 0;
-      virtual void send( const IQ& ) {};
-      virtual void send( const IQ&, IqHandler*, int ) {};
+      virtual void send( const IQ& ) = 0;
+      virtual void send( IQ&, IqHandler*, int ) = 0;
       void removeIqHandler( IqHandler* ih, int exttype );
       void removeIDHandler( IqHandler* ih );
       void registerIqHandler( IqHandler* ih, int exttype );
@@ -55,65 +54,267 @@ using namespace gloox;
 #include "../../jinglesession.h"
 #include "../../jinglesession.cpp"
 #include "../../jinglesessionhandler.h"
-class JingleSessionTest : public ClientBase, public Jingle::SessionHandler
+#include "../../jinglesessionmanager.h"
+#include "../../jinglecontent.h"
+class TestInitiator : public ClientBase, public Jingle::SessionHandler
 {
   public:
-    JingleSessionTest() : m_result( false ), m_result2( false )
-    {
-      m_js = new Jingle::Session( this, JID( "foo@bar" ), this );
-    }
-    ~JingleSessionTest() { delete m_js; }
+    TestInitiator() : m_js( new Jingle::Session( this, remote_jid, this ) ), m_result( false ), m_result2( false )
+    {}
+    virtual ~TestInitiator() { delete m_js; }
     void setTest( int test ) { m_test = test; }
-    virtual void send( IQ& iq );
-    virtual void send( const IQ& iq, IqHandler*, int );
+    virtual void send( const IQ& iq );
+    virtual void send( IQ& iq, IqHandler*, int );
     virtual void trackID( IqHandler *ih, const std::string& id, int context );
     bool checkResult() { bool t = m_result; m_result = false; return t; }
     bool checkResult2() { bool t = m_result2; m_result2 = false; return t; }
     Jingle::Session* js() { return m_js; }
-    virtual void handleSessionStateChange( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
+    virtual void handleSessionStateChange( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ );
     virtual void handleSessionInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
     virtual void handleTransportInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
-  private:
+    virtual void handleSession( Jingle::Session* session ) {}
+private:
     Jingle::Session* m_js;
     int m_test;
     bool m_result;
     bool m_result2;
 };
 
-void JingleSessionTest::send( IQ& /*iq*/ )
+class TestResponder : public ClientBase, public Jingle::SessionHandler
 {
+public:
+  TestResponder() : m_js( 0 ), m_result( false ), m_result2( false ),
+    m_manager( this, this )
+  {}
+  virtual ~TestResponder() { delete m_js; }
+  void setTest( int test ) { m_test = test; }
+  virtual void send( const IQ& iq );
+  virtual void send( IQ& iq, IqHandler*, int );
+  virtual void trackID( IqHandler *ih, const std::string& id, int context );
+  bool checkResult() { bool t = m_result; m_result = false; return t; }
+  bool checkResult2() { bool t = m_result2; m_result2 = false; return t; }
+  Jingle::Session* js() { return m_js; }
+  Jingle::SessionManager& sm() { return m_manager; }
+  virtual void handleSessionStateChange( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ );
+  virtual void handleSessionInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
+  virtual void handleTransportInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
+  virtual void handleSession( Jingle::Session* session ) { m_js = session; }
+private:
+  Jingle::Session* m_js;
+  int m_test;
+  bool m_result;
+  bool m_result2;
+  Jingle::SessionManager m_manager;
+};
+
+TestInitiator* ini;
+TestResponder* res;
+
+
+void TestInitiator::handleSessionStateChange( const Jingle::Session* session, const Jingle::Session::Jingle* jingle )
+{
+  m_result2 = false;
+
+  if( m_test == 1 && session->state() == Jingle::Session::Pending )
+    m_result2 = true;
 }
 
-void JingleSessionTest::send( const IQ& iq, IqHandler*, int ctx )
+void TestInitiator::send( const IQ& iq )
 {
+//   printf( "TestInitiator::senD(IQ): %s\n", iq.tag()->xml().c_str() );
+  m_result2 = false;
+
+  switch( m_test )
+  {
+    case 2:
+    case 3:
+      if( iq.subtype() == IQ::Result && iq.to().full() == "foo@bar" )
+        m_result2 = true;
+      break;
+  }
+}
+
+void TestInitiator::send( IQ& iq, IqHandler*, int ctx )
+{
+  m_result = false;
+  iq.setFrom( JID( "self" ) );
+  Tag* t = iq.tag();
+
+//   printf( "TestInitiator: test %d: %s\n", m_test, t->xml().c_str() );
+
   switch( m_test )
   {
     case 1:
     {
+      if( t->xml() == "<iq to='foo@bar' from='self' id='id' type='set'><jingle xmlns='" + XMLNS_JINGLE + "' action='session-initiate' initiator='self' sid='somesid'/></iq>" )
+        m_result = true;
+      res->sm().handleIq( iq );
       break;
     }
+  }
+
+  delete t;
+}
+
+void TestInitiator::trackID( IqHandler*, const std::string&, int ) {}
+
+// ------------------------------------------------------------------------------------------------------------
+
+void TestResponder::handleSessionStateChange( const Jingle::Session* session, const Jingle::Session::Jingle* jingle )
+{
+//   m_result2 = false;
+
+//   if( m_test == 1 && session->state() == Jingle::Session::Pending )
+//     m_result2 = true;
+}
+
+void TestResponder::send( const IQ& iq )
+{
+  m_result2 = false;
+//   printf( "TestResponder::senD(IQ): %s\n", iq.tag()->xml().c_str() );
+
+  switch( m_test )
+  {
+    case 1:
+      if( iq.subtype() == IQ::Result && iq.to().full() == "self" )
+      {
+//         printf( "m_result2 = true;\n" );
+        m_result2 = true;
+      }
+      break;
+  }
+}
+
+void TestResponder::send( IQ& iq, IqHandler*, int ctx )
+{
+  m_result = false;
+  iq.setFrom( remote_jid );
+  Tag* t = iq.tag();
+
+//   printf( "TestResponder: test %d: %s\n", m_test, t->xml().c_str() );
+  switch( m_test )
+  {
+    case 1:
+      break;
     case 2:
+      if( t->xml() == "<iq to='self' from='foo@bar' id='id' type='set'><jingle xmlns='" + XMLNS_JINGLE + "' action='session-accept' sid='somesid'/></iq>" )
+        m_result = true;
+      ini->js()->handleIq( iq );
+      break;
     case 3:
+      if( t->xml() == "<iq to='self' from='foo@bar' id='id' type='set'><jingle xmlns='" + XMLNS_JINGLE + "' action='session-terminate' sid='somesid'><reason><success/></reason></jingle></iq>" )
+        m_result = true;
+      ini->js()->handleIq( iq );
+      break;
     case 4:
     case 5:
     {
       break;
     }
   }
+
+  delete t;
 }
 
-void JingleSessionTest::trackID( IqHandler*, const std::string&, int ) {}
+void TestResponder::trackID( IqHandler*, const std::string&, int ) {}
+
+// ------------------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------------------
+
 
 int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
-  JingleSessionTest* jst = new JingleSessionTest();
+  ini = new TestInitiator();
+  ini->js()->setSID( "somesid" );
 
+  res = new TestResponder();
 
   // -------
-  name = "initial state";
-  if( jst->js()->state() != Jingle::Session::Ended )
+  name = "Initiator: ended (initial) state";
+  if( ini->js()->state() != Jingle::Session::Ended )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Initiator: session initiate";
+  ini->setTest( 1 );
+  res->setTest( 1 );
+  Jingle::PluginList pl;
+  pl.push_back( new Jingle::Content() );
+  if( !ini->js()->initiate( pl ) || !ini->checkResult() || !res->checkResult2() )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Initiator: pending state";
+  if( ini->js()->state() != Jingle::Session::Pending )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Responder: pending state";
+  if( res->js()->state() != Jingle::Session::Pending )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Responder: session accept";
+  ini->setTest( 2 );
+  res->setTest( 2 );
+  if( !res->js()->accept( new Jingle::Content() ) || !res->checkResult() || !ini->checkResult2() )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Initiator: active state";
+  if( ini->js()->state() != Jingle::Session::Active )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Responder: active state";
+  if( res->js()->state() != Jingle::Session::Active )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Responder: session terminate";
+  ini->setTest( 3 );
+  res->setTest( 3 );
+  if( !res->js()->terminate( new Jingle::Session::Reason( Jingle::Session::Reason::Success ) ) || !res->checkResult() || !ini->checkResult2() )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Initiator: ended state";
+  if( ini->js()->state() != Jingle::Session::Ended )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "Responder: ended state";
+  if( res->js()->state() != Jingle::Session::Ended )
   {
     ++fail;
     fprintf( stderr, "test '%s' failed\n", name.c_str() );
@@ -123,19 +324,17 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
 
+  delete ini;
+  delete res;
 
-
-  delete jst;
-
-  printf( "Jingle::Session: " );
   if( fail == 0 )
   {
-    printf( "OK\n" );
+    printf( "Jingle::Session: OK\n" );
     return 0;
   }
   else
   {
-    fprintf( stderr, "%d test(s) failed\n", fail );
+    fprintf( stderr, "Jingle::Session: %d test(s) failed\n", fail );
     return 1;
   }
 
