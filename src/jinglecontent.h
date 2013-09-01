@@ -58,10 +58,11 @@ namespace gloox
          */
         enum Senders
         {
-          SInitiator,                /**< The initiator sends content. */
-          SResponder,                /**< The responder sends content. */
-          SBoth,                     /**< Both parties send content( default). */
-          InvalidSender             /**< Invalid value. */
+          SInitiator,                /**< The initiator generates/sends content. */
+          SResponder,                /**< The responder generates/sends content. */
+          SBoth,                     /**< Both parties generate/send content( default). */
+          SNone,                     /**< No party generates/sends content. */
+          InvalidSender              /**< Invalid value. */
         };
 
         /**

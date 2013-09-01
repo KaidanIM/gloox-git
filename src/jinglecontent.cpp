@@ -35,7 +35,8 @@ namespace gloox
     static const char* sendersValues [] = {
       "initiator",
       "responder",
-      "both"
+      "both",
+      "none"
     };
 
     static inline Content::Senders sendersType( const std::string& type )

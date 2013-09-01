@@ -52,6 +52,11 @@ namespace gloox
          */
         virtual void handleTransportInfo( const Session* session, const Session::Jingle* jingle ) = 0;
 
+        /**
+         *
+         */
+        virtual void handleSession( Session* session ) = 0;
+
     };
 
   }

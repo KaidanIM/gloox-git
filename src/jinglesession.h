@@ -355,6 +355,12 @@ namespace gloox
         State state() const { return m_state; }
 
         /**
+         * Sets the session's ID.
+         * @param sid  The session's id.
+         */
+        void setSID( const std::string& sid ) { m_sid = sid; }
+
+        /**
          * Returns the session's ID.
          * @return The session's ID.
          */
