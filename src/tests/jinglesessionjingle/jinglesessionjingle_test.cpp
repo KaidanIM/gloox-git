@@ -73,7 +73,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "invalid Jingle 2";
-    Jingle::Session::Jingle js( Jingle::ContentAccept, JID(), 0, "somesid" );
+    Jingle::Session::Jingle js( Jingle::SessionAccept, JID(), 0, "" );
     Tag* t = js.tag();
     if( t )
     {
@@ -90,7 +90,7 @@ int main( int /*argc*/, char** /*argv*/ )
     js.setInitiator( jid );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
-      "action='content-accept' initiator='foo@bar/barfoo' sid='somesid'/>" )
+      "action='content-accept' sid='somesid'/>" )
     {
       ++fail;
       fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
@@ -100,12 +100,102 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "empty Jingle, transport-info";
-    Jingle::Session::Jingle js( Jingle::TransportInfo, jid, 0, "somesid" );
+    name = "empty Jingle, content-add";
+    Jingle::Session::Jingle js( Jingle::ContentAdd, jid, 0, "somesid" );
     js.setInitiator( jid );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
-      "action='transport-info' initiator='foo@bar/barfoo' sid='somesid'/>" )
+      "action='content-add' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, content-modify";
+    Jingle::Session::Jingle js( Jingle::ContentModify, jid, 0, "somesid" );
+    js.setInitiator( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='content-modify' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, content-reject";
+    Jingle::Session::Jingle js( Jingle::ContentReject, jid, 0, "somesid" );
+    js.setInitiator( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='content-reject' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, content-remove";
+    Jingle::Session::Jingle js( Jingle::ContentRemove, jid, 0, "somesid" );
+    js.setInitiator( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='content-remove' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, description-info";
+    Jingle::Session::Jingle js( Jingle::DescriptionInfo, jid, 0, "somesid" );
+    js.setInitiator( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='description-info' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, session-accept";
+    Jingle::Session::Jingle js( Jingle::SessionAccept, jid, 0, "somesid" );
+    js.setResponder( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='session-accept' responder='foo@bar/barfoo' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, session-info";
+    Jingle::Session::Jingle js( Jingle::SessionInfo, jid, 0, "somesid" );
+    js.setInitiator( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='session-info' sid='somesid'/>" )
     {
       ++fail;
       fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
@@ -130,12 +220,12 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "empty Jingle, content-replace";
-    Jingle::Session::Jingle js( Jingle::ContentRemove, jid, 0, "somesid" );
+    name = "empty Jingle, session-terminate";
+    Jingle::Session::Jingle js( Jingle::SessionTerminate, jid, 0, "somesid" );
     js.setInitiator( jid );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
-      "action='content-remove' initiator='foo@bar/barfoo' sid='somesid'/>" )
+      "action='session-terminate' sid='somesid'/>" )
     {
       ++fail;
       fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
@@ -145,14 +235,57 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "empty Jingle w/ initiator & responder";
-    Jingle::Session::Jingle js( Jingle::ContentAccept, jid, 0, "somesid" );
+    name = "empty Jingle, transport-accept";
+    Jingle::Session::Jingle js( Jingle::TransportAccept, jid, 0, "somesid" );
     js.setInitiator( jid );
-    js.setResponder( "someresponder" );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
-          "action='content-accept' initiator='foo@bar/barfoo' "
-          "responder='someresponder' sid='somesid'/>" )
+      "action='transport-accept' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, transport-info";
+    Jingle::Session::Jingle js( Jingle::TransportInfo, jid, 0, "somesid" );
+    js.setInitiator( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='transport-info' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, transport-reject";
+    Jingle::Session::Jingle js( Jingle::TransportReject, jid, 0, "somesid" );
+    js.setInitiator( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='transport-reject' sid='somesid'/>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "empty Jingle, transport-replace";
+    Jingle::Session::Jingle js( Jingle::TransportReplace, jid, 0, "somesid" );
+    js.setInitiator( jid );
+    Tag* t = js.tag();
+    if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
+      "action='transport-replace' sid='somesid'/>" )
     {
       ++fail;
       fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
