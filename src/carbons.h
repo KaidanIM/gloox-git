@@ -24,11 +24,66 @@ namespace gloox
 
   class Forward;
 
+  /**
+   * @brief An implementation of Message Carbons (@xep{0280}) as a StanzaExtension.
+   *
+   * @section enable Enable Mesage Carbons
+   *
+   * Before using Message Carbons you have to check your server for support of the extension.
+   * You can do so using Disco::getDiscoInfo(). You can check the result (in DiscoHandler::handleDiscoInfo())
+   * for a feature of @c XMLNS_MESSAGE_CARBONS (use Disco::Info::hasFeature()).
+   *
+   * If the feature exists, you can enable Message Carbons with the server.
+   *
+   * @code
+   * Client cb( ... );
+   * // ...
+   *
+   * // setup
+   * cb.registerStanzaExtension( new Forward() ); // required for Message Carbons support
+   * cb.registerStanzaExtension( new Carbons() );
+   * // ...
+   *
+   * // enable Message Carbons
+   * IQ iq( IQ::Set, JID() ); // empty JID
+   * iq.addExtension( new Carbons( Carbons::Enable ) );
+   * cb.send( iq, MyIqHandler, 1 ); // myIqHandler will be notified of the result with the given context ('1' in this case).
+   * @endcode
+   *
+   * @note Once enabled, the server will automatically send all received and sent messages @b of @b type @c Chat to all other Carbons-enabled resources of
+   * the current account. You have to make sure that you actually send messages of type @c Chat. The default is currently @c Normal.
+   *
+   * @section disable Disable Message Carbons
+   *
+   * Once enabled, you can easily disable Message carbons. The code is almost identical to the code used to enable the feature,
+   * except that you use a Carbons::Type of Carbons::Disable when you add the Carbons extension to the IQ:
+   * @code
+   * iq.addExtension( new Carbons( Carbons::Disable ) );
+   * @endcode
+   *
+   * @section private Prevent carbon copies for a single message
+   *
+   * To disable carbon copies for a single message, add a Carbons extension of type Private:
+   *
+   * @code
+   * Message msg( Message::Chat, ... );
+   * // ...
+   * msg.addExtension( new Carbons( Carbons::Private ) );
+   * @endcode
+   *
+   * The server will not copy this message to your other connected resources.
+   *
+   *
+   * XEP Version: 0.8
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 1.0.5
+   */
   class GLOOX_API Carbons : public StanzaExtension
   {
     public:
       /**
-       *
+       * The types of Message Carbons stanza extensions.
        */
       enum Type
       {
@@ -41,14 +96,17 @@ namespace gloox
       };
 
       /**
-       *
+       * Constructs a new Carbons instance of the given type.
+       * You should only use the @c Enable, @c Disable and @c Private types.
+       * @param type The Carbons type to create.
        */
       Carbons( Type type );
 
       /**
-       *
+       * Constructs a new Carbons instance from the given tag.
+       * @param tag The Tag to create the Carbons instance from.
        */
-      Carbons( const Tag* tag = 0);
+      Carbons( const Tag* tag = 0 );
 
       /**
        * Virtual destructor.
@@ -56,7 +114,8 @@ namespace gloox
       virtual ~Carbons();
 
       /**
-       *
+       * Returns the current instance's type.
+       * @return The intance's type.
        */
       Type type() const { return m_type; }
 

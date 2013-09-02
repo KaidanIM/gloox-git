@@ -434,7 +434,7 @@ namespace gloox
 
       /**
        * Removes the given IqHandler from the list of handlers of pending operations, added
-       * using trackID(). Necessary, for example, when closing a GUI element that has an
+       * using send( IQ&, IqHandler*, int, bool ). Necessary, for example, when closing a GUI element that has an
        * operation pending.
        * @param ih The IqHandler to remove.
        * @since 0.8.7
@@ -826,7 +826,7 @@ namespace gloox
        * @param xml The data to send.
        */
       void send( const std::string& xml );
-     
+
       /**
        * This function checks if there are any unacknowledged Tags in the send queue and resends
        * as necessary.
@@ -836,7 +836,7 @@ namespace gloox
        * @since 1.0.4
        */
       void checkQueue( int handled, bool resend );
-      
+
       JID m_jid;                         /**< The 'self' JID. */
       JID m_authzid;                     /**< An optional authorization ID. See setAuthzid(). */
       std::string m_authcid;             /**< An alternative authentication ID. See setAuthcid(). */
@@ -1063,7 +1063,7 @@ namespace gloox
 
       int m_uniqueBaseId;
       util::AtomicRefCount m_nextId;
-      
+
       int m_smSent;
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
