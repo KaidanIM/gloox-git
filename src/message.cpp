@@ -71,7 +71,7 @@ namespace gloox
     if( m_subtype == Invalid )
       return 0;
 
-    Tag* t = new Tag( "message" );
+    Tag* t = new Tag( "message", XMLNS, XMLNS_CLIENT );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
     if( m_from )
