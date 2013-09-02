@@ -48,7 +48,7 @@ namespace gloox
       /**
        *
        */
-      Carbons( const Tag* tag );
+      Carbons( const Tag* tag = 0);
 
       /**
        * Virtual destructor.

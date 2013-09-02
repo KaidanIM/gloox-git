@@ -39,14 +39,14 @@ namespace gloox
       return;
 
     const std::string& name = tag->name();
-    m_type = (Type)util::lookup2( name, typeValues );
+    m_type = (Type)util::lookup( name, typeValues );
 
     switch( m_type )
     {
       case Sent:
       case Received:
       {
-        Tag* f = tag->findChild( "forward", XMLNS, XMLNS_STANZA_FORWARDING );
+        Tag* f = tag->findChild( "forwarded", XMLNS, XMLNS_STANZA_FORWARDING );
         if( f )
           m_forward = new Forward( f );
         break;
@@ -88,7 +88,7 @@ namespace gloox
     if( m_type == Invalid )
       return 0;
 
-    Tag* t = new Tag( util::lookup2( m_type, typeValues ), XMLNS, XMLNS_MESSAGE_CARBONS );
+    Tag* t = new Tag( util::lookup( m_type, typeValues ), XMLNS, XMLNS_MESSAGE_CARBONS );
     if( m_forward && ( m_type == Received || m_type == Sent ) )
       t->addChild( m_forward->tag() );
 
