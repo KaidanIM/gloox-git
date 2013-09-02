@@ -28,6 +28,9 @@ namespace gloox
   MessageEvent::MessageEvent( const Tag* tag )
     : StanzaExtension( ExtMessageEvent ), m_event( MessageEventCancel )
   {
+    if( !tag )
+      return;
+
     const TagList& l = tag->children();
     TagList::const_iterator it = l.begin();
     int event = 0;
