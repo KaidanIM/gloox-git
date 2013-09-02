@@ -1,6 +1,7 @@
-v1.0.5 -- xx yyy 2013
+v1.0.5 -- 02 Sep 2013
 ---------------------
 - added support for Stanza Forwarding (XEP-0297)
+- added support for Message Carbons (XEP-0280)
 
 
 
@@ -43,7 +44,7 @@ connection (patch by Erik Horemans)
 v1.0.1 -- 29 Jun 2013
 ---------------------
 - Added support for Serverless Messaging (XEP-0174)
-- TLSOpenSSLServer: compilation fix 
+- TLSOpenSSLServer: compilation fix
 - don't bail on DNS TCP queries
 - fixed µs timeout value (now defaults to 1.000.000)
 - omit port in initial greeting (usually -1 anyway)

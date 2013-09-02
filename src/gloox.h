@@ -322,6 +322,7 @@
  * @li @xep{0206} @link gloox::ConnectionBOSH see BOSH @endlink
  * @li @xep{0224} @link gloox::Attention Attention @endlink
  * @li @xep{0256} @link gloox::LastActivity::Query Last Activity in Presence @endlink
+ * @li @xep{0280} @link gloox::Carbons Message Carbons @endlink
  * @li @xep{0297} @link gloox::Forward Stanza Forwarding @endlink
  *
  * Further extensions can easily be implemented using

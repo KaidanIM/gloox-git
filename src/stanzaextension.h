@@ -88,6 +88,7 @@ namespace gloox
     ExtSHIM,                        /**< An extension dealing with Stanza Headers and Internet Metadata (@xep{0131}). */
     ExtAttention,                   /**< An extension dealing with Attention (@xep{0224}). */
     ExtForward,                     /**< An extension dealing with Stanza Forwarding (@xep{0297}). */
+    ExtCarbons,                     /**< An extension dealing with Message Carbons (@xep{0280}). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
@@ -198,7 +199,7 @@ namespace gloox
        * @return The embedded Stanza. May be 0.
        */
       virtual Stanza* embeddedStanza() const { return 0; }
-      
+
       /**
        * This function returns the embedded Tag that the embedded Stanza is based on, if any.
        * You only have to reimplement it if your protocol flow contains embedded Stanzas.
