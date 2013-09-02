@@ -92,19 +92,19 @@ namespace gloox
    * availability is likely to be lifted in the future.)
    *
    * Of course, all these mechanisms are not tried unless the server offers them.
-   * 
+   *
    * @section stream_management Stream Management
-   * 
-   * To enable Stream Management (@xep{0198}), call @ref setStreamManagement() with the first parameter set to @b true 
+   *
+   * To enable Stream Management (@xep{0198}), call @ref setStreamManagement() with the first parameter set to @b true
    * at any time. This will tell the server to enable Stream Management, if available. Once switched on,
    * Stream Management can not be disabled for a given active stream. However, setting the first
    * parameter to @b false it can be disabled inside gloox so that Stream Management will not be used
    * for subsequent connections.
-   * 
+   *
    * To enable the stream resumption feature, pass @b true as the second parameter. Upon re-connect after an
    * unexpected (i.e. not user-triggered) disconnect, gloox will try to resume the stream
    * and re-send any lost stanzas automatically.
-   * 
+   *
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
@@ -205,8 +205,8 @@ namespace gloox
        * @note This function is part of @xep{0198}.
        * @since 1.0.4
        */
-      void setStreamManagement( bool enabled = true, bool resume = true );
-      
+      void setStreamManagement( bool enable = true, bool resume = true );
+
       /**
        * Use this function to send an unrequested 'ack' to the server to let it know the number of handled stanzas.
        * You may use this function at any time. However, gloox will also reply to incoming 'ack requests' automatically.
@@ -217,7 +217,7 @@ namespace gloox
        * @since 1.0.4
        */
       void ackStreamManagement();
-      
+
       /**
        * Use this function to request the number of handled stanzas from the server.
        * You may use this function at any time. gloox does not send any such requests
@@ -478,7 +478,7 @@ namespace gloox
       bool m_resourceBound;
       bool m_forceNonSasl;
       bool m_manageRoster;
-      
+
       std::string m_smId;
       std::string m_smLocation;
       bool m_smResume;

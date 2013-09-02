@@ -393,7 +393,7 @@ namespace gloox
 
     if( tag->hasChild( "sm", XMLNS, XMLNS_STREAM_MANAGEMENT ) )
       features |= StreamFeatureStreamManagement;
-    
+
     if( features == 0 )
       features = StreamFeatureIqAuth;
 
@@ -543,7 +543,7 @@ namespace gloox
         break;
     }
   }
-  
+
   void Client::setStreamManagement( bool enable, bool resume )
   {
     m_smWanted = enable;
@@ -561,7 +561,7 @@ namespace gloox
     if( m_smWanted && m_resourceBound )
       sendStreamManagement();
   }
-  
+
   void Client::sendStreamManagement()
   {
     if( !m_smWanted )
@@ -589,7 +589,7 @@ namespace gloox
       m_smContext = CtxSMResume;
     }
   }
-  
+
   void Client::ackStreamManagement()
   {
     if( m_smContext >= CtxSMEnabled )
@@ -608,7 +608,7 @@ namespace gloox
       send( r );
     }
   }
-  
+
   void Client::createSession()
   {
     notifyStreamEvent( StreamEventSessionCreation );

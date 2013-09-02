@@ -305,7 +305,7 @@ namespace gloox
         /**
          * Creates a new Session from the incoming Jingle object.
          * This is a NOOP for Jingles that have an action() different from SessionInitiate.
-         * @param param The ClientBase to use for communication.
+         * @param parent The ClientBase to use for communication.
          * @param jingle The Jingle object to init the Session from.
          * @param jsh The handler to receive events and results.
          */
