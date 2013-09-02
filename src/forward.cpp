@@ -26,20 +26,20 @@ namespace gloox
       m_stanza( stanza ), m_tag( 0 ), m_delay( delay )
   {
   }
-  
+
   Forward::Forward( const Tag* tag )
-    : StanzaExtension( ExtForward ), 
+    : StanzaExtension( ExtForward ),
       m_stanza( 0 ), m_tag( 0 ), m_delay( 0 )
   {
     if( !tag || !( tag->name() == "forwarded" && tag->hasAttribute( XMLNS, XMLNS_STANZA_FORWARDING ) ) )
       return;
 
-    m_delay = new DelayedDelivery( tag->findChild( "delay" ) );
+    m_delay = new DelayedDelivery( tag->findChild( "delay", XMLNS, XMLNS_DELAY ) );
 
     Tag* m = tag->findChild( "message" );
     if( !m )
       return;
-    
+
     m_tag = m->clone();
     m_stanza = new Message( m );
   }
@@ -58,7 +58,7 @@ namespace gloox
                                       "|/presence/forwarded[@xmlns='" + XMLNS_STANZA_FORWARDING + "']";
     return filter;
   }
-  
+
   Tag* Forward::tag() const
   {
     if( !m_stanza )
@@ -78,8 +78,8 @@ namespace gloox
   {
     if( !m_tag || !m_delay )
       return 0;
-    
+
     return new Forward( new Message( m_tag ), static_cast<DelayedDelivery*>( m_delay->clone() ) );
   }
-  
+
 }
