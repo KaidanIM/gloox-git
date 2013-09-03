@@ -754,7 +754,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -769,6 +768,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -780,7 +782,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -795,6 +796,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -806,7 +810,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -821,6 +824,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -832,7 +838,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -847,6 +852,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -858,7 +866,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -873,6 +880,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -884,7 +894,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -899,6 +908,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -910,7 +922,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -925,6 +936,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -936,7 +950,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -951,6 +964,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -962,7 +978,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -977,6 +992,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -988,7 +1006,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1003,6 +1020,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -1014,7 +1034,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1029,6 +1048,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -1040,7 +1062,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1055,6 +1076,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -1066,7 +1090,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1081,6 +1104,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -1092,7 +1118,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1107,6 +1132,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -1118,7 +1146,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1133,6 +1160,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -1144,7 +1174,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1159,6 +1188,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -1170,7 +1202,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1186,6 +1217,9 @@ DEP_CPP_ADHOC=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
@@ -1193,23 +1227,29 @@ DEP_CPP_ADHOC=\
 	".\src\adhoc.h"\
 	".\src\adhoccommandprovider.h"\
 	".\src\adhochandler.h"\
-	".\src\client.h"\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
 	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -1225,7 +1265,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1241,6 +1280,9 @@ DEP_CPP_ADHOC=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
@@ -1251,7 +1293,6 @@ DEP_CPP_ADHOC=\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -1266,6 +1307,9 @@ DEP_CPP_ADHOC=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_ADHOC=\
+	".\src\dataformbase.h"\
 	
 
 !ENDIF 
@@ -1620,18 +1664,24 @@ DEP_CPP_ANNOT=\
 DEP_CPP_ANNOT=\
 	".\src\annotations.h"\
 	".\src\annotationshandler.h"\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\privatexml.h"\
 	".\src\privatexmlhandler.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -1676,6 +1726,313 @@ DEP_CPP_ANNOT=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\atomicrefcount.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_ATOMI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\config.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+NODEP_CPP_ATOMI=\
+	".\src\config.h.unix"\
 	
 
 !ENDIF 
@@ -2175,20 +2532,26 @@ DEP_CPP_BOOKM=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_BOOKM=\
+	".\src\atomicrefcount.h"\
 	".\src\bookmarkhandler.h"\
 	".\src\bookmarkstorage.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\privatexml.h"\
 	".\src\privatexmlhandler.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -2233,6 +2596,233 @@ DEP_CPP_BOOKM=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\carbons.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_CARBO=\
+	".\src\carbons.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
 	
 
 !ENDIF 
@@ -2517,15 +3107,19 @@ DEP_CPP_CHATS=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_CHATS=\
+	".\src\chatstate.h"\
 	".\src\chatstatefilter.h"\
 	".\src\chatstatehandler.h"\
+	".\src\delayeddelivery.h"\
 	".\src\gloox.h"\
 	".\src\jid.h"\
 	".\src\macros.h"\
+	".\src\message.h"\
 	".\src\messageeventhandler.h"\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\tag.h"\
 	
 
@@ -3149,20 +3743,30 @@ NODEP_CPP_CLIEN=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_CLIEN=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\atomicrefcount.h"\
+	".\src\capabilities.h"\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
+	".\src\config.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\disco.h"\
 	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\nonsaslauth.h"\
+	".\src\prep.h"\
+	".\src\presence.h"\
 	".\src\presencehandler.h"\
 	".\src\privatexmlhandler.h"\
 	".\src\resource.h"\
@@ -3173,6 +3777,7 @@ DEP_CPP_CLIEN=\
 	".\src\stanzaextension.h"\
 	".\src\stanzaextensionfactory.h"\
 	".\src\statisticshandler.h"\
+	".\src\subscription.h"\
 	".\src\subscriptionhandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -3180,7 +3785,7 @@ DEP_CPP_CLIEN=\
 	".\src\tlshandler.h"\
 	
 NODEP_CPP_CLIEN=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -3856,37 +4461,58 @@ NODEP_CPP_CLIENT=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_CLIENT=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\atomicrefcount.h"\
 	".\src\base64.h"\
 	".\src\clientbase.h"\
 	".\src\compressionbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\compressionzlib.h"\
+	".\src\config.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\connectionlistener.h"\
 	".\src\connectiontcpbase.h"\
 	".\src\connectiontcpclient.h"\
+	".\src\dataform.h"\
+	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
+	".\src\delayeddelivery.h"\
 	".\src\disco.h"\
+	".\src\discohandler.h"\
 	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\eventhandler.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\md5.h"\
+	".\src\message.h"\
 	".\src\messagehandler.h"\
 	".\src\messagesession.h"\
 	".\src\messagesessionhandler.h"\
 	".\src\mucinvitationhandler.h"\
+	".\src\mucroom.h"\
+	".\src\mucroomconfighandler.h"\
+	".\src\mucroomhandler.h"\
 	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\presence.h"\
 	".\src\presencehandler.h"\
 	".\src\resource.h"\
 	".\src\rosteritem.h"\
 	".\src\rosterlistener.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\stanzaextensionfactory.h"\
 	".\src\statisticshandler.h"\
+	".\src\subscription.h"\
 	".\src\subscriptionhandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -3895,7 +4521,7 @@ DEP_CPP_CLIENT=\
 	".\src\tlshandler.h"\
 	
 NODEP_CPP_CLIENT=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -4335,21 +4961,26 @@ DEP_CPP_COMPO=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_COMPO=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\component.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\disco.h"\
-	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\prep.h"\
 	".\src\sha.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -4646,15 +5277,18 @@ NODEP_CPP_COMPR=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_COMPR=\
+	".\config.h.symbian"\
 	".\config.h.win"\
 	".\src\compressionbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\compressionzlib.h"\
+	".\src\config.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	
 NODEP_CPP_COMPR=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -4950,7 +5584,10 @@ DEP_CPP_CONNE=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_CONNE=\
+	".\config.h.symbian"\
+	".\config.h.win"\
 	".\src\base64.h"\
+	".\src\config.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\connectionsocks5proxy.h"\
@@ -4960,6 +5597,9 @@ DEP_CPP_CONNE=\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
+	
+NODEP_CPP_CONNE=\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -5283,6 +5923,7 @@ DEP_CPP_CONNEC=\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\mutex.h"\
+	".\src\mutexguard.h"\
 	".\src\prep.h"\
 	
 
@@ -5961,6 +6602,9 @@ DEP_CPP_CONNECTI=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_CONNECTI=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\config.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\connectionhandler.h"\
@@ -5974,6 +6618,9 @@ DEP_CPP_CONNECTI=\
 	".\src\macros.h"\
 	".\src\mutex.h"\
 	".\src\mutexguard.h"\
+	
+NODEP_CPP_CONNECTI=\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -6023,215 +6670,246 @@ SOURCE=.\src\dataform.cpp
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
@@ -6239,17 +6917,21 @@ DEP_CPP_DATAF=\
 	".\src\macros.h"\
 	".\src\tag.h"\
 	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	".\src\stanzaextension.h"\
 	".\src\tag.h"\
 	
 
@@ -6257,7 +6939,6 @@ DEP_CPP_DATAF=\
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
@@ -6265,18 +6946,23 @@ DEP_CPP_DATAF=\
 	".\src\macros.h"\
 	".\src\tag.h"\
 	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_DATAF=\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAF=\
+	".\src\dataformbase.h"\
 	
 
 !ENDIF 
@@ -6289,221 +6975,250 @@ SOURCE=.\src\dataformbase.cpp
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
-
-DEP_CPP_DATAFO=\
+NODEP_CPP_DATAFO=\
 	".\src\dataformbase.h"\
-	".\src\dataformfield.h"\
-	".\src\dataformitem.h"\
-	".\src\dataformreported.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_DATAFO=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	
+NODEP_CPP_DATAFO=\
+	".\src\dataformbase.h"\
 	
 
 !ENDIF 
@@ -6516,177 +7231,210 @@ SOURCE=.\src\dataformfield.cpp
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
 	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
@@ -6696,21 +7444,25 @@ DEP_CPP_DATAFOR=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
 	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_DATAFOR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFOR=\
+	".\src\dataformbase.h"\
 	
 
 !ENDIF 
@@ -6723,195 +7475,229 @@ SOURCE=.\src\dataformitem.cpp
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
 	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
@@ -6921,23 +7707,27 @@ DEP_CPP_DATAFORM=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
 	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_DATAFORM=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformitem.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORM=\
+	".\src\dataformbase.h"\
 	
 
 !ENDIF 
@@ -6950,195 +7740,229 @@ SOURCE=.\src\dataformreported.cpp
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
 	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
@@ -7148,23 +7972,27 @@ DEP_CPP_DATAFORMR=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
 	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_DATAFORMR=\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\dataformreported.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_DATAFORMR=\
+	".\src\dataformbase.h"\
 	
 
 !ENDIF 
@@ -7727,19 +8555,29 @@ DEP_CPP_DISCO=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DISCO=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
 	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\softwareversion.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -8032,7 +8870,9 @@ NODEP_CPP_DNS_C=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DNS_C=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\config.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
@@ -8040,7 +8880,7 @@ DEP_CPP_DNS_C=\
 	".\src\macros.h"\
 	
 NODEP_CPP_DNS_C=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -8083,7 +8923,6 @@ SOURCE=.\src\flexoff.cpp
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8100,6 +8939,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -8107,7 +8949,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8124,6 +8965,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -8131,7 +8975,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8148,6 +8991,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -8155,7 +9001,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8172,6 +9017,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -8179,7 +9027,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8196,6 +9043,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -8203,7 +9053,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8220,6 +9069,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -8227,7 +9079,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8244,6 +9095,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -8251,7 +9105,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8268,6 +9121,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -8275,7 +9131,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8292,6 +9147,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -8299,7 +9157,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8316,6 +9173,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -8323,7 +9183,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8340,6 +9199,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -8347,7 +9209,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8364,6 +9225,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -8371,7 +9235,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8388,6 +9251,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -8395,7 +9261,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8412,6 +9277,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -8419,7 +9287,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8436,6 +9303,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -8443,7 +9313,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8460,6 +9329,9 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -8467,7 +9339,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8485,28 +9356,36 @@ DEP_CPP_FLEXO=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_FLEXO=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
-	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\flexoff.h"\
 	".\src\flexoffhandler.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -8518,7 +9397,6 @@ DEP_CPP_FLEXO=\
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8536,13 +9414,15 @@ DEP_CPP_FLEXO=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_FLEXO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -8559,6 +9439,296 @@ DEP_CPP_FLEXO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_FLEXO=\
+	".\src\dataformbase.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\forward.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_FORWA=\
+	".\src\delayeddelivery.h"\
+	".\src\forward.h"\
+	".\src\gloox.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
 	
 
 !ENDIF 
@@ -9540,13 +10710,21 @@ DEP_CPP_INSTA=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_INSTA=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
+	".\src\disco.h"\
 	".\src\discohandler.h"\
 	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
 	".\src\instantmucroom.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
@@ -9556,8 +10734,11 @@ DEP_CPP_INSTA=\
 	".\src\mucroom.h"\
 	".\src\mucroomconfighandler.h"\
 	".\src\mucroomhandler.h"\
+	".\src\mutex.h"\
+	".\src\presence.h"\
 	".\src\presencehandler.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -9758,6 +10939,7 @@ DEP_CPP_JID_C=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_JID_C=\
+	".\src\gloox.h"\
 	".\src\jid.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
@@ -9777,6 +10959,1514 @@ DEP_CPP_JID_C=\
 	".\src\jid.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglecontent.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_JINGL=\
+	".\src\gloox.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jingletransport.h"\
+	".\src\macros.h"\
+	".\src\tag.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingledescription.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglesession.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_JINGLE=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jinglecontent.h"\
+	".\src\jingledescription.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jingletransport.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglesessionmanager.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_JINGLES=\
+	".\src\atomicrefcount.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
+	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\jingleplugin.h"\
+	".\src\jinglesession.h"\
+	".\src\jinglesessionhandler.h"\
+	".\src\jinglesessionmanager.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
 	
 
 !ENDIF 
@@ -10095,8 +12785,14 @@ DEP_CPP_MD5_C=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MD5_C=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\config.h"\
 	".\src\macros.h"\
 	".\src\md5.h"\
+	
+NODEP_CPP_MD5_C=\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -10378,14 +13074,18 @@ DEP_CPP_MESSA=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MESSA=\
+	".\src\delayeddelivery.h"\
 	".\src\gloox.h"\
 	".\src\jid.h"\
 	".\src\macros.h"\
+	".\src\message.h"\
+	".\src\messageevent.h"\
 	".\src\messageeventfilter.h"\
 	".\src\messageeventhandler.h"\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\tag.h"\
 	
 
@@ -10599,6 +13299,7 @@ DEP_CPP_MESSAG=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MESSAG=\
+	".\src\gloox.h"\
 	".\src\jid.h"\
 	".\src\macros.h"\
 	".\src\messagefilter.h"\
@@ -11009,21 +13710,28 @@ DEP_CPP_MESSAGE=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MESSAGE=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\delayeddelivery.h"\
 	".\src\disco.h"\
-	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\message.h"\
 	".\src\messagefilter.h"\
 	".\src\messagehandler.h"\
 	".\src\messagesession.h"\
+	".\src\mutex.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -11390,18 +14098,27 @@ DEP_CPP_MUCME=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MUCME=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\delayeddelivery.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\message.h"\
 	".\src\messagehandler.h"\
 	".\src\messagesession.h"\
 	".\src\mucmessagesession.h"\
+	".\src\mutex.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -11456,7 +14173,6 @@ SOURCE=.\src\mucroom.cpp
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11478,6 +14194,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -11485,7 +14204,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11507,6 +14225,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -11514,7 +14235,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11536,6 +14256,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -11543,7 +14266,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11565,6 +14287,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -11572,7 +14297,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11594,6 +14318,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -11601,7 +14328,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11623,6 +14349,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -11630,7 +14359,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11652,6 +14380,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -11659,7 +14390,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11681,6 +14411,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -11688,7 +14421,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11710,6 +14442,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -11717,7 +14452,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11739,6 +14473,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -11746,7 +14483,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11768,6 +14504,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -11775,7 +14514,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11797,6 +14535,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -11804,7 +14545,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11826,6 +14566,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -11833,7 +14576,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11855,6 +14597,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -11862,7 +14607,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11884,6 +14628,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -11891,7 +14638,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11913,6 +14659,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -11920,7 +14669,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -11943,33 +14691,45 @@ DEP_CPP_MUCRO=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MUCRO=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
+	".\src\delayeddelivery.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
 	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\message.h"\
 	".\src\messagehandler.h"\
 	".\src\messagesession.h"\
 	".\src\mucmessagesession.h"\
 	".\src\mucroom.h"\
 	".\src\mucroomconfighandler.h"\
 	".\src\mucroomhandler.h"\
+	".\src\mutex.h"\
+	".\src\presence.h"\
 	".\src\presencehandler.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -11981,7 +14741,6 @@ DEP_CPP_MUCRO=\
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -12004,13 +14763,15 @@ DEP_CPP_MUCRO=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_MUCRO=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\disco.h"\
 	".\src\discohandler.h"\
@@ -12032,6 +14793,9 @@ DEP_CPP_MUCRO=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_MUCRO=\
+	".\src\dataformbase.h"\
 	
 
 !ENDIF 
@@ -12197,10 +14961,14 @@ NODEP_CPP_MUTEX=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MUTEX=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\config.h"\
+	".\src\macros.h"\
 	".\src\mutex.h"\
 	
 NODEP_CPP_MUTEX=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -12554,19 +15322,26 @@ DEP_CPP_NONSA=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_NONSA=\
+	".\src\atomicrefcount.h"\
 	".\src\client.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\nonsaslauth.h"\
+	".\src\presence.h"\
 	".\src\sha.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -13181,12 +15956,14 @@ NODEP_CPP_PREP_=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_PREP_=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\config.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
 	
 NODEP_CPP_PREP_=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -13340,6 +16117,7 @@ DEP_CPP_PRIVA=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_PRIVA=\
+	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\privacyitem.h"\
 	
@@ -13691,19 +16469,25 @@ DEP_CPP_PRIVAC=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_PRIVAC=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\privacyitem.h"\
 	".\src\privacylisthandler.h"\
 	".\src\privacymanager.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -14064,18 +16848,24 @@ DEP_CPP_PRIVAT=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_PRIVAT=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\privatexml.h"\
 	".\src\privatexmlhandler.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -14130,7 +16920,6 @@ SOURCE=.\src\registration.cpp
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14147,6 +16936,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -14154,7 +16946,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14171,6 +16962,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -14178,7 +16972,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14195,6 +16988,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -14202,7 +16998,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14219,6 +17014,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -14226,7 +17024,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14243,6 +17040,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -14250,7 +17050,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14267,6 +17066,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -14274,7 +17076,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14291,6 +17092,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -14298,7 +17102,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14315,6 +17118,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -14322,7 +17128,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14339,6 +17144,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -14346,7 +17154,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14363,6 +17170,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -14370,7 +17180,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14387,6 +17196,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -14394,7 +17206,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14411,6 +17222,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -14418,7 +17232,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14435,6 +17248,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -14442,7 +17258,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14459,6 +17274,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -14466,7 +17284,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14483,6 +17300,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -14490,7 +17310,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14507,6 +17326,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -14514,7 +17336,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14532,22 +17353,30 @@ DEP_CPP_REGIS=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_REGIS=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\oob.h"\
 	".\src\prep.h"\
 	".\src\registration.h"\
@@ -14565,7 +17394,6 @@ DEP_CPP_REGIS=\
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14583,13 +17411,15 @@ DEP_CPP_REGIS=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_REGIS=\
 	".\src\clientbase.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -14606,6 +17436,9 @@ DEP_CPP_REGIS=\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
+	
+NODEP_CPP_REGIS=\
+	".\src\dataformbase.h"\
 	
 
 !ENDIF 
@@ -14791,8 +17624,13 @@ DEP_CPP_ROSTE=\
 	".\src\gloox.h"\
 	".\src\jid.h"\
 	".\src\macros.h"\
+	".\src\presence.h"\
 	".\src\resource.h"\
 	".\src\rosteritem.h"\
+	".\src\rosteritemdata.h"\
+	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\tag.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -15267,26 +18105,36 @@ DEP_CPP_ROSTER=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_ROSTER=\
+	".\src\atomicrefcount.h"\
+	".\src\capabilities.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\disco.h"\
 	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\presence.h"\
 	".\src\presencehandler.h"\
 	".\src\privatexml.h"\
 	".\src\privatexmlhandler.h"\
 	".\src\resource.h"\
 	".\src\rosteritem.h"\
+	".\src\rosteritemdata.h"\
 	".\src\rosterlistener.h"\
 	".\src\rostermanager.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
+	".\src\subscription.h"\
 	".\src\subscriptionhandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -15610,15 +18458,25 @@ DEP_CPP_SEARC=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_SEARC=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
+	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -15784,8 +18642,15 @@ DEP_CPP_SHA_C=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_SHA_C=\
+	".\config.h.symbian"\
+	".\config.h.win"\
+	".\src\config.h"\
+	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\sha.h"\
+	
+NODEP_CPP_SHA_C=\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -16220,21 +19085,26 @@ DEP_CPP_SIMAN=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_SIMAN=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\disco.h"\
-	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\sihandler.h"\
 	".\src\simanager.h"\
 	".\src\siprofilehandler.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -16301,7 +19171,6 @@ SOURCE=.\src\siprofileft.cpp
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16315,10 +19184,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -16326,7 +19198,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16340,10 +19211,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -16351,7 +19225,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16365,10 +19238,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -16376,7 +19252,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16390,10 +19265,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -16401,7 +19279,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16415,10 +19292,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -16426,7 +19306,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16440,10 +19319,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -16451,7 +19333,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16465,10 +19346,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -16476,7 +19360,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16490,10 +19373,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -16501,7 +19387,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16515,10 +19400,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -16526,7 +19414,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16540,10 +19427,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -16551,7 +19441,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16565,10 +19454,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -16576,7 +19468,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16590,10 +19481,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -16601,7 +19495,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16615,10 +19508,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -16626,7 +19522,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16640,10 +19535,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -16651,7 +19549,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16665,10 +19562,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -16676,7 +19576,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16690,10 +19589,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -16701,7 +19603,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16715,35 +19616,53 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_SIPRO=\
+	".\src\atomicrefcount.h"\
+	".\src\bytestream.h"\
+	".\src\bytestreamhandler.h"\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\inbandbytestream.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
 	".\src\macros.h"\
-	".\src\messagefilter.h"\
-	".\src\messagesession.h"\
+	".\src\messagehandler.h"\
+	".\src\mutex.h"\
+	".\src\oob.h"\
 	".\src\sihandler.h"\
 	".\src\simanager.h"\
 	".\src\siprofileft.h"\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
+	".\src\statisticshandler.h"\
 	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -16751,7 +19670,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16765,10 +19683,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
@@ -16776,7 +19697,6 @@ DEP_CPP_SIPRO=\
 DEP_CPP_SIPRO=\
 	".\src\connectiondatahandler.h"\
 	".\src\dataform.h"\
-	".\src\dataformbase.h"\
 	".\src\dataformfield.h"\
 	".\src\gloox.h"\
 	".\src\iqhandler.h"\
@@ -16790,10 +19710,13 @@ DEP_CPP_SIPRO=\
 	".\src\siprofilefthandler.h"\
 	".\src\siprofilehandler.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_SIPRO=\
+	".\src\dataformbase.h"\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ENDIF 
@@ -16821,13 +19744,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -16848,13 +19773,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -16875,13 +19802,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -16902,13 +19831,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -16929,13 +19860,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -16956,13 +19889,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -16983,13 +19918,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -17010,13 +19947,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -17037,13 +19976,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -17064,13 +20005,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -17091,13 +20034,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -17118,13 +20063,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -17145,13 +20092,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -17172,13 +20121,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -17199,13 +20150,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -17226,13 +20179,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -17253,7 +20208,6 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
@@ -17261,28 +20215,36 @@ DEP_CPP_SOCKS=\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
 	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_SOCKS=\
+	".\src\atomicrefcount.h"\
+	".\src\bytestream.h"\
+	".\src\bytestreamdatahandler.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\connectionsocks5proxy.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
-	".\src\messagefilter.h"\
-	".\src\messagesession.h"\
+	".\src\mutex.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -17307,13 +20269,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
@@ -17334,13 +20298,15 @@ DEP_CPP_SOCKS=\
 	".\src\messagesession.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamdatahandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS=\
+	".\src\socks5bytestreamdatahandler.h"\
 	
 
 !ENDIF 
@@ -17368,13 +20334,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -17395,13 +20363,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -17422,13 +20392,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -17449,13 +20421,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -17476,13 +20450,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -17503,13 +20479,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -17530,13 +20508,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -17557,13 +20537,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -17584,13 +20566,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -17611,13 +20595,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -17638,13 +20624,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -17665,13 +20653,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -17692,13 +20682,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -17719,13 +20711,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -17746,13 +20740,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -17773,13 +20769,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -17800,7 +20798,6 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
@@ -17808,32 +20805,40 @@ DEP_CPP_SOCKS5=\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
 	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
+	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_SOCKS5=\
+	".\src\atomicrefcount.h"\
+	".\src\bytestream.h"\
+	".\src\bytestreamhandler.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpserver.h"\
 	".\src\disco.h"\
-	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
-	".\src\messagefilter.h"\
-	".\src\messagesession.h"\
 	".\src\mutex.h"\
 	".\src\sha.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\socks5bytestreamserver.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -17858,13 +20863,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
@@ -17885,13 +20892,15 @@ DEP_CPP_SOCKS5=\
 	".\src\messagefilter.h"\
 	".\src\messagesession.h"\
 	".\src\socks5bytestream.h"\
-	".\src\socks5bytestreamhandler.h"\
 	".\src\socks5bytestreammanager.h"\
 	".\src\stanza.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlshandler.h"\
+	
+NODEP_CPP_SOCKS5=\
+	".\src\socks5bytestreamhandler.h"\
 	
 
 !ENDIF 
@@ -18458,6 +21467,7 @@ DEP_CPP_STANZ=\
 	".\src\gloox.h"\
 	".\src\jid.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\stanza.h"\
 	".\src\stanzaextension.h"\
 	".\src\stanzaextensionfactory.h"\
@@ -18509,6 +21519,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18526,6 +21538,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18543,6 +21557,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18560,6 +21576,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18577,6 +21595,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18594,6 +21614,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18611,6 +21633,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18628,6 +21652,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18645,6 +21671,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18662,6 +21690,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18679,6 +21709,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18696,6 +21728,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18713,6 +21747,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18730,6 +21766,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18747,6 +21785,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18764,6 +21804,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18781,24 +21823,23 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_STANZA=\
-	".\src\delayeddelivery.h"\
 	".\src\gloox.h"\
-	".\src\gpgencrypted.h"\
-	".\src\gpgsigned.h"\
 	".\src\jid.h"\
 	".\src\macros.h"\
-	".\src\oob.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\stanza.h"\
 	".\src\stanzaextension.h"\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
-	".\src\vcardupdate.h"\
-	".\src\xdelayeddelivery.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -18815,6 +21856,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -18832,6 +21875,8 @@ DEP_CPP_STANZA=\
 	".\src\stanzaextensionfactory.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
+	
+NODEP_CPP_STANZA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -19018,12 +22063,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -19035,12 +22080,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -19052,12 +22097,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -19069,12 +22114,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -19086,12 +22131,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -19103,12 +22148,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -19120,12 +22165,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -19137,12 +22182,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -19154,12 +22199,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -19171,12 +22216,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -19188,12 +22233,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -19205,12 +22250,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -19222,12 +22267,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -19239,12 +22284,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -19256,12 +22301,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -19273,12 +22318,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -19290,20 +22335,23 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_TLSDE=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\config.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlsgnutlsbase.h"\
@@ -19311,11 +22359,13 @@ DEP_CPP_TLSDE=\
 	".\src\tlsgnutlsclientanon.h"\
 	".\src\tlsgnutlsserveranon.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
+	".\src\tlsopensslbase.h"\
+	".\src\tlsopensslclient.h"\
+	".\src\tlsopensslserver.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -19327,12 +22377,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
@@ -19344,12 +22394,12 @@ DEP_CPP_TLSDE=\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
 	".\src\tlsgnutls.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ENDIF 
@@ -19600,15 +22650,18 @@ NODEP_CPP_TLSGN=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_TLSGN=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\config.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\tlsbase.h"\
 	".\src\tlsgnutlsbase.h"\
 	".\src\tlshandler.h"\
 	
 NODEP_CPP_TLSGN=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -19904,16 +22957,19 @@ NODEP_CPP_TLSGNU=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_TLSGNU=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\config.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\tlsbase.h"\
 	".\src\tlsgnutlsbase.h"\
 	".\src\tlsgnutlsclient.h"\
 	".\src\tlshandler.h"\
 	
 NODEP_CPP_TLSGNU=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -20211,16 +23267,19 @@ NODEP_CPP_TLSGNUT=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_TLSGNUT=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\config.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\tlsbase.h"\
 	".\src\tlsgnutlsbase.h"\
 	".\src\tlsgnutlsclientanon.h"\
 	".\src\tlshandler.h"\
 	
 NODEP_CPP_TLSGNUT=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -20518,16 +23577,19 @@ NODEP_CPP_TLSGNUTL=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_TLSGNUTL=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\config.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\tlsbase.h"\
 	".\src\tlsgnutlsbase.h"\
 	".\src\tlsgnutlsserveranon.h"\
 	".\src\tlshandler.h"\
 	
 NODEP_CPP_TLSGNUTL=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -20575,10 +23637,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
@@ -20589,10 +23651,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
@@ -20603,10 +23665,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
@@ -20617,10 +23679,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
@@ -20631,10 +23693,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
@@ -20645,10 +23707,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
@@ -20659,10 +23721,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
@@ -20673,10 +23735,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
@@ -20687,10 +23749,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
@@ -20701,10 +23763,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
@@ -20715,10 +23777,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
@@ -20729,10 +23791,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
@@ -20743,10 +23805,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
@@ -20757,10 +23819,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
@@ -20771,10 +23833,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
@@ -20785,10 +23847,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
@@ -20799,25 +23861,13 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
-
-DEP_CPP_TLSOP=\
-	".\config.h.win"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tlsbase.h"\
-	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
-	
-NODEP_CPP_TLSOP=\
-	".\src\config.h"\
-	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
 
@@ -20827,10 +23877,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
@@ -20841,10 +23891,10 @@ DEP_CPP_TLSOP=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
 	
 NODEP_CPP_TLSOP=\
 	".\src\config.h"\
+	".\src\tlsopenssl.h"\
 	
 
 !ENDIF 
@@ -21095,15 +24145,18 @@ NODEP_CPP_TLSSC=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_TLSSC=\
+	".\config.h.symbian"\
 	".\config.h.win"\
+	".\src\config.h"\
 	".\src\gloox.h"\
 	".\src\macros.h"\
+	".\src\mutex.h"\
 	".\src\tlsbase.h"\
 	".\src\tlshandler.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSSC=\
-	".\src\config.h"\
+	".\src\config.h.unix"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -21586,13 +24639,21 @@ DEP_CPP_UNIQU=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_UNIQU=\
+	".\src\atomicrefcount.h"\
 	".\src\clientbase.h"\
 	".\src\compressiondatahandler.h"\
 	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformfield.h"\
+	".\src\dataformfieldcontainer.h"\
+	".\src\disco.h"\
 	".\src\discohandler.h"\
 	".\src\disconodehandler.h"\
+	".\src\event.h"\
+	".\src\eventdispatcher.h"\
 	".\src\gloox.h"\
 	".\src\instantmucroom.h"\
+	".\src\iq.h"\
 	".\src\iqhandler.h"\
 	".\src\jid.h"\
 	".\src\loghandler.h"\
@@ -21602,9 +24663,12 @@ DEP_CPP_UNIQU=\
 	".\src\mucroom.h"\
 	".\src\mucroomconfighandler.h"\
 	".\src\mucroomhandler.h"\
+	".\src\mutex.h"\
+	".\src\presence.h"\
 	".\src\presencehandler.h"\
 	".\src\sha.h"\
 	".\src\stanza.h"\
+	".\src\stanzaextension.h"\
 	".\src\statisticshandler.h"\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
@@ -21933,6 +24997,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -21944,6 +25010,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -21955,6 +25023,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -21966,6 +25036,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -21977,6 +25049,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -21988,6 +25062,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -21999,6 +25075,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22010,6 +25088,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22021,6 +25101,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22032,6 +25114,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22043,6 +25127,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22054,6 +25140,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22065,6 +25153,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22076,6 +25166,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22087,6 +25179,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22098,6 +25192,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22109,19 +25205,12 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
-
-DEP_CPP_XDELA=\
-	".\src\gloox.h"\
-	".\src\jid.h"\
-	".\src\macros.h"\
-	".\src\stanzaextension.h"\
-	".\src\tag.h"\
-	".\src\xdelayeddelivery.h"\
-	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
 
@@ -22131,6 +25220,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22142,6 +25233,8 @@ DEP_CPP_XDELA=\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
+	
+NODEP_CPP_XDELA=\
 	".\src\xdelayeddelivery.h"\
 	
 
@@ -22174,6 +25267,10 @@ SOURCE=.\src\annotationshandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\atomicrefcount.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\base64.h
 # End Source File
 # Begin Source File
@@ -22183,6 +25280,10 @@ SOURCE=.\src\bookmarkhandler.h
 # Begin Source File
 
 SOURCE=.\src\bookmarkstorage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\carbons.h
 # End Source File
 # Begin Source File
 
@@ -22298,6 +25399,10 @@ SOURCE=.\src\flexoffhandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\forward.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\gloox.h
 # End Source File
 # Begin Source File
@@ -22319,6 +25424,34 @@ SOURCE=.\src\iqhandler.h
 # Begin Source File
 
 SOURCE=.\src\jid.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglecontent.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingledescription.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingleplugin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglesession.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglesessionhandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglesessionmanager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingletransport.h
 # End Source File
 # Begin Source File
 

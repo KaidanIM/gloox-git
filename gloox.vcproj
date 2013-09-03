@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="gloox-1.0"
-	ProjectGUID="{4DDB9C8A-C4A7-4518-A470-0B88629D8B66}"
+	ProjectGUID="{36E32BC3-0645-4C90-8BF5-6495ACB7CF5F}"
 	RootNamespace="gloox10"
 	TargetFrameworkVersion="196613"
 	>
@@ -196,6 +196,10 @@
 				>
 			</File>
 			<File
+				RelativePath="src\carbons.cpp"
+				>
+			</File>
+			<File
 				RelativePath="src\chatstate.cpp"
 				>
 			</File>
@@ -304,6 +308,10 @@
 				>
 			</File>
 			<File
+				RelativePath="src\forward.cpp"
+				>
+			</File>
+			<File
 				RelativePath="src\gloox.cpp"
 				>
 			</File>
@@ -329,6 +337,22 @@
 			</File>
 			<File
 				RelativePath="src\jid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglecontent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jingledescription.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglesession.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglesessionmanager.cpp"
 				>
 			</File>
 			<File
@@ -618,6 +642,10 @@
 				>
 			</File>
 			<File
+				RelativePath="src\carbons.h"
+				>
+			</File>
+			<File
 				RelativePath="src\chatstate.h"
 				>
 			</File>
@@ -774,6 +802,10 @@
 				>
 			</File>
 			<File
+				RelativePath="src\forward.h"
+				>
+			</File>
+			<File
 				RelativePath="src\gloox.h"
 				>
 			</File>
@@ -803,6 +835,34 @@
 			</File>
 			<File
 				RelativePath="src\jid.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglecontent.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jingledescription.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jingleplugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglesession.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglesessionhandler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglesessionmanager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jingletransport.h"
 				>
 			</File>
 			<File

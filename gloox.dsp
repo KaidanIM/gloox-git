@@ -114,6 +114,10 @@ SOURCE=.\src\capabilities.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\carbons.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\chatstate.cpp
 # End Source File
 # Begin Source File
@@ -215,6 +219,10 @@ SOURCE=.\src\flexoff.cpp
 # Begin Source File
 
 SOURCE=.\src\gloox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\forward.cpp
 # End Source File
 # Begin Source File
 
@@ -522,6 +530,10 @@ SOURCE=.\src\capabilities.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\carbons.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\chatstate.h
 # End Source File
 # Begin Source File
@@ -667,6 +679,10 @@ SOURCE=.\src\flexoff.h
 # Begin Source File
 
 SOURCE=.\src\flexoffhandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\forward.h
 # End Source File
 # Begin Source File
 
