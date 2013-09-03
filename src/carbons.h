@@ -86,17 +86,14 @@ namespace gloox
    * @code
    * bool Myclass::handleMessage( const Message& msg, MessageSession* )
    * {
-   *    if( msg.hasEmbeddedStanza() )
-   *    {
-   *      const Carbons *carbon = msg.findExtension<const Carbons>( ExtCarbons );
-   *      if( carbon )
-   *      {
-   *        if( carbon->embeddedStanza() )
-   *        {
-   *          Message* embeddedMessage = static_cast<Message *>( carbon->embeddedStanza() );
-   *        }
-   *      }
-   *    }
+   *   if( msg.hasEmbeddedStanza() ) // optional, saves some processing time when there is no Carbons extension
+   *   {
+   *     const Carbons* carbon = msg.findExtension<const Carbons>( ExtCarbons );
+   *     if( carbon && carbon->embeddedStanza() )
+   *     {
+   *       Message* embeddedMessage = static_cast<Message *>( carbon->embeddedStanza() );
+   *     }
+   *   }
    * }
    * @endcode
    *
