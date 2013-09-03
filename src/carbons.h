@@ -73,6 +73,43 @@ namespace gloox
    *
    * The server will not copy this message to your other connected resources.
    *
+   * @section access Access carbon copies
+   *
+   * When receiving a message (sent by either another connected client of the current user, or by a 3rd party), a carbon copy will
+   * have the following characteristics:
+   * @li The message's @c from attribute will be the @b bare JID of the @b receiving entity.
+   * @li The message's @c from attribute will be the @b full JID of the @b receiving entity.
+   * @li The message contains a Carbons StanzaExtension. This extension contains the original message with the @b original
+   * @c from/to attributes.
+   *
+   * Some sample code:
+   * @code
+   * bool Myclass::handleMessage( const Message& msg, MessageSession* )
+   * {
+   *    if( msg.hasEmbeddedStanza() )
+   *    {
+   *      const Carbons *carbon = msg.findExtension<const Carbons>( ExtCarbons );
+   *      if( carbon )
+   *      {
+   *        if( carbon->embeddedStanza() )
+   *        {
+   *          Message* embeddedMessage = static_cast<Message *>( carbon->embeddedStanza() );
+   *        }
+   *      }
+   *    }
+   * }
+   * @endcode
+   *
+   * You can also determine whether a carbon was sent by a 3rd party or a different client of the current user by checking the return value of Carbons::type().
+   * @code
+   * Carbons* c = msg.findExtension<...>( ... );
+   * // check that c is valid
+   *
+   * if( c->type() == Carbons::Received )
+   *   // Message was sent by a 3rd party
+   * else if( c->type() == Carbons::Sent )
+   *   // Message was sent by a different client of the current user
+   * @endcode
    *
    * XEP Version: 0.8
    *
