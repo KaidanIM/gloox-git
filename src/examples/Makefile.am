@@ -9,7 +9,7 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = register_example disco_example adhoc_example roster_example privatexml_example component_example \
                   bookmarkstorage_example annotations_example privacylist_example message_example flexoff_example \
                   vcard_example reset_example muc_example e2ee_client e2ee_server ft_recv ft_send \
-                  pubsub_example bosh_example linklocal_example
+                  pubsub_example bosh_example linklocal_example reconnect_example
 
 register_example_SOURCES = register_example.cpp
 register_example_LDADD = ../libgloox.la $(LDFLAGS)
@@ -94,3 +94,7 @@ bosh_example_CFLAGS = $(CPPFLAGS)
 linklocal_example_SOURCES = linklocal_example.cpp
 linklocal_example_LDADD = ../libgloox.la $(LDFLAGS)
 linklocal_example_CFLAGS = $(CPPFLAGS)
+
+reconnect_example_SOURCES = reconnect_example.cpp
+reconnect_example_LDADD = ../libgloox.la $(LDFLAGS)
+reconnect_example_CFLAGS = $(CPPFLAGS)
