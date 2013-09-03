@@ -102,7 +102,7 @@ namespace gloox
   const std::string XMLNS_JINGLE_ERRORS     = "urn:xmpp:jingle:errors:1";
   const std::string XMLNS_JINGLE_ICE_UDP    = "urn:xmpp:jingle:transports:ice-udp:1";
   const std::string XMLNS_JINGLE_FILE_TRANSFER = "urn:xmpp:jingle:apps:file-transfer:3";
-  
+
   const std::string XMLNS_SHIM              = "http://jabber.org/protocol/shim";
   const std::string XMLNS_ATTENTION         = "urn:xmpp:attention:0";
   const std::string XMLNS_STREAM_MANAGEMENT = "urn:xmpp:sm:3";
@@ -111,7 +111,7 @@ namespace gloox
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";
-  const std::string GLOOX_VERSION           = "1.0.5";
+  const std::string GLOOX_VERSION           = "1.0.6";
   const std::string GLOOX_CAPS_NODE         = "http://camaya.net/gloox";
 
   const std::string XMLNS = "xmlns";

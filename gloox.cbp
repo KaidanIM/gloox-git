@@ -53,6 +53,8 @@
 		<Unit filename="src/bytestreamhandler.h" />
 		<Unit filename="src/capabilities.cpp" />
 		<Unit filename="src/capabilities.h" />
+		<Unit filename="src/carbons.cpp" />
+		<Unit filename="src/carbons.h" />
 		<Unit filename="src/chatstate.cpp" />
 		<Unit filename="src/chatstate.h" />
 		<Unit filename="src/chatstatefilter.cpp" />
@@ -115,6 +117,8 @@
 		<Unit filename="src/flexoff.cpp" />
 		<Unit filename="src/flexoff.h" />
 		<Unit filename="src/flexoffhandler.h" />
+		<Unit filename="src/forward.cpp" />
+		<Unit filename="src/forward.h" />
 		<Unit filename="src/gloox.cpp" />
 		<Unit filename="src/gloox.h" />
 		<Unit filename="src/gpgencrypted.cpp" />
@@ -130,6 +134,17 @@
 		<Unit filename="src/iqhandler.h" />
 		<Unit filename="src/jid.cpp" />
 		<Unit filename="src/jid.h" />
+		<Unit filename="src/jinglesession.cpp" />
+		<Unit filename="src/jinglesession.h" />
+		<Unit filename="src/jinglecontent.cpp" />
+		<Unit filename="src/jinglecontent.h" />
+		<Unit filename="src/jingledescription.cpp" />
+		<Unit filename="src/jingledescription.h" />
+		<Unit filename="src/jingleplugin.h" />
+		<Unit filename="src/jinglesessionhandler.h" />
+		<Unit filename="src/jinglesessionmanager.cpp" />
+		<Unit filename="src/jinglesessionmanager.h" />
+		<Unit filename="src/jinglesessiontransport.h" />
 		<Unit filename="src/lastactivity.cpp" />
 		<Unit filename="src/lastactivity.h" />
 		<Unit filename="src/lastactivityhandler.h" />
