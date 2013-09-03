@@ -70,11 +70,11 @@ namespace gloox
       return --m_count;
 #endif
     }
-    
+
     void AtomicRefCount::reset()
     {
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-      ::InterlockedAnd( (volatile LONG*)&m_count, (volatile LONG)0 );
+      ::InterlockedExchange( (volatile LONG*)&m_count, (volatile LONG)0 );
 #elif defined( __APPLE__ )
       OSAtomicAnd32Barrier( (int32_t)0, (volatile int32_t*)&m_count );
 #elif defined( HAVE_GCC_ATOMIC_BUILTINS )
