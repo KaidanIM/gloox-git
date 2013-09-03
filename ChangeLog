@@ -1,5 +1,12 @@
 v1.0.5 -- 02 Sep 2013
 ---------------------
+- ClientBase: removed check for empty message body
+- MessageSession: removed check for empty message body 
+
+
+
+v1.0.5 -- 02 Sep 2013
+---------------------
 - added support for Stanza Forwarding (XEP-0297)
 - added support for Message Carbons (XEP-0280)
 
