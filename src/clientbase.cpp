@@ -61,12 +61,11 @@
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 #include <tchar.h>
-#ifdef __MINGW32__
-#ifndef SecureZeroMemory
-#include <windows.h>
-#define SecureZeroMemory(p,s) RtlFillMemory((p),(s),0)
-#endif
-#endif
+# ifdef __MINGW32__
+#  ifndef SecureZeroMemory
+#  define SecureZeroMemory(p,s) RtlFillMemory((p),(s),0)
+#  endif
+# endif
 #endif
 
 namespace gloox
