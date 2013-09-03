@@ -30,8 +30,6 @@
 # include <unistd.h>
 #endif
 
-#include <cstdio>
-
 namespace gloox
 {
 
@@ -303,7 +301,6 @@ namespace gloox
       }
       else if( name == "enabled" && xmlns == XMLNS_STREAM_MANAGEMENT )
       {
-        printf( "Client: Enable detected\n" );
         m_smContext = CtxSMEnabled;
         m_smMax = atoi( tag->findAttribute( "max" ).c_str() );
         m_smId = tag->findAttribute( "id" );
@@ -318,10 +315,8 @@ namespace gloox
       }
       else if( name == "resumed" && xmlns == XMLNS_STREAM_MANAGEMENT && m_smContext == CtxSMResume )
       {
-        printf( "Client: Resume detected\n" );
         if( tag->findAttribute( "previd" ) == m_smId )
         {
-          printf( "Client: Resume detected, SMID recognized\n" );
           m_smContext = CtxSMResumed;
           notifyStreamEvent( StreamEventSMResumed );
           int h = atoi( tag->findAttribute( "h" ).c_str() );
@@ -685,9 +680,9 @@ namespace gloox
 
   void Client::connected()
   {
-    if( m_authed )
+    if( m_authed && m_smContext != CtxSMResumed )
     {
-      if( m_manageRoster && m_smContext != CtxSMResumed )
+      if( m_manageRoster )
       {
         notifyStreamEvent( StreamEventRoster );
         m_rosterManager->fill();

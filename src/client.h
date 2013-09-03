@@ -334,6 +334,9 @@ namespace gloox
       void nonSaslLogin();
 
     private:
+#ifdef CLIENT_TEST
+    public:
+#endif
       /**
        * @brief This is an implementation of a resource binding StanzaExtension.
        *

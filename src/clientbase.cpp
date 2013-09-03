@@ -198,7 +198,7 @@ namespace gloox
       m_compression = getDefaultCompression();
 
     m_logInstance.dbg( LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION + ", connecting to "
-                                               + m_server + ( ( m_customConnection )?( " using a custom connection" ):( ":" + util::int2string( m_port ) ) ) + "..." );
+                                               + m_server + ( ( m_customConnection )?( " using a custom connection" ):( m_port > 0 ? ( ":" + util::int2string( m_port ) ) : EmptyString ) ) + "..." );
     m_block = block;
     ConnectionError ret = m_connection->connect();
     if( ret != ConnNoError )
@@ -1020,14 +1020,14 @@ namespace gloox
       return false;
 
     int major = 0;
-    int minor = 0;
+//     int minor = 0;
     int myMajor = atoi( XMPP_STREAM_VERSION_MAJOR.c_str() );
 
     size_t dot = version.find( '.' );
     if( !version.empty() && dot && dot != std::string::npos )
     {
       major = atoi( version.substr( 0, dot ).c_str() );
-      minor = atoi( version.substr( dot ).c_str() );
+//       minor = atoi( version.substr( dot ).c_str() );
     }
 
     return myMajor >= major;
