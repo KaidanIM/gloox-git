@@ -73,7 +73,7 @@ namespace gloox
    *
    * The server will not copy this message to your other connected resources.
    *
-   * @section access Access carbon copies
+   * @section access Access received carbon copies
    *
    * When receiving a message (sent by either another connected client of the current user, or by a 3rd party), a carbon copy will
    * have the following characteristics:
