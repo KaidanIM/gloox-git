@@ -61,6 +61,12 @@
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 #include <tchar.h>
+#ifdef __MINGW32__
+#ifndef SecureZeroMemory
+#include <windows.h>
+#define SecureZeroMemory(p,s) RtlFillMemory((p),(s),0)
+#endif
+#endif
 #endif
 
 namespace gloox
@@ -410,7 +416,7 @@ namespace gloox
     m_smSent = 0;
 
     notifyOnDisconnect( reason );
-    
+
 #ifdef CLIENTBASE_TEST
     m_nextId.reset();
 #endif
@@ -857,10 +863,10 @@ namespace gloox
   {
     if( !tag )
       return;
-      
+
     send( tag, false, true );
   }
-  
+
   void ClientBase::send( Tag* tag, bool queue, bool del )
   {
     if( !tag )
@@ -872,7 +878,7 @@ namespace gloox
 
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
-      
+
     if( queue && m_smContext >= CtxSMEnabled )
       m_smQueue.insert( std::make_pair( m_smSent++, tag ) );
     else if( del )
@@ -893,12 +899,12 @@ namespace gloox
       logInstance().dbg( LogAreaXmlOutgoing, xml );
     }
   }
-  
+
   void ClientBase::checkQueue( int handled, bool resend )
   {
     if( m_smContext < CtxSMEnabled || handled < 0 )
       return;
-      
+
     SMQueueMap::iterator it = m_smQueue.begin();
     while( it != m_smQueue.end() )
     {
@@ -1569,8 +1575,6 @@ namespace gloox
 
     if( msHandler )
     {
-      if( msg.subtype() == Message::Chat && msg.body().empty() )
-        return; // don't want a new MS for empty messages
       MessageSession* session = new MessageSession( this, msg.from(), true, msg.subtype() );
       msHandler->handleMessageSession( session );
       session->handleMessage( msg );

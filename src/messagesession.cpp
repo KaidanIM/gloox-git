@@ -55,7 +55,7 @@ namespace gloox
     for( ; it != m_messageFilterList.end(); ++it )
       (*it)->filter( msg );
 
-    if( m_messageHandler && !msg.body().empty() )
+    if( m_messageHandler )
       m_messageHandler->handleMessage( msg, this );
   }
 
