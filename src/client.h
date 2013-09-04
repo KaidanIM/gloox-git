@@ -96,15 +96,20 @@ namespace gloox
    * @section stream_management Stream Management
    *
    * To enable Stream Management (@xep{0198}), call @ref setStreamManagement() with the first parameter set to @b true
-   * at any time. This will tell the server to enable Stream Management, if available. Once switched on,
+   * at any time. This will tell the server to enable Stream Management, if the feature is available. Once switched on,
    * Stream Management can not be disabled for a given active stream. However, setting the first
-   * parameter to @b false it can be disabled inside gloox so that Stream Management will not be used
+   * parameter to @b false, it can be disabled inside gloox so that Stream Management will not be used
    * for subsequent connections.
    *
-   * To enable the stream resumption feature, pass @b true as the second parameter. Upon re-connect after an
-   * unexpected (i.e. not user-triggered) disconnect, gloox will try to resume the stream
-   * and re-send any lost stanzas automatically.
+   * To enable the stream resumption feature, pass @b true as the second parameter to @ref setStreamManagement().
+   * Upon re-connect after an unexpected (i.e. neither user-triggered nor server-triggered) disconnect, gloox will try
+   * to resume the stream and re-send any non-acknowledged stanzas automatically.
+   * For stream resumption to work you have to re-connect using the very same Client instance.
    *
+   * After an unexpected disconnect you may check the send queue using @link ClientBase::sendQueue() sendQueue() @endlink.
+   * Stanzas in the queue have been sent but not yet acknowledged by the server. Depending on the circumstances of the
+   * disconnect, this does not mean that those stanzas have not been received by the recipient.
+   * 
    *
    * @author Jakob Schroeter <js@camaya.net>
    */

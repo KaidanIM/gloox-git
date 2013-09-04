@@ -879,7 +879,11 @@ namespace gloox
       m_statisticsHandler->handleStatistics( getStatistics() );
 
     if( queue && m_smContext >= CtxSMEnabled )
+    {
+      m_queueMutex.lock();
       m_smQueue.insert( std::make_pair( m_smSent++, tag ) );
+      m_queueMutex.unlock();
+    }
     else if( del )
       delete tag;
   }
@@ -904,6 +908,7 @@ namespace gloox
     if( m_smContext < CtxSMEnabled || handled < 0 )
       return;
 
+    util::MutexGuard mg( m_queueMutex );
     SMQueueMap::iterator it = m_smQueue.begin();
     while( it != m_smQueue.end() )
     {
@@ -918,6 +923,17 @@ namespace gloox
         ++it;
       }
     }
+  }
+
+  const TagList ClientBase::sendQueue()
+  {
+    TagList l;
+    util::MutexGuard mg( m_queueMutex );
+    SMQueueMap::iterator it = m_smQueue.begin();
+    for( ; it != m_smQueue.end(); ++it )
+      l.push_back( (*it).second->clone() );
+
+    return l;
   }
 
   void ClientBase::addFrom( Tag* tag )
