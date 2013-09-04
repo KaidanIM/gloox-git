@@ -503,7 +503,7 @@ namespace gloox
        * @xep{0030} requires an entity to have at least one identity. See @xep{0030}
        * for more information on categories and types.
        * @param category The entity category of this client. Default: client.
-       * @param type The type of this entity. Default: bot.
+       * @param type The type of this entity. Default: bot. May not be empty.
        * @param name The name of the entity. Default: empty.
        * @note An entity can have more than one identity. You cann add more identities
        * using addIdentity(). A call to setIdentity() will clear the list of identities
@@ -515,7 +515,7 @@ namespace gloox
       /**
        * Adds another identity to the list of identities.
        * @param category The entity category of this client. Default: client.
-       * @param type The type of this entity. Default: bot.
+       * @param type The type of this entity. Default: bot. May not be empty.
        * @param name The name of the entity. Default: empty.
        */
       void addIdentity( const std::string& category, const std::string& type,
