@@ -679,6 +679,15 @@ namespace gloox
        */
       const StanzaExtensionList& presenceExtensions() const { return m_presenceExtensions; }
 
+      /**
+       * Returns a list of Tags that are currently in the send queue.
+       * You should not rely on the currentness of this data when there is an established connection.
+       * @return A 'decoupled' list of Tags (deep copies) in the send queue. The caller is responsible
+       * for deleting the tags.
+       * @since 1.0.6
+       */
+      const TagList sendQueue();
+
       // reimplemented from ParserHandler
       virtual void handleTag( Tag* tag );
 
@@ -1045,6 +1054,7 @@ namespace gloox
 
       util::Mutex m_iqHandlerMapMutex;
       util::Mutex m_iqExtHandlerMapMutex;
+      util::Mutex m_queueMutex;
 
       Parser m_parser;
       LogSink m_logInstance;
