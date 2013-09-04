@@ -471,8 +471,8 @@ namespace gloox
        * Sets the version of the host application using this library.
        * The library takes care of jabber:iq:version requests. These
        * IQ packets will not be forwarded to the IqHandlers.
-       * @param name The name to be returned to inquireing clients.
-       * @param version The version to be returned to inquireing clients.
+       * @param name The name to be returned to inquiring clients.
+       * @param version The version to be returned to inquiring clients.
        * @param os The operating system to announce. Default: don't include.
        */
       void setVersion( const std::string& name, const std::string& version,
