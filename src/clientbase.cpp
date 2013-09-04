@@ -538,7 +538,7 @@ namespace gloox
         SEC_WINNT_AUTH_IDENTITY_W identity, *ident = 0;
         memset( &identity, 0, sizeof( identity ) );
 
-        WCHAR *usernameW = 0, *domainW = NULL, *passwordW = 0;
+        WCHAR *usernameW = 0, *domainW = 0, *passwordW = 0;
         int cchUsernameW = 0, cchDomainW = 0, cchPasswordW = 0;
 
         if( m_jid.username().length() > 0 )
