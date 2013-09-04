@@ -1,7 +1,10 @@
-v1.0.5 -- 02 Sep 2013
+v1.0.6 -- 04 Sep 2013
 ---------------------
-- ClientBase: removed check for empty message body
-- MessageSession: removed check for empty message body 
+- ClientBase: removed check for empty message body --> messages of type chat with empty bodies will be passed on to listeners - required for Message Carbons
+- MessageSession: removed check for empty message body --> messages of type chat with empty bodies will be passed on to listeners - required for Message Carbons
+- don't send presence after stream resumption
+- added ClientBase::sendQueue()
+- documentation updates and fixes
 
 
 
