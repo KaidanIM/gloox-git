@@ -502,7 +502,7 @@ namespace gloox
        * with a correct identity.
        * @xep{0030} requires an entity to have at least one identity. See @xep{0030}
        * for more information on categories and types.
-       * @param category The entity category of this client. Default: client.
+       * @param category The entity category of this client. Default: client. May not be empty.
        * @param type The type of this entity. Default: bot. May not be empty.
        * @param name The name of the entity. Default: empty.
        * @note An entity can have more than one identity. You cann add more identities
@@ -514,7 +514,7 @@ namespace gloox
 
       /**
        * Adds another identity to the list of identities.
-       * @param category The entity category of this client. Default: client.
+       * @param category The entity category of this client. Default: client. May not be empty.
        * @param type The type of this entity. Default: bot. May not be empty.
        * @param name The name of the entity. Default: empty.
        */
