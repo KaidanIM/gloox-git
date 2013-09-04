@@ -36,14 +36,14 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
                     MessageEventHandler, MessageHandler, ChatStateHandler
 {
   public:
-    MessageTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ), m_reconnect( false ) {}
+    MessageTest() : m_session( 0 ), m_reconnect( false ) {}
 
     virtual ~MessageTest() {}
 
     void start()
     {
 
-      JID jid( "ba@ed.us/gloox" );
+      JID jid( "ba@ed.st/gloox" );
       j = new Client( jid, "test" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
@@ -51,7 +51,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
 //       j->setTls( TLSDisabled );
-//       j->setCompression( false );
+      j->setCompression( false );
       j->setStreamManagement( true, true );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
@@ -134,28 +134,18 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       printf( "type: %d, subject: %s, message: %s, thread id: %s\n", msg.subtype(),
               msg.subject().c_str(), msg.body().c_str(), msg.thread().c_str() );
 
-      std::string re = "You said:\n> " + msg.body() + "\nI like that statement.";
-      std::string sub;
-      if( !msg.subject().empty() )
-        sub = "Re: " +  msg.subject();
 
-      m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
-#if defined( WIN32 ) || defined( _WIN32 )
-      Sleep( 1000 );
-#else
-      sleep( 1 );
-#endif
-      m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
-      m_chatStateFilter->setChatState( ChatStateComposing );
-#if defined( WIN32 ) || defined( _WIN32 )
-      Sleep( 2000 );
-#else
-      sleep( 2 );
-#endif
-      m_session->send( re, sub );
-
-      if( msg.body() == "quit" )
+      if( msg.body().substr( 0, 3 ) == "ack" ) // using substr() to work around some stupid clients
+        j->ackStreamManagement();
+      else if( msg.body().substr( 0, 3 ) == "req" )
+        j->reqStreamManagement();
+      else if( msg.body().substr( 0, 4 ) == "quit" )
         j->disconnect();
+      else
+      {
+        std::string re = "You said:\n> " + msg.body() + "\nI like that statement.";
+        m_session->send( re, gloox::EmptyString );
+      }
     }
 
     virtual void handleMessageEvent( const JID& from, MessageEventType event )
@@ -175,10 +165,6 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       j->disposeMessageSession( m_session );
       m_session = session;
       m_session->registerMessageHandler( this );
-      m_messageEventFilter = new MessageEventFilter( m_session );
-      m_messageEventFilter->registerMessageEventHandler( this );
-      m_chatStateFilter = new ChatStateFilter( m_session );
-      m_chatStateFilter->registerChatStateHandler( this );
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
@@ -188,15 +174,13 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       if( message.substr( 0, 10 ) == "<stream:er" )
         printf( "something's foul\n" );
 
-      if( !m_reconnect && j->m_smHandled > 8 )
+      if( !m_reconnect && j->m_smHandled > 10 )
         j->disconnect( ConnTlsFailed ); // fake disconnect reason so that no </stream:stream> is sent
     }
 
   private:
     Client *j;
     MessageSession *m_session;
-    MessageEventFilter *m_messageEventFilter;
-    ChatStateFilter *m_chatStateFilter;
     bool m_reconnect;
 };
 
