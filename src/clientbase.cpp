@@ -881,7 +881,7 @@ namespace gloox
     if( queue && m_smContext >= CtxSMEnabled )
     {
       m_queueMutex.lock();
-      m_smQueue.insert( std::make_pair( m_smSent++, tag ) );
+      m_smQueue.insert( std::make_pair( ++m_smSent, tag ) );
       m_queueMutex.unlock();
     }
     else if( del )
@@ -920,6 +920,10 @@ namespace gloox
       else if( resend && (*it).first > handled )
       {
         send( (*it).second, false, false );
+        ++it;
+      }
+      else
+      {
         ++it;
       }
     }
