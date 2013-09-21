@@ -849,6 +849,12 @@ namespace gloox
        */
       void checkQueue( int handled, bool resend );
 
+      /**
+       * Returns the number of sent stanzas, if Stream Management is enabled.
+       * @return The number of sent stanzas.
+       */
+      int stanzasSent() const { return m_smSent; }
+
       JID m_jid;                         /**< The 'self' JID. */
       JID m_authzid;                     /**< An optional authorization ID. See setAuthzid(). */
       std::string m_authcid;             /**< An alternative authentication ID. See setAuthcid(). */

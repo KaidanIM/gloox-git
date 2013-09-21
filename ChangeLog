@@ -1,3 +1,9 @@
+v1.0.7 -- xx Sep 2013
+---------------------
+- fixed bug in stanza handling/counting related to Stream Management (patch by Norbert Riedlin)
+
+
+
 v1.0.6 -- 04 Sep 2013
 ---------------------
 - ClientBase: removed check for empty message body --> messages of type chat with empty bodies will be passed on to listeners - required for Message Carbons
