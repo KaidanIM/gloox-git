@@ -1,6 +1,7 @@
 v1.0.7 -- xx Sep 2013
 ---------------------
 - fixed bug in stanza handling/counting related to Stream Management (patch by Norbert Riedlin)
+- added protected ClientBase::stanzasSent() to return sent stanzas (if Stream Management enabled)
 
 
 
