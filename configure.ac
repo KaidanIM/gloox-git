@@ -421,6 +421,8 @@ src/tests/inbandbytestreamibb/Makefile
 src/tests/inbandbytestream/Makefile
 src/tests/iq/Makefile
 src/tests/jid/Makefile
+src/tests/jinglecontent/Makefile
+src/tests/jingleiceudp/Makefile
 src/tests/jinglesession/Makefile
 src/tests/jinglesessionjingle/Makefile
 src/tests/lastactivityquery/Makefile

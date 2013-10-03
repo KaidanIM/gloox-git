@@ -12,8 +12,7 @@
 
 
 #include "jinglecontent.h"
-#include "jingledescription.h"
-#include "jingletransport.h"
+#include "jinglepluginfactory.h"
 #include "util.h"
 
 namespace gloox
@@ -44,17 +43,24 @@ namespace gloox
       return (Content::Senders)util::lookup( type, sendersValues );
     }
 
-    Content::Content( Description* desc, Transport* trans,
-                      const std::string& name, Creator creator,
+    Content::Content( const std::string& name, Creator creator,
                       Senders senders, const std::string& disposition )
-      : m_description( desc ), m_transport( trans ),
-        m_creator( creator ), m_disposition( disposition ), m_name( name ), m_senders( senders )
+      : m_factory( 0 ), m_creator( creator ), m_disposition( disposition ), m_name( name ), m_senders( senders )
     {
     }
 
     Content::Content( const Tag* tag )
+      : m_factory( 0 )
     {
+      if( !m_factory || !tag || tag->name() != "content" )
+        return;
 
+      m_name = tag->findAttribute( "name" );
+      m_creator = (Creator)util::lookup( tag->findAttribute( "creator" ), creatorValues );
+      m_senders = (Senders)util::lookup( tag->findAttribute( "senders" ), sendersValues );
+      m_disposition = tag->findAttribute( "disposition" );
+
+      m_factory->addPlugins( *this, tag );
     }
 
     Content::~Content()
@@ -78,10 +84,9 @@ namespace gloox
       t->addAttribute( "name", m_name );
       t->addAttribute( "senders", util::lookup( m_senders, sendersValues ) );
 
-      if( m_description )
-        t->addChild( m_description->tag() );
-      if( m_transport )
-        t->addChild( m_transport->tag() );
+      PluginList::const_iterator it = m_plugins.begin();
+      for( ; it != m_plugins.end(); ++it )
+        t->addChild( (*it)->tag() );
 
       return t;
     }

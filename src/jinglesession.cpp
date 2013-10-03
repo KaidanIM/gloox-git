@@ -16,8 +16,6 @@
 #include "clientbase.h"
 #include "error.h"
 #include "jinglecontent.h"
-#include "jingledescription.h"
-#include "jingletransport.h"
 #include "jinglesessionhandler.h"
 #include "tag.h"
 #include "util.h"
@@ -225,6 +223,7 @@ namespace gloox
         return;
 
       m_initiator = m_parent->jid();
+      m_sid = m_parent->getID();
 
 //       m_parent->registerIqHandler( this, ExtJingle );
 

@@ -26,11 +26,10 @@ namespace gloox
   namespace Jingle
   {
 
-    class Description;
-    class Transport;
+    class PluginFactory;
 
     /**
-     * @brief An abstraction of a Jingle Content Type. This part of Jingle (@xep{0166}).
+     * @brief An abstraction of a Jingle Content Type. This is part of Jingle (@xep{0166}).
      *
      * You should not need to use this class directly, unless you want to extend gloox' Jingle support.
      * See @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
@@ -68,12 +67,12 @@ namespace gloox
         /**
          * Creates a new Content wrapper.
          */
-        Content( Description* desc, Transport* trans,
-                 const std::string& name, Creator creator = CInitiator,
+        Content( const std::string& name, Creator creator = CInitiator,
                  Senders senders = SBoth, const std::string& disposition = EmptyString );
 
         /**
-         *
+         * Creates a new Content object from the given tag.
+         * @param tag The Tag to parse.
          */
         Content( const Tag* tag = 0 );
 
@@ -89,11 +88,13 @@ namespace gloox
         virtual Tag* tag() const;
 
         // reimplemented from Plugin
+        virtual Plugin* newInstance( const Tag* tag ) const { return new Content( tag ); }
+
+        // reimplemented from Plugin
         virtual Plugin* clone() const;
 
       private:
-        Description* m_description;
-        Transport* m_transport;
+        PluginFactory* m_factory;
         Creator m_creator;
         std::string m_disposition;
         std::string m_name;
