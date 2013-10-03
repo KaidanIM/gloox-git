@@ -46,7 +46,8 @@ namespace gloox
           Request,
           Checksum,
           Abort,
-          Received
+          Received,
+          Invalid
         };
 
         struct File
@@ -66,7 +67,7 @@ namespace gloox
         /**
          *
          */
-        FileTransfer( const std::string& d );
+        FileTransfer( Type type, FileList files );
 
         /**
          *

@@ -25,11 +25,21 @@ namespace gloox
   namespace Jingle
   {
 
-    FileTransfer::FileTransfer( const std::string& d )
+    static const char* typeValues [] = {
+      "offer",
+      "request",
+      "checksum",
+      "abort",
+      "received"
+    };
+
+    FileTransfer::FileTransfer( Type type, FileList files )
+      : m_type( type ), m_files( files )
     {
     }
 
     FileTransfer::FileTransfer( const Tag* tag )
+      : m_type( Invalid )
     {
       if( !tag || tag->xmlns() != XMLNS_JINGLE_FILE_TRANSFER )
         return;
@@ -49,7 +59,7 @@ namespace gloox
         parseFileList( tag->findChildren( "file" ) );
       }
 
-
+      m_type = (Type)util::lookup( name, typeValues );
     }
 
     void FileTransfer::parseFileList( const TagList& files )
@@ -98,34 +108,18 @@ namespace gloox
 
     Tag* FileTransfer::tag() const
     {
+      if( m_type == Invalid )
+        return 0;
+
       Tag* r = 0;
 
       switch( m_type )
       {
         case Offer:
-        {
-          r = new Tag( "description", XMLNS, XMLNS_JINGLE_FILE_TRANSFER );
-          Tag* o = new Tag( r, "offer" );
-          FileList::const_iterator it = m_files.begin();
-          for( ; it != m_files.end(); ++it )
-          {
-            Tag* f = new Tag( o, "file" );
-            new Tag( f, "date", (*it).date );
-            new Tag( f, "name", (*it).name );
-            new Tag( f, "desc", (*it).desc );
-            new Tag( f, "size", util::long2string( (*it).size ) );
-            Tag* h = new Tag( f, "hash", XMLNS, XMLNS_HASHES );
-            h->addAttribute( "algo", (*it).hash_algo );
-            h->setCData( (*it).hash );
-            if( (*it).range )
-              new Tag( f, "range" );
-          }
-          break;
-        }
         case Request:
         {
           r = new Tag( "description", XMLNS, XMLNS_JINGLE_FILE_TRANSFER );
-          Tag* o = new Tag( r, "request" );
+          Tag* o = new Tag( r, util::lookup( m_type, typeValues ) );
           FileList::const_iterator it = m_files.begin();
           for( ; it != m_files.end(); ++it )
           {
@@ -143,8 +137,10 @@ namespace gloox
           break;
         }
         case Abort:
+        case Checksum:
+        case Received:
         {
-          r = new Tag( "abort", XMLNS, XMLNS_JINGLE_FILE_TRANSFER );
+          r = new Tag( util::lookup( m_type, typeValues ), XMLNS, XMLNS_JINGLE_FILE_TRANSFER );
           FileList::const_iterator it = m_files.begin();
           Tag* f = new Tag( r, "file" );
           new Tag( f, "date", (*it).date );
@@ -154,37 +150,12 @@ namespace gloox
           Tag* h = new Tag( f, "hash", XMLNS, XMLNS_HASHES );
           h->addAttribute( "algo", (*it).hash_algo );
           h->setCData( (*it).hash );
+          if( (*it).range )
+            new Tag( f, "range" );
           break;
         }
-        case Checksum:
-        {
-          r = new Tag( "checksum", XMLNS, XMLNS_JINGLE_FILE_TRANSFER );
-          FileList::const_iterator it = m_files.begin();
-          for( ; it != m_files.end(); ++it )
-          {
-            Tag* f = new Tag( r, "file" );
-            new Tag( f, "date", (*it).date );
-            new Tag( f, "name", (*it).name );
-            new Tag( f, "desc", (*it).desc );
-            new Tag( f, "size", util::long2string( (*it).size ) );
-            Tag* h = new Tag( f, "hash", XMLNS, XMLNS_HASHES );
-            h->addAttribute( "algo", (*it).hash_algo );
-            h->setCData( (*it).hash );
-            if( (*it).range )
-              new Tag( f, "range" );
-          }
+        default:
           break;
-        }
-        case Received:
-        {
-          r = new Tag( "received", XMLNS, XMLNS_JINGLE_FILE_TRANSFER );
-          FileList::const_iterator it = m_files.begin();
-          Tag* f = new Tag( r, "file" );
-          Tag* h = new Tag( f, "hash", XMLNS, XMLNS_HASHES );
-          h->addAttribute( "algo", (*it).hash_algo );
-          h->setCData( (*it).hash );
-          break;
-        }
       }
 
       return r;
