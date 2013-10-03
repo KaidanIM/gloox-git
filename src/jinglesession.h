@@ -80,6 +80,8 @@ namespace gloox
     class GLOOX_API Session : public IqHandler
     {
 
+      friend class SessionManager;
+
       public:
         /**
          * Session state.
@@ -293,34 +295,25 @@ namespace gloox
         };
 
         /**
-         * Creates a new Jingle Session.
-         * @param parent The ClientBase to use for communication.
-         * @param callee The remote end of the session.
-         * @param jsh The handler to receive events and results.
-         */
-        Session( ClientBase* parent, const JID& callee, SessionHandler* jsh );
-
-        /**
-         * Creates a new Session from the incoming Jingle object.
-         * This is a NOOP for Jingles that have an action() different from SessionInitiate.
-         * @param parent The ClientBase to use for communication.
-         * @param jingle The Jingle object to init the Session from.
-         * @param jsh The handler to receive events and results.
-         */
-        Session( ClientBase* parent, const Session::Jingle* jingle,
-                 SessionHandler* jsh );
-
-        /**
          * Virtual Destructor.
          */
         virtual ~Session();
 
         /**
          * Initiates a session with a remote entity.
-         * @param plugins A list of Content-derived objects.
+         * @param plugins A list of Content objects. It is important to pass a (list of) Content objects here.
+         * Even though e.g. Jingle::ICEUDP are Plugin-derived, too, using anything other than Content here will result
+         * in erroneous behaviour at best. You may use initiate( const Content* content ) for just one Content.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
-        bool initiate( const PluginList& plugins );
+        bool initiate( const PluginList& contents );
+
+        /**
+         * Initiates a session with a remote entity.
+         * @param plugins A list of Content objects. You may use initiate( const PluginList& contents ) for more than one Content.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
+         */
+        bool initiate( const Content* content );
 
         /**
          * Accepts an incoming session with the given content.
@@ -375,6 +368,24 @@ namespace gloox
 #else
       private:
 #endif
+        /**
+         * Creates a new Jingle Session.
+         * @param parent The ClientBase to use for communication.
+         * @param callee The remote end of the session.
+         * @param jsh The handler to receive events and results.
+         */
+        Session( ClientBase* parent, const JID& callee, SessionHandler* jsh );
+
+        /**
+         * Creates a new Session from the incoming Jingle object.
+         * This is a NOOP for Jingles that have an action() different from SessionInitiate.
+         * @param parent The ClientBase to use for communication.
+         * @param jingle The Jingle object to init the Session from.
+         * @param jsh The handler to receive events and results.
+         */
+        Session( ClientBase* parent, const Session::Jingle* jingle,
+                 SessionHandler* jsh );
+
         ClientBase* m_parent;
         State m_state;
         JID m_callee;

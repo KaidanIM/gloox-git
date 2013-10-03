@@ -48,6 +48,12 @@ namespace gloox
          */
         virtual ~SessionManager();
 
+        /**
+         *
+         */
+        Session* createSession( const JID& callee, SessionHandler* handler );
+
+
         // reimplemented from IqHandler
         virtual bool handleIq( const IQ& iq );
 

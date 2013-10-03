@@ -39,23 +39,19 @@ namespace gloox
 
         /**
          *
+         * @param jingle May be 0.
          */
         virtual void handleSessionStateChange( const Session* session, const Session::Jingle* jingle ) = 0;
 
         /**
          *
          */
-        virtual void handleSessionInfo( const Session* session, const Session::Jingle* jingle ) = 0;
+        virtual void handleSessionAction( Action action, const Session* session, const Session::Jingle* jingle ) = 0;
 
         /**
          *
          */
-        virtual void handleTransportInfo( const Session* session, const Session::Jingle* jingle ) = 0;
-
-        /**
-         *
-         */
-        virtual void handleSession( Session* session ) = 0;
+        virtual void handleIncomingSession( Session* session ) = 0;
 
     };
 

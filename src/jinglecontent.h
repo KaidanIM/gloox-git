@@ -67,7 +67,7 @@ namespace gloox
         /**
          * Creates a new Content wrapper.
          */
-        Content( const std::string& name, Creator creator = CInitiator,
+        Content( const std::string& name, const PluginList& plugins, Creator creator = CInitiator,
                  Senders senders = SBoth, const std::string& disposition = EmptyString );
 
         /**

@@ -43,10 +43,12 @@ namespace gloox
       return (Content::Senders)util::lookup( type, sendersValues );
     }
 
-    Content::Content( const std::string& name, Creator creator,
+    Content::Content( const std::string& name, const PluginList& plugins, Creator creator,
                       Senders senders, const std::string& disposition )
-      : m_factory( 0 ), m_creator( creator ), m_disposition( disposition ), m_name( name ), m_senders( senders )
+      : m_factory( 0 ), m_creator( creator ), m_disposition( disposition ),
+        m_name( name ), m_senders( senders )
     {
+      m_plugins = plugins;
     }
 
     Content::Content( const Tag* tag )
