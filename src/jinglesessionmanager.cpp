@@ -39,6 +39,16 @@ namespace gloox
       util::clearList( m_sessions );
     }
 
+    Session* SessionManager::createSession( const JID& callee, SessionHandler* handler )
+    {
+      if( !( handler || m_handler ) || !callee )
+        return 0;
+
+      Session* sess = new Session( m_parent, callee, handler ? handler : m_handler );
+      m_sessions.push_back( sess );
+      return sess;
+    }
+
     bool SessionManager::handleIq( const IQ& iq )
     {
       const Session::Jingle* j = iq.findExtension<Session::Jingle>( ExtJingle );
@@ -50,7 +60,7 @@ namespace gloox
       if( it == m_sessions.end() )
       {
         Session* s = new Session( m_parent, j, m_handler );
-        m_handler->handleSession( s );
+        m_handler->handleIncomingSession( s );
         s->handleIq( iq );
       }
       else

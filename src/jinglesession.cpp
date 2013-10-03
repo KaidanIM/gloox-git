@@ -251,6 +251,16 @@ namespace gloox
         m_parent->removeIDHandler( this );
     }
 
+    bool Session::initiate( const Content* content )
+    {
+      if( !content )
+        return false;
+
+      PluginList pl;
+      pl.push_back( content );
+      return initiate( pl );
+    }
+
     bool Session::initiate( const PluginList& plugins )
     {
       if( !m_valid || !m_parent || plugins.empty() || !m_initiator
@@ -261,6 +271,7 @@ namespace gloox
       IQ init( IQ::Set, m_callee, m_parent->getID() );
       init.addExtension( new Jingle( SessionInitiate, m_initiator, plugins, m_sid ) );
       m_parent->send( init, this, SessionInitiate );
+      m_handler->handleSessionStateChange( this, 0 );
 
       return true;
     }
@@ -337,7 +348,7 @@ namespace gloox
         }
         case SessionInfo:
         {
-          m_handler->handleSessionInfo( this, j );
+          m_handler->handleSessionAction( SessionInfo, this, j );
           IQ re( IQ::Result, iq.from(), iq.id() );
           m_parent->send( re );
           break;
@@ -363,7 +374,7 @@ namespace gloox
           break;
         case TransportInfo:
         {
-          m_handler->handleTransportInfo( this, j );
+          m_handler->handleSessionAction( TransportInfo, this, j );
           IQ re( IQ::Result, iq.from(), iq.id() );
           m_parent->send( re );
           break;
@@ -402,6 +413,8 @@ namespace gloox
           case SessionInfo:
             break;
           case SessionInitiate:
+            m_state = Ended;
+            m_handler->handleSessionStateChange( this, 0 );
             break;
           case SessionTerminate:
             break;

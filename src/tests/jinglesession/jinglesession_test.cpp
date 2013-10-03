@@ -1,4 +1,5 @@
 #define GLOOX_TESTS
+#define JINGLE_TEST
 #include "../../iq.h"
 #include "../../iqhandler.h"
 #include "../../jid.h"
@@ -70,9 +71,8 @@ class TestInitiator : public ClientBase, public Jingle::SessionHandler
     bool checkResult2() { bool t = m_result2; m_result2 = false; return t; }
     Jingle::Session* js() { return m_js; }
     virtual void handleSessionStateChange( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ );
-    virtual void handleSessionInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
-    virtual void handleTransportInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
-    virtual void handleSession( Jingle::Session* session ) {}
+    virtual void handleSessionAction( Jingle::Action action, const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
+    virtual void handleIncomingSession( Jingle::Session* session ) {}
 private:
     Jingle::Session* m_js;
     int m_test;
@@ -96,9 +96,8 @@ public:
   Jingle::Session* js() { return m_js; }
   Jingle::SessionManager& sm() { return m_manager; }
   virtual void handleSessionStateChange( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ );
-  virtual void handleSessionInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
-  virtual void handleTransportInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
-  virtual void handleSession( Jingle::Session* session ) { m_js = session; }
+  virtual void handleSessionAction( Jingle::Action action, const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
+  virtual void handleIncomingSession( Jingle::Session* session ) { m_js = session; }
 private:
   Jingle::Session* m_js;
   int m_test;

@@ -89,6 +89,7 @@ namespace gloox
         virtual Plugin* clone() const = 0;
 
       protected:
+
         PluginList m_plugins;
 
     };

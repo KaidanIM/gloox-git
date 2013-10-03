@@ -579,8 +579,11 @@ namespace gloox
   /** Jingle ICE-UDP Transport namespace (@xep{0176}) */
   GLOOX_API extern const std::string XMLNS_JINGLE_ICE_UDP;
 
-  /** Jingle Raw UDP Transport namespace (@xep{0234}) */
+  /** Jingle File Transfer namespace (@xep{0234}) */
   GLOOX_API extern const std::string XMLNS_JINGLE_FILE_TRANSFER;
+
+  /** Jingle File Transfer namespace (multiple files) (@xep{0234}) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_FILE_TRANSFER_MULTI;
 
   /** Stanza Headers and Internet Metadata (SHIM) namespace (@xep{0131}) */
   GLOOX_API extern const std::string XMLNS_SHIM;
@@ -597,6 +600,8 @@ namespace gloox
   /** Message Carbons namespace (@xep{0280}) */
   GLOOX_API extern const std::string XMLNS_MESSAGE_CARBONS;
 
+  /** Use of Cryptographic Hash Functions in XMPP namespace (@xep{0300}) */
+  GLOOX_API extern const std::string XMLNS_HASHES;
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
