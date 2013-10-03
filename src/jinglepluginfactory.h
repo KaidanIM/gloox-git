@@ -11,46 +11,53 @@
 */
 
 
-#ifndef JINGLETRANSPORT_H__
-#define JINGLETRANSPORT_H__
+#ifndef JINGLEPLUGINFACTORY_H__
+#define JINGLEPLUGINFACTORY_H__
 
 #include "jingleplugin.h"
 
-#include <string>
-
 namespace gloox
 {
+
+  class Tag;
 
   namespace Jingle
   {
 
     /**
-     * @brief An abstract base class of a Jingle Transport. This is part of Jingle (@xep{0166}).
-     *
-     * You should not need to use this class directly unless you are extending gloox. See
-     * @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
-     *
-     * XEP Version: 1.1
      *
      * @author Jakob Schroeter <js@camaya.net>
-     * @since 1.0.5
+     * @since 1.0.7
      */
-    class Transport : public Plugin
+    class PluginFactory
     {
       public:
         /**
-         * Virtual destructor.
+         *
          */
-        virtual ~Transport() {}
+        PluginFactory();
 
-      protected:
-        /** The Transport's namespace. */
-//         const std::string m_xmlns;
+        /**
+         *
+         */
+        virtual ~PluginFactory();
+
+        /**
+         *
+         */
+        void registerPlugin( Plugin* plugin );
+
+        /**
+         *
+         */
+        void addPlugins( Plugin& plugin, const Tag* tag );
+
+      private:
+        PluginList m_plugins;
 
     };
 
   }
-
 }
 
-#endif // JINGLETRANSPORT_H__
+#endif // JINGLEPLUGINFACTORY_H__

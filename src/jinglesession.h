@@ -27,7 +27,7 @@ namespace gloox
   class ClientBase;
 
   /**
-   * @brief The namespace containing Jingle-related (XEP-0166 et. al.) classes.
+   * @brief The namespace containing Jingle-related (@xep{0166} et. al.) classes.
    *
    * See @link gloox::Jingle::Session Session @endlink for more information
    * about Jingle in gloox.
@@ -42,11 +42,6 @@ namespace gloox
     class Transport;
     class SessionHandler;
     class Content;
-
-    /**
-     * A list of Jingle Plugins.
-     */
-    typedef std::list<const Plugin*> PluginList;
 
     /**
      * Jingle Session actions.
@@ -97,7 +92,7 @@ namespace gloox
         };
 
         /**
-         * @brief An abstraction of a terminate reason.
+         * @brief An abstraction of a Jingle (@xep{0166}) session terminate reason.
          *
          * XEP Version: 0.33
          * @author Jakob Schroeter <js@camaya.net>
@@ -171,13 +166,16 @@ namespace gloox
              */
             const std::string& text() const { return m_text; }
 
-            // reimplemented from Jingle::Plugin
+            // reimplemented from Plugin
             virtual const std::string& filterString() const;
 
-            // reimplemented from Jingle::Plugin
+            // reimplemented from Plugin
             virtual Tag* tag() const;
 
-            // reimplemented from Jingle::Plugin
+            // reimplemented from Plugin
+            virtual Plugin* newInstance( const Tag* tag ) const { return new Reason( tag ); }
+
+            // reimplemented from Plugin
             virtual Plugin* clone() const;
 
           private:
@@ -188,7 +186,7 @@ namespace gloox
         };
 
         /**
-         * @brief This is an abstraction of the XEP-0166 (Jingle) &lt;jingle&gt; element as a StanzaExtension.
+         * @brief This is an abstraction of Jingle's (@xep{0166}) &lt;jingle&gt; element as a StanzaExtension.
          *
          * XEP Version: 0.33
          * @author Jakob Schroeter <js@camaya.net>

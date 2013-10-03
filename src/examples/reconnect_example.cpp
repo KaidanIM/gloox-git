@@ -43,7 +43,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
     void start()
     {
 
-      JID jid( "ba@ed.st/gloox" );
+      JID jid( "admin@jabba.us/gloox" );
       j = new Client( jid, "test" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );

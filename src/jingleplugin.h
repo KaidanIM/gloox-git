@@ -15,8 +15,10 @@
 #define JINGLEPLUGIN_H__
 
 #include "macros.h"
+#include "util.h"
 
 #include <string>
+#include <list>
 
 namespace gloox
 {
@@ -26,8 +28,15 @@ namespace gloox
   namespace Jingle
   {
 
+    class Plugin;
+
     /**
-     * @brief An abstraction of a Jingle plugin. This part of Jingle (@xep{0166}).
+     * A list of Jingle plugins.
+     */
+    typedef std::list<const Plugin*> PluginList;
+
+    /**
+     * @brief An abstraction of a Jingle plugin. This is part of Jingle (@xep{0166}).
      *
      * This is the base class for Transport and Description. It is also used for
      * session information, such as the 'ringing' info in Jingle Audio, or Jingle DTMF.
@@ -43,11 +52,17 @@ namespace gloox
         /**
          * Virtual destructor.
          */
-        virtual ~Plugin() {}
+        virtual ~Plugin() { util::clearList( m_plugins ) ; }
+
+        /**
+         *
+         */
+        void addPlugin( const Plugin* plugin ) { if( plugin ) m_plugins.push_back( plugin ); }
 
         /**
          * Returns an XPath expression that describes a path to child elements of a
-         * jingle element that a plugin handles.
+         * jingle element that the plugin handles.
+         * The result should be a single Tag.
          *
          * @return The plugin's filter string.
          */
@@ -60,10 +75,22 @@ namespace gloox
         virtual Tag* tag() const = 0;
 
         /**
+         * Returns a new instance of the same plugin type,
+         * based on the Tag provided.
+         * @param tag The Tag to parse and create a new instance from.
+         * @return The new plugin instance.
+         */
+        virtual Plugin* newInstance( const Tag* tag ) const = 0;
+
+        /**
          * Creates an identical deep copy of the current instance.
          * @return An identical deep copy of the current instance.
          */
         virtual Plugin* clone() const = 0;
+
+      protected:
+        PluginList m_plugins;
+
     };
 
   }
