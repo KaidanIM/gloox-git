@@ -386,6 +386,9 @@ namespace gloox
         Session( ClientBase* parent, const Session::Jingle* jingle,
                  SessionHandler* jsh );
 
+        bool doAction( Action action, const Plugin* plugin );
+        bool doAction( Action action, const PluginList& plugin );
+
         ClientBase* m_parent;
         State m_state;
         JID m_callee;

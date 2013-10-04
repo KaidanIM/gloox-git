@@ -253,67 +253,64 @@ namespace gloox
 
     bool Session::initiate( const Content* content )
     {
-      if( !content )
+      if( !content || !m_initiator || m_state >= Pending )
         return false;
 
-      PluginList pl;
-      pl.push_back( content );
-      return initiate( pl );
+      m_state = Pending;
+      return doAction( SessionInitiate, content );
     }
 
     bool Session::initiate( const PluginList& plugins )
     {
-      if( !m_valid || !m_parent || plugins.empty() || !m_initiator
-          || m_state >= Pending )
+      if( plugins.empty() || !m_initiator || m_state >= Pending )
         return false;
 
       m_state = Pending;
-      IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( SessionInitiate, m_initiator, plugins, m_sid ) );
-      m_parent->send( init, this, SessionInitiate );
-      m_handler->handleSessionStateChange( this, 0 );
-
-      return true;
+      return doAction( SessionInitiate, plugins );
     }
 
     bool Session::accept( const Content* content )
     {
-      if( !m_valid || !m_parent || !content /*|| !m_initiator*/
-          || m_state > Pending )
+      if( !content || m_state > Pending )
         return false;
 
       m_state = Active;
-      IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( SessionAccept, m_initiator, content, m_sid ) );
-      m_parent->send( init, this, SessionAccept );
-
-      return true;
+      return doAction( SessionAccept, content );
     }
 
     bool Session::inform( Action action, const Plugin* plugin )
     {
-      if( !m_valid || !m_parent || m_state < Pending || !m_initiator
-          || action != DescriptionInfo || action != SessionInfo
-          || action != TransportInfo )
+      if( m_state < Pending )
         return false;
 
-      IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( action, m_initiator, plugin, m_sid ) );
-      m_parent->send( init, this, action );
-
-      return true;
+      return doAction( action, plugin );
     }
 
     bool Session::terminate( Session::Reason* reason )
     {
-      if( !m_valid || !m_parent || m_state < Pending /*|| !m_initiator*/ )
+      if( m_state < Pending /*|| !m_initiator*/ )
         return false;
 
       m_state = Ended;
 
+      return doAction( SessionTerminate, reason );
+    }
+
+    bool Session::doAction( Action action, const Plugin* plugin )
+    {
+      PluginList pl;
+      pl.push_back( plugin );
+      return doAction( action, pl );
+    }
+
+    bool Session::doAction( Action action, const PluginList& plugins )
+    {
+      if( !m_valid || !m_parent )
+        return false;
+
       IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( SessionTerminate, m_initiator, reason, m_sid ) );
-      m_parent->send( init, this, SessionTerminate );
+      init.addExtension( new Jingle( action, m_initiator, plugins, m_sid ) );
+      m_parent->send( init, this, action );
 
       return true;
     }
@@ -324,33 +321,13 @@ namespace gloox
       if( !j || j->sid() != m_sid || !m_handler )
         return false;
 
+      m_handler->handleSessionAction( SessionInfo, this, j );
       switch( j->action() )
       {
-        case ContentAccept:
-          break;
-        case ContentAdd:
-          break;
-        case ContentModify:
-          break;
-        case ContentReject:
-          break;
-        case ContentRemove:
-          break;
-        case DescriptionInfo:
-          break;
         case SessionAccept:
         {
           m_state = Active;
           m_handler->handleSessionStateChange( this, j );
-          IQ re( IQ::Result, iq.from(), iq.id() );
-          m_parent->send( re );
-          break;
-        }
-        case SessionInfo:
-        {
-          m_handler->handleSessionAction( SessionInfo, this, j );
-          IQ re( IQ::Result, iq.from(), iq.id() );
-          m_parent->send( re );
           break;
         }
         case SessionInitiate:
@@ -358,34 +335,20 @@ namespace gloox
           m_state = Pending;
           m_initiator = j->initiator();
           m_handler->handleSessionStateChange( this, j );
-          IQ re( IQ::Result, iq.from(), iq.id() );
-          m_parent->send( re );
           break;
         }
         case SessionTerminate:
         {
           m_state = Ended;
           m_handler->handleSessionStateChange( this, j );
-          IQ re( IQ::Result, iq.from(), iq.id() );
-          m_parent->send( re );
           break;
         }
-        case TransportAccept:
-          break;
-        case TransportInfo:
-        {
-          m_handler->handleSessionAction( TransportInfo, this, j );
-          IQ re( IQ::Result, iq.from(), iq.id() );
-          m_parent->send( re );
-          break;
-        }
-        case TransportReject:
-          break;
-        case TransportReplace:
-          break;
-        case InvalidAction:
+        default:
           break;
       }
+
+      IQ re( IQ::Result, iq.from(), iq.id() );
+      m_parent->send( re );
 
       return true;
     }
