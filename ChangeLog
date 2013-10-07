@@ -1,5 +1,9 @@
-v1.0.7 -- xx Sep 2013
+v1.0.7 -- 03 Oct 2013
 ---------------------
+- added Jingle (XEP-0166)
+- added Jingle ICE-UDP Transport (XEP-0176)
+- added Jingle File Transfer (XEP-0234)
+- fixed compilation in iOS7 SDK (thanks to Kurt Vermeersch)
 - fixed bug in stanza handling/counting related to Stream Management (patch by Norbert Riedlin)
 - added protected ClientBase::stanzasSent() to return sent stanzas (if Stream Management enabled)
 

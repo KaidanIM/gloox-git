@@ -20,6 +20,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <cstdlib>
 
 namespace gloox
 {
