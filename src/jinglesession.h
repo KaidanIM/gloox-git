@@ -54,6 +54,7 @@ namespace gloox
       ContentReject,                /**< Reject a content-add action received from another party. */
       ContentRemove,                /**< Remove one or more content definitions from the session. */
       DescriptionInfo,              /**< Exchange information about parameters for an application type. */
+      SecurityInfo,                 /**< Send information related to establishment or maintenance of security preconditions. */
       SessionAccept,                /**< Definitively accept a session negotiation. */
       SessionInfo,                  /**< Send session-level information, such as a ping or a ringing message. */
       SessionInitiate,              /**< Request negotiation of a new Jingle session. */
@@ -300,20 +301,44 @@ namespace gloox
         virtual ~Session();
 
         /**
-         * Initiates a session with a remote entity.
-         * @param plugins A list of Content objects. It is important to pass a (list of) Content objects here.
-         * Even though e.g. Jingle::ICEUDP are Plugin-derived, too, using anything other than Content here will result
-         * in erroneous behaviour at best. You may use initiate( const Content* content ) for just one Content.
-         * @return @b False if a prerequisite is not met, @b true otherwise.
+         *
          */
-        bool initiate( const PluginList& contents );
+        bool contentAccept( const Content* content );
 
         /**
-         * Initiates a session with a remote entity.
-         * @param plugins A list of Content objects. You may use initiate( const PluginList& contents ) for more than one Content.
-         * @return @b False if a prerequisite is not met, @b true otherwise.
+         *
          */
-        bool initiate( const Content* content );
+        bool contentAdd( const Content* content );
+
+        /**
+         *
+         */
+        bool contentAdd( const PluginList& contents );
+
+        /**
+         *
+         */
+        bool contentModify( const Content* content );
+
+        /**
+         *
+         */
+        bool contentReject( const Content* content );
+
+        /**
+         *
+         */
+        bool contentRemove( const Content* content );
+
+        /**
+         *
+         */
+        bool descriptionInfo( const Plugin* info );
+
+        /**
+         *
+         */
+        bool securityInfo( const Plugin* info );
 
         /**
          * Accepts an incoming session with the given content.
@@ -321,23 +346,56 @@ namespace gloox
          * parameters.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
-        bool accept( const Content* content );
+        bool sessionAccept( const Content* content );
 
         /**
-         * Sends an informational message (DescriptionInfo,
-         * TransportInfo, SessionInfo) to the remote party.
-         * @param action The type of message to send.
-         * @param plugin The payload. May be 0.
+         *
+         */
+        bool sessionInfo( const Plugin* info );
+
+        /**
+         * Initiates a session with a remote entity.
+         * @param plugins A list of Content objects. You may use initiate( const PluginList& contents ) for more than one Content.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
-        bool inform( Action action, const Plugin* plugin );
+        bool sessionInitiate( const Content* content );
 
         /**
-         * Terminates the current session, if it is at least in Pending state, with the given reason. The sid parameter is ignored unless the reason is AlternativeSession.
+         * Initiates a session with a remote entity.
+         * @param plugins A list of Content objects. It is important to pass a (list of) Content objects here.
+         * Even though e.g. Jingle::ICEUDP are Plugin-derived, too, using anything other than Content here will result
+         * in erroneous behaviour at best. You may use initiate( const Content* content ) for just one Content.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
+         */
+        bool sessionInitiate( const PluginList& plugins );
+
+        /**
+         * Terminates the current session, if it is at least in Pending state, with the given reason. The sid parameter
+         * is ignored unless the reason is AlternativeSession.
          * @param reason The reason for terminating the session.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
-        bool terminate( Reason* reason );
+        bool sessionTerminate( Session::Reason* reason );
+
+        /**
+         *
+         */
+        bool transportAccept( const Content* content );
+
+        /**
+         *
+         */
+        bool transportInfo( const Plugin* info );
+
+        /**
+         *
+         */
+        bool transportReject( const Content* content );
+
+        /**
+         *
+         */
+        bool transportReplace( const Content* content );
 
         /**
          * Returns the session's state.

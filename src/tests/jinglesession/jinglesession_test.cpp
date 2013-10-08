@@ -245,7 +245,7 @@ int main( int /*argc*/, char** /*argv*/ )
   res->setTest( 1 );
   Jingle::PluginList pl;
   pl.push_back( new Jingle::Content() );
-  if( !ini->js()->initiate( pl ) || !ini->checkResult() || !res->checkResult2() )
+  if( !ini->js()->sessionInitiate( pl ) || !ini->checkResult() || !res->checkResult2() )
   {
     ++fail;
     fprintf( stderr, "test '%s' failed\n", name.c_str() );
@@ -271,7 +271,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "Responder: session accept";
   ini->setTest( 2 );
   res->setTest( 2 );
-  if( !res->js()->accept( new Jingle::Content() ) || !res->checkResult() || !ini->checkResult2() )
+  if( !res->js()->sessionAccept( new Jingle::Content() ) || !res->checkResult() || !ini->checkResult2() )
   {
     ++fail;
     fprintf( stderr, "test '%s' failed\n", name.c_str() );
@@ -297,7 +297,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "Responder: session terminate";
   ini->setTest( 3 );
   res->setTest( 3 );
-  if( !res->js()->terminate( new Jingle::Session::Reason( Jingle::Session::Reason::Success ) ) || !res->checkResult() || !ini->checkResult2() )
+  if( !res->js()->sessionTerminate( new Jingle::Session::Reason( Jingle::Session::Reason::Success ) ) || !res->checkResult() || !ini->checkResult2() )
   {
     ++fail;
     fprintf( stderr, "test '%s' failed\n", name.c_str() );

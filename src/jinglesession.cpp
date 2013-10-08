@@ -251,25 +251,71 @@ namespace gloox
         m_parent->removeIDHandler( this );
     }
 
-    bool Session::initiate( const Content* content )
+    bool Session::contentAccept( const Content* content )
     {
-      if( !content || !m_initiator || m_state >= Pending )
+      if( m_state < Pending )
         return false;
 
-      m_state = Pending;
-      return doAction( SessionInitiate, content );
+      return doAction( ContentAccept, content );
     }
 
-    bool Session::initiate( const PluginList& plugins )
+    bool Session::contentAdd( const Content* content )
     {
-      if( plugins.empty() || !m_initiator || m_state >= Pending )
+      if( m_state < Pending )
         return false;
 
-      m_state = Pending;
-      return doAction( SessionInitiate, plugins );
+      return doAction( ContentAdd, content );
     }
 
-    bool Session::accept( const Content* content )
+    bool Session::contentAdd( const PluginList& contents )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( ContentAdd, contents );
+    }
+
+    bool Session::contentModify( const Content* content )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( ContentModify, content );
+    }
+
+    bool Session::contentReject( const Content* content )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( ContentReject, content );
+    }
+
+    bool Session::contentRemove( const Content* content )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( ContentRemove, content );
+    }
+
+    bool Session::descriptionInfo( const Plugin* info )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( DescriptionInfo, info );
+    }
+
+    bool Session::securityInfo( const Plugin* info )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( SecurityInfo, info );
+    }
+
+    bool Session::sessionAccept( const Content* content )
     {
       if( !content || m_state > Pending )
         return false;
@@ -278,15 +324,33 @@ namespace gloox
       return doAction( SessionAccept, content );
     }
 
-    bool Session::inform( Action action, const Plugin* plugin )
+    bool Session::sessionInfo( const Plugin* info )
     {
       if( m_state < Pending )
         return false;
 
-      return doAction( action, plugin );
+      return doAction( SessionInfo, info );
     }
 
-    bool Session::terminate( Session::Reason* reason )
+    bool Session::sessionInitiate( const Content* content )
+    {
+      if( !content || !m_initiator || m_state >= Pending )
+        return false;
+
+      m_state = Pending;
+      return doAction( SessionInitiate, content );
+    }
+
+    bool Session::sessionInitiate( const PluginList& plugins )
+    {
+      if( plugins.empty() || !m_initiator || m_state >= Pending )
+        return false;
+
+      m_state = Pending;
+      return doAction( SessionInitiate, plugins );
+    }
+
+    bool Session::sessionTerminate( Session::Reason* reason )
     {
       if( m_state < Pending /*|| !m_initiator*/ )
         return false;
@@ -294,6 +358,38 @@ namespace gloox
       m_state = Ended;
 
       return doAction( SessionTerminate, reason );
+    }
+
+    bool Session::transportAccept( const Content* content )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( TransportAccept, content );
+    }
+
+    bool Session::transportInfo( const Plugin* info )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( TransportInfo, info );
+    }
+
+    bool Session::transportReject( const Content* content )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( TransportReject, content );
+    }
+
+    bool Session::transportReplace( const Content* content )
+    {
+      if( m_state < Pending )
+        return false;
+
+      return doAction( TransportReplace, content );
     }
 
     bool Session::doAction( Action action, const Plugin* plugin )
