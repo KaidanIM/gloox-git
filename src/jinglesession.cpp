@@ -33,6 +33,7 @@ namespace gloox
       "content-reject",
       "content-remove",
       "description-info",
+      "security-info",
       "session-accept",
       "session-info",
       "session-initiate",
@@ -417,31 +418,23 @@ namespace gloox
       if( !j || j->sid() != m_sid || !m_handler )
         return false;
 
-      m_handler->handleSessionAction( SessionInfo, this, j );
       switch( j->action() )
       {
         case SessionAccept:
-        {
           m_state = Active;
-          m_handler->handleSessionStateChange( this, j );
           break;
-        }
         case SessionInitiate:
-        {
           m_state = Pending;
           m_initiator = j->initiator();
-          m_handler->handleSessionStateChange( this, j );
           break;
-        }
         case SessionTerminate:
-        {
           m_state = Ended;
-          m_handler->handleSessionStateChange( this, j );
           break;
-        }
         default:
           break;
       }
+
+      m_handler->handleSessionAction( j->action(), this, j );
 
       IQ re( IQ::Result, iq.from(), iq.id() );
       m_parent->send( re );
@@ -453,6 +446,10 @@ namespace gloox
     {
       if( iq.subtype() == IQ::Error )
       {
+
+        const Error* e = iq.findExtension<Error>( ExtError );
+        m_handler->handleSessionActionError( (Action)context, this, e );
+
         switch( context )
         {
           case ContentAccept:
@@ -473,7 +470,6 @@ namespace gloox
             break;
           case SessionInitiate:
             m_state = Ended;
-            m_handler->handleSessionStateChange( this, 0 );
             break;
           case SessionTerminate:
             break;

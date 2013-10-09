@@ -36,10 +36,12 @@ namespace gloox
     typedef std::list<const Plugin*> PluginList;
 
     /**
-     * @brief An abstraction of a Jingle plugin. This is part of Jingle (@xep{0166}).
+     * @brief An abstraction of a Jingle plugin. This is part of Jingle (@xep{0166}) et al.
      *
-     * This is the base class for Transport and Description. It is also used for
-     * session information, such as the 'ringing' info in Jingle Audio, or Jingle DTMF.
+     * This is the base class for Content and all other pluggable Jingle-related containers, e.g.
+     * session information, such as the 'ringing' info in Jingle Audio, or Jingle DTMF, etc.
+     *
+     * A Plugin abstracts the XML that gets sent and received as part of a Jingle session negotiation.
      *
      * XEP Version: 1.1
      *
@@ -55,7 +57,8 @@ namespace gloox
         virtual ~Plugin() { util::clearList( m_plugins ) ; }
 
         /**
-         *
+         * Adds another Plugin as child.
+         * @param plugin A plugin to be embedded. Will be owned by this instance and deleted in the destructor.
          */
         void addPlugin( const Plugin* plugin ) { if( plugin ) m_plugins.push_back( plugin ); }
 

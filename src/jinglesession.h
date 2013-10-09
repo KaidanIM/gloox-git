@@ -33,7 +33,7 @@ namespace gloox
    * about Jingle in gloox.
    *
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 1.1
+   * @since 1.0.5
    */
   namespace Jingle
   {
@@ -69,9 +69,20 @@ namespace gloox
     /**
      * @brief This is an implementation of a Jingle Session (@xep{0166}).
      *
-     * Beware! The classes in the Jingle namespace implement the signaling part of Jingle only.
+     * @note The classes in the Jingle namespace implement the signaling part of Jingle only.
      * There is no support for actually establishing any connection to a remote entity,
-     * nor for transfering any media in any way whatsoever.
+     * nor for transfering any media in any way whatsoever outside the XMPP channel.
+     *
+     * To use Jingle with gloox you should first instantiate a Jingle::SessionManager. The SessionManager will
+     * let you create new Jingle sessions and notify the respective handler about incoming Jingle session requests.
+     * It will also announce generic Jingle support via Disco. You should manually announce any additional Jingle
+     * transports and media types you wish to support.
+     * @code
+     * Jingle::SessionManager* jsm = new Jingle::SessionManager( ... );
+     * m_clientbase->disco()->addFeature( ... ); // any additional Jingle namespaces, e.g. XMLNS_JINGLE_FILE_TRANSFER
+     * @endcode
+     *
+     *
      *
      * XEP Version: 1.1
      *
@@ -97,9 +108,10 @@ namespace gloox
         /**
          * @brief An abstraction of a Jingle (@xep{0166}) session terminate reason.
          *
-         * XEP Version: 0.33
+         * XEP Version: 1.1
+         *
          * @author Jakob Schroeter <js@camaya.net>
-         * @since 1.1
+         * @since 1.0.5
          */
         class GLOOX_API Reason : public Plugin
         {
@@ -158,14 +170,14 @@ namespace gloox
             /**
              * Returns the session ID of the alternate session, if given (only applicable
              * if reason() returns AlternativeSession).
-             * @return The session ID of the alternative session, or the empty string.
+             * @return The session ID of the alternative session, or an empty string.
              */
             const std::string& sid() const { return m_sid; }
 
             /**
              * Returns the content of an optional, human-readable
              * &lt;text&gt; element.
-             * @return An optional text describing the reason for the action.
+             * @return An optional text describing the reason for the terminate action.
              */
             const std::string& text() const { return m_text; }
 
@@ -191,9 +203,9 @@ namespace gloox
         /**
          * @brief This is an abstraction of Jingle's (@xep{0166}) &lt;jingle&gt; element as a StanzaExtension.
          *
-         * XEP Version: 0.33
+         * XEP Version: 1.1
          * @author Jakob Schroeter <js@camaya.net>
-         * @since 1.0
+         * @since 1.0.5
          */
         class Jingle : public StanzaExtension
         {
@@ -219,7 +231,8 @@ namespace gloox
             const std::string& sid() const { return m_sid; }
 
             /**
-             *
+             * Set's the session's initiator.
+             * @param jid The session initiator's JID.
              */
             void setInitiator( const JID& jid ) { m_initiator = jid; }
 
@@ -230,12 +243,14 @@ namespace gloox
             const JID& initiator() const { return m_initiator; }
 
             /**
-             *
+             * Set's the session's responder.
+             * @param jid The session responder's JID.
              */
             void setResponder( const JID& jid ) { m_responder = jid; }
 
             /**
-             *
+             * Returns the desired action.
+             * @return The action.
              */
             Action action() const { return m_action; }
 
@@ -301,55 +316,73 @@ namespace gloox
         virtual ~Session();
 
         /**
-         *
+         * Sends a 'content-accept' notification.
+         * @param content The accepted content.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentAccept( const Content* content );
 
         /**
-         *
+         * Sends a 'content-add' request.
+         * @param content The proposed content to be added.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentAdd( const Content* content );
 
         /**
-         *
+         * Sends a 'content-add' request.
+         * @param contents A list of proposed content to be added.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentAdd( const PluginList& contents );
 
         /**
-         *
+         * Sends a 'content-modify' request.
+         * @param content The proposed content type to be modified.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentModify( const Content* content );
 
         /**
-         *
+         * Sends a 'content-reject' reply.
+         * @param content The rejected content.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentReject( const Content* content );
 
         /**
-         *
+         * Sends a 'content-remove' request.
+         * @param content The content type to be removed.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentRemove( const Content* content );
 
         /**
-         *
+         * Sends a 'description-info' notice.
+         * @param info The payload.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool descriptionInfo( const Plugin* info );
 
         /**
-         *
+         * Sends a 'security-info' notice.
+         * @param info A security pre-condition.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool securityInfo( const Plugin* info );
 
         /**
          * Accepts an incoming session with the given content.
-         * @param content A pair of Description and Transport that describe the accepted session
-         * parameters.
+         * @param content A pair of application description and transport method wrapped in a Content that describes
+         * the accepted session parameters.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionAccept( const Content* content );
 
         /**
-         *
+         * Sends a 'session-info' notice.
+         * @param info The payload.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionInfo( const Plugin* info );
 
@@ -364,7 +397,7 @@ namespace gloox
          * Initiates a session with a remote entity.
          * @param plugins A list of Content objects. It is important to pass a (list of) Content objects here.
          * Even though e.g. Jingle::ICEUDP are Plugin-derived, too, using anything other than Content here will result
-         * in erroneous behaviour at best. You may use initiate( const Content* content ) for just one Content.
+         * in erroneous behaviour at best. You may use sessionInitiate( const Content* content ) for just one Content.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionInitiate( const PluginList& plugins );
@@ -378,22 +411,30 @@ namespace gloox
         bool sessionTerminate( Session::Reason* reason );
 
         /**
-         *
+         * Sends a 'transport-accept' reply.
+         * @param content The accepted transport wrapped in a Content.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool transportAccept( const Content* content );
 
         /**
-         *
+         * Sends a 'transport-info' notice.
+         * @param info The payload.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool transportInfo( const Plugin* info );
 
         /**
-         *
+         * Sends a 'transport-reject' reply.
+         * @param content The rejected transport wrapped in a Content.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool transportReject( const Content* content );
 
         /**
-         *
+         * Sends a 'transport-replace' request.
+         * @param content The proposed transport to be replaced wrapped in a Content.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool transportReplace( const Content* content );
 

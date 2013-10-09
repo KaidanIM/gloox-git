@@ -27,9 +27,10 @@ namespace gloox
   {
 
     /**
-     * @brief An abstraction of the signaling part of Jingle File Tarnsfer (XEP-0234).
+     * @brief An abstraction of the signaling part of Jingle File Transfer (XEP-0234), implemented as a Jingle::Plugin.
      *
-     * XEP Version: 1.0
+     * XEP Version: 0.15
+     *
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0.7
      */
@@ -42,35 +43,43 @@ namespace gloox
          */
         enum Type
         {
-          Offer,
-          Request,
-          Checksum,
-          Abort,
-          Received,
-          Invalid
+          Offer,                    /**< Signifies a file transfer offer (send). */
+          Request,                  /**< Signifies a file request (pull). */
+          Checksum,                 /**< Used to send a file's checksum. */
+          Abort,                    /**< used to abort a running transfer. */
+          Received,                 /**< Signifies a successful file transfer. */
+          Invalid                   /**< Invalid type. */
         };
 
+        /**
+         * Holds information about a file.
+         */
         struct File
         {
-          std::string name;
-          std::string date;
-          std::string desc;
-          std::string hash;
-          std::string hash_algo;
-          long int size;
-          bool range;
-          long int offset;
+          std::string name;         /**< The file's name. */
+          std::string date;         /**< The file's (creation?) date */
+          std::string desc;         /**< A description. */
+          std::string hash;         /**< The file's cehcksum. */
+          std::string hash_algo;    /**< The algorithm used to calculate the checksum */
+          long int size;            /**< The filesize in Bytes. */
+          bool range;               /**< Signifies that an offset transfer is possible. */
+          long int offset;          /**< An (optional) offset. */
         };
 
+        /** A list of files. */
         typedef std::list<File> FileList;
 
         /**
-         *
+         * Creates a new instance.
+         * @param type The type of the object.
+         * @param files A list of files to offer, request, acknowledge, ... Most of
+         * the time this list will contain only one file.
          */
-        FileTransfer( Type type, FileList files );
+        FileTransfer( Type type, const FileList& files );
 
         /**
-         *
+         * Creates a new instance from the given Tag
+         * @param tag The Tag to parse.
          */
         FileTransfer( const Tag* tag = 0 );
 

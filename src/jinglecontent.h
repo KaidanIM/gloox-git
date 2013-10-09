@@ -31,7 +31,6 @@ namespace gloox
     /**
      * @brief An abstraction of a Jingle Content Type. This is part of Jingle (@xep{0166}).
      *
-     * You should not need to use this class directly, unless you want to extend gloox' Jingle support.
      * See @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
      *
      * XEP Version: 1.1
@@ -66,9 +65,15 @@ namespace gloox
 
         /**
          * Creates a new Content wrapper.
+         * @param name A unique name for the content type.
+         * @param plugins A list of application formats, transport methods, security preconditions, ...
+         * @param creator Which party originally generated the content type; the defined values are "SInitiator" and "SResponder".
+         * @param senders Which parties in the session will be generating content.
+         * @param disposition How the content definition is to be interpreted by the recipient. The meaning of this attribute
+         * matches the "Content-Disposition" header as defined in RFC 2183 and applied to SIP by RFC 3261.
          */
         Content( const std::string& name, const PluginList& plugins, Creator creator = CInitiator,
-                 Senders senders = SBoth, const std::string& disposition = EmptyString );
+                 Senders senders = SBoth, const std::string& disposition = "session" );
 
         /**
          * Creates a new Content object from the given tag.
