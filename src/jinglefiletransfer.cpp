@@ -33,7 +33,7 @@ namespace gloox
       "received"
     };
 
-    FileTransfer::FileTransfer( Type type, FileList files )
+    FileTransfer::FileTransfer( Type type, const FileList& files )
       : m_type( type ), m_files( files )
     {
     }
@@ -47,7 +47,7 @@ namespace gloox
       std::string name = tag->name();
       if( name == "description" )
       {
-        const Tag* c = tag->findTag( "offer|request" );
+        const Tag* c = tag->findTag( "//offer|//request" );
         if( c )
         {
           parseFileList( c->findChildren( "file" ) );

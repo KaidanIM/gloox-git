@@ -16,6 +16,7 @@
 #include "clientbase.h"
 #include "jinglesession.h"
 #include "jinglesessionhandler.h"
+#include "disco.h"
 #include "util.h"
 
 namespace gloox
@@ -31,6 +32,7 @@ namespace gloox
       {
         m_parent->registerStanzaExtension( new Session::Jingle() );
         m_parent->registerIqHandler( this, ExtJingle );
+        m_parent->disco()->addFeature( XMLNS_JINGLE );
       }
     }
 
