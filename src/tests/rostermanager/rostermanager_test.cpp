@@ -109,6 +109,8 @@ class RosterManagerTest : public ClientBase, public RosterListener
     {
       if( m_test == 1 && roster.size() == 3 )
         m_result2 = true;
+      else
+        printf("rostersize: %d\n", roster.size() );
     }
     virtual void handleRosterPresence( const RosterItem& /*item*/, const std::string& /*resource*/,
                                        Presence::PresenceType /*presence*/, const std::string& /*msg*/ ) {}
@@ -160,6 +162,9 @@ void RosterManagerTest::send( const IQ& iq, IqHandler*, int ctx )
       Tag* r = new Tag( "iq" );
       Tag* q = new Tag( r, "query" );
       q->setXmlns( XMLNS_ROSTER );
+      Tag* i = new Tag( q, "item", "jid", "foo@bar" ); i->addAttribute( "subscription", "both" );
+      i = new Tag( q, "item", "jid", "bar@foo" ); i->addAttribute( "subscription", "both" );
+      i = new Tag( q, "item", "jid", "foobar" ); i->addAttribute( "subscription", "both" );
       re.addExtension( new RosterManager::Query( q ) );
       delete r;
       m_rm->handleIqID( re, ctx );
