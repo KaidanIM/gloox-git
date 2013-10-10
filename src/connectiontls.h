@@ -35,7 +35,7 @@ namespace gloox
    * @code
    * Client *c = new Client( ... );
    * c->setConnectionImpl( new ConnectionTLS( c,
-   *                                new ConnectionTCP( c->logInstance(), server, 5223 ),
+   *                                new ConnectionTCPClient( c->logInstance(), server, 5223 ),
    *                                c->logInstance()) );
    * @endcode
    *

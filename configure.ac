@@ -425,6 +425,7 @@ src/tests/jinglecontent/Makefile
 src/tests/jingleiceudp/Makefile
 src/tests/jinglesession/Makefile
 src/tests/jinglesessionjingle/Makefile
+src/tests/jinglesessionmanager/Makefile
 src/tests/lastactivityquery/Makefile
 src/tests/lastactivity/Makefile
 src/tests/md5/Makefile

@@ -79,7 +79,31 @@ namespace gloox
          * Creates a new Content object from the given tag.
          * @param tag The Tag to parse.
          */
-        Content( const Tag* tag = 0 );
+        Content( const Tag* tag = 0, PluginFactory* factory = 0 );
+
+        /**
+         * Returns the content's creator.
+         * @return The content's creator.
+         */
+        Creator creator() const { return m_creator; }
+
+        /**
+         * Returns the senders.
+         * @return The senders.
+         */
+        Senders senders() const { return m_senders; }
+
+        /**
+         * Returns the disposition.
+         * @return The disposition.
+         */
+        const std::string& disposition() const { return m_disposition; }
+
+        /**
+         * Returns the content name.
+         * @return The content name.
+         */
+        const std::string& name() const { return m_name; }
 
         /**
          * Virtual destructor.
@@ -93,13 +117,12 @@ namespace gloox
         virtual Tag* tag() const;
 
         // reimplemented from Plugin
-        virtual Plugin* newInstance( const Tag* tag ) const { return new Content( tag ); }
+        virtual Plugin* newInstance( const Tag* tag ) const { return new Content( tag, m_factory ); }
 
         // reimplemented from Plugin
         virtual Plugin* clone() const;
 
       private:
-        PluginFactory* m_factory;
         Creator m_creator;
         std::string m_disposition;
         std::string m_name;

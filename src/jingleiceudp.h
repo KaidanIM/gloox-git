@@ -71,12 +71,16 @@ namespace gloox
         typedef std::list<Candidate> CandidateList;
 
         /**
-         *
+         * Constructs a new instance.
+         * @param pwd The @c pwd value.
+         * @param ufrag The @c ufrag value.
+         * @param candidates A list of connection candidates.
          */
         ICEUDP( const std::string& pwd, const std::string& ufrag, CandidateList& candidates );
 
         /**
-         *
+         * Constructs a new instance from the given tag.
+         * @param tag The Tag to parse.
          */
         ICEUDP( const Tag* tag = 0 );
 
@@ -84,6 +88,24 @@ namespace gloox
          * Virtual destructor.
          */
         virtual ~ICEUDP() {}
+
+        /**
+         * Returns the @c pwd value.
+         * @return The @c pwd value.
+         */
+        const std::string& pwd() const { return m_pwd; }
+
+        /**
+         * Returns the @c ufrag value.
+         * @return The @c ufrag value.
+         */
+        const std::string& ufrag() const { return m_ufrag; }
+
+        /**
+         * Returns the list of connection candidates.
+         * @return The list of connection candidates.
+         */
+        const CandidateList& candidates() const { return m_candidates; }
 
         // reimplemented from Plugin
         virtual const std::string& filterString() const;

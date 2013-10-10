@@ -41,6 +41,12 @@ namespace gloox
       util::clearList( m_sessions );
     }
 
+    void SessionManager::registerPlugin( Plugin* plugin )
+    {
+      if( plugin )
+        m_factory.registerPlugin( plugin );
+    }
+
     Session* SessionManager::createSession( const JID& callee, SessionHandler* handler )
     {
       if( !( handler || m_handler ) || !callee )
@@ -51,11 +57,22 @@ namespace gloox
       return sess;
     }
 
+    void SessionManager::discardSession( Session* session )
+    {
+      if( !session )
+        return;
+
+      m_sessions.remove( session );
+      delete session;
+    }
+
     bool SessionManager::handleIq( const IQ& iq )
     {
       const Session::Jingle* j = iq.findExtension<Session::Jingle>( ExtJingle );
       if( !j )
         return false;
+
+      m_factory.addPlugins( const_cast<Session::Jingle&>( *j ), j->embeddedTag() );
 
       SessionList::iterator it = m_sessions.begin();
       for( ; it != m_sessions.end() && (*it)->sid() != j->sid(); ++it ) ;

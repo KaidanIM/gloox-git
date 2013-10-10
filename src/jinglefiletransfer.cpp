@@ -47,7 +47,7 @@ namespace gloox
       std::string name = tag->name();
       if( name == "description" )
       {
-        const Tag* c = tag->findTag( "//offer|//request" );
+        const Tag* c = tag->findTag( "description/offer|description/request" );
         if( c )
         {
           parseFileList( c->findChildren( "file" ) );
@@ -94,10 +94,10 @@ namespace gloox
 
     const std::string& FileTransfer::filterString() const
     {
-      static const std::string filter = "description[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']"
-                                        "|abort[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']"
-                                        "|received[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']"
-                                        "|checksum[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']";
+      static const std::string filter = "content/description[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']"
+                                        "|jingle/abort[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']"
+                                        "|jingle/received[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']"
+                                        "|jingle/checksum[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']";
       return filter;
     }
 
