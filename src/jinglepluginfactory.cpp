@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2008-2013 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2013 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -13,7 +13,6 @@
 
 #include "jinglepluginfactory.h"
 #include "tag.h"
-#include "jingleplugin.h"
 #include "util.h"
 
 namespace gloox
@@ -33,8 +32,11 @@ namespace gloox
 
     void PluginFactory::registerPlugin( Plugin* plugin )
     {
-      if( plugin )
-        m_plugins.push_back( plugin );
+      if( !plugin )
+        return;
+
+      plugin->setFactory( this );
+      m_plugins.push_back( plugin );
     }
 
     void PluginFactory::addPlugins( Plugin& plugin, const Tag* tag )
@@ -43,7 +45,7 @@ namespace gloox
         return;
 
       ConstTagList::const_iterator it;
-      
+
       PluginList::const_iterator itp = m_plugins.begin();
       for( ; itp != m_plugins.end(); ++itp )
       {
@@ -59,6 +61,30 @@ namespace gloox
         }
       }
     }
+
+    void PluginFactory::addPlugins( Session::Jingle& jingle, const Tag* tag )
+    {
+      if( !tag )
+        return;
+
+      ConstTagList::const_iterator it;
+
+      PluginList::const_iterator itp = m_plugins.begin();
+      for( ; itp != m_plugins.end(); ++itp )
+      {
+        const ConstTagList& match = tag->findTagList( (*itp)->filterString() );
+        it = match.begin();
+        for( ; it != match.end(); ++it )
+        {
+          Plugin* pl = (*itp)->newInstance( (*it) );
+          if( pl )
+          {
+            jingle.addPlugin( pl );
+          }
+        }
+      }
+    }
+
 
   }
 

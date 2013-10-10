@@ -29,6 +29,7 @@ namespace gloox
   {
 
     class Plugin;
+    class PluginFactory;
 
     /**
      * A list of Jingle plugins.
@@ -50,7 +51,15 @@ namespace gloox
      */
     class GLOOX_API Plugin
     {
+
+      friend class PluginFactory;
+
       public:
+        /**
+         * Simple initializer.
+         */
+        Plugin() : m_factory( 0 ) {}
+
         /**
          * Virtual destructor.
          */
@@ -61,6 +70,12 @@ namespace gloox
          * @param plugin A plugin to be embedded. Will be owned by this instance and deleted in the destructor.
          */
         void addPlugin( const Plugin* plugin ) { if( plugin ) m_plugins.push_back( plugin ); }
+
+        /**
+         * Returns a reference to a list of embedded plugins.
+         * @return A reference to a list of embedded plugins.
+         */
+        const PluginList& plugins() const { return m_plugins; }
 
         /**
          * Returns an XPath expression that describes a path to child elements of a
@@ -92,8 +107,11 @@ namespace gloox
         virtual Plugin* clone() const = 0;
 
       protected:
-
         PluginList m_plugins;
+        PluginFactory* m_factory;
+
+      private:
+        void setFactory( PluginFactory* factory ) { m_factory = factory; }
 
     };
 

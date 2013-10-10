@@ -249,10 +249,28 @@ namespace gloox
             void setResponder( const JID& jid ) { m_responder = jid; }
 
             /**
-             * Returns the desired action.
+             * Returns this Jingle's action.
              * @return The action.
              */
             Action action() const { return m_action; }
+
+            /**
+             * Adds a Plugin as child.
+             * @param plugin A plugin to be embedded. Will be owned by this instance and deleted in the destructor.
+             */
+            void addPlugin( const Plugin* plugin ) { if( plugin ) m_plugins.push_back( plugin ); }
+
+            /**
+             * Returns a reference to a list of embedded plugins.
+             * @return A reference to a list of embedded plugins.
+             */
+            const PluginList& plugins() const { return m_plugins; }
+
+            /**
+             * Returns the tag to build plugins from.
+             * @return The tag to build plugins from.
+             */
+            Tag* embeddedTag() const { return m_tag; }
 
             // reimplemented from StanzaExtension
             virtual const std::string& filterString() const;
@@ -307,6 +325,7 @@ namespace gloox
             JID m_initiator;
             JID m_responder;
             PluginList m_plugins;
+            Tag* m_tag;
 
         };
 
@@ -388,7 +407,7 @@ namespace gloox
 
         /**
          * Initiates a session with a remote entity.
-         * @param plugins A list of Content objects. You may use initiate( const PluginList& contents ) for more than one Content.
+         * @param content A Content object. You may use initiate( const PluginList& contents ) for more than one Content.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionInitiate( const Content* content );

@@ -39,7 +39,7 @@ namespace gloox
       public:
 
         /**
-         *
+         * The type of a FileTransfer instance.
          */
         enum Type
         {
@@ -52,7 +52,7 @@ namespace gloox
         };
 
         /**
-         * Holds information about a file.
+         * A struct holding information about a file.
          */
         struct File
         {
@@ -66,7 +66,7 @@ namespace gloox
           long int offset;          /**< An (optional) offset. */
         };
 
-        /** A list of files. */
+        /** A list of file information structs. */
         typedef std::list<File> FileList;
 
         /**
@@ -87,6 +87,18 @@ namespace gloox
          * Virtual destructor.
          */
         virtual ~FileTransfer() {}
+
+        /**
+         * Returns the type.
+         * @return The type.
+         */
+        Type type() const { return m_type; }
+
+        /**
+         * Returns a list of embedded file infos.
+         * @return A list of embedded file infos.
+         */
+        const FileList& files() const { return m_files; }
 
         // reimplemented from Plugin
         virtual const std::string& filterString() const;

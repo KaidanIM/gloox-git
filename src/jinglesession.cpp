@@ -130,21 +130,21 @@ namespace gloox
     Session::Jingle::Jingle( Action action, const JID& initiator,
                              const PluginList& plugins, const std::string& sid )
       : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid ),
-        m_initiator( initiator ), m_plugins( plugins )
+        m_initiator( initiator ), m_plugins( plugins ), m_tag( 0 )
     {
     }
 
     Session::Jingle::Jingle( Action action, const JID& initiator,
                              const Plugin* plugin, const std::string& sid )
       : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid ),
-        m_initiator( initiator )
+        m_initiator( initiator ), m_tag( 0 )
     {
       if( plugin )
         m_plugins.push_back( plugin );
     }
 
     Session::Jingle::Jingle( const Tag* tag )
-      : StanzaExtension( ExtJingle ), m_action( InvalidAction )
+      : StanzaExtension( ExtJingle ), m_action( InvalidAction ), m_tag( 0 )
     {
       if( !tag || tag->name() != "jingle" )
         return;
@@ -154,14 +154,16 @@ namespace gloox
       m_responder.setJID( tag->findAttribute( "responder" ) );
       m_sid = tag->findAttribute( "sid" );
 
-      const TagList& l = tag->children();
-      TagList::const_iterator it = l.begin();
-      for( ; it != l.end(); ++it )
-      {
-        const std::string& name = (*it)->name();
-        if( name == "content" )
-          m_plugins.push_back( new Content( (*it) ) );
-      }
+//       const TagList& l = tag->children();
+//       TagList::const_iterator it = l.begin();
+//       for( ; it != l.end(); ++it )
+//       {
+//         const std::string& name = (*it)->name();
+//         if( name == "content" )
+//           m_plugins.push_back( new Content( (*it) ) );
+//       }
+
+      m_tag = tag->clone();
     }
 
     Session::Jingle::Jingle( const Jingle& right )

@@ -45,16 +45,15 @@ namespace gloox
 
     Content::Content( const std::string& name, const PluginList& plugins, Creator creator,
                       Senders senders, const std::string& disposition )
-      : m_factory( 0 ), m_creator( creator ), m_disposition( disposition ),
+      : m_creator( creator ), m_disposition( disposition ),
         m_name( name ), m_senders( senders )
     {
       m_plugins = plugins;
     }
 
-    Content::Content( const Tag* tag )
-      : m_factory( 0 )
+    Content::Content( const Tag* tag, PluginFactory* factory )
     {
-      if( !m_factory || !tag || tag->name() != "content" )
+      if( !factory || !tag || tag->name() != "content" )
         return;
 
       m_name = tag->findAttribute( "name" );
@@ -62,7 +61,7 @@ namespace gloox
       m_senders = (Senders)util::lookup( tag->findAttribute( "senders" ), sendersValues );
       m_disposition = tag->findAttribute( "disposition" );
 
-      m_factory->addPlugins( *this, tag );
+      factory->addPlugins( *this, tag );
     }
 
     Content::~Content()
@@ -71,7 +70,7 @@ namespace gloox
 
     const std::string& Content::filterString() const
     {
-      static const std::string filter = "content";
+      static const std::string filter = "jingle/content";
       return filter;
     }
 

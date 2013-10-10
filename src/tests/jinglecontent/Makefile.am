@@ -11,5 +11,6 @@ jinglecontent_test_SOURCES = jinglecontent_test.cpp
 jinglecontent_test_LDADD = ../../stanza.o ../../jid.o ../../tag.o ../../prep.o \
                 ../../gloox.o \
                 ../../iq.o ../../util.o ../../sha.o ../../base64.o \
-                ../../jinglecontent.o ../../error.o ../../mutex.o
+                ../../jinglecontent.o ../../error.o ../../mutex.o \
+                ../../jinglepluginfactory.o
 jinglecontent_test_CFLAGS = $(CPPFLAGS)
