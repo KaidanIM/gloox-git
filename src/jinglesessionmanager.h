@@ -32,12 +32,24 @@ namespace gloox
     class SessionHandler;
 
     /**
-     * @brief The SessionManager is responsible for creating and destroying sessions, as well as for delegating incoming
-     * IQs to their respective sessions.
+     * @brief The SessionManager is responsible for creating and destroying Jingle sessions, as well as for delegating incoming
+     * IQs to their respective sessions. This is part of Jingle (@xep{0166}).
+     *
+     * @note The classes in the Jingle namespace implement the signaling part of Jingle only.
+     * Establishing connections to a remote entity or transfering data outside the XMPP channel
+     * is out of scope of gloox.
+     *
+     * To use Jingle with gloox you should first instantiate a Jingle::SessionManager. The SessionManager will
+     * let you create new Jingle sessions and notify the respective handler about incoming Jingle session requests.
+     * It will also announce generic Jingle support via Disco. You have to register any
+     * @link gloox::Jingle::Plugin Jingle plugins @endlink you want to use using registerPlugin().
+     * These will automatically announce any additional features via Disco.
      *
      * Use createSession() to create a new Session.
      *
-     * Use discardSession() to get rid of a session.
+     * Implement SessionHandler::handleIncomingSession() to receive incoming session requests.
+     *
+     * Use discardSession() to get rid of a session. Do not delete a session manually.
      *
      * There is no limit to the number of concurrent sessions.
      *
@@ -50,7 +62,7 @@ namespace gloox
         /**
          * Creates new instance. There should be only one SessionManager per ClientBase.
          * @param parent A ClientBase instance used for sending and receiving.
-         * @param sh A session handler that will be notifiedwes about incoming session requests.
+         * @param sh A session handler that will be notified about incoming session requests.
          * Only handleIncomingSession() will be called in that handler.
          */
         SessionManager( ClientBase* parent, SessionHandler* sh );

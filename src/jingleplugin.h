@@ -78,6 +78,13 @@ namespace gloox
         const PluginList& plugins() const { return m_plugins; }
 
         /**
+         * Reimplement this function if your plugin wants to add anything to the list of
+         * features announced via Disco.
+         * @return A list of additional feature strings.
+         */
+        virtual const StringList features() const { return StringList(); }
+
+        /**
          * Returns an XPath expression that describes a path to child elements of a
          * jingle element that the plugin handles.
          * The result should be a single Tag.

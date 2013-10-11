@@ -27,7 +27,7 @@ namespace gloox
   {
 
     /**
-     * @brief An abstraction of the signaling part of Jingle File Transfer (XEP-0234), implemented as a Jingle::Plugin.
+     * @brief An abstraction of the signaling part of Jingle File Transfer (@xep{0234}), implemented as a Jingle::Plugin.
      *
      * XEP Version: 0.15
      *
@@ -99,6 +99,9 @@ namespace gloox
          * @return A list of embedded file infos.
          */
         const FileList& files() const { return m_files; }
+
+        // reimplemented from Plugin
+        virtual const StringList features() const;
 
         // reimplemented from Plugin
         virtual const std::string& filterString() const;
