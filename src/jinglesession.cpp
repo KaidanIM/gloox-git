@@ -100,7 +100,7 @@ namespace gloox
 
     const std::string& Session::Reason::filterString() const
     {
-      static const std::string filter = "reason";
+      static const std::string filter = "jingle/reason";
       return filter;
     }
 
@@ -166,15 +166,15 @@ namespace gloox
       m_tag = tag->clone();
     }
 
-    Session::Jingle::Jingle( const Jingle& right )
-      : StanzaExtension( ExtJingle ), m_action( right.m_action ),
-        m_sid( right.m_sid ), m_initiator( right.m_initiator ),
-        m_responder( right.m_responder )
-    {
-      PluginList::const_iterator it = right.m_plugins.begin();
-      for( ; it != right.m_plugins.end(); ++it )
-        m_plugins.push_back( (*it)->clone() );
-    }
+//     Session::Jingle::Jingle( const Jingle& right )
+//       : StanzaExtension( ExtJingle ), m_action( right.m_action ),
+//         m_sid( right.m_sid ), m_initiator( right.m_initiator ),
+//         m_responder( right.m_responder )
+//     {
+//       PluginList::const_iterator it = right.m_plugins.begin();
+//       for( ; it != right.m_plugins.end(); ++it )
+//         m_plugins.push_back( (*it)->clone() );
+//     }
 
     Session::Jingle::~Jingle()
     {

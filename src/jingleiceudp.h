@@ -28,9 +28,10 @@ namespace gloox
   {
 
     /**
-     * @brief An abstraction of the signaling part of Jingle ICE-UDP Transport Method (XEP-0176).
+     * @brief An abstraction of the signaling part of Jingle ICE-UDP Transport Method (@xep{0176}).
      *
      * XEP Version: 1.0
+     *
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0.7
      */
@@ -38,14 +39,14 @@ namespace gloox
     {
       public:
         /**
-         *
+         * Describes the candidate type.
          */
         enum Type
         {
-          Host,
-          PeerReflexive,
-          Relayed,
-          ServerReflexive
+          Host,                     /**< A host candidate. */
+          PeerReflexive,            /**< A peer reflexive candidate. */
+          Relayed,                  /**< A relayed candidate. */
+          ServerReflexive           /**< A server reflexive candidate. */
         };
 
         /**
@@ -53,18 +54,19 @@ namespace gloox
          */
         struct Candidate
         {
-          std::string component;
-          std::string foundation;
-          std::string generation;
-          std::string id;
-          std::string ip;
-          std::string network;
-          int port;
-          int priority;
-          std::string protocol;
-          std::string rel_addr;
-          int rel_port;
-          Type type;
+          std::string component;    /**< A Component ID as defined in ICE-CORE. */
+          std::string foundation;   /**< A Foundation as defined in ICE-CORE.*/
+          std::string generation;   /**< An index, starting at 0, that enables the parties to keep track of
+                                         updates to the candidate throughout the life of the session. */
+          std::string id;           /**< A unique identifier for the candidate. */
+          std::string ip;           /**< The IP address for the candidate transport mechanism. */
+          std::string network;      /**< An index, starting at 0, referencing which network this candidate is on for a given peer. */
+          int port;                 /**< The port at the candidate IP address. */
+          int priority;             /**< A Priority as defined in ICE-CORE. */
+          std::string protocol;     /**< The protocol to be used. Should be @b udp. */
+          std::string rel_addr;     /**< A related address as defined in ICE-CORE. */
+          int rel_port;             /**< A related port as defined in ICE-CORE. */
+          Type type;                /**< A Candidate Type as defined in ICE-CORE. */
         };
 
         /** A list of transport candidates. */
@@ -106,6 +108,9 @@ namespace gloox
          * @return The list of connection candidates.
          */
         const CandidateList& candidates() const { return m_candidates; }
+
+        // reimplemented from Plugin
+        virtual const StringList features() const;
 
         // reimplemented from Plugin
         virtual const std::string& filterString() const;

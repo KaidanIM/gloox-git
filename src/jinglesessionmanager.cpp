@@ -43,8 +43,17 @@ namespace gloox
 
     void SessionManager::registerPlugin( Plugin* plugin )
     {
-      if( plugin )
-        m_factory.registerPlugin( plugin );
+      if( !plugin )
+        return;
+
+      m_factory.registerPlugin( plugin );
+      if( m_parent )
+      {
+        StringList features = plugin->features();
+        StringList::const_iterator it = features.begin();
+        for( ; it != features.end(); ++it )
+          m_parent->disco()->addFeature( (*it) );
+      }
     }
 
     Session* SessionManager::createSession( const JID& callee, SessionHandler* handler )

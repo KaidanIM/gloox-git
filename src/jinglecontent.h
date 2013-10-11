@@ -78,6 +78,7 @@ namespace gloox
         /**
          * Creates a new Content object from the given tag.
          * @param tag The Tag to parse.
+         * @param factory A PluginFactory instance to use for embedding plugins.
          */
         Content( const Tag* tag = 0, PluginFactory* factory = 0 );
 

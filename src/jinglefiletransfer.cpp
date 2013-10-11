@@ -92,6 +92,13 @@ namespace gloox
       }
     }
 
+    const StringList FileTransfer::features() const
+    {
+      StringList sl;
+      sl.push_back( XMLNS_JINGLE_FILE_TRANSFER );
+      return sl;
+    }
+
     const std::string& FileTransfer::filterString() const
     {
       static const std::string filter = "content/description[@xmlns='" + XMLNS_JINGLE_FILE_TRANSFER + "']"

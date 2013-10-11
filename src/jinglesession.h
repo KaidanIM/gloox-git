@@ -29,7 +29,7 @@ namespace gloox
   /**
    * @brief The namespace containing Jingle-related (@xep{0166} et. al.) classes.
    *
-   * See @link gloox::Jingle::Session Session @endlink for more information
+   * See @link gloox::Jingle::SessionManager SessionManager @endlink for more information
    * about Jingle in gloox.
    *
    * @author Jakob Schroeter <js@camaya.net>
@@ -69,20 +69,8 @@ namespace gloox
     /**
      * @brief This is an implementation of a Jingle Session (@xep{0166}).
      *
-     * @note The classes in the Jingle namespace implement the signaling part of Jingle only.
-     * There is no support for actually establishing any connection to a remote entity,
-     * nor for transfering any media in any way whatsoever outside the XMPP channel.
-     *
-     * To use Jingle with gloox you should first instantiate a Jingle::SessionManager. The SessionManager will
-     * let you create new Jingle sessions and notify the respective handler about incoming Jingle session requests.
-     * It will also announce generic Jingle support via Disco. You should manually announce any additional Jingle
-     * transports and media types you wish to support.
-     * @code
-     * Jingle::SessionManager* jsm = new Jingle::SessionManager( ... );
-     * m_clientbase->disco()->addFeature( ... ); // any additional Jingle namespaces, e.g. XMLNS_JINGLE_FILE_TRANSFER
-     * @endcode
-     *
-     *
+     * See @link gloox::Jingle::SessionManager Jingle::SessionManager @endlink for info on how to use
+     * Jingle in gloox.
      *
      * XEP Version: 1.1
      *
@@ -314,11 +302,11 @@ namespace gloox
             Jingle( Action action, const JID& initiator,
                     const Plugin* plugin, const std::string& sid );
 
-            /**
-             * Copy constructor.
-             * @param right The instance to copy.
-             */
-            Jingle( const Jingle& right );
+//             /**
+//              * Copy constructor.
+//              * @param right The instance to copy.
+//              */
+//             Jingle( const Jingle& right );
 
             Action m_action;
             std::string m_sid;

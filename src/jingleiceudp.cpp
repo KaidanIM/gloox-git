@@ -61,6 +61,13 @@ namespace gloox
       }
     }
 
+    const StringList ICEUDP::features() const
+    {
+      StringList sl;
+      sl.push_back( XMLNS_JINGLE_ICE_UDP );
+      return sl;
+    }
+
     const std::string& ICEUDP::filterString() const
     {
       static const std::string filter = "content/transport[@xmlns='" + XMLNS_JINGLE_ICE_UDP + "']";
