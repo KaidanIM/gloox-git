@@ -344,7 +344,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jingledescription.cpp"
+				RelativePath=".\src\jinglefiletransfer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jingleiceudp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglepluginfactory.cpp"
 				>
 			</File>
 			<File
@@ -842,11 +850,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jingledescription.h"
+				RelativePath=".\src\jinglefiletransfer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jingleiceudp.h"
 				>
 			</File>
 			<File
 				RelativePath=".\src\jingleplugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jinglepluginfactory.h"
 				>
 			</File>
 			<File
