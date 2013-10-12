@@ -86,16 +86,7 @@ namespace gloox
 
   ConnectionError ConnectionTLS::recv( int timeout )
   {
-    if( m_connection->state() == StateConnected )
-    {
-      return m_connection->recv( timeout );
-    }
-    else
-    {
-      m_log.log( LogLevelWarning, LogAreaClassConnectionTLS,
-                 "Attempt to receive data on a connection that is not connected (or is connecting)" );
-      return ConnNotConnected;
-    }
+    return m_connection ? m_connection->recv( timeout ) : ConnNotConnected;
   }
 
   bool ConnectionTLS::send( const std::string& data )
