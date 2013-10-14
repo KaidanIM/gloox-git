@@ -294,8 +294,14 @@ namespace gloox
       }
       else if( name == "success" && xmlns == XMLNS_STREAM_SASL )
       {
+        if( !processSASLSuccess( tag->cdata() ) )
+        {
+          logInstance().err( LogAreaClassClient, "The Server response could not be verified!" );
+          disconnect( ConnAuthenticationFailed );
+          return false;
+        }
+
         logInstance().dbg( LogAreaClassClient, "SASL authentication successful" );
-        processSASLSuccess();
         setAuthed( true );
         header();
       }
@@ -401,6 +407,12 @@ namespace gloox
 
     const std::string mech = "mechanism";
 
+    if( tag->hasChildWithCData( mech, "SCRAM-SHA-1-PLUS" ) )
+      mechs |= SaslMechScramSha1Plus;
+
+    if( tag->hasChildWithCData( mech, "SCRAM-SHA-1" ) )
+      mechs |= SaslMechScramSha1;
+
     if( tag->hasChildWithCData( mech, "DIGEST-MD5" ) )
       mechs |= SaslMechDigestMd5;
 
@@ -439,7 +451,13 @@ namespace gloox
   {
     bool retval = true;
 
-    if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
+    if( m_streamFeatures & SaslMechScramSha1 && m_availableSaslMechs & SaslMechScramSha1
+      && !m_forceNonSasl )
+    {
+      notifyStreamEvent( StreamEventAuthentication );
+      startSASL( SaslMechScramSha1 );
+    }
+    else if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
         && !m_forceNonSasl )
     {
       notifyStreamEvent( StreamEventAuthentication );

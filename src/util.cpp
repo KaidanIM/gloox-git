@@ -13,6 +13,8 @@
 #include "util.h"
 #include "gloox.h"
 
+#include <cstdio>
+
 namespace gloox
 {
 
@@ -53,6 +55,15 @@ namespace gloox
     {
       const unsigned i = (unsigned)internalLog2( code );
       return i < size ? std::string( values[i] ) : def;
+    }
+
+    std::string hex( const std::string& input )
+    {
+      const char* H = input.c_str();
+      char* buf = new char[input.length() * 2 + 1];
+      for( unsigned int i = 0; i < input.length(); ++i )
+        sprintf( buf + i * 2, "%02x", (unsigned char)( H[i] ) );
+      return std::string( buf, 40 );
     }
 
     static const char escape_chars[] = { '&', '<', '>', '\'', '"' };

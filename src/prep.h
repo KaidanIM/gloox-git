@@ -68,6 +68,16 @@ namespace gloox
     bool resourceprep( const std::string& resource, std::string& out );
 
     /**
+     * This function applies the Saslprep profile of Stringprep to a std::string.
+     * @param input The string to apply the profile to.
+     * @param out The prepped string. In case of an error this string is not touched.
+     * If LibIDN is not available the string is returned unchanged.
+     * @return @b True if prepping was successful, @b false otherwise or if LibIDN
+     * is not available.
+     */
+    bool saslprep( const std::string& input, std::string& out );
+
+    /**
      * This function applies the idna() function to a string. I.e. it transforms
      * internationalized domain names into plain ASCII.
      * @param domain The string to convert.

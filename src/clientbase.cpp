@@ -40,12 +40,14 @@
 #include "presencehandler.h"
 #include "rosterlistener.h"
 #include "stanzaextensionfactory.h"
+#include "sha.h"
 #include "subscription.h"
 #include "subscriptionhandler.h"
 #include "tag.h"
 #include "taghandler.h"
 #include "tlsbase.h"
 #include "tlsdefault.h"
+#include "prep.h"
 #include "util.h"
 
 #include <cstdlib>
@@ -127,6 +129,8 @@ namespace gloox
 
   void ClientBase::init()
   {
+    srand( time( 0 ) );
+
     if( !m_disco )
     {
       m_disco = new Disco( this );
@@ -482,6 +486,28 @@ namespace gloox
 
     switch( type )
     {
+      case SaslMechScramSha1Plus:
+      case SaslMechScramSha1:
+      {
+        a->addAttribute( "mechanism", "SCRAM-SHA-1" );
+
+        std::string t, tmp = "n,";
+
+        if( m_authzid && prep::saslprep( m_authzid.bare(), t ) )
+          tmp += "a=" + t;
+
+        tmp += ",";
+        m_clientFirstMessageBare = "n=";
+        if( !m_authcid.empty() && prep::saslprep( m_authcid, t ) )
+          m_clientFirstMessageBare += t;
+        else if( prep::saslprep( m_jid.username(), t ) )
+          m_clientFirstMessageBare += t;
+
+        m_clientFirstMessageBare += ",r=" + getRandom();
+
+        a->setCData( Base64::encode64( tmp + m_clientFirstMessageBare ) );
+        break;
+      }
       case SaslMechDigestMd5:
         a->addAttribute( "mechanism", "DIGEST-MD5" );
         break;
@@ -612,6 +638,52 @@ namespace gloox
     send( a );
   }
 
+  std::string ClientBase::hmac( const std::string& key, const std::string& str )
+  {
+    SHA sha;
+    std::string key_ = key;
+    if( key_.length() > 64 )
+    {
+      sha.feed( key_ );
+      key_ = sha.binary();
+      sha.reset();
+    }
+    unsigned char ipad[65];
+    unsigned char opad[65];
+    memset( ipad, '\0', sizeof( ipad ) );
+    memset( opad, '\0', sizeof( opad ) );
+    memcpy( ipad, key_.c_str(), key_.length() );
+    memcpy( opad, key_.c_str(), key_.length() );
+    for( int i = 0; i < 64; i++ )
+    {
+      ipad[i] ^= 0x36;
+      opad[i] ^= 0x5c;
+    }
+    sha.feed( ipad, 64 );
+    sha.feed( str );
+    key_ = sha.binary();
+    sha.reset();
+    sha.feed( opad, 64 );
+    sha.feed( key_ );
+
+    return sha.binary(); // hex() for testing
+  }
+
+  std::string ClientBase::hi( const std::string& str, const std::string& salt, int iter )
+  {
+    unsigned char xored[20];
+    memset( xored, '\0', sizeof( xored ) );
+    std::string tmp = salt;
+    tmp.append( "\0\0\0\1", 4 );
+    for( int i = 0; i < iter; ++i )
+    {
+      tmp = hmac( str, tmp );
+      for( int j = 0; j < 20; ++j )
+        xored[j] ^= tmp.c_str()[j];
+    }
+    return std::string( (char*)xored, 20 );
+  }
+
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
     Tag* t = new Tag( "response", XMLNS, XMLNS_STREAM_SASL );
@@ -620,6 +692,49 @@ namespace gloox
 
     switch( m_selectedSaslMech )
     {
+      case SaslMechScramSha1:
+      {
+        printf( "decoded: %s\n", decoded.c_str() );
+
+        std::string snonce, salt, tmp;
+        int iter = 0;
+        std::string::size_type posn = decoded.find( "r=" );
+        std::string::size_type poss = decoded.find( "s=" );
+        std::string::size_type posi = decoded.find( "i=" );
+        if( posn == std::string::npos || poss == std::string::npos || posi == std::string::npos )
+          break;
+
+        snonce = decoded.substr( posn + 2, poss - posn - 3 );
+        salt = Base64::decode64( decoded.substr( poss + 2, posi - poss - 3 ) );
+        tmp = decoded.substr( posi + 2, decoded.length() - posi - 2 );
+        iter = atoi( tmp.c_str() );
+
+        if( !prep::saslprep( m_password, tmp ) )
+          break;
+
+        std::string saltedPwd = hi( tmp, salt, iter );
+        std::string ck = hmac( saltedPwd, "Client Key" );
+        SHA sha;
+        sha.feed( ck );
+        std::string storedKey = sha.binary();
+
+        tmp = "c=biws,r=" + snonce;
+        std::string authMessage = m_clientFirstMessageBare + "," + decoded + "," + tmp; // client-final-message-without-proof
+        std::string clientSignature = hmac( storedKey, authMessage );
+        unsigned char clientProof[20]; // ck XOR clientSignature
+        memcpy( clientProof, ck.c_str(), 20 );
+        for( int i = 0; i < 20; ++i )
+          clientProof[i] ^= clientSignature.c_str()[i];
+        std::string serverKey = hmac( saltedPwd, "Server Key" );
+        m_serverSignature = hmac( serverKey, authMessage );
+
+        tmp += ",p=";
+        tmp.append( Base64::encode64( std::string( (char*)clientProof, 20 ) ) );
+
+        t->setCData( Base64::encode64( tmp ) );
+
+        break;
+      }
       case SaslMechDigestMd5:
       {
         if( !decoded.compare( 0, 7, "rspauth" ) )
@@ -645,11 +760,7 @@ namespace gloox
           end = decoded.find( '"', end + 1 );
         std::string nonce = decoded.substr( pos + 7, end - ( pos + 7 ) );
 
-        std::string cnonce;
-        char cn[4*8+1];
-        for( int i = 0; i < 4; ++i )
-          sprintf( cn + i*8, "%08x", rand() );
-        cnonce.assign( cn, 4*8 );
+        std::string cnonce = getRandom();
 
         MD5 md5;
         md5.feed( m_jid.username() );
@@ -789,7 +900,7 @@ namespace gloox
 #endif
   }
 
-  void ClientBase::processSASLSuccess()
+  bool ClientBase::processSASLSuccess( const std::string& payload )
   {
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     if( m_selectedSaslMech == SaslMechNTLM )
@@ -798,6 +909,14 @@ namespace gloox
       DeleteSecurityContext( &m_ctxtHandle );
     }
 #endif
+    if( m_selectedSaslMech == SaslMechScramSha1 || m_selectedSaslMech == SaslMechScramSha1Plus )
+    {
+      const std::string decoded = Base64::decode64( payload );
+      if( decoded.length() < 3 || Base64::decode64( decoded.substr( 2 ) ) != m_serverSignature  )
+        return false;
+    }
+
+    return true;
   }
 
   void ClientBase::send( IQ& iq, IqHandler* ih, int context, bool del )
@@ -1644,6 +1763,14 @@ namespace gloox
     }
 
     return false;
+  }
+
+  std::string ClientBase::getRandom()
+  {
+    char cn[4*8+1];
+    for( int i = 0; i < 4; ++i )
+      sprintf( cn + i*8, "%08x", rand() );
+    return std::string( cn, 4*8 );;
   }
 
   CompressionBase* ClientBase::getDefaultCompression()

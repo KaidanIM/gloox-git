@@ -799,9 +799,13 @@ namespace gloox
       void startSASL( SaslMechanism type );
 
       /**
-       * Releases SASL related resources.
+       * Verifies the server response after successful authentication (if applicable) and
+       * releases SASL related resources (if applicable).
+       * @param payload The server's verification string.
+       * @return @b True if verification is not supported by the chosen SASL mechanism or could be completed successfully,
+       * @b false if verification failed.
        */
-      void processSASLSuccess();
+      bool processSASLSuccess( const std::string& payload );
 
       /**
        * Processes the given SASL challenge and sends a response.
@@ -854,6 +858,12 @@ namespace gloox
        * @return The number of sent stanzas.
        */
       int stanzasSent() const { return m_smSent; }
+
+      /**
+       * Returns 32 octets of random characters.
+       * @return Random characters.
+       */
+      std::string getRandom();
 
       JID m_jid;                         /**< The 'self' JID. */
       JID m_authzid;                     /**< An optional authorization ID. See setAuthzid(). */
@@ -979,6 +989,8 @@ namespace gloox
       virtual void cleanup() {}
       virtual void handleIqIDForward( const IQ& iq, int context ) { (void) iq; (void) context; }
       void send( Tag* tag, bool queue, bool del );
+      std::string hmac( const std::string& str, const std::string& key );
+      std::string hi( const std::string& str, const std::string& key, int iter );
 
       void parse( const std::string& data );
       void init();
@@ -1077,6 +1089,8 @@ namespace gloox
 
       SaslMechanism m_selectedSaslMech;
 
+      std::string m_clientFirstMessageBare;
+      std::string m_serverSignature;
       std::string m_ntlmDomain;
       bool m_customConnection;
 

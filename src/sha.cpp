@@ -55,7 +55,8 @@ namespace gloox
     if( m_corrupted )
       return EmptyString;
 
-    finalize();
+    if( !m_finished )
+      finalize();
 
     char buf[41];
     for( int i = 0; i < 20; ++i )
