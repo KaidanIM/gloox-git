@@ -1,3 +1,12 @@
+v1.0.8 -- 14 Oct 2013
+---------------------
+- ConnectionTLS: make stacked TLS/SSL connections work again with HTTP proxies
+- added SASL SCRAM-SHA-1 authentication mechanisms (#201)
+- properly seed the RNG
+- SHA::hex(): finalize() only once
+
+
+
 v1.0.7 -- 11 Oct 2013
 ---------------------
 - added Jingle (XEP-0166)

@@ -81,6 +81,13 @@ namespace gloox
                                 unsigned size, const std::string& def = EmptyString );
 
     /**
+     * Returns the input string in hex notation.
+     * @param input The (binary) input string.
+     * @return The input string in hex notation.
+     */
+    std::string hex( const std::string& input );
+
+    /**
      * A convenience function that executes the given function on each object in a given list.
      * @param t The object to execute the function on.
      * @param f The function to execute.

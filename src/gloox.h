@@ -747,15 +747,17 @@ namespace gloox
   // must be adjusted with changes to StreamFeature enum above
   enum SaslMechanism
   {
-    SaslMechNone           =     0, /**< Invalid SASL Mechanism. */
-    SaslMechDigestMd5      =   512, /**< SASL Digest-MD5 according to RFC 2831. */
-    SaslMechPlain          =  1024, /**< SASL PLAIN according to RFC 2595 Section 6. */
-    SaslMechAnonymous      =  2048, /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
+    SaslMechNone          =      0, /**< Invalid SASL Mechanism. */
+    SaslMechScramSha1     =   2048, /**< SASL SCRAM-SHA-1-PLUS accroding to RFC 5801 */
+    SaslMechScramSha1Plus =   1024, /**< SASL SCRAM-SHA-1 accroding to RFC 5801 */
+    SaslMechDigestMd5     =   4096, /**< SASL Digest-MD5 according to RFC 2831. */
+    SaslMechPlain         =   8192, /**< SASL PLAIN according to RFC 2595 Section 6. */
+    SaslMechAnonymous     =  16384, /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
                                      * RFC 2245 Section 6. */
-    SaslMechExternal       =  4096, /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
-    SaslMechGssapi         =  8192, /**< SASL GSSAPI (Win32 only). */
-    SaslMechNTLM           = 16384, /**< SASL NTLM (Win32 only). */
-    SaslMechAll            = 65535  /**< Includes all supported SASL mechanisms. */
+    SaslMechExternal      =  32768, /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
+    SaslMechGssapi        =  65536, /**< SASL GSSAPI (Win32 only). */
+    SaslMechNTLM          = 131072, /**< SASL NTLM (Win32 only). */
+    SaslMechAll           = 262143  /**< Includes all supported SASL mechanisms. */
   };
 
   /**

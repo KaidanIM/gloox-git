@@ -92,6 +92,18 @@ namespace gloox
 #endif
     }
 
+    bool saslprep( const std::string& input, std::string& out )
+    {
+      #ifdef HAVE_LIBIDN
+      return prepare( input, out, stringprep_saslprep );
+      #else
+      if( input.length() > JID_PORTION_SIZE )
+        return false;
+      out = input;
+      return true;
+      #endif
+    }
+
     bool idna( const std::string& domain, std::string& out )
     {
 #ifdef HAVE_LIBIDN
