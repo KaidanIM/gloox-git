@@ -139,7 +139,7 @@ namespace gloox
         m_proxyHandshakeBuffer = EmptyString;
         m_state = StateConnected;
         m_logInstance.dbg( LogAreaClassConnectionHTTPProxy,
-                           "http proxy connection established" );
+                           "HTTP proxy connection established" );
         m_handler->handleConnect( this );
       }
       else if( !m_proxyHandshakeBuffer.compare( 9, 3, "407" ) )
@@ -174,7 +174,7 @@ namespace gloox
           port = host.second;
         }
       }
-      std::string message = "Requesting http proxy connection to " + server + ":"
+      std::string message = "Requesting HTTP proxy connection to " + server + ":"
           + util::int2string( port );
       m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, message );
 
