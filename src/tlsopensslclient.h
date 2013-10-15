@@ -47,7 +47,13 @@ namespace gloox
        */
       virtual ~OpenSSLClient();
 
-    private:
+      // reimplemented from TLSBase
+      virtual bool hasChannelBinding() const;
+
+      // reimplemented from TLSBase
+      virtual const std::string channelBinding() const;
+
+  private:
       // reimplemented from OpenSSLBase
       virtual bool setType();
 

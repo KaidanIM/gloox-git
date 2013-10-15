@@ -37,6 +37,18 @@ namespace gloox
     return true;
   }
 
+  bool OpenSSLClient::hasChannelBinding() const
+  {
+    return true;
+  }
+
+  const std::string OpenSSLClient::channelBinding() const
+  {
+    unsigned char* buf[128];
+    int res = SSL_get_finished( m_ssl, buf, 128 );
+    return std::string( (char*)buf, res );
+  }
+
   int OpenSSLClient::handshakeFunction()
   {
     return SSL_connect( m_ssl );

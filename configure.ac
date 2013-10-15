@@ -140,6 +140,9 @@ if test "$ssl" = "no"; then
   if test "$gnutls" != "no" ; then
     AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support (GnuTLS). Undefine HAVE_OPENSSL.])
     ssl=yes
+    AC_CHECK_LIB(gnutls, gnutls_session_channel_binding,
+            [AC_MSG_RESULT(yes)
+            AC_DEFINE(HAVE_GNUTLS_SESSION_CHANNEL_BINDING, 1, [Define to 1 if you have GnuTLS 2.12.0 or above.] )], [AC_MSG_RESULT(no)])
   else
     AC_MSG_WARN([GnuTLS not found])
   fi

@@ -1,7 +1,7 @@
-v1.0.8 -- 14 Oct 2013
+v1.0.8 -- 15 Oct 2013
 ---------------------
 - ConnectionTLS: make stacked TLS/SSL connections work again with HTTP proxies
-- added SASL SCRAM-SHA-1 authentication mechanisms (#201)
+- added SASL SCRAM-SHA-1/SCRAM-SHA-1-PLUS authentication mechanisms (GnuTLS & OpenSSL only) (#201)
 - properly seed the RNG
 - SHA::hex(): finalize() only once
 

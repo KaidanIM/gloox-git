@@ -11,6 +11,9 @@
 /* Uncomment if you have GnuTLS available and want to use it */
 // #define HAVE_GNUTLS 1
 
+/* Uncomment if you have GnuTLS 2.12.0 or above */
+// #define HAVE_GNUTLS_SESSION_CHANNEL_BINDING 1
+
 /* Uncomment if you have OpenSSL available and want to use it */
 // #define HAVE_OPENSSL 1
 

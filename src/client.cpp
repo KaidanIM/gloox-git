@@ -451,14 +451,21 @@ namespace gloox
   {
     bool retval = true;
 
-    if( m_streamFeatures & SaslMechScramSha1 && m_availableSaslMechs & SaslMechScramSha1
-      && !m_forceNonSasl )
+    if( ( m_streamFeatures & SaslMechScramSha1Plus && m_availableSaslMechs & SaslMechScramSha1Plus
+          && m_encryption && m_encryptionActive && m_encryption->hasChannelBinding() )
+        && !m_forceNonSasl )
+    {
+      notifyStreamEvent( StreamEventAuthentication );
+      startSASL( SaslMechScramSha1Plus );
+    }
+    else if( m_streamFeatures & SaslMechScramSha1 && m_availableSaslMechs & SaslMechScramSha1
+             && !m_forceNonSasl )
     {
       notifyStreamEvent( StreamEventAuthentication );
       startSASL( SaslMechScramSha1 );
     }
     else if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
-        && !m_forceNonSasl )
+             && !m_forceNonSasl )
     {
       notifyStreamEvent( StreamEventAuthentication );
       startSASL( SaslMechDigestMd5 );

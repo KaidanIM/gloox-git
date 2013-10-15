@@ -105,6 +105,18 @@ namespace gloox
       virtual bool isSecure() const { return m_secure; }
 
       /**
+       * This function indicates whether the underlying TLS implementation supports channel binding (used in e.g. SASL SCRAM-SHA-1-PLUS).
+       * @return @b True if channel binding is supported, @b false otherwise.
+       */
+      virtual bool hasChannelBinding() const { return false; }
+
+      /**
+       * Returns the channel binding data for the established connection.
+       * @return The channel binding data, if any, or the empty string.
+       */
+      virtual const std::string channelBinding() const { return EmptyString; }
+
+      /**
        * Use this function to set a number of trusted root CA certificates which shall be
        * used to verify a servers certificate.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
