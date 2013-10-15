@@ -465,6 +465,27 @@ namespace gloox
     while( true );
   }
 
+  bool SChannel::hasChannelBinding() const
+  {
+#ifdef HAVE_WINTLS_CHANNEL_BINDING
+    return true;
+#else
+    return false;
+#endif
+  }
+
+  const std::string SChannel::channelBinding() const
+  {
+#ifdef HAVE_WINTLS_CHANNEL_BINDING // see ../config.h.win if the following doesn't compile
+    SecPkgContext_Bindings buf;
+    if( QueryContextAttributes( &m_context, SECPKG_ATTR_UNIQUE_BINDINGS, &buf ) == SEC_E_OK )
+    {
+      return std::string( buf->Bindings[buf->Bindings.dwApplicationDataOffset], buf->Bindings.cbApplicationDataLength );
+    }
+#endif
+    return EmptyString;
+  }
+
   void SChannel::setCACerts( const StringList& /*cacerts*/ ) {}
 
   void SChannel::setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {}
