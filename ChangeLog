@@ -1,7 +1,8 @@
 v1.0.9 -- xx yyy 2013
 ---------------------
-- change colon to dash in uid generation to possibly fix #191
+- changed colon to dash in uid generation to possibly fix #191
 - added Channel Binding (needed for SASL SCRAM-SHA-1-PLUS) to SChannel (untestd)
+- fixed SCRAM-SHA-1-PLUS
 
 
 

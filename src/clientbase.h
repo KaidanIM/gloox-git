@@ -1091,6 +1091,7 @@ namespace gloox
 
       std::string m_clientFirstMessageBare;
       std::string m_serverSignature;
+      std::string m_gs2Header;
       std::string m_ntlmDomain;
       bool m_customConnection;
 

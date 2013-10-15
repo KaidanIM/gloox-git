@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cstdio>
 
 namespace gloox
 {
@@ -155,13 +156,11 @@ namespace gloox
     gnutls_datum_t cb;
     int rc;
     rc = gnutls_session_channel_binding( *m_session, GNUTLS_CB_TLS_UNIQUE, &cb );
-    if( rc )
-      return EmptyString;
-    else
+    if( !rc )
       return std::string( (char*)cb.data, cb.size );
-#else
-    return EmptyString;
+    else
 #endif
+      return EmptyString;
   }
 
   ssize_t GnuTLSBase::pullFunc( void* data, size_t len )
