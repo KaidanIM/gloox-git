@@ -1,3 +1,9 @@
+v1.0.10 -- xx yyy 2013
+---------------------
+-
+
+
+
 v1.0.9 -- 15 Oct 2013
 ---------------------
 - changed colon to dash in uid generation to possibly fix #191
