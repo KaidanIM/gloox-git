@@ -7,6 +7,12 @@ v1.0.8 -- 15 Oct 2013
 
 
 
+v1.0.7.1 -- 11 Oct 2013
+---------------------
+- fixed/updated the win32 project files
+
+
+
 v1.0.7 -- 11 Oct 2013
 ---------------------
 - added Jingle (XEP-0166)
