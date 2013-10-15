@@ -489,9 +489,23 @@ namespace gloox
       case SaslMechScramSha1Plus:
       case SaslMechScramSha1:
       {
-        a->addAttribute( "mechanism", "SCRAM-SHA-1" );
+        std::string t;
+        std::string tmp;
 
-        std::string t, tmp = "n,";
+        if( type == SaslMechScramSha1 )
+        {
+          if( ( m_availableSaslMechs & SaslMechScramSha1Plus ) != SaslMechScramSha1Plus )
+            tmp = "y,";
+          else
+            tmp = "n,";
+          a->addAttribute( "mechanism", "SCRAM-SHA-1" );
+        }
+        else // SaslMechScramSha1Plus
+        {
+
+          tmp = "p=tls-unique,";
+          a->addAttribute( "mechanism", "SCRAM-SHA-1-PLUS" );
+        }
 
         if( m_authzid && prep::saslprep( m_authzid.bare(), t ) )
           tmp += "a=" + t;
@@ -692,6 +706,7 @@ namespace gloox
 
     switch( m_selectedSaslMech )
     {
+      case SaslMechScramSha1Plus:
       case SaslMechScramSha1:
       {
         printf( "decoded: %s\n", decoded.c_str() );
@@ -718,7 +733,12 @@ namespace gloox
         sha.feed( ck );
         std::string storedKey = sha.binary();
 
-        tmp = "c=biws,r=" + snonce;
+        if( m_selectedSaslMech == SaslMechScramSha1Plus )
+          tmp = "c=" + Base64::encode64( m_encryption->channelBinding() );
+        else
+          tmp = "c=biws";
+        tmp += ",r=" + snonce;
+
         std::string authMessage = m_clientFirstMessageBare + "," + decoded + "," + tmp; // client-final-message-without-proof
         std::string clientSignature = hmac( storedKey, authMessage );
         unsigned char clientProof[20]; // ck XOR clientSignature

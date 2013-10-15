@@ -63,6 +63,12 @@ namespace gloox
       virtual bool handshake();
 
       // reimplemented from TLSBase
+      virtual bool hasChannelBinding() const;
+
+      // reimplemented from TLSBase
+      virtual const std::string channelBinding() const;
+
+      // reimplemented from TLSBase
       virtual void setCACerts( const StringList& /*cacerts*/ ) {}
 
       // reimplemented from TLSBase

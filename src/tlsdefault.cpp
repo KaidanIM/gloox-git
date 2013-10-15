@@ -126,6 +126,16 @@ namespace gloox
     return m_impl ? m_impl->isSecure() : false;
   }
 
+  bool TLSDefault::hasChannelBinding() const
+  {
+    return m_impl ? m_impl->hasChannelBinding() : false;
+  }
+
+  const std::string TLSDefault::channelBinding() const
+  {
+    return m_impl ? m_impl->channelBinding() : EmptyString;
+  }
+
   void TLSDefault::setCACerts( const StringList& cacerts )
   {
     if( m_impl )

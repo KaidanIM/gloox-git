@@ -140,6 +140,30 @@ namespace gloox
     return true;
   }
 
+  bool GnuTLSBase::hasChannelBinding() const
+  {
+#ifdef HAVE_GNUTLS_SESSION_CHANNEL_BINDING
+    return true;
+#else
+    return false;
+#endif
+  }
+
+  const std::string GnuTLSBase::channelBinding() const
+  {
+#ifdef HAVE_GNUTLS_SESSION_CHANNEL_BINDING
+    gnutls_datum_t cb;
+    int rc;
+    rc = gnutls_session_channel_binding( *m_session, GNUTLS_CB_TLS_UNIQUE, &cb );
+    if( rc )
+      return EmptyString;
+    else
+      return std::string( (char*)cb.data, cb.size );
+#else
+    return EmptyString;
+#endif
+  }
+
   ssize_t GnuTLSBase::pullFunc( void* data, size_t len )
   {
     ssize_t cpy = ( len > m_recvBuffer.length() ) ? ( m_recvBuffer.length() ) : ( len );
