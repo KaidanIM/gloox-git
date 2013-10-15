@@ -489,28 +489,26 @@ namespace gloox
       case SaslMechScramSha1Plus:
       case SaslMechScramSha1:
       {
-        std::string t;
-        std::string tmp;
-
         if( type == SaslMechScramSha1 )
         {
           if( ( m_availableSaslMechs & SaslMechScramSha1Plus ) != SaslMechScramSha1Plus )
-            tmp = "y,";
+            m_gs2Header = "y,";
           else
-            tmp = "n,";
+            m_gs2Header = "n,";
           a->addAttribute( "mechanism", "SCRAM-SHA-1" );
         }
         else // SaslMechScramSha1Plus
         {
-
-          tmp = "p=tls-unique,";
+          m_gs2Header = "p=tls-unique,";
           a->addAttribute( "mechanism", "SCRAM-SHA-1-PLUS" );
         }
 
+        std::string t;
         if( m_authzid && prep::saslprep( m_authzid.bare(), t ) )
-          tmp += "a=" + t;
+          m_gs2Header += "a=" + t;
 
-        tmp += ",";
+        m_gs2Header += ",";
+
         m_clientFirstMessageBare = "n=";
         if( !m_authcid.empty() && prep::saslprep( m_authcid, t ) )
           m_clientFirstMessageBare += t;
@@ -519,7 +517,7 @@ namespace gloox
 
         m_clientFirstMessageBare += ",r=" + getRandom();
 
-        a->setCData( Base64::encode64( tmp + m_clientFirstMessageBare ) );
+        a->setCData( Base64::encode64( m_gs2Header + m_clientFirstMessageBare ) );
         break;
       }
       case SaslMechDigestMd5:
@@ -709,8 +707,6 @@ namespace gloox
       case SaslMechScramSha1Plus:
       case SaslMechScramSha1:
       {
-        printf( "decoded: %s\n", decoded.c_str() );
-
         std::string snonce, salt, tmp;
         int iter = 0;
         std::string::size_type posn = decoded.find( "r=" );
@@ -734,7 +730,7 @@ namespace gloox
         std::string storedKey = sha.binary();
 
         if( m_selectedSaslMech == SaslMechScramSha1Plus )
-          tmp = "c=" + Base64::encode64( m_encryption->channelBinding() );
+          tmp = "c=" + Base64::encode64( m_gs2Header + m_encryption->channelBinding() );
         else
           tmp = "c=biws";
         tmp += ",r=" + snonce;
