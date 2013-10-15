@@ -1167,7 +1167,7 @@ namespace gloox
     return "uid" + util::int2string( m_nextId.increment() );
 #else
     char r[21+1];
-    sprintf( r, "uid:%08x:%08x", m_uniqueBaseId, m_nextId.increment() );
+    sprintf( r, "uid-%08x-%08x", m_uniqueBaseId, m_nextId.increment() );
     std::string ret( r, 21 );
     return ret;
 #endif
