@@ -260,7 +260,7 @@ namespace gloox
       --m_rid; // I think... (may need to rethink when acks are implemented)
       m_logInstance.warn( LogAreaClassConnectionBOSH,
                          "Unable to send. Connection not complete, or too many open requests,"
-                         " so added to buffer.\n" );
+                         " so added to buffer." );
     }
 
     return true;
