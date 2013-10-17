@@ -110,7 +110,7 @@ namespace gloox
 
     m_state = StateConnecting;
     m_logInstance.dbg( LogAreaClassConnectionBOSH,
-                       "bosh initiating connection to server: " +
+                       "Initiating BOSH connection to server: " +
                        ( ( m_connMode == ModePipelining ) ? std::string( "Pipelining" )
                          : ( ( m_connMode == ModeLegacyHTTP ) ? std::string( "LegacyHTTP" )
                                                               : std::string( "PersistentHTTP" ) ) ) );
@@ -142,12 +142,12 @@ namespace gloox
       }
       sendRequest( requestBody );
 
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "BOSH disconnection request sent" );
     }
     else
     {
       m_logInstance.err( LogAreaClassConnectionBOSH,
-                         "disconnecting from server in a non-graceful fashion" );
+                         "Disconnecting from server in a non-graceful fashion" );
     }
 
     util::ForEach( m_activeConnections, &ConnectionBase::disconnect );
@@ -197,7 +197,7 @@ namespace gloox
 //       else
 //       {
 //         m_initialStreamSent = true;
-//         m_logInstance.dbg( LogAreaClassConnectionBOSH, "initial <stream:stream> dropped" );
+//         m_logInstance.dbg( LogAreaClassConnectionBOSH, "Initial <stream:stream> dropped" );
 //         return true;
 //       }
     }
@@ -397,7 +397,7 @@ namespace gloox
       }
       else
       {
-        m_logInstance.warn( LogAreaClassConnectionBOSH, "buffer length mismatch" );
+        m_logInstance.warn( LogAreaClassConnectionBOSH, "Buffer length mismatch" );
         break;
       }
     }
@@ -425,7 +425,7 @@ namespace gloox
       requestBody.addAttribute( "xmpp:version", "1.0" );
       requestBody.addAttribute( "to", m_server );
 
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending bosh connection request" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "Sending BOSH connection request" );
       sendRequest( requestBody.xml() );
     }
   }
@@ -445,7 +445,7 @@ namespace gloox
       case ModePipelining:
         m_connMode = ModeLegacyHTTP; // Server seems not to support pipelining
         m_logInstance.dbg( LogAreaClassConnectionBOSH,
-                           "connection closed - falling back to HTTP/1.0 connection method" );
+                           "Connection closed - falling back to HTTP/1.0 connection method" );
         break;
       case ModeLegacyHTTP:
       case ModePersistentHTTP:
@@ -463,7 +463,7 @@ namespace gloox
     if( m_streamRestart )
     {
       m_streamRestart = false;
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "Sending spoofed <stream:stream>" );
       m_handler->handleReceivedData( this, "<?xml version='1.0' ?>"
           "<stream:stream xmlns:stream='http://etherx.jabber.org/streams'"
           " xmlns='" + XMLNS_CLIENT + "' version='" + XMPP_STREAM_VERSION_MAJOR
@@ -483,7 +483,7 @@ namespace gloox
         {
           m_maxOpenRequests = serverRequests;
           m_logInstance.dbg( LogAreaClassConnectionBOSH,
-                              "bosh parameter 'requests' now set to " + tag->findAttribute( "requests" ) );
+                              "BOSH parameter 'requests' now set to " + tag->findAttribute( "requests" ) );
         }
       }
       if( tag->hasAttribute( "hold" ) )
@@ -493,7 +493,7 @@ namespace gloox
         {
           m_hold = maxHold;
           m_logInstance.dbg( LogAreaClassConnectionBOSH,
-                              "bosh parameter 'hold' now set to " + tag->findAttribute( "hold" ) );
+                              "BOSH parameter 'hold' now set to " + tag->findAttribute( "hold" ) );
         }
       }
       if( tag->hasAttribute( "wait" ) )
@@ -503,7 +503,7 @@ namespace gloox
         {
           m_wait = maxWait;
           m_logInstance.dbg( LogAreaClassConnectionBOSH,
-                              "bosh parameter 'wait' now set to " + tag->findAttribute( "wait" )
+                              "BOSH parameter 'wait' now set to " + tag->findAttribute( "wait" )
                                   + " seconds" );
         }
       }
@@ -512,7 +512,7 @@ namespace gloox
         const int minTime = atoi( tag->findAttribute( "polling" ).c_str() );
         m_minTimePerRequest = minTime;
         m_logInstance.dbg( LogAreaClassConnectionBOSH,
-                            "bosh parameter 'polling' now set to " + tag->findAttribute( "polling" )
+                            "BOSH parameter 'polling' now set to " + tag->findAttribute( "polling" )
                                 + " seconds" );
       }
 
@@ -531,7 +531,7 @@ namespace gloox
     if( tag->findAttribute( "type" ) == "terminate" )
     {
       m_logInstance.dbg( LogAreaClassConnectionBOSH,
-                         "bosh connection closed by server: " + tag->findAttribute( "condition" ) );
+                         "BOSH connection closed by server: " + tag->findAttribute( "condition" ) );
       m_state = StateDisconnected;
       m_handler->handleDisconnect( this, ConnStreamClosed );
       return;
