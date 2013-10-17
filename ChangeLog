@@ -1,6 +1,6 @@
 v1.0.10 -- xx yyy 2013
 ---------------------
--
+- TLSSChannel: use malloc/realloc/free instead of their legacy Local* variants (fixes #222)
 
 
 
