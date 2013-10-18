@@ -104,6 +104,8 @@ namespace gloox
           std::string::size_type pos = 0;
           while( ( pos = binval.find( '\n' ) ) != std::string::npos )
             binval.erase( pos, 1 );
+          while( ( pos = binval.find( '\r' ) ) != std::string::npos )
+            binval.erase( pos, 1 );
           m_photo.type = tag.findChild( "TYPE" )->cdata();
           m_photo.binval = Base64::decode64( binval );
           m_PHOTO = true;
@@ -121,6 +123,8 @@ namespace gloox
           std::string binval = tag.findChild( "BINVAL" )->cdata();
           std::string::size_type pos = 0;
           while( ( pos = binval.find( '\n' ) ) != std::string::npos )
+            binval.erase( pos, 1 );
+          while( ( pos = binval.find( '\r' ) ) != std::string::npos )
             binval.erase( pos, 1 );
           m_logo.type = tag.findChild( "TYPE" )->cdata();
           m_logo.binval = Base64::decode64( binval );
