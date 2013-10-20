@@ -87,7 +87,7 @@ namespace gloox
       for( ; it != m_sessions.end() && (*it)->sid() != j->sid(); ++it ) ;
       if( it == m_sessions.end() )
       {
-        Session* s = new Session( m_parent, j, m_handler );
+        Session* s = new Session( m_parent, iq.from(), j, m_handler );
         m_handler->handleIncomingSession( s );
         s->handleIq( iq );
       }

@@ -219,10 +219,10 @@ namespace gloox
 
     // ---- Session ----
     Session::Session( ClientBase* parent, const JID& callee, SessionHandler* jsh )
-      : m_parent( parent ), m_state( Ended ), m_callee( callee ),
+      : m_parent( parent ), m_state( Ended ), m_remote( callee ),
         m_handler( jsh ), m_valid( false )
     {
-      if( !m_parent || !m_handler || !m_callee )
+      if( !m_parent || !m_handler || !m_remote )
         return;
 
       m_initiator = m_parent->jid();
@@ -233,15 +233,14 @@ namespace gloox
       m_valid = true;
     }
 
-    Session::Session( ClientBase* parent, const Session::Jingle* jingle, SessionHandler* jsh )
+    Session::Session( ClientBase* parent, const JID& callee, const Session::Jingle* jingle, SessionHandler* jsh )
       : m_parent( parent ), m_state( Ended ), m_handler( jsh ), m_valid( false )
     {
-      if( !m_parent || !m_handler /*|| !jingle || jingle->action() != SessionInitiate*/ )
+      if( !m_parent || !m_handler || !callee /*|| jingle->action() != SessionInitiate*/ )
         return;
 
 //       m_parent->registerIqHandler( this, ExtJingle );
-      m_callee = m_parent->jid();
-//       m_initiator = jingle->initiator();
+      m_remote = callee;
 //       m_state = Pending;
       m_sid = jingle->sid();
 
@@ -407,7 +406,7 @@ namespace gloox
       if( !m_valid || !m_parent )
         return false;
 
-      IQ init( IQ::Set, m_callee, m_parent->getID() );
+      IQ init( IQ::Set, m_remote, m_parent->getID() );
       init.addExtension( new Jingle( action, m_initiator, plugins, m_sid ) );
       m_parent->send( init, this, action );
 
@@ -424,6 +423,7 @@ namespace gloox
       {
         case SessionAccept:
           m_state = Active;
+          m_responder = j->responder();
           break;
         case SessionInitiate:
           m_state = Pending;
