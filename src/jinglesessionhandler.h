@@ -46,7 +46,7 @@ namespace gloox
          * @note Also note that you have to reply to most actions, usually with the *Accept or *Reject counterpart,
          * using the similarly-named functions that Session offers.
          */
-        virtual void handleSessionAction( Action action, const Session* session, const Session::Jingle* jingle ) = 0;
+        virtual void handleSessionAction( Action action, Session* session, const Session::Jingle* jingle ) = 0;
 
         /**
          * This function is called when a request to a remote entity returns an error.
@@ -55,7 +55,7 @@ namespace gloox
          * @param error The error. May be 0 in special cases.
          * @note Note that an action can cause a session state change. You may check using session->state().
          */
-        virtual void handleSessionActionError( Action action, const Session* session, const Error* error ) = 0;
+        virtual void handleSessionActionError( Action action, Session* session, const Error* error ) = 0;
 
         /**
          * This function is called if a remote entity wants to establish a Jingle session.

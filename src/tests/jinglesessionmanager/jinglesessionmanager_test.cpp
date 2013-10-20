@@ -79,8 +79,8 @@ class TestInitiator : public ClientBase, public Jingle::SessionHandler
     virtual void trackID( IqHandler *ih, const std::string& id, int context ) {}
     bool checkResult() { bool t = m_result; m_result = false; return t; }
     bool checkResult2() { bool t = m_result2; m_result2 = false; return t; }
-    virtual void handleSessionAction( Jingle::Action action, const Jingle::Session* session, const Jingle::Session::Jingle* jingle );
-    virtual void handleSessionActionError( Jingle::Action action, const Jingle::Session* /*session*/, const Error* /*e*/ ) {}
+    virtual void handleSessionAction( Jingle::Action action, Jingle::Session* session, const Jingle::Session::Jingle* jingle );
+    virtual void handleSessionActionError( Jingle::Action action, Jingle::Session* /*session*/, const Error* /*e*/ ) {}
     virtual void handleIncomingSession( Jingle::Session* session ) {}
 private:
     Jingle::SessionManager m_sm;
@@ -92,7 +92,7 @@ private:
 
 
 
-void TestInitiator::handleSessionAction( Jingle::Action action, const Jingle::Session* session, const Jingle::Session::Jingle* jingle )
+void TestInitiator::handleSessionAction( Jingle::Action action, Jingle::Session* session, const Jingle::Session::Jingle* jingle )
 {
   m_result = false;
   switch( m_test )

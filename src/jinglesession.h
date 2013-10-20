@@ -237,6 +237,12 @@ namespace gloox
             void setResponder( const JID& jid ) { m_responder = jid; }
 
             /**
+             * Returns the responder.
+             * @return The responder.
+             */
+            const JID& responder() const { return m_responder; }
+
+            /**
              * Returns this Jingle's action.
              * @return The action.
              */
@@ -321,6 +327,13 @@ namespace gloox
          * Virtual Destructor.
          */
         virtual ~Session();
+
+        /**
+         * Explicitely sets an new initiator. The initiator defaults to the initiating entity's JID.
+         * Normally, you should not need to use this function.
+         * @param initiator The new initiator.
+         */
+        void setInitiator( const JID& initiator ) { m_initiator = initiator; }
 
         /**
          * Sends a 'content-accept' notification.
@@ -486,10 +499,11 @@ namespace gloox
          * Creates a new Session from the incoming Jingle object.
          * This is a NOOP for Jingles that have an action() different from SessionInitiate.
          * @param parent The ClientBase to use for communication.
+         * @param callee The remote entity.
          * @param jingle The Jingle object to init the Session from.
          * @param jsh The handler to receive events and results.
          */
-        Session( ClientBase* parent, const Session::Jingle* jingle,
+        Session( ClientBase* parent, const JID& callee, const Session::Jingle* jingle,
                  SessionHandler* jsh );
 
         bool doAction( Action action, const Plugin* plugin );
@@ -497,8 +511,9 @@ namespace gloox
 
         ClientBase* m_parent;
         State m_state;
-        JID m_callee;
+        JID m_remote;
         JID m_initiator;
+        JID m_responder;
         SessionHandler* m_handler;
         std::string m_sid;
         bool m_valid;

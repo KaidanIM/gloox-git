@@ -62,7 +62,7 @@ class TestInitiator : public ClientBase, public Jingle::SessionHandler
 {
   public:
     TestInitiator() : m_js( new Jingle::Session( this, remote_jid, this ) ), m_result( false ), m_result2( false )
-    {}
+    { m_js->setInitiator( JID( "notself" ) ); }
     virtual ~TestInitiator() { delete m_js; }
     void setTest( int test ) { m_test = test; }
     virtual void send( const IQ& iq );
@@ -71,8 +71,8 @@ class TestInitiator : public ClientBase, public Jingle::SessionHandler
     bool checkResult() { bool t = m_result; m_result = false; return t; }
     bool checkResult2() { bool t = m_result2; m_result2 = false; return t; }
     Jingle::Session* js() { return m_js; }
-    virtual void handleSessionAction( Jingle::Action action, const Jingle::Session* session, const Jingle::Session::Jingle* jingle );
-    virtual void handleSessionActionError( Jingle::Action action, const Jingle::Session* /*session*/, const Error* /*e*/ ) {}
+    virtual void handleSessionAction( Jingle::Action action, Jingle::Session* session, const Jingle::Session::Jingle* jingle );
+    virtual void handleSessionActionError( Jingle::Action action, Jingle::Session* /*session*/, const Error* /*e*/ ) {}
     virtual void handleIncomingSession( Jingle::Session* session ) {}
 private:
     Jingle::Session* m_js;
@@ -96,8 +96,8 @@ public:
   bool checkResult2() { bool t = m_result2; m_result2 = false; return t; }
   Jingle::Session* js() { return m_js; }
   Jingle::SessionManager* sm() { return m_manager; }
-  virtual void handleSessionAction( Jingle::Action action, const Jingle::Session* session, const Jingle::Session::Jingle* jingle );
-  virtual void handleSessionActionError( Jingle::Action action, const Jingle::Session* /*session*/, const Error* /*e*/ ) {}
+  virtual void handleSessionAction( Jingle::Action action, Jingle::Session* session, const Jingle::Session::Jingle* jingle );
+  virtual void handleSessionActionError( Jingle::Action action, Jingle::Session* /*session*/, const Error* /*e*/ ) {}
 
   virtual void handleIncomingSession( Jingle::Session* session ) { m_js = session; }
 private:
@@ -112,7 +112,7 @@ TestInitiator* ini;
 TestResponder* res;
 
 
-void TestInitiator::handleSessionAction( Jingle::Action action, const Jingle::Session* session, const Jingle::Session::Jingle* jingle )
+void TestInitiator::handleSessionAction( Jingle::Action action, Jingle::Session* session, const Jingle::Session::Jingle* jingle )
 {
 //   m_result2 = false;
 
@@ -148,7 +148,7 @@ void TestInitiator::send( IQ& iq, IqHandler*, int ctx )
   {
     case 1:
     {
-      expected = "<iq to='foo@bar' from='self' id='id' type='set'><jingle xmlns='" + XMLNS_JINGLE + "' action='session-initiate' initiator='self' sid='somesid'/></iq>";
+      expected = "<iq to='foo@bar' from='self' id='id' type='set'><jingle xmlns='" + XMLNS_JINGLE + "' action='session-initiate' initiator='notself' sid='somesid'/></iq>";
       if( t->xml() == expected )
         m_result = true;
       else
@@ -165,7 +165,7 @@ void TestInitiator::trackID( IqHandler*, const std::string&, int ) {}
 
 // ------------------------------------------------------------------------------------------------------------
 
-void TestResponder::handleSessionAction( Jingle::Action action, const Jingle::Session* session, const Jingle::Session::Jingle* jingle )
+void TestResponder::handleSessionAction( Jingle::Action action, Jingle::Session* session, const Jingle::Session::Jingle* jingle )
 {
   m_result2 = false;
 
