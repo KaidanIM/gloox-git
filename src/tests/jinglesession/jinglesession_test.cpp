@@ -87,7 +87,7 @@ public:
   TestResponder() : m_js( 0 ), m_result( false ), m_result2( false ),
     m_manager( 0 )
     {}
-  virtual ~TestResponder() { delete m_js; delete m_manager; }
+  virtual ~TestResponder() { delete m_manager; }
   void setTest( int test ) { if( !m_manager ) m_manager = new Jingle::SessionManager( this, this ); m_test = test; }
   virtual void send( const IQ& iq );
   virtual void send( IQ& iq, IqHandler*, int );
