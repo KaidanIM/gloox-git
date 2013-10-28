@@ -88,6 +88,7 @@ namespace gloox
       if( it == m_sessions.end() )
       {
         Session* s = new Session( m_parent, iq.from(), j, m_handler );
+        m_sessions.push_back( s );
         m_handler->handleIncomingSession( s );
         s->handleIq( iq );
       }

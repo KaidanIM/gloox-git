@@ -58,6 +58,7 @@ namespace gloox
         c.rel_addr = (*it)->findAttribute( "rel-addr" );
         c.rel_port = atoi( (*it)->findAttribute( "rel-port" ).c_str() );
         c.type = (Type)util::lookup( (*it)->findAttribute( "type" ), typeValues );
+        m_candidates.push_back( c );
       }
     }
 

@@ -326,6 +326,15 @@ namespace gloox
       return doAction( SessionAccept, content );
     }
 
+    bool Session::sessionAccept( const PluginList& plugins )
+    {
+      if( plugins.empty() || m_state >= Pending )
+        return false;
+
+      m_state = Active;
+      return doAction( SessionAccept, plugins );
+    }
+
     bool Session::sessionInfo( const Plugin* info )
     {
       if( m_state < Pending )

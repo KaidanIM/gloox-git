@@ -336,6 +336,18 @@ namespace gloox
         void setInitiator( const JID& initiator ) { m_initiator = initiator; }
 
         /**
+         * Returns the session's initiator.
+         * @return The session's initiator.
+         */
+        const JID& initiator() const { return m_initiator; }
+
+        /**
+         * Explicitely sets a new handler for the session.
+         * @param handler The new handler.
+         */
+        void setHandler( SessionHandler* handler ) { m_handler = handler; }
+
+        /**
          * Sends a 'content-accept' notification.
          * @param content The accepted content.
          * @return @b False if a prerequisite is not met, @b true otherwise.
@@ -398,6 +410,13 @@ namespace gloox
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionAccept( const Content* content );
+
+        /**
+         * Accepts an incoming session with the given list of contents.
+         * @param content A list of Content objects that describe the accepted session parameters.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
+         */
+        bool sessionAccept( const PluginList& plugins );
 
         /**
          * Sends a 'session-info' notice.
