@@ -127,21 +127,23 @@ namespace gloox
     // ---- ~Session::Reason ----
 
     // ---- Session::Jingle ----
-    Session::Jingle::Jingle( Action action, const JID& initiator,
+    Session::Jingle::Jingle( Action action, const JID& initiator, const JID& responder,
                              const PluginList& plugins, const std::string& sid )
       : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid ),
-        m_initiator( initiator ), m_plugins( plugins ), m_tag( 0 )
+        m_initiator( initiator ), m_responder( responder ), m_plugins( plugins ), m_tag( 0 )
     {
     }
 
-    Session::Jingle::Jingle( Action action, const JID& initiator,
+#ifdef JINGLE_TEST
+    Session::Jingle::Jingle( Action action, const JID& initiator, const JID& responder,
                              const Plugin* plugin, const std::string& sid )
       : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid ),
-        m_initiator( initiator ), m_tag( 0 )
+        m_initiator( initiator ), m_responder( responder ), m_tag( 0 )
     {
       if( plugin )
         m_plugins.push_back( plugin );
     }
+#endif
 
     Session::Jingle::Jingle( const Tag* tag )
       : StanzaExtension( ExtJingle ), m_action( InvalidAction ), m_tag( 0 )
@@ -153,15 +155,6 @@ namespace gloox
       m_initiator.setJID( tag->findAttribute( "initiator" ) );
       m_responder.setJID( tag->findAttribute( "responder" ) );
       m_sid = tag->findAttribute( "sid" );
-
-//       const TagList& l = tag->children();
-//       TagList::const_iterator it = l.begin();
-//       for( ; it != l.end(); ++it )
-//       {
-//         const std::string& name = (*it)->name();
-//         if( name == "content" )
-//           m_plugins.push_back( new Content( (*it) ) );
-//       }
 
       m_tag = tag->clone();
     }
@@ -228,8 +221,6 @@ namespace gloox
       m_initiator = m_parent->jid();
       m_sid = m_parent->getID();
 
-//       m_parent->registerIqHandler( this, ExtJingle );
-
       m_valid = true;
     }
 
@@ -239,9 +230,7 @@ namespace gloox
       if( !m_parent || !m_handler || !callee /*|| jingle->action() != SessionInitiate*/ )
         return;
 
-//       m_parent->registerIqHandler( this, ExtJingle );
       m_remote = callee;
-//       m_state = Pending;
       m_sid = jingle->sid();
 
       m_valid = true;
@@ -416,7 +405,7 @@ namespace gloox
         return false;
 
       IQ init( IQ::Set, m_remote, m_parent->getID() );
-      init.addExtension( new Jingle( action, m_initiator, plugins, m_sid ) );
+      init.addExtension( new Jingle( action, m_initiator, m_responder, plugins, m_sid ) );
       m_parent->send( init, this, action );
 
       return true;
@@ -425,7 +414,7 @@ namespace gloox
     bool Session::handleIq( const IQ& iq )
     {
       const Jingle* j = iq.findExtension<Jingle>( ExtJingle );
-      if( !j || j->sid() != m_sid || !m_handler )
+      if( !j || j->sid() != m_sid || !m_handler || !m_parent )
         return false;
 
       switch( j->action() )
@@ -437,6 +426,8 @@ namespace gloox
         case SessionInitiate:
           m_state = Pending;
           m_initiator = j->initiator();
+          if( !m_responder )
+            m_responder = m_parent->jid();
           break;
         case SessionTerminate:
           m_state = Ended;
