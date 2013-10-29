@@ -96,7 +96,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             atomicrefcount.h          linklocalmanager.h           linklocalhandler.h \
                             linklocalclient.h         linklocal.h             forward.h \
                             jinglesession.h           jinglecontent.h         jingleplugin.h \
-                            jingletransport.h         jinglesessionhandler.h \
+                            jinglesessionhandler.h \
                             jinglesessionmanager.h    carbons.h               jinglepluginfactory.h \
                             jingleiceudp.h            jinglefiletransfer.h
 

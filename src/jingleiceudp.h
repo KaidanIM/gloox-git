@@ -35,7 +35,7 @@ namespace gloox
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0.7
      */
-    class ICEUDP : public Plugin
+    class GLOOX_API ICEUDP : public Plugin
     {
       public:
         /**

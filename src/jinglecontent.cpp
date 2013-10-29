@@ -45,13 +45,14 @@ namespace gloox
 
     Content::Content( const std::string& name, const PluginList& plugins, Creator creator,
                       Senders senders, const std::string& disposition )
-      : m_creator( creator ), m_disposition( disposition ),
+      : Plugin( PluginContent ), m_creator( creator ), m_disposition( disposition ),
         m_name( name ), m_senders( senders )
     {
       m_plugins = plugins;
     }
 
     Content::Content( const Tag* tag, PluginFactory* factory )
+     : Plugin( PluginContent )
     {
       if( !factory || !tag || tag->name() != "content" )
         return;
