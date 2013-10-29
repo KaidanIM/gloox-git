@@ -219,26 +219,14 @@ namespace gloox
             const std::string& sid() const { return m_sid; }
 
             /**
-             * Set's the session's initiator.
-             * @param jid The session initiator's JID.
-             */
-            void setInitiator( const JID& jid ) { m_initiator = jid; }
-
-            /**
-             * Returns the initiator.
-             * @return The initiator.
+             * Returns the 'session initiator'. This will usually be empty for any action other than 'session-initiate'.
+             * @return The 'session initiator'.
              */
             const JID& initiator() const { return m_initiator; }
 
             /**
-             * Set's the session's responder.
-             * @param jid The session responder's JID.
-             */
-            void setResponder( const JID& jid ) { m_responder = jid; }
-
-            /**
-             * Returns the responder.
-             * @return The responder.
+             * Returns the 'session responder'. This will usually be empty for any action other than 'session-accept'.
+             * @return The 'session responder'.
              */
             const JID& responder() const { return m_responder; }
 
@@ -289,24 +277,30 @@ namespace gloox
             /**
              * Constructs a new object and fills it according to the parameters.
              * @param action The Action to carry out.
-             * @param initiator The full JID initiator of the session flow.
+             * @param initiator The full JID of the initiator of the session flow. Will only be used for the SessionInitiate action.
+             * @param responder The full JID of the responder. Will only be used for the SessionAccept action.
              * @param plugins A list of contents (plugins) for the &lt;jingle&gt;
-             * element. Usually, this will be Content objects.
+             * element. Usually, these will be Content objects, but can be any Plugin-derived objects.
+             * These objects will be owned and deleted by this Jingle instance.
              * @param sid The session ID:
              */
-            Jingle( Action action, const JID& initiator,
+            Jingle( Action action, const JID& initiator, const JID& responder,
                     const PluginList& plugins, const std::string& sid );
 
+#ifdef JINGLE_TEST
             /**
              * Constructs a new object and fills it according to the parameters.
              * @param action The Action to carry out.
-             * @param initiator The full JID initiator of the session flow.
+             * @param initiator The full JID of the initiator of the session flow. Will only be used for the SessionInitiate action.
+             * @param responder The full JID of the responder. Will only be used for the SessionAccept action.
              * @param plugin A single content (plugin) for the &lt;jingle&gt;
-             * element. This may be Content object, but can be any Plugin-derived object.
+             * element. Usually, this will be a Content object, but can be any Plugin-derived object.
+             * This object will be owned and deleted by this Jingle instance.
              * @param sid The session ID:
              */
-            Jingle( Action action, const JID& initiator,
+            Jingle( Action action, const JID& initiator, const JID& responder,
                     const Plugin* plugin, const std::string& sid );
+            #endif
 
 //             /**
 //              * Copy constructor.
@@ -329,7 +323,7 @@ namespace gloox
         virtual ~Session();
 
         /**
-         * Explicitely sets an new initiator. The initiator defaults to the initiating entity's JID.
+         * Explicitely sets a new session initiator. The initiator defaults to the initiating entity's JID.
          * Normally, you should not need to use this function.
          * @param initiator The new initiator.
          */
@@ -342,6 +336,22 @@ namespace gloox
         const JID& initiator() const { return m_initiator; }
 
         /**
+         * Returns the session's responder. This will only return something useful after the 'session-accept' action has been
+         * sent/received.
+         * @return The session's responder.
+         */
+        const JID& responder() const { return m_responder; }
+
+        /**
+         * Explicitely sets the 'session responder'. By default, the associated ClientBase's jid() will be used.
+         * You can change this here.
+         * @note Changing the session responder only affects the 'session-accept' action; it will have no effect after
+         * that action has been executed or if the local entity is the session initiator.
+         * @param jid The session responder's full JID.
+         */
+        void setResponder( const JID& jid ) { m_responder = jid; }
+
+        /**
          * Explicitely sets a new handler for the session.
          * @param handler The new handler.
          */
@@ -350,6 +360,7 @@ namespace gloox
         /**
          * Sends a 'content-accept' notification.
          * @param content The accepted content.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentAccept( const Content* content );
@@ -357,6 +368,7 @@ namespace gloox
         /**
          * Sends a 'content-add' request.
          * @param content The proposed content to be added.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentAdd( const Content* content );
@@ -364,6 +376,7 @@ namespace gloox
         /**
          * Sends a 'content-add' request.
          * @param contents A list of proposed content to be added.
+         * These objects will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentAdd( const PluginList& contents );
@@ -371,6 +384,7 @@ namespace gloox
         /**
          * Sends a 'content-modify' request.
          * @param content The proposed content type to be modified.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentModify( const Content* content );
@@ -378,6 +392,7 @@ namespace gloox
         /**
          * Sends a 'content-reject' reply.
          * @param content The rejected content.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentReject( const Content* content );
@@ -385,6 +400,7 @@ namespace gloox
         /**
          * Sends a 'content-remove' request.
          * @param content The content type to be removed.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool contentRemove( const Content* content );
@@ -392,6 +408,7 @@ namespace gloox
         /**
          * Sends a 'description-info' notice.
          * @param info The payload.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool descriptionInfo( const Plugin* info );
@@ -399,6 +416,7 @@ namespace gloox
         /**
          * Sends a 'security-info' notice.
          * @param info A security pre-condition.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool securityInfo( const Plugin* info );
@@ -407,6 +425,7 @@ namespace gloox
          * Accepts an incoming session with the given content.
          * @param content A pair of application description and transport method wrapped in a Content that describes
          * the accepted session parameters.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionAccept( const Content* content );
@@ -414,6 +433,7 @@ namespace gloox
         /**
          * Accepts an incoming session with the given list of contents.
          * @param content A list of Content objects that describe the accepted session parameters.
+         * These objects will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionAccept( const PluginList& plugins );
@@ -421,6 +441,7 @@ namespace gloox
         /**
          * Sends a 'session-info' notice.
          * @param info The payload.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionInfo( const Plugin* info );
@@ -428,6 +449,7 @@ namespace gloox
         /**
          * Initiates a session with a remote entity.
          * @param content A Content object. You may use initiate( const PluginList& contents ) for more than one Content.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionInitiate( const Content* content );
@@ -437,6 +459,7 @@ namespace gloox
          * @param plugins A list of Content objects. It is important to pass a (list of) Content objects here.
          * Even though e.g. Jingle::ICEUDP are Plugin-derived, too, using anything other than Content here will result
          * in erroneous behaviour at best. You may use sessionInitiate( const Content* content ) for just one Content.
+         * These objects will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionInitiate( const PluginList& plugins );
@@ -445,6 +468,7 @@ namespace gloox
          * Terminates the current session, if it is at least in Pending state, with the given reason. The sid parameter
          * is ignored unless the reason is AlternativeSession.
          * @param reason The reason for terminating the session.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool sessionTerminate( Session::Reason* reason );
@@ -452,6 +476,7 @@ namespace gloox
         /**
          * Sends a 'transport-accept' reply.
          * @param content The accepted transport wrapped in a Content.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool transportAccept( const Content* content );
@@ -459,6 +484,7 @@ namespace gloox
         /**
          * Sends a 'transport-info' notice.
          * @param info The payload.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool transportInfo( const Plugin* info );
@@ -466,6 +492,7 @@ namespace gloox
         /**
          * Sends a 'transport-reject' reply.
          * @param content The rejected transport wrapped in a Content.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool transportReject( const Content* content );
@@ -473,6 +500,7 @@ namespace gloox
         /**
          * Sends a 'transport-replace' request.
          * @param content The proposed transport to be replaced wrapped in a Content.
+         * This object will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool transportReplace( const Content* content );
@@ -484,7 +512,8 @@ namespace gloox
         State state() const { return m_state; }
 
         /**
-         * Sets the session's ID.
+         * Sets the session's ID. This will be initialized to a random value (or taken from an incoming session request)
+         * by default. You should not need to set the session ID manually.
          * @param sid  The session's id.
          */
         void setSID( const std::string& sid ) { m_sid = sid; }

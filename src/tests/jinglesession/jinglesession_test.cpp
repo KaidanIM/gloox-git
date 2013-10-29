@@ -203,7 +203,7 @@ void TestResponder::send( IQ& iq, IqHandler*, int ctx )
     case 1:
       break;
     case 2:
-      expected = "<iq to='self' from='foo@bar' id='id' type='set'><jingle xmlns='" + XMLNS_JINGLE + "' action='session-accept' sid='somesid'/></iq>";
+      expected = "<iq to='self' from='foo@bar' id='id' type='set'><jingle xmlns='" + XMLNS_JINGLE + "' action='session-accept' responder='self' sid='somesid'/></iq>";
       if( t->xml() == expected )
         m_result = true;
       else
