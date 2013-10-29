@@ -35,7 +35,7 @@ namespace gloox
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0.5
      */
-    class Transport : public Plugin
+    class GLOOX_API Transport : public Plugin
     {
       public:
         /**

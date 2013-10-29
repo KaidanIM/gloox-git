@@ -34,12 +34,12 @@ namespace gloox
     };
 
     FileTransfer::FileTransfer( Type type, const FileList& files )
-      : m_type( type ), m_files( files )
+      : Plugin( PluginFileTransfer ), m_type( type ), m_files( files )
     {
     }
 
     FileTransfer::FileTransfer( const Tag* tag )
-      : m_type( Invalid )
+      : Plugin( PluginFileTransfer ), m_type( Invalid )
     {
       if( !tag || tag->xmlns() != XMLNS_JINGLE_FILE_TRANSFER )
         return;

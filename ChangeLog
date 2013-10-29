@@ -6,6 +6,7 @@ v1.0.10 -- xx yyy 2013
 - Jingle: fixed ::ICEUDP to actually add candidates; added ::Session::initiator(), ::setHandler(), ::sessionAccept( PluginList ); fixed storing of new sessions in ::SessionManager (patches by Erich Keane)
 - Jingle: removed Jingle::setInitiator() and ::setResponder() (now provided by ctor)
 - AtomicRefCount: fixed compilation on iOS (patch by Erich Keane)
+- Jingle::Plugin: added JinglePluginType, pluginType(), and findPlugin() to easily look for and retrieve specific plugins
 
 
 

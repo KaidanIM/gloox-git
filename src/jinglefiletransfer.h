@@ -34,7 +34,7 @@ namespace gloox
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0.7
      */
-    class FileTransfer : public Plugin
+    class GLOOX_API FileTransfer : public Plugin
     {
       public:
 

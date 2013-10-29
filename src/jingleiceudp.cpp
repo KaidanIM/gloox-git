@@ -30,11 +30,12 @@ namespace gloox
     };
 
     ICEUDP::ICEUDP( const std::string& pwd, const std::string& ufrag, CandidateList& candidates )
-      : m_pwd( pwd ), m_ufrag( ufrag), m_candidates( candidates )
+      : Plugin( PluginICEUDP ), m_pwd( pwd ), m_ufrag( ufrag), m_candidates( candidates )
     {
     }
 
     ICEUDP::ICEUDP( const Tag* tag )
+      : Plugin( PluginICEUDP )
     {
       if( !tag || tag->name() != "transport" || tag->xmlns() != XMLNS_JINGLE_ICE_UDP )
         return;

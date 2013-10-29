@@ -31,13 +31,25 @@ namespace gloox
     class Plugin;
     class PluginFactory;
 
+    enum JinglePluginType
+    {
+      PluginNone,                   /**< Invalid plugin type. */
+      PluginContent,                /**< A plugin abstracting a &lt;content&gt; element. May contain further plugins. */
+      PluginFileTransfer,           /**< A plugin for File Transfer. */
+      PluginICEUDP,                 /**< A plugin for ICE UDP transport negotiation. */
+      PluginReason,                 /**< An abstraction of a Jingle (@xep{0166}) session terminate reason. */
+      PluginUser                    /**< User-supplied plugins must use IDs above this. Do
+                                     * not hard-code PluginUser's value anywhere, it is subject
+                                     * to change. */
+    };
+
     /**
      * A list of Jingle plugins.
      */
     typedef std::list<const Plugin*> PluginList;
 
     /**
-     * @brief An abstraction of a Jingle plugin. This is part of Jingle (@xep{0166}) et al.
+     * @brief An abstraction of a Jingle plugin. This is part of Jingle (@xep{0166} et al.)
      *
      * This is the base class for Content and all other pluggable Jingle-related containers, e.g.
      * session information, such as the 'ringing' info in Jingle Audio, or Jingle DTMF, etc.
@@ -58,7 +70,7 @@ namespace gloox
         /**
          * Simple initializer.
          */
-        Plugin() : m_factory( 0 ) {}
+        Plugin( JinglePluginType type ) : m_factory( 0 ), m_pluginType( type ) {}
 
         /**
          * Virtual destructor.
@@ -70,6 +82,33 @@ namespace gloox
          * @param plugin A plugin to be embedded. Will be owned by this instance and deleted in the destructor.
          */
         void addPlugin( const Plugin* plugin ) { if( plugin ) m_plugins.push_back( plugin ); }
+
+        /**
+         * Finds a Jingle::Plugin of a particular type.
+         * @param type JinglePluginType to search for.
+         * @return A pointer to the first Jingle::Plugin of the given type, or 0 if none was found.
+         */
+        const Plugin* findPlugin( int type ) const
+        {
+          PluginList::const_iterator it = m_plugins.begin();
+          for( ; it != m_plugins.end() && (*it)->pluginType() != type; ++it ) ;
+          return it != m_plugins.end() ? (*it) : 0;
+        }
+
+        /**
+         * Finds a Jingle::Plugin of a particular type.
+         * Example:
+         * @code
+         * const MyPlugin* c = plugin.findPlugin<MyPlugin>( PluginMyPlugin );
+         * @endcode
+         * @param type The plugin type to look for.
+         * @return The static_cast' type, or 0 if none was found.
+         */
+        template< class T >
+        inline const T* findPlugin( int type ) const
+        {
+          return static_cast<const T*>( findPlugin( type ) );
+        }
 
         /**
          * Returns a reference to a list of embedded plugins.
@@ -113,12 +152,20 @@ namespace gloox
          */
         virtual Plugin* clone() const = 0;
 
+        /**
+         * Returns the plugin type.
+         * @return The plugin type.
+         */
+        JinglePluginType pluginType() const { return m_pluginType; }
+
       protected:
         PluginList m_plugins;
         PluginFactory* m_factory;
 
       private:
         void setFactory( PluginFactory* factory ) { m_factory = factory; }
+
+        JinglePluginType m_pluginType;
 
     };
 

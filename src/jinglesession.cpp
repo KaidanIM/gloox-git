@@ -78,11 +78,12 @@ namespace gloox
     Session::Reason::Reason( Reasons reason,
                              const std::string& sid,
                              const std::string& text)
-      : m_reason( reason ), m_sid( sid ), m_text( text )
+      : Plugin( PluginReason ), m_reason( reason ), m_sid( sid ), m_text( text )
     {
     }
 
     Session::Reason::Reason( const Tag* tag )
+      : Plugin( PluginReason )
     {
       if( !tag || tag->name() != "reason" )
         return;
