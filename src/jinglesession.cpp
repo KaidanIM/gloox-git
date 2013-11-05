@@ -437,10 +437,10 @@ namespace gloox
           break;
       }
 
-      m_handler->handleSessionAction( j->action(), this, j );
-
       IQ re( IQ::Result, iq.from(), iq.id() );
       m_parent->send( re );
+
+      m_handler->handleSessionAction( j->action(), this, j );
 
       return true;
     }
