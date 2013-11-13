@@ -7,7 +7,7 @@ v1.0.10 -- xx yyy 2013
 - Jingle: removed Jingle::setInitiator() and ::setResponder() (now provided by ctor)
 - AtomicRefCount: fixed compilation on iOS (patch by Erich Keane)
 - Jingle::Plugin: added JinglePluginType, pluginType(), and findPlugin() to easily look for and retrieve specific plugins
-
+- ConnectionBOSH: fixed return value for recv() (patch by Sudarshan Prasad)
 
 
 v1.0.9 -- 15 Oct 2013

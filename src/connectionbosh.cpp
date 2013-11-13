@@ -160,13 +160,15 @@ namespace gloox
 
   ConnectionError ConnectionBOSH::recv( int timeout )
   {
+    ConnectionError ret = ConnNoError;
+
     if( m_state == StateDisconnected )
       return ConnNotConnected;
 
     if( !m_connectionPool.empty() )
-      m_connectionPool.front()->recv( 0 );
+      ret = m_connectionPool.front()->recv( 0 );
     if( !m_activeConnections.empty() )
-      m_activeConnections.front()->recv( timeout );
+      ret = m_activeConnections.front()->recv( timeout );
 
     // If there are no open requests then the spec allows us to send an empty request...
     // (Some CMs do not obey this, it seems)
@@ -177,7 +179,7 @@ namespace gloox
       sendXML();
     }
 
-    return ConnNoError; // FIXME?
+    return ret;
   }
 
   bool ConnectionBOSH::send( const std::string& data )
