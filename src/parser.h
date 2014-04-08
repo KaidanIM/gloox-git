@@ -104,7 +104,6 @@ namespace gloox
       void addCData();
       bool closeTag();
       bool isWhitespace( unsigned char c );
-      bool isValid( unsigned char c );
       void streamEvent( Tag* tag );
       ForwardScanState forwardScan( std::string::size_type& pos, const std::string& data,
                                     const std::string& needle );

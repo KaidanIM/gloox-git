@@ -173,12 +173,6 @@ namespace gloox
       const unsigned char c = data[i];
 //       printf( "found char:   %c, ", c );
 
-      if( !isValid( c ) )
-      {
-        cleanup();
-        return static_cast<int>( i );
-      }
-
       switch( m_state )
       {
         case Initial:
@@ -799,11 +793,6 @@ namespace gloox
     m_attribs.clear();
     m_state = Initial;
     m_preamble = 0;
-  }
-
-  bool Parser::isValid( unsigned char c )
-  {
-    return ( c != 0xc0 || c != 0xc1 || c < 0xf5 );
   }
 
   bool Parser::isWhitespace( unsigned char c )
