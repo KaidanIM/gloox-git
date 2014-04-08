@@ -1,4 +1,4 @@
-v1.0.10 -- xx yyy 2013
+v1.0.10 -- 09 Apr 2014
 ---------------------
 - TLSSChannel: use malloc/realloc/free instead of their legacy Local* variants (fixes #222)
 - VCard: remove \r from vcard photos. Fixes a recent change Facebook made to their vcard pictures (patch by Fernando Sanchez)
