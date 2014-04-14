@@ -71,7 +71,7 @@ namespace gloox
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
       bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
 
-      gnutls_certificate_credentials m_credentials;
+      gnutls_certificate_credentials_t m_credentials;
 
   };
 
