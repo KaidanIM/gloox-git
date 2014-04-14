@@ -61,7 +61,7 @@ namespace gloox
          * This function is called if a remote entity wants to establish a Jingle session.
          * @param session The new Jingle session.
          * @note Note that you have to explicitely accept or reject the session by calling either of session->sessionAccept() and
-         * session->sessionReject(), respectively.
+         * session->sessionTerminate(), respectively.
          */
         virtual void handleIncomingSession( Session* session ) = 0;
 
