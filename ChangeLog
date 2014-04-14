@@ -1,3 +1,9 @@
+v1.1 -- yy Apr 2014
+-------------------
+- GnuTLS: updated use of priority API
+
+
+
 v1.0.10 -- 09 Apr 2014
 ---------------------
 - TLSSChannel: use malloc/realloc/free instead of their legacy Local* variants (fixes #222)
@@ -121,7 +127,7 @@ v1.0.1 -- 29 Jun 2013
 - NonSASLAuth: fixed resource usage by deprecating ClientBase::m_selectedResource
 - InBandBytestream: don't call handler in dtor
 - util: fixed long2string()
-- fixed a few leaks in GnutTLS client code (#181)
+- fixed a few leaks in GnuTLS client code (#181)
 - VCard: made getters const (#186) (binary-incompatible change!)
 - PubsubManager: fixed using wrong Tag (#190)
 - Search: fixed search() (#193)
