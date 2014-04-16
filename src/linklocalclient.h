@@ -6,7 +6,7 @@
   agreement can be found in the file LICENSE in this distribution.
   This software may not be copied, modified, sold or distributed
   other than expressed in the named license agreement.
- 
+
   This software is distributed without any warranty.
 */
 
@@ -61,7 +61,7 @@ namespace gloox
          * @note Use this function only on a Client instance that you created for an @b incoming connection.
          */
         bool connect();
-        
+
         /**
          * Starts resolving the given service. Use values from Handler::handleBrowseReply().
          * @param service The service to connect to.
@@ -72,7 +72,7 @@ namespace gloox
          * @return @b True if resolving the service could be started successfully, @b false otherwise.
          * @note Use this function only for @b outgoing connections.
          */
-        bool connect( const std::string& service, const std::string& type, const std::string& domain, int interface = 0 );
+        bool connect( const std::string& service, const std::string& type, const std::string& domain, int iface = 0 );
 
         /**
          * Call this periodically to receive data from the underlying socket.
@@ -81,10 +81,10 @@ namespace gloox
          * @return The state of the underlying connection.
          */
         virtual ConnectionError recv( int timeout = -1 );
-        
+
         // reimplemented from ConnectionDataHandler, overwriting ClientBase::handleConnect()
         virtual void handleConnect( const ConnectionBase* connection );
-                
+
       protected:
         // reimplemented from ClientBase
         virtual void handleStartNode( const Tag* start );
@@ -108,7 +108,7 @@ namespace gloox
         DNSServiceRef m_currentRef;
 
         std::string m_to;
-        
+
         int m_interface;
         int m_port;
 

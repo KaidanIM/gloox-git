@@ -1,6 +1,7 @@
 v1.0.11 -- xx Apr 2014
 ----------------------
 - GnuTLS: updated use of priority API
+- LinkLocal*: compile fixes for MSVC 2008 (thanks to Serhiy M. Vasylenko)
 
 
 
