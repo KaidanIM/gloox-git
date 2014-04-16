@@ -1,12 +1,12 @@
 /*
   Copyright (c) 2012-2013 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
- 
+
   This software is distributed under a license. The full license
   agreement can be found in the file LICENSE in this distribution.
   This software may not be copied, modified, sold or distributed
   other than expressed in the named license agreement.
- 
+
   This software is distributed without any warranty.
 */
 
@@ -20,9 +20,9 @@
 #include "util.h"
 
 #include <cstdio>
-#include <unistd.h>
 
 #if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
+# include <unistd.h>
 # include <arpa/inet.h>
 #endif
 
@@ -104,7 +104,7 @@ namespace gloox
                                                   0,                                      // flags
                                                   m_interface,                            // interface, 0 = any, -1 = local only
                                                   service.c_str(),                        // service name, 0 = local computer name
-                                                  LINKLOCAL_SERVICE_TYPE.c_str(),              // service type
+                                                  LINKLOCAL_SERVICE_TYPE.c_str(),         // service type
                                                   m_domain.c_str(),                       // domain, 0 = default domain(s)
                                                   m_host.c_str(),                         // host, 0 = default host name(s)
                                                   htons( m_port ),                        // port
@@ -180,8 +180,8 @@ namespace gloox
 
 
     void Manager::handleBrowseReply( DNSServiceRef /*sdRef*/, DNSServiceFlags flags, uint32_t interfaceIndex,
-                                        DNSServiceErrorType errorCode, const char* serviceName, const char* regtype,
-                                        const char* replyDomain, void* context )
+                                     DNSServiceErrorType errorCode, const char* serviceName, const char* regtype,
+                                     const char* replyDomain, void* context )
     {
       if( !context || errorCode != kDNSServiceErr_NoError )
         return;
@@ -192,10 +192,10 @@ namespace gloox
 
       Manager* m = static_cast<Manager*>( context );
       m->handleBrowse( f, serviceName, regtype, replyDomain, interfaceIndex, ( flags & kDNSServiceFlagsMoreComing ) == kDNSServiceFlagsMoreComing );
-                                              
+
     }
 
-    void Manager::handleBrowse( Flag flag, const std::string& service, const std::string& regtype, const std::string& domain, int interface, bool moreComing )
+    void Manager::handleBrowse( Flag flag, const std::string& service, const std::string& regtype, const std::string& domain, int iface, bool moreComing )
     {
       Service s( flag, service, regtype, domain, interface );
       m_tmpServices.push_back( s );
@@ -234,7 +234,7 @@ namespace gloox
 //       StringMap result;
 //       if( txt.empty() )
 //         return result;
-// 
+//
 //       std::string::const_iterator it = txt.begin();
 //       while( it < txt.end() )
 //       {
@@ -244,7 +244,7 @@ namespace gloox
 //         size_t pos = tmp.find( '=' );
 //         result.insert( std::make_pair( tmp.substr( 0, pos ), tmp.substr( pos + 1 ) ) );
 //       }
-// 
+//
 //       return result;
 //     }
 

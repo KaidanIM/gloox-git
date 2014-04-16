@@ -6,7 +6,7 @@
   agreement can be found in the file LICENSE in this distribution.
   This software may not be copied, modified, sold or distributed
   other than expressed in the named license agreement.
- 
+
   This software is distributed without any warranty.
 */
 
@@ -53,7 +53,7 @@ namespace gloox
     }
 
     bool Client::connect( const std::string& service, const std::string& type,
-                          const std::string& domain, int interface )
+                          const std::string& domain, int iface )
     {
       m_interface = interface;
       return resolve( service, type, domain );
@@ -67,28 +67,28 @@ namespace gloox
       {
         if( !m_currentRef )
           return ConnNoError;
-        
+
         struct timeval tv;
-        
+
         fd_set fds;
         FD_ZERO( &fds );
         // the following causes a C4127 warning in VC++ Express 2008 and possibly other versions.
         // however, the reason for the warning can't be fixed in gloox.
         FD_SET( DNSServiceRefSockFD( m_currentRef ), &fds );
-        
+
         tv.tv_sec = timeout / 1000000;
         tv.tv_usec = timeout % 1000000;
-        
+
         if( select( FD_SETSIZE, &fds, 0, 0, timeout == -1 ? 0 : &tv ) > 0 )
         {
           if( FD_ISSET( DNSServiceRefSockFD( m_currentRef ), &fds ) != 0 )
             DNSServiceProcessResult( m_currentRef );
         }
-        
+
         return ConnNoError;
       }
     }
-    
+
 
     bool Client::resolve( const std::string& service, const std::string& type,
                           const std::string& domain )
@@ -96,7 +96,7 @@ namespace gloox
       m_to = service;
       m_rRef = 0;
       DNSServiceErrorType e = DNSServiceResolve( &m_rRef, 0, m_interface, service.c_str(), type.c_str(),
-                                                domain.c_str(), &handleResolveReply, this );
+                                                 domain.c_str(), (DNSServiceResolveReply)&handleResolveReply, this );
       if( e != kDNSServiceErr_NoError )
       {
         DNSServiceRefDeallocate( m_rRef );
@@ -125,7 +125,7 @@ namespace gloox
       m_port = port;
       m_qRef = 0;
       DNSServiceErrorType e = DNSServiceQueryRecord( &m_qRef, 0, m_interface, hostname.c_str(), kDNSServiceType_A,
-                                                    kDNSServiceClass_IN, &handleQueryReply, this );
+                                                     kDNSServiceClass_IN, (DNSServiceQueryRecordReply)&handleQueryReply, this );
       if( e != kDNSServiceErr_NoError )
       {
         // printf( "Client::query() failed\n" );

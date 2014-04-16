@@ -1,7 +1,7 @@
 /*
   Copyright (c) 2012-2013 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
- 
+
   This software is distributed under a license. The full license
   agreement can be found in the file LICENSE in this distribution.
   This software may not be copied, modified, sold or distributed
@@ -81,7 +81,7 @@ namespace gloox
      * @endcode
      *
      * @note Note that your own service may show up in the list, too.
-     * 
+     *
      * ### Connecting to an XMPP service
      *
      * Using the info from the Service struct you can initiate a connection to the remote entity.
@@ -129,12 +129,12 @@ namespace gloox
      * @endcode
      *
      * Other entities on the network will now be informed about the availability of your service.
-     * 
+     *
      * ### Listening for incoming connections
      *
      * The second argument to Manager's constructor is a ConnectionHandler-derived class that
      * will receive incoming connections.
-     * 
+     *
      * When registerService() gets called, the Manager will also start a local server that will
      * accept incoming connections. By default, it will listen on port 5562.
      *
@@ -149,7 +149,7 @@ namespace gloox
      * @endcode
      *
      * Finally you have to attach the incoming connection to the Client instance, and call connect().
-     * 
+     *
      * @code
      * connection->registerConnectionDataHandler( &c );
      * c.setConnectionImpl( connection );
@@ -166,9 +166,9 @@ namespace gloox
      */
     class GLOOX_API Manager
     {
-      
+
       public:
-        
+
         /**
          * Creates a new Link-local Manager instance. You can call @c registerService() and/or @c startBrowsing()
          * immediately on a new Manager object, it will use sane defaults.
@@ -317,7 +317,7 @@ namespace gloox
                                        DNSServiceErrorType errorCode, const char* serviceName, const char* regtype,
                                        const char* replyDomain, void* context );
 
-        void handleBrowse( Flag flag, const std::string& service, const std::string& regtype, const std::string& domain, int interface, bool moreComing );
+        void handleBrowse( Flag flag, const std::string& service, const std::string& regtype, const std::string& domain, int iface, bool moreComing );
 
         typedef std::list<ConnectionTCPClient*> ConnectionList;
         typedef std::map<ConnectionTCPClient*, const JID> ConnectionMap;
@@ -327,7 +327,7 @@ namespace gloox
 
         ServiceList m_tmpServices;
 //         ServiceList m_services;
-         
+
         std::string m_user;
         std::string m_host;
         std::string m_domain;

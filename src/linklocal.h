@@ -42,7 +42,7 @@ namespace gloox
       AddService,            /**< A service has been added. */
       RemoveService          /**< A service has been removed. */
     };
-    
+
     /**
      * @brief An abstraction of the parameters of a single link-local service.
      *
@@ -55,21 +55,21 @@ namespace gloox
 
       private:
         Service( Flag _flag, const std::string& _service, const std::string& _regtype, const std::string& _domain, int _interface )
-         : flag( _flag ), service( _service ), regtype( _regtype ), domain( _domain ), interface( _interface ) {}
+         : flag( _flag ), service( _service ), regtype( _regtype ), domain( _domain ), iface( _interface ) {}
 
       public:
         Flag flag;
         std::string service;
         std::string regtype;
         std::string domain;
-        int interface;
+        int iface;
     };
 
     /**
      * A list of services.
      */
     typedef std::list<Service> ServiceList;
-    
+
   }
 
 }
