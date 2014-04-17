@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2008-2013 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2008-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -54,7 +54,7 @@ namespace gloox
     Content::Content( const Tag* tag, PluginFactory* factory )
      : Plugin( PluginContent )
     {
-      if( !factory || !tag || tag->name() != "content" )
+      if( !tag || tag->name() != "content" )
         return;
 
       m_name = tag->findAttribute( "name" );
@@ -62,7 +62,8 @@ namespace gloox
       m_senders = (Senders)util::lookup( tag->findAttribute( "senders" ), sendersValues );
       m_disposition = tag->findAttribute( "disposition" );
 
-      factory->addPlugins( *this, tag );
+      if( factory )
+        factory->addPlugins( *this, tag );
     }
 
     Content::~Content()
