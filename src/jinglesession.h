@@ -147,7 +147,7 @@ namespace gloox
             /**
              * Virtual destructor.
              */
-            virtual ~Reason() {}
+            virtual ~Reason();
 
             /**
              * Returns the reason for the session termination.

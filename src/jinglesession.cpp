@@ -99,6 +99,10 @@ namespace gloox
       }
     }
 
+    Session::Reason::~Reason()
+    {
+    }
+
     const std::string& Session::Reason::filterString() const
     {
       static const std::string filter = "jingle/reason";
