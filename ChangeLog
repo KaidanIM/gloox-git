@@ -4,7 +4,8 @@ v1.0.11 -- 13 Sep 2014
 - LinkLocal*: compile fixes for MSVC 2008 (thanks to Serhiy M. Vasylenko)
 - fixed Debian bug #746857, worked around #758899
 - fixed memory leak (#240)
-- fixed compatibility with recent GnuTLS  versions, fixed GnuTLS check (thanks to Andreas Metzler) (fixes #231)
+- fixed compatibility with recent GnuTLS  versions, fixed GnuTLS check (thanks to Andreas Metzler) (#231)
+- Jingle::Session: fixed state error (thanks to leerymatthew) (#236)
 
 
 
