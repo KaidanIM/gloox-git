@@ -18,12 +18,6 @@
 
 #include <errno.h>
 
-#ifdef HAVE_PTHREAD
-extern "C" {
-GCRY_THREAD_OPTION_PTHREAD_IMPL;
-}
-#endif
-
 namespace gloox
 {
 
@@ -48,8 +42,6 @@ namespace gloox
                            const std::string& /*clientCerts*/,
                            const StringList& /*cacerts*/ )
   {
-    gcry_control( GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread );
-
     if( m_initLib && gnutls_global_init() != 0 )
       return false;
 
