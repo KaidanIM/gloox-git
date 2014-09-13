@@ -322,7 +322,7 @@ namespace gloox
 
     bool Session::sessionAccept( const PluginList& plugins )
     {
-      if( plugins.empty() || m_state >= Pending )
+      if( plugins.empty() || m_state != Pending )
         return false;
 
       m_state = Active;
