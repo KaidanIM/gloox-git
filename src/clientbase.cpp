@@ -1019,7 +1019,7 @@ namespace gloox
       m_smQueue.insert( std::make_pair( ++m_smSent, tag ) );
       m_queueMutex.unlock();
     }
-    else if( del )
+    else if( del || m_smContext < CtxSMEnabled )
       delete tag;
   }
 

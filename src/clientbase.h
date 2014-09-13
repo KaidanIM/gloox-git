@@ -909,7 +909,7 @@ namespace gloox
       enum SMContext
       {
         CtxSMInvalid,                    /**< Initial value. */
-        CtxSMFailed,                      /**< Either of the above failed. */
+        CtxSMFailed,                     /**< Either of the below failed. */
         CtxSMEnable,                     /**< 'enable' request sent */
         CtxSMResume,                     /**< 'resume' request sent */
         CtxSMEnabled,                    /**< Stream Management successfully enabled. */
