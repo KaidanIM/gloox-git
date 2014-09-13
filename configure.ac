@@ -124,27 +124,20 @@ fi
 
 dnl GnuTLS
 if test "$ssl" = "no"; then
-  AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
+  AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[yes/no]],
                                      [Support Stream Encryption (needs GnuTLS)]),
         gnutls=$withval, gnutls=yes)
   if test "$gnutls" != "no"; then
-    if test "$gnutls" != "yes"; then
-      LDFLAGS="${LDFLAGS} `pkg-config gnutls --libs-only-L`"
-      CPPFLAGS="${CPPFLAGS} `pkg-config gnutls --cflags`"
+    PKG_CHECK_MODULES([GNUTLS], [gnutls >= 2.12], [gnutls=yes], [gnutls=no])
+    if test "$gnutls" = "yes" ; then
+      LIBS="${LIBS} ${GNUTLS_LIBS}"
+      CPPFLAGS="${CPPFLAGS} ${GNUTLS_CFLAGS}"
+      AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support (GnuTLS). Undefine HAVE_OPENSSL.])
+      AC_DEFINE(HAVE_GNUTLS_SESSION_CHANNEL_BINDING, 1, [Define to 1 if you have GnuTLS 2.12.0 or above.] )
+      ssl=yes
+    else
+      AC_MSG_WARN([GnuTLS not found])
     fi
-    AC_CHECK_HEADER(gnutls/gnutls.h,
-    AC_CHECK_LIB(gnutls, gnutls_check_version,
-            [gnutls=yes LIBS="${LIBS} `pkg-config gnutls --libs` -lgcrypt"], gnutls=no),
-            gnutls=no)
-  fi
-  if test "$gnutls" != "no" ; then
-    AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support (GnuTLS). Undefine HAVE_OPENSSL.])
-    ssl=yes
-    AC_CHECK_LIB(gnutls, gnutls_session_channel_binding,
-            [AC_MSG_RESULT(yes)
-            AC_DEFINE(HAVE_GNUTLS_SESSION_CHANNEL_BINDING, 1, [Define to 1 if you have GnuTLS 2.12.0 or above.] )], [AC_MSG_RESULT(no)])
-  else
-    AC_MSG_WARN([GnuTLS not found])
   fi
   AC_MSG_CHECKING([if GnuTLS should be used])
   AC_MSG_RESULT($gnutls)
