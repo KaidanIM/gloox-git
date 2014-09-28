@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../config.h"
 #include "../linklocalmanager.h"
 #include "../linklocalhandler.h"
@@ -131,7 +143,7 @@ class LinkLocalExample : public LinkLocal::Handler, LogHandler, ConnectionHandle
       m_client->registerConnectionListener( this );
       m_client->connect();
     }
-    
+
     virtual void handleMessage( const Message& msg, MessageSession* /*session*/ = 0 )
     {
       m_ok = true;
@@ -139,9 +151,9 @@ class LinkLocalExample : public LinkLocal::Handler, LogHandler, ConnectionHandle
       Message m( Message::Chat, msg.from(), "hey!" );
       m_client->send( m );
     }
-    
+
     virtual void onConnect() {}
-    
+
     virtual void onDisconnect( ConnectionError e )
     {
       printf( "onDisconnect\n" );
@@ -152,7 +164,7 @@ class LinkLocalExample : public LinkLocal::Handler, LogHandler, ConnectionHandle
 //     {
 //       if( !client)
 //         return;
-// 
+//
 //       printf( "received LinkLocalClient, connect() successful!\n" );
 //       client->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 //       client->registerMessageHandler( this );
@@ -163,15 +175,15 @@ class LinkLocalExample : public LinkLocal::Handler, LogHandler, ConnectionHandle
 //         delete m_client;
 //       m_client = client;
 //     }
-    
+
     virtual void onResourceBind( const std::string& resource ) { (void)resource; }
-    
+
     virtual void onResourceBindError( const Error* error ) { (void) (error); }
-    
+
     virtual void onSessionCreateError( const Error* error ) { (void) (error); }
-    
+
     virtual bool onTLSConnect( const CertInfo& info ) { return true; }
-    
+
     virtual void onStreamEvent( StreamEvent event ) { (void) (event); }
 private:
     LogSink m_log;
@@ -180,7 +192,7 @@ private:
     LinkLocal::Client* m_fClient;
     bool m_disconnect;
     bool m_ok;
-  
+
 };
 
 int main( int /*argc*/, char** /*argv*/ )
