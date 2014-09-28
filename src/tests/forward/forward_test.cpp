@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../gloox.h"
 #include "../../jid.h"
 #include "../../delayeddelivery.h"
@@ -50,13 +62,13 @@ int main( int /*argc*/, char** /*argv*/ )
   DelayedDelivery* d = new DelayedDelivery( JID( "from@me/res" ), "thestamp" );
   Forward* f = new Forward( fm, d );
   m.addExtension( f );
-  
+
   Tag* tag = m.tag();
   ForwardTest t;
   t.testTag( tag );
-  
-  
-  
+
+
+
 
   // -------
   name = "create Forward 1";
