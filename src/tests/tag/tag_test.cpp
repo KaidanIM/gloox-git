@@ -309,6 +309,20 @@ int main( int /*argc*/, char** /*argv*/ )
 
   //-------
   {
+    name = "deep xmlns";
+    Tag t( "abc" );
+    Tag* f = new Tag( &t, "def" );
+    f = new Tag( f, "ghi" );
+    t.setXmlns( "foo" );
+    if( t.xml() != "<abc xmlns='foo'><def><ghi/></def></abc>" )
+    {
+      ++fail;
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+  }
+
+  //-------
+  {
     name = "simple nested xmlns 2";
     Tag t( "abc" );
     t.setXmlns( "foo" );
