@@ -110,13 +110,12 @@ source        tlsgnutlsserver.cpp
 source        tlsopensslbase.cpp
 source        tlsopensslclient.cpp
 source        tlsopensslserver.cpp
-source        tlsschannel.cpp
 source        uniquemucroom.cpp
 source        util.cpp
 source        vcard.cpp
 source        vcardmanager.cpp
 source        vcardupdate.cpp
-source        xhtmlim.cpp bob.cpp connectioncompression.cpp jinglecontent.cpp jingledescription.cpp jingledtmf.cpp jingleiceudp.cpp jinglerawudp.cpp jinglertp.cpp jinglesession.cpp mucinvite.cpp rap.cpp
+source        xhtmlim.cpp bob.cpp connectioncompression.cpp jinglecontent.cpp jingledescription.cpp jingledtmf.cpp jingleiceudp.cpp jinglerawudp.cpp jinglertp.cpp jinglesession.cpp mucinvite.cpp rap.cpp asyncdns.cpp thread.cpp tlsschannelbase.cpp tlsschannelclient.cpp tlsschannelserver.cpp
 
 userinclude   .\src
 userinclude   .
@@ -127,3 +126,6 @@ systeminclude \epoc32\include\stdapis\openssl
 systeminclude \epoc32\include\stdapis\stlport
 
 library       euser.lib estlib.lib libstdcpp.lib libssl.lib libcrypto.lib libz.lib esock.lib libc.lib
+
+SOURCEPATH src\tests\stanzaextensionfactory
+SOURCE stanzaextensionfactory_perf.cpp
