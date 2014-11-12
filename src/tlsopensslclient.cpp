@@ -30,7 +30,7 @@ namespace gloox
 
   bool OpenSSLClient::setType()
   {
-    m_ctx = SSL_CTX_new( SSLv23_client_method() ); // FIXME: use TLSv1_client_method() as soon as OpenSSL/gtalk combo is fixed!
+    m_ctx = SSL_CTX_new( TLSv1_client_method() );
     if( !m_ctx )
       return false;
 
