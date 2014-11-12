@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="gloox trunk"
-	ProjectGUID="{F0281A51-5DD4-4D34-A7D7-227AB289430E}"
-	RootNamespace="glooxtrunk"
+	Name="gloox-1.0"
+	ProjectGUID="{36E32BC3-0645-4C90-8BF5-6495ACB7CF5F}"
+	RootNamespace="gloox10"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\gloox-1.0\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
@@ -87,7 +87,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -110,6 +110,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				PreprocessorDefinitions="DLL_EXPORT"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -175,6 +176,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\atomicrefcount.cpp"
+				>
+			</File>
+			<File
 				RelativePath="src\attention.cpp"
 				>
 			</File>
@@ -183,15 +188,15 @@
 				>
 			</File>
 			<File
-				RelativePath="src\bob.cpp"
-				>
-			</File>
-			<File
 				RelativePath="src\bookmarkstorage.cpp"
 				>
 			</File>
 			<File
 				RelativePath="src\capabilities.cpp"
+				>
+			</File>
+			<File
+				RelativePath="src\carbons.cpp"
 				>
 			</File>
 			<File
@@ -224,10 +229,6 @@
 			</File>
 			<File
 				RelativePath="src\connectionbosh.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\connectioncompression.cpp"
 				>
 			</File>
 			<File
@@ -307,6 +308,10 @@
 				>
 			</File>
 			<File
+				RelativePath="src\forward.cpp"
+				>
+			</File>
+			<File
 				RelativePath="src\gloox.cpp"
 				>
 			</File>
@@ -335,31 +340,27 @@
 				>
 			</File>
 			<File
-				RelativePath="src\jinglecontent.cpp"
+				RelativePath=".\src\jinglecontent.cpp"
 				>
 			</File>
 			<File
-				RelativePath="src\jingledescription.cpp"
+				RelativePath=".\src\jinglefiletransfer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="src\jingledtmf.cpp"
+				RelativePath=".\src\jingleiceudp.cpp"
 				>
 			</File>
 			<File
-				RelativePath="src\jingleiceudp.cpp"
+				RelativePath=".\src\jinglepluginfactory.cpp"
 				>
 			</File>
 			<File
-				RelativePath="src\jinglerawudp.cpp"
+				RelativePath=".\src\jinglesession.cpp"
 				>
 			</File>
 			<File
-				RelativePath="src\jinglertp.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\jinglesession.cpp"
+				RelativePath=".\src\jinglesessionmanager.cpp"
 				>
 			</File>
 			<File
@@ -368,10 +369,6 @@
 			</File>
 			<File
 				RelativePath="src\logsink.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\md4.cpp"
 				>
 			</File>
 			<File
@@ -396,10 +393,6 @@
 			</File>
 			<File
 				RelativePath="src\messagesession.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\mucinvite.cpp"
 				>
 			</File>
 			<File
@@ -463,10 +456,6 @@
 				>
 			</File>
 			<File
-				RelativePath="src\rap.cpp"
-				>
-			</File>
-			<File
 				RelativePath="src\receipt.cpp"
 				>
 			</File>
@@ -484,10 +473,6 @@
 			</File>
 			<File
 				RelativePath="src\search.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\semafore.cpp"
 				>
 			</File>
 			<File
@@ -555,10 +540,6 @@
 				>
 			</File>
 			<File
-				RelativePath="src\tlsgnutlsserver.cpp"
-				>
-			</File>
-			<File
 				RelativePath="src\tlsgnutlsserveranon.cpp"
 				>
 			</File>
@@ -575,15 +556,7 @@
 				>
 			</File>
 			<File
-				RelativePath="src\tlsschannelbase.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\tlsschannelclient.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\tlsschannelserver.cpp"
+				RelativePath="src\tlsschannel.cpp"
 				>
 			</File>
 			<File
@@ -641,15 +614,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\atomicrefcount.h"
+				>
+			</File>
+			<File
 				RelativePath="src\attention.h"
 				>
 			</File>
 			<File
 				RelativePath="src\base64.h"
-				>
-			</File>
-			<File
-				RelativePath="src\bob.h"
 				>
 			</File>
 			<File
@@ -674,6 +647,10 @@
 			</File>
 			<File
 				RelativePath="src\capabilities.h"
+				>
+			</File>
+			<File
+				RelativePath="src\carbons.h"
 				>
 			</File>
 			<File
@@ -717,19 +694,11 @@
 				>
 			</File>
 			<File
-				RelativePath="src\connectionAuthHttpProxy.h"
-				>
-			</File>
-			<File
 				RelativePath="src\connectionbase.h"
 				>
 			</File>
 			<File
 				RelativePath="src\connectionbosh.h"
-				>
-			</File>
-			<File
-				RelativePath="src\connectioncompression.h"
 				>
 			</File>
 			<File
@@ -841,6 +810,10 @@
 				>
 			</File>
 			<File
+				RelativePath="src\forward.h"
+				>
+			</File>
+			<File
 				RelativePath="src\gloox.h"
 				>
 			</File>
@@ -873,43 +846,39 @@
 				>
 			</File>
 			<File
-				RelativePath="src\jinglecontent.h"
+				RelativePath=".\src\jinglecontent.h"
 				>
 			</File>
 			<File
-				RelativePath="src\jingledescription.h"
+				RelativePath=".\src\jinglefiletransfer.h"
 				>
 			</File>
 			<File
-				RelativePath="src\jingledtmf.h"
+				RelativePath=".\src\jingleiceudp.h"
 				>
 			</File>
 			<File
-				RelativePath="src\jingleiceudp.h"
+				RelativePath=".\src\jingleplugin.h"
 				>
 			</File>
 			<File
-				RelativePath="src\jingleplugin.h"
+				RelativePath=".\src\jinglepluginfactory.h"
 				>
 			</File>
 			<File
-				RelativePath="src\jinglerawudp.h"
+				RelativePath=".\src\jinglesession.h"
 				>
 			</File>
 			<File
-				RelativePath="src\jinglertp.h"
+				RelativePath=".\src\jinglesessionhandler.h"
 				>
 			</File>
 			<File
-				RelativePath="src\jinglesession.h"
+				RelativePath=".\src\jinglesessionmanager.h"
 				>
 			</File>
 			<File
-				RelativePath="src\jinglesessionhandler.h"
-				>
-			</File>
-			<File
-				RelativePath="src\jingletransport.h"
+				RelativePath=".\src\jingletransport.h"
 				>
 			</File>
 			<File
@@ -930,10 +899,6 @@
 			</File>
 			<File
 				RelativePath="src\macros.h"
-				>
-			</File>
-			<File
-				RelativePath="src\md4.h"
 				>
 			</File>
 			<File
@@ -974,10 +939,6 @@
 			</File>
 			<File
 				RelativePath="src\mucinvitationhandler.h"
-				>
-			</File>
-			<File
-				RelativePath="src\mucinvite.h"
 				>
 			</File>
 			<File
@@ -1073,10 +1034,6 @@
 				>
 			</File>
 			<File
-				RelativePath="src\rap.h"
-				>
-			</File>
-			<File
 				RelativePath="src\receipt.h"
 				>
 			</File>
@@ -1114,10 +1071,6 @@
 			</File>
 			<File
 				RelativePath="src\searchhandler.h"
-				>
-			</File>
-			<File
-				RelativePath="src\semafore.h"
 				>
 			</File>
 			<File
@@ -1217,10 +1170,6 @@
 				>
 			</File>
 			<File
-				RelativePath="src\tlsgnutlsserver.h"
-				>
-			</File>
-			<File
 				RelativePath="src\tlsgnutlsserveranon.h"
 				>
 			</File>
@@ -1241,15 +1190,7 @@
 				>
 			</File>
 			<File
-				RelativePath="src\tlsschannelbase.h"
-				>
-			</File>
-			<File
-				RelativePath="src\tlsschannelclient.h"
-				>
-			</File>
-			<File
-				RelativePath="src\tlsschannelserver.h"
+				RelativePath="src\tlsschannel.h"
 				>
 			</File>
 			<File

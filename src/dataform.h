@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -46,7 +46,7 @@ namespace gloox
   };
 
   /**
-   * @brief An abstraction of a XEP-0004 Data Form.
+   * @brief An abstraction of a @xep{0004} Data Form.
    *
    *
    *

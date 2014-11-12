@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2008-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2008-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -25,15 +25,17 @@ namespace gloox
   {
 
     /**
-     * @brief An abstract base class of a Jingle Transport.
+     * @brief An abstract base class of a Jingle Transport. This is part of Jingle (@xep{0166}).
      *
-     * You should not need to use this class directly. See
+     * You should not need to use this class directly unless you are extending gloox. See
      * @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
      *
+     * XEP Version: 1.1
+     *
      * @author Jakob Schroeter <js@camaya.net>
-     * @since 1.1
+     * @since 1.0.5
      */
-    class Transport : public Plugin
+    class GLOOX_API Transport : public Plugin
     {
       public:
         /**

@@ -1,27 +1,28 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../tag.h"
+#define MUCROOM_TEST
+#include "../../mucroom.h"
 #include "../../dataform.h"
 #include "../../iq.h"
 #include "../../message.h"
 #include "../../stanzaextensionfactory.h"
-
-#include "../clientbase.h"
-
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 #include <cstdio> // [s]print[f]
-
-#define MUCROOM_TEST
-#include "../../mucroom.cpp"
-#include "../../mucroom.h"
-#include "../../disco.cpp"
-#include "../../disco.h"
-#include "../../mucmessagesession.cpp"
-#include "../../mucmessagesession.h"
-#include "../../messagesession.cpp"
-#include "../../messagesession.h"
 
 int main( int /*argc*/, char** /*argv*/ )
 {
@@ -37,7 +38,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t || t->xml() != "<query xmlns='" + XMLNS_MUC_OWNER + "'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -52,7 +53,7 @@ int main( int /*argc*/, char** /*argv*/ )
                           "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -67,7 +68,7 @@ int main( int /*argc*/, char** /*argv*/ )
                           "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -82,7 +83,7 @@ int main( int /*argc*/, char** /*argv*/ )
                           "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -99,7 +100,7 @@ int main( int /*argc*/, char** /*argv*/ )
                             "</destroy></query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -113,7 +114,7 @@ int main( int /*argc*/, char** /*argv*/ )
          "<destroy/></query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -128,7 +129,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t || *t != *d )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     delete d;
@@ -148,7 +149,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t || *t != *d )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     delete d;
@@ -166,7 +167,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -175,7 +176,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !fail )
     printf( "OK\n" );
   else
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
 
   return fail;
 }

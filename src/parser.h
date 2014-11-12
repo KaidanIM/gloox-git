@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2004-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -51,7 +51,7 @@ namespace gloox
        * Use this function to feed the parser with more XML.
        * @param data Raw xml to parse. It may be modified if backbuffering is necessary.
        * @return Returns @b -1 if parsing was successful. If a parse error occured, the
-       * character position where the error occured is returned.
+       * character position where the error was occured is returned.
        */
       int feed( std::string& data );
 
@@ -61,18 +61,6 @@ namespace gloox
        * internal use only.
        */
       void cleanup( bool deleteRoot = true );
-
-      /**
-       * Parses the given data and returns a Tag if and only if
-       * @b data contains a string that represents a well-formed
-       * and complete XML element. Hence this function is not
-       * suited for stream parsing.
-       * @param data A string containing XML.
-       * @return A Tag, or 0. The caller is responsible for
-       * deleting the returned Tag.
-       * @since 1.0
-       */
-      static Tag* parse( std::string& data );
 
     private:
       enum ParserInternalState
@@ -94,8 +82,7 @@ namespace gloox
         TagValueApos,
         TagAttributeValue,
         TagPreamble,
-        TagCDATASection,
-        XMLComment
+        TagCDATASection
       };
 
       enum ForwardScanState
@@ -112,22 +99,11 @@ namespace gloox
         DecodeInsufficient
       };
 
-      /**
-       * (Some of the) Return values for feed().
-       * @since 1.0
-       */
-      enum ParserInternalReturn
-      {
-        ParseIncomplete = -1,       /**< More data is needed to complete parsing. */
-        ParseOK         = -2        /**< A complete Tag could be parsed. */
-      };
-
       void addTag();
       void addAttribute();
       void addCData();
       bool closeTag();
       bool isWhitespace( unsigned char c );
-      bool isValid( unsigned char c );
       void streamEvent( Tag* tag );
       ForwardScanState forwardScan( std::string::size_type& pos, const std::string& data,
                                     const std::string& needle );
@@ -149,13 +125,11 @@ namespace gloox
       std::string m_attribPrefix;
       std::string m_backBuffer;
       int m_preamble;
-      int m_return; // used by static Parser::parse()
       bool m_quote;
       bool m_haveTagPrefix;
       bool m_haveAttribPrefix;
       bool m_attribIsXmlns;
       bool m_deleteRoot;
-      bool m_nullRoot; // used by static Parser::parse()
 
   };
 

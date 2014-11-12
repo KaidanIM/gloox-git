@@ -1,23 +1,26 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../tag.h"
+#define ROSTERMANAGER_TEST
+#include "../../rostermanager.h"
 #include "../../iq.h"
 #include "../../stanzaextensionfactory.h"
-
-#include "../clientbase.h"
-
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 #include <cstdio> // [s]print[f]
-
-#define ROSTERMANAGER_TEST
-#include "../../rostermanager.h"
-#include "../../rostermanager.cpp"
-#include "../../privacymanager.h"
-#include "../../privacymanager.cpp"
-#include "../../privatexml.h"
-#include "../../privatexml.cpp"
 
 int main( int /*argc*/, char** /*argv*/ )
 {
@@ -34,7 +37,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t->xml() != "<query xmlns='" + XMLNS_ROSTER + "'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -55,7 +58,7 @@ int main( int /*argc*/, char** /*argv*/ )
                     "</item></query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -71,7 +74,7 @@ int main( int /*argc*/, char** /*argv*/ )
         "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -93,7 +96,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( *t != *q || rq.roster().size() != 2 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -115,7 +118,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( *t != *q )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
       printf( "     got: %s\n", t->xml().c_str() );
       printf( "expected: %s\n", q->xml().c_str() );
     }
@@ -137,7 +140,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -149,7 +152,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "RosterManager::Query: %d test(s) failed\n", fail );
+    fprintf( stderr, "RosterManager::Query: %d test(s) failed\n", fail );
     return 1;
   }
 

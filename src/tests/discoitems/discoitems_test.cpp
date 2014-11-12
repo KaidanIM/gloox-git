@@ -1,9 +1,20 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../tag.h"
+#define DISCO_ITEMS_TEST
+#include "../../disco.h"
 #include "../../iq.h"
 #include "../../stanzaextensionfactory.h"
-
-#include "../clientbase.h"
-
 using namespace gloox;
 
 #include <stdio.h>
@@ -11,13 +22,7 @@ using namespace gloox;
 #include <string>
 #include <cstdio> // [s]print[f]
 
-#define DISCO_TEST
-#define DISCO_ITEMS_TEST
-#define ADHOC_TEST
-#include "../../disco.h"
-#include "../../disco.cpp"
-
-             int main( int /*argc*/, char** /*argv*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
@@ -32,7 +37,7 @@ using namespace gloox;
         || !di.node().empty() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -47,7 +52,7 @@ using namespace gloox;
         || di.node() != "somenode" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -74,7 +79,7 @@ using namespace gloox;
         || item->name() != "name1" || item->node() != "node1" || item->jid() != "jid1" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -92,7 +97,7 @@ using namespace gloox;
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -104,7 +109,7 @@ using namespace gloox;
   }
   else
   {
-    printf( "Disco::Items: %d test(s) failed\n", fail );
+    fprintf( stderr, "Disco::Items: %d test(s) failed\n", fail );
     return 1;
   }
 

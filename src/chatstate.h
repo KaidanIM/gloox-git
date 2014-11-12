@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -24,7 +24,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief An implementation of Chat State Notifications (XEP-0085) as a StanzaExtension.
+   * @brief An implementation of Chat State Notifications (@xep{0085}) as a StanzaExtension.
    *
    * @author Vincent Thomasset
    * @author Jakob Schroeter <js@camaya.net>

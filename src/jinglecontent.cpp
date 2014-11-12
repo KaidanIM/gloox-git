@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2008-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2008-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -12,8 +12,7 @@
 
 
 #include "jinglecontent.h"
-#include "jingledescription.h"
-#include "jingletransport.h"
+#include "jinglepluginfactory.h"
 #include "util.h"
 
 namespace gloox
@@ -35,7 +34,8 @@ namespace gloox
     static const char* sendersValues [] = {
       "initiator",
       "responder",
-      "both"
+      "both",
+      "none"
     };
 
     static inline Content::Senders sendersType( const std::string& type )
@@ -43,17 +43,27 @@ namespace gloox
       return (Content::Senders)util::lookup( type, sendersValues );
     }
 
-    Content::Content( Description* desc, Transport* trans,
-                      const std::string& name, Creator creator,
+    Content::Content( const std::string& name, const PluginList& plugins, Creator creator,
                       Senders senders, const std::string& disposition )
-      : m_description( desc ), m_transport( trans ),
-        m_creator( creator ), m_disposition( disposition ), m_name( name ), m_senders( senders )
+      : Plugin( PluginContent ), m_creator( creator ), m_disposition( disposition ),
+        m_name( name ), m_senders( senders )
     {
+      m_plugins = plugins;
     }
 
-    Content::Content( const Tag* tag )
+    Content::Content( const Tag* tag, PluginFactory* factory )
+     : Plugin( PluginContent )
     {
+      if( !tag || tag->name() != "content" )
+        return;
 
+      m_name = tag->findAttribute( "name" );
+      m_creator = (Creator)util::lookup( tag->findAttribute( "creator" ), creatorValues );
+      m_senders = (Senders)util::lookup( tag->findAttribute( "senders" ), sendersValues );
+      m_disposition = tag->findAttribute( "disposition" );
+
+      if( factory )
+        factory->addPlugins( *this, tag );
     }
 
     Content::~Content()
@@ -62,7 +72,7 @@ namespace gloox
 
     const std::string& Content::filterString() const
     {
-      static const std::string filter = "content";
+      static const std::string filter = "jingle/content";
       return filter;
     }
 
@@ -77,10 +87,9 @@ namespace gloox
       t->addAttribute( "name", m_name );
       t->addAttribute( "senders", util::lookup( m_senders, sendersValues ) );
 
-      if( m_description )
-        t->addChild( m_description->tag() );
-      if( m_transport )
-        t->addChild( m_transport->tag() );
+      PluginList::const_iterator it = m_plugins.begin();
+      for( ; it != m_plugins.end(); ++it )
+        t->addChild( (*it)->tag() );
 
       return t;
     }

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -52,9 +52,6 @@ namespace gloox
        * @param clientCerts A path to a certificate bundle in PEM format.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        * @return @b False if initialization failed, @b true otherwise.
-       * @note The arguments are not used in the SChannel (native on Windows) implementation,
-       * init() needs to be called nonetheless. Use setSubject() to set client/server
-       * key/certificate.
        * @since 1.0
        */
       virtual bool init( const std::string& clientKey = EmptyString,
@@ -64,25 +61,11 @@ namespace gloox
       /**
        * Enables/disables initialization of the underlying TLS library. By default,
        * initialization is performed. You may want to switch it off if the TLS library
-       * is used elsewhere in your applicationas well and you have no control over the
+       * is used elsewhere in your application as well and you have no control over the
        * initialization.
        * @param init Whether or not to intialize the underlying TLS library.
        */
       void setInitLib( bool init ) { m_initLib = init; }
-
-      /**
-       * Sets the subject/common name to search the system certificate store for. Used only by the
-       * SChannel implementation (Windows). Required for SChannel server, optional for SChannel client.
-       * The system 'MY' certificate store will be searched for the @b subject (substring match) for a
-       * private key/certificate pair which will be used.
-       * @note On the server-side, initialization
-       * will fail if @b subject is not set or if no associated key/certificate could be found.
-       * On the client-side initialization will fail if a @b subject was set for which no
-       * key/certificate pair could be found. Setting no @b subject on the client-side is fine.
-       * @note setSubject() must be called before init() to be effective.
-       * @param subject The to use.
-       */
-      virtual void setSubject( const std::string& subject ) { m_subject = subject; }
 
       /**
        * Use this function to feed unencrypted data to the encryption implementation.
@@ -122,10 +105,42 @@ namespace gloox
       virtual bool isSecure() const { return m_secure; }
 
       /**
+       * This function indicates whether the underlying TLS implementation supports channel binding (used in e.g. SASL SCRAM-SHA-1-PLUS).
+       * @return @b True if channel binding is supported, @b false otherwise.
+       */
+      virtual bool hasChannelBinding() const { return false; }
+
+      /**
+       * Returns the channel binding data for the established connection.
+       * @return The channel binding data, if any, or the empty string.
+       */
+      virtual const std::string channelBinding() const { return EmptyString; }
+
+      /**
+       * Use this function to set a number of trusted root CA certificates which shall be
+       * used to verify a servers certificate.
+       * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
+       */
+      virtual void setCACerts( const StringList& cacerts ) = 0;
+
+      /**
        * This function is used to retrieve certificate and connection info of a encrypted connection.
        * @return Certificate information.
        */
       virtual const CertInfo& fetchTLSInfo() const { return m_certInfo; }
+
+      /**
+       * Use this function to set the user's certificate and private key. The certificate will
+       * be presented to the server upon request and can be used for SASL EXTERNAL authentication.
+       * The user's certificate file should be a bundle of more than one certificate in PEM format.
+       * The first one in the file should be the user's certificate, each cert following that one
+       * should have signed the previous one.
+       * @note These certificates are not necessarily the same as those used to verify the server's
+       * certificate.
+       * @param clientKey The absolute path to the user's private key in PEM format.
+       * @param clientCerts A path to a certificate bundle in PEM format.
+       */
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts ) = 0;
 
     protected:
       TLSHandler* m_handler;
@@ -133,7 +148,6 @@ namespace gloox
       std::string m_clientKey;
       std::string m_clientCerts;
       std::string m_server;
-      std::string m_subject;
       CertInfo m_certInfo;
       util::Mutex m_mutex;
       bool m_secure;

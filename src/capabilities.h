@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -27,7 +27,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief This is an implementation of XEP-0115 (Entity Capabilities).
+   * @brief This is an implementation of @xep{0115} (Entity Capabilities).
    *
    * XEP Version: 1.5-15
    * @author Jakob Schroeter <js@camaya.net>

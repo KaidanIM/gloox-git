@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -53,18 +53,6 @@ namespace gloox
       ~SOCKS5BytestreamServer();
 
       /**
-       * Use this function to use a different server implementation.
-       * The default is a ConnectionTCPServer.
-       * @param An alternate server.
-       */
-      void setServerImpl( ConnectionBase *server );
-
-      /**
-       * Removes the current server implementation.
-       */
-      void removeServerImpl();
-
-      /**
        * Starts listening on the specified interface and port.
        * @return Returns @c ConnNoError on success, @c ConnIoError on failure (e.g. if the port
        * is already in use).
@@ -99,10 +87,10 @@ namespace gloox
       const std::string localInterface() const;
 
       /**
-       * Exposes the local server.
-       * @return The local server.
+       * Exposes the local socket.
+       * @return The local socket.
        */
-      ConnectionBase* server() const { return m_server; }
+      int serverSocket() const { return m_tcpServer->socket(); }
 
       // reimplemented from ConnectionHandler
       virtual void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection );
@@ -147,7 +135,7 @@ namespace gloox
       typedef std::list<std::string> HashMap;
       HashMap m_hashes;
 
-      ConnectionBase* m_server;
+      ConnectionTCPServer* m_tcpServer;
 
       util::Mutex m_mutex;
       const LogSink& m_logInstance;

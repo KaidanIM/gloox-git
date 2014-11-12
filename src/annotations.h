@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -30,7 +30,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief This is an implementation of XEP-0145 (Annotations).
+   * @brief This is an implementation of @xep{0145} (Annotations).
    *
    * You can use this class to store arbitrary notes about a roster item on the server
    * (and to retrieve them later on).

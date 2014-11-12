@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -160,7 +160,7 @@ namespace gloox
          * @param jid Subscribed entity.
          * @param node ID of the node.
          * @param options Options DataForm.
-         * @param subid An optional subscription ID.
+         * @param sid An optional subscription ID.
          * @param error Subscription options retrieval Error.
          *
          * @see Manager::getSubscriptionOptions
@@ -180,7 +180,7 @@ namespace gloox
          * @param service Service hosting the queried node.
          * @param jid Subscribed entity.
          * @param node ID of the queried node.
-         * @param subid An optional subscription ID.
+         * @param sid An optional subscription ID.
          * @param error Subscription options modification Error.
          *
          * @see Manager::setSubscriptionOptions

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -19,13 +19,6 @@
 
 namespace gloox
 {
-
-  const std::string SHA::sha1( const std::string& data )
-  {
-    SHA sha;
-    sha.feed( data );
-    return sha.hex();
-  }
 
   SHA::SHA()
   {
@@ -62,7 +55,8 @@ namespace gloox
     if( m_corrupted )
       return EmptyString;
 
-    finalize();
+    if( !m_finished )
+      finalize();
 
     char buf[41];
     for( int i = 0; i < 20; ++i )

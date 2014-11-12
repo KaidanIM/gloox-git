@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -402,7 +402,7 @@ namespace gloox
         m_ctx = DeleteItem;
         m_node = r->findAttribute( "node" );
         m_notify = r->hasAttribute( "notify", "1" ) || r->hasAttribute( "notify", "true" );
-        const TagList& l = p->children();
+        const TagList& l = r->children();
         TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
           m_items.push_back( new Item( (*it) ) );
@@ -1073,12 +1073,9 @@ namespace gloox
             case PublishItem:
             {
               const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
-              if( ps && ps->items().size())
-              {
-                const ItemList il = ps->items();
-                rh->handleItemPublication( id, service, "",
-                                           il, error );
-              }
+              rh->handleItemPublication( id, service, "",
+                                         ps ? ps->items() : ItemList(),
+                                         error );
               break;
             }
             case DeleteItem:

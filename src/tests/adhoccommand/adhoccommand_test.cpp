@@ -1,27 +1,26 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../tag.h"
 #define ADHOC_COMMANDS_TEST
 #include "../../adhoc.h"
 #include "../../iq.h"
 #include "../../stanzaextensionfactory.h"
-
-#include "../clientbase.h"
-
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 #include <cstdio> // [s]print[f]
-
-#define DISCO_TEST
-#define DISCO_INFO_TEST
-#define ADHOC_TEST
-#include "../../disco.h"
-#include "../../disco.cpp"
-#include "../../adhoc.h"
-#include "../../adhoc.cpp"
-#include "../../adhochandler.h"
-#include "../../adhoccommandprovider.h"
 
 int main( int /*argc*/, char** /*argv*/ )
 {
@@ -39,7 +38,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || ac.node() != "somecmd" || ac.action() != Adhoc::Command::Execute )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -55,7 +54,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || ac.action() != Adhoc::Command::Execute )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -76,7 +75,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || ac.action() != Adhoc::Command::Execute || ac.form() == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -94,7 +93,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -106,7 +105,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Adhoc::Command: %d test(s) failed\n", fail );
+    fprintf( stderr, "Adhoc::Command: %d test(s) failed\n", fail );
     return 1;
   }
 

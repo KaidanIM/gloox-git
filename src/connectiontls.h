@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+ * Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
  * This file is part of the gloox library. http://camaya.net/gloox
  *
  * This software is distributed under a license. The full license
@@ -35,7 +35,7 @@ namespace gloox
    * @code
    * Client *c = new Client( ... );
    * c->setConnectionImpl( new ConnectionTLS( c,
-   *                                new ConnectionTCP( c->logInstance(), server, 5223 ),
+   *                                new ConnectionTCPClient( c->logInstance(), server, 5223 ),
    *                                c->logInstance()) );
    * @endcode
    *
@@ -103,26 +103,13 @@ namespace gloox
        * certificate.
        * @param clientKey The absolute path to the user's private key in PEM format.
        * @param clientCerts A path to a certificate bundle in PEM format.
+       * @note This function is a wrapper around TLSBase::setClientCert().
        */
       void setClientCert( const std::string& clientKey, const std::string& clientCerts )
       {
         m_clientKey = clientKey;
         m_clientCerts = clientCerts;
       }
-
-      /**
-       * Sets the subject/common name to search the system certificate store for. Used only by the
-       * SChannel implementation (Windows). Required for SChannel server, optional for SChannel client.
-       * The system 'MY' certificate store will be searched for the @b subject (substring match) for a
-       * private key/certificate pair which will be used.
-       * @note On the server-side, initialization (init())
-       * will fail if @b subject is not set or if no associated key/certificate could be found.
-       * On the client-side initialization will fail if a @b subject was set for which no
-       * key/certificate pair could be found. Setting no @b subject on the client-side is fine.
-       * @note setSubject() must be called before init() to be effective.
-       * @param subject The to use.
-       */
-      virtual void setSubject( const std::string& subject ) { m_subject = subject; }
 
       /**
        * Sets the transport connection.
@@ -201,7 +188,6 @@ namespace gloox
       StringList m_cacerts;
       std::string m_clientCerts;
       std::string m_clientKey;
-      std::string m_subject;
 
     private:
       ConnectionTLS& operator=( const ConnectionTLS& );

@@ -1,16 +1,4 @@
 /*
-  Copyright (c) 2006-2009 by Jakob Schroeter <js@camaya.net>
-  This file is part of the gloox library. http://camaya.net/gloox
-
-  This software is distributed under a license. The full license
-  agreement can be found in the file LICENSE in this distribution.
-  This software may not be copied, modified, sold or distributed
-  other than expressed in the named license agreement.
-
-  This software is distributed without any warranty.
-*/
-
-/*
   Copyright (C) 1999, 2002 Aladdin Enterprises.  All rights reserved.
 
   This software is provided 'as-is', without any express or implied
@@ -70,7 +58,7 @@ namespace gloox
 {
 
   /**
-   * @brief An MD5 implementation.
+   * @brief An MD% implementation.
    *
    * This is an implementation of the Message Digest Algorithm as decribed in RFC 1321.
    * The original code has been taken from an implementation by L. Peter Deutsch.
@@ -81,13 +69,6 @@ namespace gloox
   class GLOOX_API MD5
   {
     public:
-      /**
-       * Static function that returns a hash of the given data.
-       * @param data Input data to hash.
-       * @return The data's hash in hex notation.
-       */
-      static const std::string md5( const std::string& data );
-
       /**
        * Constructs a new MD5 object.
        */

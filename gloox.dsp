@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="gloox trunk" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="gloox 1.0" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=gloox trunk - Win32 Debug
-!MESSAGE Dies ist kein gÃ¼ltiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und fÃ¼hren Sie den Befehl
+CFG=gloox 1.0 - Win32 Debug
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE
 !MESSAGE NMAKE /f "gloox.mak".
 !MESSAGE
-!MESSAGE Sie kÃ¶nnen beim AusfÃ¼hren von NMAKE eine Konfiguration angeben
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
 !MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE
 !MESSAGE NMAKE /f "gloox.mak" CFG="gloox 1.0 - Win32 Debug"
 !MESSAGE
-!MESSAGE FÃ¼r die Konfiguration stehen zur Auswahl:
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE
-!MESSAGE "gloox trunk - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gloox trunk - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gloox 1.0 - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gloox 1.0 - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE
 
 # Begin Project
@@ -29,7 +29,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "gloox trunk - Win32 Release"
+!IF  "$(CFG)" == "gloox 1.0 - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 /dll
 
-!ELSEIF  "$(CFG)" == "gloox trunk - Win32 Debug"
+!ELSEIF  "$(CFG)" == "gloox 1.0 - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -83,8 +83,8 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "gloox trunk - Win32 Release"
-# Name "gloox trunk - Win32 Debug"
+# Name "gloox 1.0 - Win32 Release"
+# Name "gloox 1.0 - Win32 Debug"
 # Begin Group "Quellcodedateien"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -114,6 +114,10 @@ SOURCE=.\src\capabilities.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\carbons.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\chatstate.cpp
 # End Source File
 # Begin Source File
@@ -134,19 +138,11 @@ SOURCE=.\src\component.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\compressiondefault.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\compressionzlib.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\connectionbosh.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\connectioncompression.cpp
 # End Source File
 # Begin Source File
 
@@ -226,6 +222,10 @@ SOURCE=.\src\gloox.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\forward.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\gpgencrypted.cpp
 # End Source File
 # Begin Source File
@@ -250,31 +250,11 @@ SOURCE=.\src\jid.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\jinglecontent.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingledescription.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglesession.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingletransport.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\lastactivity.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\logsink.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\md4.cpp
 # End Source File
 # Begin Source File
 
@@ -359,10 +339,6 @@ SOURCE=.\src\pubsubitem.cpp
 # Begin Source File
 
 SOURCE=.\src\pubsubmanager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\rap.cpp
 # End Source File
 # Begin Source File
 
@@ -554,6 +530,10 @@ SOURCE=.\src\capabilities.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\carbons.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\chatstate.h
 # End Source File
 # Begin Source File
@@ -583,10 +563,6 @@ SOURCE=.\src\compressionbase.h
 # Begin Source File
 
 SOURCE=.\src\compressiondatahandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\compressiondefault.h
 # End Source File
 # Begin Source File
 
@@ -706,6 +682,10 @@ SOURCE=.\src\flexoffhandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\forward.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\gloox.h
 # End Source File
 # Begin Source File
@@ -738,46 +718,6 @@ SOURCE=.\src\jid.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\jingleaudiortp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglecontent.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingledescription.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingleiceudp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingleplugin.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglerawudp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglesession.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglesessionhandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jingletransport.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\jinglevideortp.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\lastactivity.h
 # End Source File
 # Begin Source File
@@ -795,10 +735,6 @@ SOURCE=.\src\logsink.h
 # Begin Source File
 
 SOURCE=.\src\macros.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\md4.h
 # End Source File
 # Begin Source File
 
@@ -935,10 +871,6 @@ SOURCE=.\src\pubsubmanager.h
 # Begin Source File
 
 SOURCE=.\src\pubsubresulthandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\rap.h
 # End Source File
 # Begin Source File
 

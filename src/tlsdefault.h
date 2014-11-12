@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+ * Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
  * This file is part of the gloox library. http://camaya.net/gloox
  *
  * This software is distributed under a license. The full license
@@ -43,7 +43,7 @@ namespace gloox
                                      * TLS implementations. */
         AnonymousClient   =  2,     /**< Anonymous TLS client (non-verifying), available with
                                      * GnuTLS. */
-        VerifyingServer   =  4,     /**< TLS server, verifying, available for GnuTLS and OpenSSL. */
+        VerifyingServer   =  4,     /**< TLS server, verifying, currently not available. */
         AnonymousServer   =  8      /**< Anonymous TLS server (non-verifying), available with
                                      * GnuTLS. */
       };
@@ -82,7 +82,19 @@ namespace gloox
       virtual bool isSecure() const;
 
       // reimplemented from TLSBase
+      virtual bool hasChannelBinding() const;
+
+      // reimplemented from TLSBase
+      virtual const std::string channelBinding() const;
+
+      // reimplemented from TLSBase
+      virtual void setCACerts( const StringList& cacerts );
+
+      // reimplemented from TLSBase
       virtual const CertInfo& fetchTLSInfo() const;
+
+      // reimplemented from TLSBase
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
       /**
        * Returns an ORed list of supported TLS types.

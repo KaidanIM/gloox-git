@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -30,13 +30,6 @@ namespace gloox
   {
 
     public:
-      /**
-       * Static function that returns a hash of the given data.
-       * @param data Input data to hash.
-       * @return The data's hash in hex notation.
-       */
-      static const std::string sha1( const std::string& data );
-
       /**
        * Constructs a new SHA object.
        */

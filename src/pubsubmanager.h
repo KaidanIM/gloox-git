@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -32,7 +32,7 @@ namespace gloox
     class ResultHandler;
 
     /**
-     * @brief This manager is used to interact with PubSub services (XEP-0060).
+     * @brief This manager is used to interact with PubSub services (@xep{0060}).
      *
      * @note PubSub support in gloox is still relatively young and you are most
      * welcome to ask questions, criticize the API and so on.
@@ -121,7 +121,7 @@ namespace gloox
          * @param options The options to configure while subscribing.
          *        Should be a TypeSubmit form, with a field named FORM_TYPE having the value
          *        http://jabber.org/protocol/pubsub#subscribe_options
-         *        See XEP-0060, "Subscribe and Configure".
+         *        See @xep{0060}, "Subscribe and Configure".
          *        Will be owned and deleted by the PubSub object.
          * @return The IQ ID used in the request.
          *

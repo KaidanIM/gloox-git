@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../clientbase.h"
 #include "../../connectionbase.h"
 // #include "../../logsink.h"
@@ -25,7 +37,7 @@ class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
       registerConnectionListener( this );
     }
     virtual ~ClientBaseTest() {}
-    virtual void handleStartNode() { m_handleStartNodeCalled = true; }
+    virtual void handleStartNode( const Tag* /*tag*/ ) { m_handleStartNodeCalled = true; }
     virtual bool handleNormalNode(gloox::Tag*) { return true; }
     virtual void rosterFilled() {}
 /*    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
@@ -60,8 +72,8 @@ class ConnectionImpl : public ConnectionBase
       : ConnectionBase( cdh ), m_pos( 0 ) {}
     virtual ~ConnectionImpl() {}
     virtual ConnectionError connect() { m_state = StateConnected; return ConnNoError; }
-    virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; }
-    virtual bool send( const std::string& data ) { return true; }
+    virtual ConnectionError recv( int /*timeout = -1*/ ) { return ConnNoError; }
+    virtual bool send( const std::string& /*data*/ ) { return true; }
     virtual ConnectionError receive()
     {
       ConnectionError ce = ConnNoError;
@@ -90,7 +102,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->recv() != ConnNotConnected )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   c = 0;
@@ -106,7 +118,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !c->handleStartNodeCalled() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -123,7 +135,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !c->versionOK() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -140,7 +152,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->versionOK() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -155,7 +167,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( c->versionOK() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -173,7 +185,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !c->sidOK() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete c;
   delete t;
@@ -197,7 +209,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "ClientBase: %d test(s) failed\n", fail );
+    fprintf( stderr, "ClientBase: %d test(s) failed\n", fail );
     return 1;
   }
 

@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../tag.h"
 #include "../../gloox.h"
 #include "../../jid.h"
@@ -126,7 +138,7 @@ namespace gloox
         break;
     }
   }
-  void ClientBase::handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult )
+  void ClientBase::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult pxResult )
   {
     switch( m_test )
     {
@@ -149,7 +161,6 @@ int main( int /*argc*/, char** /*argv*/ )
   t1 = new Tag( "foo" );
   t1->setXmlns( "test" );
   new Tag( t1, "foobar" );
-  Tag *t;
   ClientBase* cb = new ClientBase();
   PrivateXML px( cb );
 
@@ -161,7 +172,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !cb->ok() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -173,7 +184,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !cb->ok() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -190,7 +201,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( se == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete f;
   }
@@ -206,7 +217,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 

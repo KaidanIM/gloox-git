@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = gloox
-PROJECT_NUMBER         = 1.1-svn
+PROJECT_NUMBER         = 1.0.12
 OUTPUT_DIRECTORY       = ./api/
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -24,7 +24,7 @@ DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 8
-ALIASES                =
+ALIASES                = xep{1}="<a href=\"http://xmpp.org/extensions/xep-\1.html\">XEP-\1</a>"
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 BUILTIN_STL_SUPPORT    = YES
@@ -190,7 +190,8 @@ PREDEFINED             = HAVE_TLS \
                          HAVE_OPENSSL \
                          HAVE_ZLIB \
                          HAVE_WINTLS \
-                         HAVE_WINDNS
+                         HAVE_WINDNS \
+                         HAVE_MDNS
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------

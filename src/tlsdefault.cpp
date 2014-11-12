@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+ * Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
  * This file is part of the gloox library. http://camaya.net/gloox
  *
  * This software is distributed under a license. The full license
@@ -20,7 +20,6 @@
 # define HAVE_TLS
 # include "tlsgnutlsclient.h"
 # include "tlsgnutlsclientanon.h"
-# include "tlsgnutlsserver.h"
 # include "tlsgnutlsserveranon.h"
 #elif defined( HAVE_OPENSSL )
 # define HAVE_TLS
@@ -30,8 +29,7 @@
 #endif
 #elif defined( HAVE_WINTLS )
 # define HAVE_TLS
-# include "tlsschannelclient.h"
-# include "tlsschannelserver.h"
+# include "tlsschannel.h"
 #endif
 
 namespace gloox
@@ -48,7 +46,7 @@ namespace gloox
 #elif defined( HAVE_OPENSSL )
         m_impl = new OpenSSLClient( th, server );
 #elif defined( HAVE_WINTLS )
-        m_impl = new SChannelClient( th, server );
+        m_impl = new SChannel( th, server );
 #endif
         break;
       case AnonymousClient:
@@ -62,14 +60,10 @@ namespace gloox
 #endif
         break;
       case VerifyingServer:
-#ifdef HAVE_GNUTLS
-        m_impl = new GnuTLSServer( th );
-#elif defined( HAVE_OPENSSL )
+#ifdef HAVE_OPENSSL
 #ifndef __SYMBIAN32__
         m_impl = new OpenSSLServer( th );
 #endif
-#elif defined( HAVE_WINTLS )
-        m_impl = new SChannelServer( th );
 #endif
         break;
       default:
@@ -132,9 +126,31 @@ namespace gloox
     return m_impl ? m_impl->isSecure() : false;
   }
 
+  bool TLSDefault::hasChannelBinding() const
+  {
+    return m_impl ? m_impl->hasChannelBinding() : false;
+  }
+
+  const std::string TLSDefault::channelBinding() const
+  {
+    return m_impl ? m_impl->channelBinding() : EmptyString;
+  }
+
+  void TLSDefault::setCACerts( const StringList& cacerts )
+  {
+    if( m_impl )
+      m_impl->setCACerts( cacerts );
+  }
+
   const CertInfo& TLSDefault::fetchTLSInfo() const
   {
     return m_impl ? m_impl->fetchTLSInfo() : m_certInfo;
+  }
+
+  void TLSDefault::setClientCert( const std::string& clientKey, const std::string& clientCerts )
+  {
+    if( m_impl )
+      m_impl->setClientCert( clientKey, clientCerts );
   }
 
 }

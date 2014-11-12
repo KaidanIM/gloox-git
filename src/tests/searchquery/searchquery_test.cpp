@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #define SEARCH_TEST
 #include "../../gloox.h"
 #include "../../jid.h"
@@ -58,7 +70,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t || t->xml() != "<query xmlns='" + XMLNS_SEARCH + "'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -86,7 +98,7 @@ int main( int /*argc*/, char** /*argv*/ )
          || sq.fields() != ( SearchFieldFirst | SearchFieldLast | SearchFieldNick | SearchFieldEmail ) )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     delete d;
@@ -108,7 +120,7 @@ int main( int /*argc*/, char** /*argv*/ )
          || !sq.form() )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete t;
     delete d;
@@ -125,7 +137,7 @@ int main( int /*argc*/, char** /*argv*/ )
        "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -144,7 +156,7 @@ int main( int /*argc*/, char** /*argv*/ )
          "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -164,7 +176,7 @@ int main( int /*argc*/, char** /*argv*/ )
          "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     delete d;
@@ -205,7 +217,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || srl.size() != 2 )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete t;
     delete d;
@@ -226,7 +238,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -240,7 +252,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 

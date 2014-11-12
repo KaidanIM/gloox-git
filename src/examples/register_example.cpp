@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../client.h"
 #include "../connectionlistener.h"
 #include "../registration.h"
@@ -36,7 +48,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
 
 // be sure to read the API documentation for class Registration!
 
-      j = new Client( "example.net" );
+      j = new Client( "jabba.us" );
       j->disableRoster();
       j->registerConnectionListener( this );
 
@@ -78,8 +90,8 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
     {
       printf( "fields: %d\ninstructions: %s\n", fields, instructions.c_str() );
       RegistrationFields vals;
-      vals.username = "testuser";
-      vals.password = "testpwd";
+      vals.username = "cotest2";
+      vals.password = "test2";
       m_reg->createAccount( fields, vals );
     }
 

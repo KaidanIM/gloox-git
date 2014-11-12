@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../base64.h"
 using namespace gloox;
 
@@ -22,7 +34,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( sample != Base64::decode64( b ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   b = "";
   sample = "";
@@ -34,7 +46,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( sample != Base64::decode64( b ) )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), b.c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), b.c_str() );
   }
   b = "";
   sample = "";
@@ -49,7 +61,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Base64: %d test(s) failed\n", fail );
+    fprintf( stderr, "Base64: %d test(s) failed\n", fail );
     return 1;
   }
 

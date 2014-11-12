@@ -1,9 +1,18 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../jid.h"
 #include "../../stanzaextensionfactory.h"
 #include "../../iq.h"
-
-#include "../clientbase.h"
-
 using namespace gloox;
 
 #include <string>
@@ -11,8 +20,6 @@ using namespace gloox;
 
 static const JID jid( "aaa@bbb.ccc" );
 static const std::string node( "node" );
-
-static const Tag* tag;
 
 #define PUBSUBMANAGER_TEST
 #include "../../pubsubmanager.cpp"
@@ -41,7 +48,7 @@ int main()
     if( se == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete f;
   }
@@ -52,7 +59,7 @@ int main()
 
   printf( "PubSub::Manager::PubSub: " );
   if( fail )
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
   else
     printf( "OK\n" );
 

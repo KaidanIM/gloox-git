@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2004-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -21,9 +21,8 @@ namespace gloox
 
   Parser::Parser( TagHandler* ph, bool deleteRoot )
     : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_xmlnss( 0 ), m_state( Initial ),
-      m_preamble( 0 ), m_return( ParseIncomplete ), m_quote( false ), m_haveTagPrefix( false ),
-      m_haveAttribPrefix( false ), m_attribIsXmlns( false ), m_deleteRoot( deleteRoot ),
-      m_nullRoot( true )
+      m_preamble( 0 ), m_quote( false ), m_haveTagPrefix( false ), m_haveAttribPrefix( false ),
+      m_attribIsXmlns( false ), m_deleteRoot( deleteRoot )
   {
   }
 
@@ -124,6 +123,7 @@ namespace gloox
 
     switch( m_state )
     {
+      case InterTag:
       case TagInside:
         m_cdata += rep;
         break;
@@ -173,12 +173,6 @@ namespace gloox
       const unsigned char c = data[i];
 //       printf( "found char:   %c, ", c );
 
-      if( !isValid( c ) )
-      {
-        cleanup();
-        return static_cast<int>( i );
-      }
-
       switch( m_state )
       {
         case Initial:
@@ -201,10 +195,29 @@ namespace gloox
 //           printf( "InterTag: %c\n", c );
           m_tag = EmptyString;
           if( isWhitespace( c ) )
+          {
+            m_state = TagInside;
+            if( m_current )
+              m_cdata += c;
             break;
+          }
 
           switch( c )
           {
+            case '&':
+//               printf( "InterTag, calling decode\n" );
+              switch( decode( i, data ) )
+              {
+                case DecodeValid:
+                  m_state = TagInside;
+                  break;
+                case DecodeInvalid:
+                  cleanup();
+                  return static_cast<int>( i );
+                case DecodeInsufficient:
+                  return -1;
+              }
+              break;
             case '<':
               m_state = TagOpening;
               break;
@@ -239,43 +252,16 @@ namespace gloox
               m_preamble = 1;
               break;
             case '!':
-              if( i + 1 >= data.length() )
-                return -1;
-
-              switch( data[i + 1] )
+              switch( forwardScan( i, data, "![CDATA[" ) )
               {
-                case '[':
-                  switch( forwardScan( i, data, "![CDATA[" ) )
-                  {
-                    case ForwardFound:
-                      m_state = TagCDATASection;
-                      break;
-                    case ForwardNotFound:
-                      cleanup();
-                      return i;
-                      break;
-                    case ForwardInsufficientSize:
-                      return -1;
-                  }
-                break;
-                case '-':
-                  switch( forwardScan( i, data, "!-- " ) )
-                  {
-                    case ForwardFound:
-                      m_state = XMLComment;
-                      break;
-                    case ForwardNotFound:
-                      cleanup();
-                      return i;
-                      break;
-                    case ForwardInsufficientSize:
-                      return -1;
-                  }
+                case ForwardFound:
+                  m_state = TagCDATASection;
                   break;
-                default:
+                case ForwardNotFound:
                   cleanup();
                   return static_cast<int>( i );
-                  break;
+                case ForwardInsufficientSize:
+                  return -1;
               }
               break;
             default:
@@ -303,21 +289,6 @@ namespace gloox
             default:
               m_cdata += c;
               break;
-          }
-          break;
-        case XMLComment: // we're inside an XMLcomment.
-          if( c == ' ' )
-          {
-            switch( forwardScan( i, data, " -->" ) )
-            {
-              case ForwardFound:
-                m_state = InterTag;
-                break;
-              case ForwardNotFound:
-                break;
-              case ForwardInsufficientSize:
-                return -1;
-            }
           }
           break;
         case TagNameCollect:          // we're collecting the tag's name, we have at least one octet already
@@ -795,7 +766,6 @@ namespace gloox
     {
 //       printf( "pushing upstream\n" );
       streamEvent( m_root );
-      m_return = ParseOK;
       cleanup( m_deleteRoot );
     }
 
@@ -806,8 +776,7 @@ namespace gloox
   {
     if( deleteRoot )
       delete m_root;
-    if( m_nullRoot )
-      m_root = 0;
+    m_root = 0;
     m_current = 0;
     delete m_xmlnss;
     m_xmlnss = 0;
@@ -826,11 +795,6 @@ namespace gloox
     m_preamble = 0;
   }
 
-  bool Parser::isValid( unsigned char c )
-  {
-    return ( c != 0xc0 || c != 0xc1 || c < 0xf5 );
-  }
-
   bool Parser::isWhitespace( unsigned char c )
   {
     return ( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 );
@@ -840,17 +804,6 @@ namespace gloox
   {
     if( m_tagHandler )
       m_tagHandler->handleTag( tag );
-  }
-
-  Tag* Parser::parse( std::string& data )
-  {
-    Parser p( 0, false );
-    p.m_nullRoot = false;
-    int i = p.feed( data );
-    if( i == -1 && p.m_return == ParseOK )
-      return p.m_root->clone();
-    else
-      return 0;
   }
 
 }

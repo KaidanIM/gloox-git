@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -24,7 +24,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief An implementation of Message Events (XEP-0022) as a StanzaExtension.
+   * @brief An implementation of Message Events (@xep{0022}) as a StanzaExtension.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0

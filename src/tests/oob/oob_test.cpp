@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../tag.h"
 #include "../../oob.h"
 #include "../../iq.h"
@@ -22,7 +34,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( d->tag() != 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   d = 0;
@@ -42,7 +54,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( d->url() != "invalidurl" || d->desc() != "description" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   d = 0;
@@ -56,7 +68,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || !t->hasChild( "desc" ) || t->findChild( "desc" )->cdata() != "description")
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   delete t;
@@ -69,7 +81,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( d->url() != "invalidurl" || d->desc() != "description" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   d = 0;
@@ -83,7 +95,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || !t->hasChild( "desc" ) || t->findChild( "desc" )->cdata() != "description")
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   delete t;
@@ -109,7 +121,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( d->url() != "invalidurl" || d->desc() != "description" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   d = 0;
@@ -123,7 +135,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || !t->hasChild( "desc" ) || t->findChild( "desc" )->cdata() != "description")
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   delete t;
@@ -136,7 +148,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( d->url() != "invalidurl" || d->desc() != "description" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   d = 0;
@@ -150,7 +162,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || !t->hasChild( "desc" ) || t->findChild( "desc" )->cdata() != "description")
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
   delete t;
@@ -178,7 +190,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 || se->url() != "url" || se->desc() != "desc" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -190,7 +202,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "OOB: %d test(s) failed\n", fail );
+    fprintf( stderr, "OOB: %d test(s) failed\n", fail );
     return 1;
   }
 

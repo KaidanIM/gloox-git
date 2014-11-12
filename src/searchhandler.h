@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -25,7 +25,7 @@ namespace gloox
 
   /**
    * Holds all the possible fields a server may require for searching according
-   * to Section 7, XEP-0055.
+   * to Section 7, @xep{0055}.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
@@ -118,7 +118,7 @@ namespace gloox
   };
 
   /**
-   * The possible fields of a XEP-0055 user search.
+   * The possible fields of a @xep{0055} user search.
    */
   enum SearchFieldEnum
   {
@@ -134,7 +134,7 @@ namespace gloox
   typedef std::list<const SearchFieldStruct*> SearchResultList;
 
   /**
-   * @brief A virtual interface that enables objects to receive Jabber Search (XEP-0055) results.
+   * @brief A virtual interface that enables objects to receive Jabber Search (@xep{0055}) results.
    *
    * A class implementing this interface can receive the result of a Jabber Search.
    *

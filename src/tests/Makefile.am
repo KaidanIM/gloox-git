@@ -2,18 +2,17 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp asyncdns \
-          base64 \
-          capabilities chatstatefilter client clientbase connectionbosh \
+SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
+          capabilities carbons chatstatefilter client clientbase connectionbosh \
           dataform dataformfield \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
           error \
-          featureneg flexoffline flexofflineoffline \
+          featureneg flexoffline flexofflineoffline forward \
           gpgencrypted gpgsigned \
           inbandbytestreamibb inbandbytestream iq \
-          jid jinglesessionjingle jinglertp jingleiceudp jinglerawudp jinglesession \
+          jid jingleiceudp jinglesession jinglesessionjingle jinglesessionmanager \
           lastactivity lastactivityquery \
-          md4 md5 message messageeventfilter \
+          md5 message messageeventfilter \
           mucroommuc mucroommucadmin mucroommucowner mucroommucuser \
           nickname nonsaslauthquery nonsaslauth \
           oob \
@@ -26,13 +25,11 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp asyncdns \
           searchquery search \
           sha shim \
           simanager simanagersi stanzaextensionfactory subscription \
-          tag tlsgnutls tlsopenssl tlsschannel \
+          tag tlsgnutls \
           uniquemucroomunique \
           vcard vcardupdate \
           xpath \
           zlib util
-
-EXTRA_DIST = clientbase.h
 
 check: test
 

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -25,7 +25,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief An abstraction of Feature Negotiation (XEP-0020), implemented
+   * @brief An abstraction of Feature Negotiation (@xep{0020}), implemented
    * as a StanzaExtension.
    *
    * XEP Version: 1.5

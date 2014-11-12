@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #define GLOOX_TESTS
 #include "../../gloox.h"
 #include "../../jid.h"
@@ -60,7 +72,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
   public:
     RegistrationTest();
     ~RegistrationTest();
-    virtual void handleRegistrationFields( const gloox::JID& from, int fields,
+    virtual void handleRegistrationFields( const gloox::JID& /*from*/, int fields,
                                            std::string instructions )
     {
       if( m_test == 2 && fields & ( gloox::Registration::FieldUsername | gloox::Registration::FieldPassword
@@ -80,7 +92,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
       m_test = 0;
     }
 
-    virtual void handleRegistrationResult( const gloox::JID& from, gloox::RegistrationResult regResult )
+    virtual void handleRegistrationResult( const gloox::JID& /*from*/, gloox::RegistrationResult regResult )
     {
       if( ( m_test == 4 || m_test == 6 || m_test == 7 || m_test == 8 )
             && regResult == gloox::RegistrationSuccess )
@@ -89,7 +101,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
       m_test = 0;
     }
 
-    virtual void handleDataForm( const gloox::JID& from, const gloox::DataForm& form )
+    virtual void handleDataForm( const gloox::JID& /*from*/, const gloox::DataForm& form )
     {
       if( m_test == 5 && form )
         m_result = true;
@@ -97,7 +109,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
       m_test = 0;
     }
 
-    virtual void handleOOB( const gloox::JID& from, const gloox::OOB& oob )
+    virtual void handleOOB( const gloox::JID& /*from*/, const gloox::OOB& /*oob*/ )
     {
     }
 
@@ -218,7 +230,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -239,7 +251,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete q;
   }
@@ -261,7 +273,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete q;
   }
@@ -279,7 +291,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -291,7 +303,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -311,7 +323,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete q;
   }
@@ -325,7 +337,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -337,7 +349,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -349,7 +361,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t.result() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -368,7 +380,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 

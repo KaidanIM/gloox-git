@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../error.h"
 #include "../../tag.h"
 #include "../../gloox.h"
@@ -27,7 +39,7 @@ int main( int /*argc*/, char** /*argv*/ )
     || e->appError()->xml() != "<unsupported xmlns='errorNS' feature='f'/>"
     || e->text() != "shit happens" )
   {
-    printf( "failed: '%s' test\n", name.c_str() );
+    fprintf( stderr, "failed: '%s' test\n", name.c_str() );
     printf( "type == %d, should be %d\n", e->type(), StanzaErrorTypeAuth );
     printf( "err == %d, should be %d\n", e->error(), StanzaErrorFeatureNotImplemented );
     printf( "xml: %s\n", e->appError()->xml().c_str() );
@@ -47,7 +59,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Error: %d test(s) failed\n", fail );
+    fprintf( stderr, "Error: %d test(s) failed\n", fail );
     return 1;
   }
 

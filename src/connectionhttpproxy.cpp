@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2004-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -174,9 +174,9 @@ namespace gloox
           port = host.second;
         }
       }
-      m_logInstance.dbg( LogAreaClassConnectionHTTPProxy,
-                         "Requesting HTTP proxy connection to " + server + ":"
-                           + util::int2string( port ) );
+      std::string message = "Requesting HTTP proxy connection to " + server + ":"
+          + util::int2string( port );
+      m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, message );
 
       std::string os = "CONNECT " + server + ":" + util::int2string( port ) + " HTTP/1."
           + util::int2string( m_http11 ? 1 : 0 ) + "\r\n"
@@ -206,7 +206,7 @@ namespace gloox
                                               ConnectionError reason )
   {
     m_state = StateDisconnected;
-    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, "HTTP proxy connection closed" );
+    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, "HTTP Proxy connection closed" );
 
     if( m_handler )
       m_handler->handleDisconnect( this, reason );

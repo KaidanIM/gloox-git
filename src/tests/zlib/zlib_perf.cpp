@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #ifndef _WIN32
 
 #include "../../compressionzlib.h"
@@ -34,7 +46,7 @@ class ZlibTest : public CompressionDataHandler
 };
 
 static const double divider = 1000000;
-static const int num = 5000000;
+static const int num = 250;
 static double t;
 
 static void printTime ( const char * testName, struct timeval tv1, struct timeval tv2 )

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -23,7 +23,6 @@
 
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
-#include <gcrypt.h>
 
 namespace gloox
 {
@@ -57,18 +56,21 @@ namespace gloox
                          const StringList& cacerts = StringList() );
 
       // reimplemented from TLSBase
+      virtual void setCACerts( const StringList& cacerts );
+
+      // reimplemented from TLSBase
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
+
+      // reimplemented from TLSBase
       virtual void cleanup();
 
     private:
-      virtual void setCACerts( const StringList& cacerts );
-      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
-
       virtual void getCertInfo();
 
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
       bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
 
-      gnutls_certificate_credentials m_credentials;
+      gnutls_certificate_credentials_t m_credentials;
 
   };
 

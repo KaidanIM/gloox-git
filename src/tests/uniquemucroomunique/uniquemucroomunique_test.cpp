@@ -1,27 +1,26 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../tag.h"
+#define UNIQUEMUCROOM_TEST
+#include "../../uniquemucroom.h"
 #include "../../iq.h"
 #include "../../stanzaextensionfactory.h"
-
-#include "../clientbase.h"
-
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 #include <cstdio> // [s]print[f]
-
-#define UNIQUEMUCROOM_TEST
-#include "../../uniquemucroom.cpp"
-#include "../../uniquemucroom.h"
-#include "../../mucroom.cpp"
-#include "../../mucroom.h"
-#include "../../disco.cpp"
-#include "../../disco.h"
-#include "../../mucmessagesession.cpp"
-#include "../../mucmessagesession.h"
-#include "../../messagesession.cpp"
-#include "../../messagesession.h"
 
 int main( int /*argc*/, char** /*argv*/ )
 {
@@ -37,7 +36,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !t || t->xml() != "<unique xmlns='" + XMLNS_MUC_UNIQUE + "'/>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -55,7 +54,7 @@ int main( int /*argc*/, char** /*argv*/ )
        || uq.name() != "foo" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
   }
@@ -72,7 +71,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -81,7 +80,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !fail )
     printf( "OK\n" );
   else
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
 
   return fail;
 }

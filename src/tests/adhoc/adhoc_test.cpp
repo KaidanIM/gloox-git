@@ -1,18 +1,64 @@
+/*
+  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
+
+  This software is distributed under a license. The full license
+  agreement can be found in the file LICENSE in this distribution.
+  This software may not be copied, modified, sold or distributed
+  other than expressed in the named license agreement.
+
+  This software is distributed without any warranty.
+*/
+
 #define GLOOX_TESTS
 #include "../../iq.h"
 #include "../../iqhandler.h"
 #include "../../jid.h"
-
-#include "../clientbase.h"
+#include "../../mutex.h"
+#include "../../mutexguard.h"
 
 #include <stdio.h>
+#include <locale.h>
 #include <string>
 #include <cstdio> // [s]print[f]
 
 gloox::JID g_jid( "foof" );
 
+namespace gloox
+{
+  class Disco;
+
+  class ClientBase
+  {
+    public:
+      ClientBase() : m_disco( 0 )  {}
+      virtual ~ClientBase() {}
+      Disco* disco() { return m_disco; }
+      const JID& jid() const { return m_jid; }
+      const std::string getID();
+      virtual void send( IQ& ) = 0;
+      virtual void send( const IQ&, IqHandler*, int ) = 0;
+      virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
+      void removeIqHandler( IqHandler* ih, int exttype );
+      void removeIDHandler( IqHandler* ih );
+      void registerIqHandler( IqHandler* ih, int exttype );
+      void registerStanzaExtension( StanzaExtension* ext );
+      void removeStanzaExtension( int ext );
+    protected:
+      Disco* m_disco;
+    private:
+      JID m_jid;
+  };
+  void ClientBase::removeIqHandler( IqHandler*, int ) {}
+  void ClientBase::removeIDHandler( IqHandler* ) {}
+  void ClientBase::registerIqHandler( IqHandler*, int ) {}
+  void ClientBase::registerStanzaExtension( StanzaExtension* se ) { delete se; }
+  void ClientBase::removeStanzaExtension( int ) {}
+  const std::string ClientBase::getID() { return "id"; }
+}
 using namespace gloox;
 
+#define CLIENTBASE_H__
 #define DISCO_TEST
 #define DISCO_INFO_TEST
 #define ADHOC_TEST
@@ -30,7 +76,7 @@ class AdhocTest : public ClientBase, public AdhocCommandProvider, public AdhocHa
     void setTest( int test ) { m_test = test; }
     void setAdhoc( Adhoc* adhoc ) { m_adhoc = adhoc; }
     virtual void send( IQ& iq );
-    virtual void send( const IQ& iq, IqHandler*, int, bool = false );
+    virtual void send( const IQ& iq, IqHandler*, int );
     virtual void trackID( IqHandler *ih, const std::string& id, int context );
     virtual void handleAdhocCommand( const JID& /*from*/, const Adhoc::Command& command,
                                      const std::string& /*sess*/ )
@@ -38,19 +84,19 @@ class AdhocTest : public ClientBase, public AdhocCommandProvider, public AdhocHa
       if( m_test == 5 && command.node() == "foocmd" )
         m_result = true;
     }
-    virtual void handleAdhocSupport( const JID& /*remote*/, bool support )
+    virtual void handleAdhocSupport( const JID& /*remote*/, bool support, int /*context*/ )
     {
       if( m_test == 1 || m_test == 2 )
         m_result = support;
     }
-    virtual void handleAdhocCommands( const JID& /*remote*/, const StringMap& commands )
+    virtual void handleAdhocCommands( const JID& /*remote*/, const StringMap& commands, int /*context*/ )
     {
       if( m_test == 3 && commands.find( "node" ) != commands.end()
           && (*(commands.find( "node" ))).second == "name" )
         m_result = true;
     }
-    virtual void handleAdhocError( const JID& /*remote*/, const Error* /*error*/ ) {}
-    virtual void handleAdhocExecutionResult( const JID& /*remote*/, const Adhoc::Command& /*command*/ )
+    virtual void handleAdhocError( const JID& /*remote*/, const Error* /*error*/, int /*context*/ ) {}
+    virtual void handleAdhocExecutionResult( const JID& /*remote*/, const Adhoc::Command& /*command*/, int /*context*/ )
     {
       if( m_test == 4 )
         m_result = true;
@@ -66,7 +112,7 @@ void AdhocTest::send( IQ& /*iq*/ )
 {
 }
 
-void AdhocTest::send( const IQ& iq, IqHandler*, int ctx, bool )
+void AdhocTest::send( const IQ& iq, IqHandler*, int ctx )
 {
   switch( m_test )
   {
@@ -120,7 +166,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !at->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -130,7 +176,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( at->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -140,7 +186,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !at->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -151,7 +197,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !at->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   ah->registerAdhocCommandProvider( at, "foocmd", "fooname" );
@@ -167,7 +213,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !at->checkResult() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -183,7 +229,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Adhoc: %d test(s) failed\n", fail );
+    fprintf( stderr, "Adhoc: %d test(s) failed\n", fail );
     return 1;
   }
 

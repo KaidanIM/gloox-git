@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../gloox.h"
 #include "../../tlshandler.h"
 #include "../../tlsgnutlsclientanon.h"
@@ -165,13 +177,13 @@ void GnuTLSTest::printfCert( CertInfo &certinfo )
 
 std::string GnuTLSTest::send( const std::string& txt )
 {
-  printf( "sending %d\n", txt.length() );
+//   printf( "sending %d\n", txt.length() );
 
   m_client->encrypt( txt );
   while( m_clientDecrypted.empty() )
     loop();
 
-  printf( "recv'ed %d\n", m_clientDecrypted.length() );
+//   printf( "recv'ed %d\n", m_clientDecrypted.length() );
   const std::string t = m_clientDecrypted;
   m_clientDecrypted = "";
   return t;
@@ -188,7 +200,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !t->handshake() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -197,7 +209,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t->send( text ) != text )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -206,7 +218,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t->send( text ) != text )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -215,7 +227,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t->send( text ) != text )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -224,7 +236,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( t->send( text ) != text )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -252,7 +264,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "TLSGnuTLS: %d test(s) failed\n", fail );
+    fprintf( stderr, "TLSGnuTLS: %d test(s) failed\n", fail );
     return 1;
   }
 }

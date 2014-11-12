@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../shim.h"
 #include "../../message.h"
 #include "../../stanzaextensionfactory.h"
@@ -23,7 +35,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -40,7 +52,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( t->xml() != "<headers xmlns='"+ XMLNS_SHIM + "'><header name='created'>yesterday</header><header name='name'>foo</header></headers>" )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
 
     name = "headers to tag to headers, part 2/2";
@@ -48,7 +60,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( s.headers() != hl )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete t;
     t = 0;
@@ -67,7 +79,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( se == 0 )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
     delete f;
   }
@@ -81,7 +93,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 

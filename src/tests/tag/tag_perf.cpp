@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #ifndef _WIN32
 
 #include "../../tag.h"
@@ -55,7 +67,7 @@ static char values[sz_max];
 
 static void randomize( const int size )
 {
-  srand( time(NULL) );
+  srand( time( 0 ) );
   for (int i = 0; i < size-1; ++i)
   {
     values[i] = rand() % 96 + 32;

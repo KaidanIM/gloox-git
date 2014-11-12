@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../jid.h"
 using namespace gloox;
 
@@ -18,7 +30,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.bare() != "abc@server.dom" || j.username() != "abc" || j.server() != "server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -28,7 +40,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || j.resource() != "res" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -37,7 +49,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.full() != "server.dom/res" || j.server() != "server.dom" || j.resource() != "res" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -46,34 +58,26 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.full() != "server.dom" || j.server() != "server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
   name = "prepped node";
-#ifndef HAVE_LIBIDN
-  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
-#else
   j = JID( "ABC@server.dom" );
   if( j.bare() != "abc@server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
-#endif
 
   // -------
   name = "prepped dom";
-#ifndef HAVE_LIBIDN
-  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
-#else
   j = JID( "abc@SeRvEr.dom" );
   if( j.bare() != "abc@server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
-#endif
 
   // -------
   name = "resource getter";
@@ -81,25 +85,25 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.resource() != "rEsOurCe" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
   name = "node getter";
-  j = JID( "abc@server.dom/rEsOurCe" );
+  j = JID( "aBc@server.dom/rEsOurCe" );
   if( j.username() != "abc" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
   name = "server getter";
-  j = JID( "abc@server.dom/rEsOurCe" );
+  j = JID( "abc@serVer.dom/rEsOurCe" );
   if( j.server() != "server.dom" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -109,7 +113,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( j.bareJID() != t1.bareJID() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -124,7 +128,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !j.full().empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -133,7 +137,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !jid1 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -142,7 +146,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( jid2 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -151,7 +155,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( e != "1\\202\\223\\264\\275\\2f6\\3a7\\3c8\\3e9\\4010\\5c" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -160,7 +164,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( f != "1 2\"3&4'5/6:7<8>9@10\\" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -179,7 +183,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "JID: %d test(s) failed\n", fail );
+    fprintf( stderr, "JID: %d test(s) failed\n", fail );
     return 1;
   }
 

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -32,7 +32,7 @@ namespace gloox
   class Disco;
 
   /**
-   * @brief An implementation of XEP-0055 (Jabber Search)
+   * @brief An implementation of @xep{0055} (Jabber Search)
    *
    * To perform a search in a directory (e.g., a User Directory):
    *
@@ -113,7 +113,7 @@ namespace gloox
     public:
 #endif
       /**
-       * @brief A wrapping class for the XEP-0055 &lt;query&gt; element.
+       * @brief A wrapping class for the @xep{0055} &lt;query&gt; element.
        *
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0

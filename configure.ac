@@ -1,7 +1,8 @@
+
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [1.1-svn], [js@camaya.net])
+AC_INIT([gloox], [1.0.12], [js@camaya.net])
 AC_CONFIG_SRCDIR(src/gloox.cpp)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -43,11 +44,34 @@ for libpath in $split_libs ; do
     LDFLAGS="-L$libpath $LDFLAGS"
 done
 
+dnl Check for GCC atomic builtins
+AC_MSG_CHECKING([whether GCC atomic builtins are available])
+echo 'int main(int argc, char* argv[]) { int i; __sync_add_and_fetch(&i, 1); __sync_sub_and_fetch(&i, 1); return 0; } ' > check_atomicbuiltins.c
+if test -z "`${CC} check_atomicbuiltins.c -o check_atomicbuiltins 2>&1`" ; then
+	HAVE_GCC_ATOMIC_BUILTINS=yes
+	AC_DEFINE(HAVE_GCC_ATOMIC_BUILTINS, 1, [Define to 1 if GCC atomic builtins are available])
+	AC_MSG_RESULT([yes])
+	if test $cross_compiling == "yes"; then
+		# Some platforms don't seem to be fully happy for libraries using GCC atomic builtins
+		#  unless -lgcc and -lgcc_s are explicitly included.
+		# (Errors like
+		# ld: hidden symbol `__sync_add_and_fetch_4' in .../libgcc.a(linux-atomic.o) is referenced by DSO
+		# ld: final link failed: Nonrepresentable section on output)
+		LDFLAGS="$LDFLAGS -lgcc -lgcc_s"
+	fi
+else
+	HAVE_GCC_ATOMIC_BUILTINS=no
+	AC_MSG_RESULT([no])
+fi
+rm -f check_atomicbuiltins*
+AC_SUBST(HAVE_GCC_ATOMIC_BUILTINS,$HAVE_GCC_ATOMIC_BUILTINS)
+
+
 dnl Checks for libraries.
 
 dnl Libidn
 AC_ARG_WITH(libidn, AC_HELP_STRING([--with-libidn=[DIR]],
-      [Support IDN (needs GNU Libidn)]),
+                                   [Support IDN (needs GNU Libidn)]),
       libidn=$withval, libidn=yes)
 if test "$libidn" != "no"; then
   if test "$libidn" != "yes"; then
@@ -91,7 +115,7 @@ if test "$schannel" = "yes"; then
     *)
         schannel=no
         echo "*"
-        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Ignoring."
+        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW/cygwin. Ignoring."
         echo "*";;
   esac
   AC_MSG_CHECKING([if SChannel should be used])
@@ -100,24 +124,20 @@ fi
 
 dnl GnuTLS
 if test "$ssl" = "no"; then
-  AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
-        [Support Stream Encryption (needs GnuTLS)]),
+  AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[yes/no]],
+                                     [Support Stream Encryption (needs GnuTLS)]),
         gnutls=$withval, gnutls=yes)
   if test "$gnutls" != "no"; then
-    if test "$gnutls" != "yes"; then
-      LDFLAGS="${LDFLAGS} `pkg-config gnutls --libs-only-L`"
-      CPPFLAGS="${CPPFLAGS} `pkg-config gnutls --cflags`"
+    PKG_CHECK_MODULES([GNUTLS], [gnutls >= 2.12], [gnutls=yes], [gnutls=no])
+    if test "$gnutls" = "yes" ; then
+      LIBS="${LIBS} ${GNUTLS_LIBS}"
+      CPPFLAGS="${CPPFLAGS} ${GNUTLS_CFLAGS}"
+      AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support (GnuTLS). Undefine HAVE_OPENSSL.])
+      AC_DEFINE(HAVE_GNUTLS_SESSION_CHANNEL_BINDING, 1, [Define to 1 if you have GnuTLS 2.12.0 or above.] )
+      ssl=yes
+    else
+      AC_MSG_WARN([GnuTLS not found])
     fi
-    AC_CHECK_HEADER(gnutls/gnutls.h,
-    AC_CHECK_LIB(gnutls, gnutls_check_version,
-            [gnutls=yes LIBS="${LIBS} `pkg-config gnutls --libs`"], gnutls=no),
-            gnutls=no)
-  fi
-  if test "$gnutls" != "no" ; then
-    AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support (GnuTLS). Undefine HAVE_OPENSSL.])
-    ssl=yes
-  else
-    AC_MSG_WARN([GnuTLS not found])
   fi
   AC_MSG_CHECKING([if GnuTLS should be used])
   AC_MSG_RESULT($gnutls)
@@ -126,7 +146,7 @@ fi
 dnl OpenSSL
 if test "$ssl" = "no"; then
   AC_ARG_WITH(openssl, AC_HELP_STRING([--with-openssl=[DIR]],
-        [Support Stream Encryption (needs OpenSSL)]),
+                                      [Support Stream Encryption (needs OpenSSL)]),
         openssl=$withval, openssl=yes)
   if test "$openssl" != "no"; then
     if test "$openssl" != "yes"; then
@@ -151,7 +171,7 @@ fi
 
 dnl Zlib
 AC_ARG_WITH(zlib, AC_HELP_STRING([--with-zlib=[DIR]],
-      [Support Stream Compression (needs Zlib)]),
+                                 [Support Stream Compression (needs Zlib)]),
       zlib=$withval, zlib=yes)
 if test "$zlib" != "no"; then
   if test "$zlib" != "yes"; then
@@ -252,7 +272,7 @@ else
       AC_MSG_CHECKING([for res_query in -lresolv (alternate version)])
       save_libs="$LIBS"
       LIBS="-lresolv $LIBS"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_query(0,0)]])],
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_query(0,0,0,0,0)]])],
                      [AC_MSG_RESULT(yes)
                       AC_DEFINE(HAVE_RES_QUERY)
                       have_res_query=yes],
@@ -273,22 +293,11 @@ fi
 #                 AC_SEARCH_LIBS(__res_querydomain,resolv bind,,have_resolver=no))
 
 
-dnl Maintainer mode
-maintainer="no"
-AC_ARG_ENABLE( maintainer,
-               [  --enable-maintainer     turn on Maintainer mode (-Werror) [default=no]],
-               [maintainer="yes"] )
-if test "x$maintainer" = "xyes"; then
-      CPPFLAGS="$CPPFLAGS -Wshadow -Werror"
-fi
-AC_MSG_CHECKING([whether to enable maintainer mode])
-AC_MSG_RESULT($maintainer)
-
-
 dnl Debug
 debug="no"
 AC_ARG_ENABLE( debug,
-               [  --enable-debug          turn on debugging [default=no]],
+               [AC_HELP_STRING([--enable-debug],
+                               [turn on debugging [default=no]])],
                [debug="yes"] )
 if test "x$debug" = "xyes"; then
       CPPFLAGS="$CPPFLAGS -g3 -fno-inline -DDEBUG"
@@ -299,7 +308,8 @@ AC_MSG_RESULT($debug)
 dnl getaddrinfo
 getaddrinfo="no"
 AC_ARG_ENABLE( getaddrinfo,
-               [  --enable-getaddrinfo    use getaddrinfo for dns lookups [default=no]],
+               [AC_HELP_STRING([--enable-getaddrinfo],
+                               [use getaddrinfo for dns lookups [default=no]])],
                [getaddrinfo="yes"] )
 if test "x$getaddrinfo" = "xyes"; then
     AC_CHECK_FUNCS(getaddrinfo,,getaddrinfo="no")
@@ -316,10 +326,29 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE
 
+dnl Want mdns support?
+AC_ARG_ENABLE([mdns],
+              [AC_HELP_STRING([--enable-mdns],
+                              [use mdns [default=no]])],
+              [enable_mdns=yes],
+              [enable_mdns=no])
+if test "$enable_mdns" = yes; then
+  AC_DEFINE([HAVE_MDNS], [], [enable mdns support])
+  AC_CHECK_HEADER(dns_sd.h,
+                  AC_CHECK_LIB(dns_sd, DNSServiceCreateConnection,
+                               [LIBS="${LIBS} -ldns_sd"], enable_mdns=no),
+                  enable_mdns=no)
+else
+  MAYBE_LIB_mdns=
+fi
+AC_SUBST(MAYBE_LIB_mdns)
+AC_MSG_CHECKING([if mDNS support should be built])
+AC_MSG_RESULT($enable_mdns)
+
 dnl build tests?
 want_tests=yes
 AC_ARG_WITH(tests, AC_HELP_STRING([--with-tests],
-      [Build unit tests (default=yes)]),
+      [Build unit tests (default=yes]),
       want_tests=$withval, want_tests=yes)
 AC_MSG_CHECKING([if unit tests should be built])
 AC_MSG_RESULT($want_tests)
@@ -362,9 +391,9 @@ src/tests/adhoccommand/Makefile
 src/tests/adhoccommandnote/Makefile
 src/tests/amprule/Makefile
 src/tests/amp/Makefile
-src/tests/asyncdns/Makefile
 src/tests/base64/Makefile
 src/tests/capabilities/Makefile
+src/tests/carbons/Makefile
 src/tests/chatstatefilter/Makefile
 src/tests/client/Makefile
 src/tests/clientbase/Makefile
@@ -381,20 +410,19 @@ src/tests/error/Makefile
 src/tests/featureneg/Makefile
 src/tests/flexofflineoffline/Makefile
 src/tests/flexoffline/Makefile
+src/tests/forward/Makefile
 src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
 src/tests/inbandbytestreamibb/Makefile
 src/tests/inbandbytestream/Makefile
 src/tests/iq/Makefile
 src/tests/jid/Makefile
-src/tests/jinglesessionjingle/Makefile
-src/tests/jinglertp/Makefile
 src/tests/jingleiceudp/Makefile
-src/tests/jinglerawudp/Makefile
 src/tests/jinglesession/Makefile
+src/tests/jinglesessionjingle/Makefile
+src/tests/jinglesessionmanager/Makefile
 src/tests/lastactivityquery/Makefile
 src/tests/lastactivity/Makefile
-src/tests/md4/Makefile
 src/tests/md5/Makefile
 src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
@@ -430,8 +458,6 @@ src/tests/stanzaextensionfactory/Makefile
 src/tests/subscription/Makefile
 src/tests/tag/Makefile
 src/tests/tlsgnutls/Makefile
-src/tests/tlsopenssl/Makefile
-src/tests/tlsschannel/Makefile
 src/tests/uniquemucroomunique/Makefile
 src/tests/util/Makefile
 src/tests/vcard/Makefile

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -26,7 +26,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief This is a wrapper of an XHTML-IM (XEP-0071) message body.
+   * @brief This is a wrapper of an XHTML-IM (@xep{0071}) message body.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0

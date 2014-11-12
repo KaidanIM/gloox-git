@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../prep.h"
 using namespace gloox;
 
@@ -18,7 +30,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( prep::nodeprep( t, result ) || !result.empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -27,7 +39,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( prep::resourceprep( t, result ) || !result.empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -36,7 +48,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( prep::nameprep( t, result ) || !result.empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -45,7 +57,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( prep::idna( t, result ) || !result.empty() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -55,7 +67,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::nodeprep( t1, result ) && result == t1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -64,7 +76,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::resourceprep( t1, result ) && result == t1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -73,7 +85,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::nameprep( t1, result ) && result == t1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
@@ -82,62 +94,48 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !( prep::idna( t1, result ) && result == t1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
 
-  const std::string t2( "aBcDeFgH" );
-  const std::string t3( "abcdefgh" );
   // -------
   name = "nodeprep simple casefolding";
-#ifndef HAVE_LIBIDN
-  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
-#else
+  const std::string t2( "aBcDeFgH" );
+  const std::string t3( "abcdefgh" );
   if( !( prep::nodeprep( t2, result ) && result == t3 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
-#endif
+
   // -------
   name = "resourceprep simple casefolding (none)";
-#ifndef HAVE_LIBIDN
-  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
-#else
   if( !( prep::resourceprep( t2, result ) && result == t2 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
-#endif
 
   // -------
   name = "nameprep simple casefolding";
-#ifndef HAVE_LIBIDN
-  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
-#else
   if( !( prep::nameprep( t2, result ) && result == t3 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
-#endif
 
   // -------
   name = "idna example";
-#ifndef HAVE_LIBIDN
-  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
-#else
   if( !( prep::idna( "www.dömäin.de", result ) && result == "www.xn--dmin-moa0i.de" ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   result = "";
-#endif
+
 
 
 
@@ -156,7 +154,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Prep: %d test(s) failed\n", fail );
+    fprintf( stderr, "Prep: %d test(s) failed\n", fail );
     return 1;
   }
 

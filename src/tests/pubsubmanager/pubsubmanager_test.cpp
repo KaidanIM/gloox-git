@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../pubsubmanager.h"
 #include "../../pubsubresulthandler.h"
 
@@ -262,7 +274,7 @@ static const std::string testValues [][2] =
       tag = iq.tag();
       if( !tag || tag->xml() != testValues[m_context][1] )
       {
-        printf( "test failed: %s\n", testValues[m_context][0].c_str() );
+        fprintf( stderr, "test failed: %s\n", testValues[m_context][0].c_str() );
         printf( "- %s\n", testValues[m_context][1].c_str() );
         if( tag )
           printf( "- %s\n", tag->xml().c_str() );
@@ -355,7 +367,7 @@ int main()
 
 
   if( cb->failed )
-    printf( "PubSub::Manager: %d test(s) failed\n", cb->failed );
+    fprintf( stderr, "PubSub::Manager: %d test(s) failed\n", cb->failed );
   else
     printf( "PubSub::Manager: OK\n" );
 

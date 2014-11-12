@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -17,11 +17,10 @@
 #include "base64.h"
 #include "clientbase.h"
 #include "compressionbase.h"
+#include "compressionzlib.h"
 #include "connectionbase.h"
-#include "connectioncompression.h"
 #include "connectionlistener.h"
 #include "connectiontcpclient.h"
-#include "connectiontls.h"
 #include "disco.h"
 #include "error.h"
 #include "eventhandler.h"
@@ -41,16 +40,17 @@
 #include "presencehandler.h"
 #include "rosterlistener.h"
 #include "stanzaextensionfactory.h"
+#include "sha.h"
 #include "subscription.h"
 #include "subscriptionhandler.h"
 #include "tag.h"
 #include "taghandler.h"
 #include "tlsbase.h"
 #include "tlsdefault.h"
+#include "prep.h"
 #include "util.h"
 
 #include <cstdlib>
-#include <cstdio>
 #include <string>
 #include <map>
 #include <list>
@@ -63,6 +63,11 @@
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
 #include <tchar.h>
+# ifdef __MINGW32__
+#  ifndef SecureZeroMemory
+#  define SecureZeroMemory(p,s) RtlFillMemory((p),(s),0)
+#  endif
+# endif
 #endif
 
 namespace gloox
@@ -88,15 +93,17 @@ namespace gloox
   // ---- ClientBase ----
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
-      m_xmllang( "en" ), m_server( server ),
-      m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( TLSOptional ), m_port( port ),
-      m_availableSaslMechs( SaslMechAll ),
+      m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
+      m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ), m_port( port ),
+      m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_transportConnection( 0 ), m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
+      m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
+      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long) & m_nextId ) & 0xFFFF ) ),
+      m_smSent( 0 )
   {
     init();
   }
@@ -105,25 +112,29 @@ namespace gloox
                           const std::string& server, int port )
     : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_password( password ),
-      m_xmllang( "en" ), m_server( server ),
-      m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( TLSOptional ),
-      m_port( port ), m_availableSaslMechs( SaslMechAll ),
+      m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
+      m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ),
+      m_port( port ), m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
-      m_transportConnection( 0 ), m_selectedSaslMech( SaslMechNone ), m_autoMessageSession( false )
+      m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
+      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long) & m_nextId ) & 0xFFFF ) ),
+      m_smSent( 0 )
   {
     init();
   }
 
   void ClientBase::init()
   {
+    srand( time( 0 ) );
+
     if( !m_disco )
     {
       m_disco = new Disco( this );
-      m_disco->setVersion( "gloox", GLOOX_VERSION );
+      m_disco->setVersion( "based on gloox", GLOOX_VERSION );
       m_disco->addFeature( XMLNS_XMPP_PING );
     }
 
@@ -131,8 +142,6 @@ namespace gloox
     registerStanzaExtension( new Ping() );
     registerIqHandler( this, ExtPing );
 
-    m_encryptionActive = false;
-    m_compressionActive = false;
     m_streamError = StreamErrorUndefined;
     m_block = false;
     memset( &m_stats, 0, sizeof( m_stats ) );
@@ -145,22 +154,16 @@ namespace gloox
     m_iqIDHandlers.clear();
     m_iqHandlerMapMutex.unlock();
 
-//     m_iqExtHandlerMapMutex.lock();
+    m_iqExtHandlerMapMutex.lock();
     m_iqExtHandlers.clear();
-//     m_iqExtHandlerMapMutex.unlock();
+    m_iqExtHandlerMapMutex.unlock();
 
-    // FIXME the same code is used in handleDisconnect()
-    // try to minimise duplication
-    if( m_encryption )
-      m_encryption->setConnectionImpl( 0 );
+    util::clearList( m_presenceExtensions );
+    util::clearMap( m_smQueue );
 
-    if( m_compression )
-      m_compression->setConnectionImpl( 0 );
-    // ~FIXME
-
-    delete m_connection;
-    delete m_encryption;
-    delete m_compression;
+    setConnectionImpl( 0 );
+    setEncryptionImpl( 0 );
+    setCompressionImpl( 0 );
     delete m_seFactory;
     m_seFactory = 0; // to avoid usage when Disco gets deleted below
     delete m_disco;
@@ -189,13 +192,17 @@ namespace gloox
     if( !m_connection )
       m_connection = new ConnectionTCPClient( this, m_logInstance, m_server, m_port );
 
-    m_transportConnection = m_connection;
-
     if( m_connection->state() >= StateConnecting )
       return true;
 
+    if( !m_encryption )
+      m_encryption = getDefaultEncryption();
+
+    if( !m_compression )
+      m_compression = getDefaultCompression();
+
     m_logInstance.dbg( LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION + ", connecting to "
-                                               + m_server + ":" + util::int2string( m_port ) + "..." );
+                                               + m_server + ( ( m_customConnection )?( " using a custom connection" ):( m_port > 0 ? ( ":" + util::int2string( m_port ) ) : EmptyString ) ) + "..." );
     m_block = block;
     ConnectionError ret = m_connection->connect();
     if( ret != ConnNoError )
@@ -231,7 +238,7 @@ namespace gloox
       }
 
       m_sid = tag->findAttribute( "id" );
-      handleStartNode();
+      handleStartNode( tag );
     }
     else if( tag->name() == "error" && tag->xmlns() == XMLNS_STREAM )
     {
@@ -248,15 +255,23 @@ namespace gloox
           {
             IQ iq( tag );
             m_seFactory->addExtensions( iq, tag );
+            if( iq.hasEmbeddedStanza() )
+              m_seFactory->addExtensions( *iq.embeddedStanza(), iq.embeddedTag() );
             notifyIqHandlers( iq );
             ++m_stats.iqStanzasReceived;
+            if( m_smContext >= CtxSMEnabled )
+              ++m_smHandled;
           }
           else if( tag->name() == "message" )
           {
             Message msg( tag );
             m_seFactory->addExtensions( msg, tag );
+            if( msg.hasEmbeddedStanza() )
+              m_seFactory->addExtensions( *msg.embeddedStanza(), msg.embeddedTag() );
             notifyMessageHandlers( msg );
             ++m_stats.messageStanzasReceived;
+            if( m_smContext >= CtxSMEnabled )
+              ++m_smHandled;
           }
           else if( tag->name() == "presence" )
           {
@@ -266,6 +281,8 @@ namespace gloox
             {
               Subscription sub( tag );
               m_seFactory->addExtensions( sub, tag );
+              if( sub.hasEmbeddedStanza() )
+                m_seFactory->addExtensions( *sub.embeddedStanza(), sub.embeddedTag() );
               notifySubscriptionHandlers( sub );
               ++m_stats.s10nStanzasReceived;
             }
@@ -273,12 +290,16 @@ namespace gloox
             {
               Presence pres( tag );
               m_seFactory->addExtensions( pres, tag );
+              if( pres.hasEmbeddedStanza() )
+                m_seFactory->addExtensions( *pres.embeddedStanza(), pres.embeddedTag() );
               notifyPresenceHandlers( pres );
               ++m_stats.presenceStanzasReceived;
             }
+            if( m_smContext >= CtxSMEnabled )
+              ++m_smHandled;
           }
           else
-            m_logInstance.err( LogAreaClassClientbase, "Received invalid stanza." );
+            m_logInstance.err( LogAreaClassClientbase, "Invalid stanza received: " + tag->name() );
         }
         else
         {
@@ -289,6 +310,37 @@ namespace gloox
 
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
+  }
+
+  void ClientBase::handleCompressedData( const std::string& data )
+  {
+    if( m_encryption && m_encryptionActive )
+      m_encryption->encrypt( data );
+    else if( m_connection )
+      m_connection->send( data );
+    else
+      m_logInstance.err( LogAreaClassClientbase, "Compression finished, but chain broken" );
+  }
+
+  void ClientBase::handleDecompressedData( const std::string& data )
+  {
+    parse( data );
+  }
+
+  void ClientBase::handleEncryptedData( const TLSBase* /*base*/, const std::string& data )
+  {
+    if( m_connection )
+      m_connection->send( data );
+    else
+      m_logInstance.err( LogAreaClassClientbase, "Encryption finished, but chain broken" );
+  }
+
+  void ClientBase::handleDecryptedData( const TLSBase* /*base*/, const std::string& data )
+  {
+    if( m_compression && m_compressionActive )
+      m_compression->decompress( data );
+    else
+      parse( data );
   }
 
   void ClientBase::handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
@@ -302,8 +354,8 @@ namespace gloox
       }
       else
       {
-        logInstance().dbg( LogAreaClassClientbase, "Connection encryption active" );
-        m_encryptionActive = true;
+        logInstance().dbg( LogAreaClassClientbase, "connection encryption active" );
+        header();
       }
     }
     else
@@ -315,7 +367,12 @@ namespace gloox
 
   void ClientBase::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
   {
-    parse( data );
+    if( m_encryption && m_encryptionActive )
+      m_encryption->decrypt( data );
+    else if( m_compression && m_compressionActive )
+      m_compression->decompress( data );
+    else
+      parse( data );
   }
 
   void ClientBase::handleConnect( const ConnectionBase* /*connection*/ )
@@ -325,23 +382,17 @@ namespace gloox
 
   void ClientBase::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
   {
-    if( !m_connection )
-      return;
-
-    m_parser.cleanup();
-
-    m_connection->cleanup();
-    m_connection = m_transportConnection;
+    if( m_connection )
+      m_connection->cleanup();
 
     if( m_encryption )
-      m_encryption->setConnectionImpl( 0 );
-    m_encryptionActive = false;
+      m_encryption->cleanup();
 
     if( m_compression )
-      m_compression->setConnectionImpl( 0 );
-    m_compressionActive = false;
+      m_compression->cleanup();
 
-    m_connection->registerConnectionDataHandler( this );
+    m_encryptionActive = false;
+    m_compressionActive = false;
 
     notifyOnDisconnect( reason );
   }
@@ -355,8 +406,23 @@ namespace gloox
       send( "</stream:stream>" );
 
     m_connection->disconnect();
+    m_connection->cleanup();
 
-    handleDisconnect( 0, reason );
+    if( m_encryption )
+      m_encryption->cleanup();
+
+    if( m_compression )
+      m_compression->cleanup();
+
+    m_encryptionActive = false;
+    m_compressionActive = false;
+    m_smSent = 0;
+
+    notifyOnDisconnect( reason );
+
+#ifdef CLIENTBASE_TEST
+    m_nextId.reset();
+#endif
   }
 
   void ClientBase::parse( const std::string& data )
@@ -394,15 +460,6 @@ namespace gloox
 #endif
   }
 
-  bool ClientBase::hasCompression()
-  {
-#if defined( HAVE_ZLIB ) || defined( HAVE_LZW )
-    return m_compress;
-#else
-    return false;
-#endif
-  }
-
   void ClientBase::startTls()
   {
     send( new Tag( "starttls", XMLNS, XMLNS_STREAM_TLS ) );
@@ -429,6 +486,40 @@ namespace gloox
 
     switch( type )
     {
+      case SaslMechScramSha1Plus:
+      case SaslMechScramSha1:
+      {
+        if( type == SaslMechScramSha1 )
+        {
+          if( ( m_availableSaslMechs & SaslMechScramSha1Plus ) != SaslMechScramSha1Plus )
+            m_gs2Header = "y,";
+          else
+            m_gs2Header = "n,";
+          a->addAttribute( "mechanism", "SCRAM-SHA-1" );
+        }
+        else // SaslMechScramSha1Plus
+        {
+          m_gs2Header = "p=tls-unique,";
+          a->addAttribute( "mechanism", "SCRAM-SHA-1-PLUS" );
+        }
+
+        std::string t;
+        if( m_authzid && prep::saslprep( m_authzid.bare(), t ) )
+          m_gs2Header += "a=" + t;
+
+        m_gs2Header += ",";
+
+        m_clientFirstMessageBare = "n=";
+        if( !m_authcid.empty() && prep::saslprep( m_authcid, t ) )
+          m_clientFirstMessageBare += t;
+        else if( prep::saslprep( m_jid.username(), t ) )
+          m_clientFirstMessageBare += t;
+
+        m_clientFirstMessageBare += ",r=" + getRandom();
+
+        a->setCData( Base64::encode64( m_gs2Header + m_clientFirstMessageBare ) );
+        break;
+      }
       case SaslMechDigestMd5:
         a->addAttribute( "mechanism", "DIGEST-MD5" );
         break;
@@ -485,7 +576,7 @@ namespace gloox
         SEC_WINNT_AUTH_IDENTITY_W identity, *ident = 0;
         memset( &identity, 0, sizeof( identity ) );
 
-        WCHAR *usernameW = 0, *domainW = NULL, *passwordW = 0;
+        WCHAR *usernameW = 0, *domainW = 0, *passwordW = 0;
         int cchUsernameW = 0, cchDomainW = 0, cchPasswordW = 0;
 
         if( m_jid.username().length() > 0 )
@@ -559,6 +650,52 @@ namespace gloox
     send( a );
   }
 
+  std::string ClientBase::hmac( const std::string& key, const std::string& str )
+  {
+    SHA sha;
+    std::string key_ = key;
+    if( key_.length() > 64 )
+    {
+      sha.feed( key_ );
+      key_ = sha.binary();
+      sha.reset();
+    }
+    unsigned char ipad[65];
+    unsigned char opad[65];
+    memset( ipad, '\0', sizeof( ipad ) );
+    memset( opad, '\0', sizeof( opad ) );
+    memcpy( ipad, key_.c_str(), key_.length() );
+    memcpy( opad, key_.c_str(), key_.length() );
+    for( int i = 0; i < 64; i++ )
+    {
+      ipad[i] ^= 0x36;
+      opad[i] ^= 0x5c;
+    }
+    sha.feed( ipad, 64 );
+    sha.feed( str );
+    key_ = sha.binary();
+    sha.reset();
+    sha.feed( opad, 64 );
+    sha.feed( key_ );
+
+    return sha.binary(); // hex() for testing
+  }
+
+  std::string ClientBase::hi( const std::string& str, const std::string& salt, int iter )
+  {
+    unsigned char xored[20];
+    memset( xored, '\0', sizeof( xored ) );
+    std::string tmp = salt;
+    tmp.append( "\0\0\0\1", 4 );
+    for( int i = 0; i < iter; ++i )
+    {
+      tmp = hmac( str, tmp );
+      for( int j = 0; j < 20; ++j )
+        xored[j] ^= tmp.c_str()[j];
+    }
+    return std::string( (char*)xored, 20 );
+  }
+
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
     Tag* t = new Tag( "response", XMLNS, XMLNS_STREAM_SASL );
@@ -567,6 +704,53 @@ namespace gloox
 
     switch( m_selectedSaslMech )
     {
+      case SaslMechScramSha1Plus:
+      case SaslMechScramSha1:
+      {
+        std::string snonce, salt, tmp;
+        int iter = 0;
+        std::string::size_type posn = decoded.find( "r=" );
+        std::string::size_type poss = decoded.find( "s=" );
+        std::string::size_type posi = decoded.find( "i=" );
+        if( posn == std::string::npos || poss == std::string::npos || posi == std::string::npos )
+          break;
+
+        snonce = decoded.substr( posn + 2, poss - posn - 3 );
+        salt = Base64::decode64( decoded.substr( poss + 2, posi - poss - 3 ) );
+        tmp = decoded.substr( posi + 2, decoded.length() - posi - 2 );
+        iter = atoi( tmp.c_str() );
+
+        if( !prep::saslprep( m_password, tmp ) )
+          break;
+
+        std::string saltedPwd = hi( tmp, salt, iter );
+        std::string ck = hmac( saltedPwd, "Client Key" );
+        SHA sha;
+        sha.feed( ck );
+        std::string storedKey = sha.binary();
+
+        if( m_selectedSaslMech == SaslMechScramSha1Plus )
+          tmp = "c=" + Base64::encode64( m_gs2Header + m_encryption->channelBinding() );
+        else
+          tmp = "c=biws";
+        tmp += ",r=" + snonce;
+
+        std::string authMessage = m_clientFirstMessageBare + "," + decoded + "," + tmp; // client-final-message-without-proof
+        std::string clientSignature = hmac( storedKey, authMessage );
+        unsigned char clientProof[20]; // ck XOR clientSignature
+        memcpy( clientProof, ck.c_str(), 20 );
+        for( int i = 0; i < 20; ++i )
+          clientProof[i] ^= clientSignature.c_str()[i];
+        std::string serverKey = hmac( saltedPwd, "Server Key" );
+        m_serverSignature = hmac( serverKey, authMessage );
+
+        tmp += ",p=";
+        tmp.append( Base64::encode64( std::string( (char*)clientProof, 20 ) ) );
+
+        t->setCData( Base64::encode64( tmp ) );
+
+        break;
+      }
       case SaslMechDigestMd5:
       {
         if( !decoded.compare( 0, 7, "rspauth" ) )
@@ -592,11 +776,7 @@ namespace gloox
           end = decoded.find( '"', end + 1 );
         std::string nonce = decoded.substr( pos + 7, end - ( pos + 7 ) );
 
-        std::string cnonce;
-        char cn[4*8+1];
-        for( int i = 0; i < 4; ++i )
-          sprintf( cn + i*8, "%08x", rand() );
-        cnonce.assign( cn, 4*8 );
+        std::string cnonce = getRandom();
 
         MD5 md5;
         md5.feed( m_jid.username() );
@@ -736,7 +916,7 @@ namespace gloox
 #endif
   }
 
-  void ClientBase::processSASLSuccess()
+  bool ClientBase::processSASLSuccess( const std::string& payload )
   {
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
     if( m_selectedSaslMech == SaslMechNTLM )
@@ -745,6 +925,14 @@ namespace gloox
       DeleteSecurityContext( &m_ctxtHandle );
     }
 #endif
+    if( m_selectedSaslMech == SaslMechScramSha1 || m_selectedSaslMech == SaslMechScramSha1Plus )
+    {
+      const std::string decoded = Base64::decode64( payload );
+      if( decoded.length() < 3 || Base64::decode64( decoded.substr( 2 ) ) != m_serverSignature  )
+        return false;
+    }
+
+    return true;
   }
 
   void ClientBase::send( IQ& iq, IqHandler* ih, int context, bool del )
@@ -772,7 +960,7 @@ namespace gloox
     Tag* tag = iq.tag();
     addFrom( tag );
     addNamespace( tag );
-    send( tag );
+    send( tag, true, false );
   }
 
   void ClientBase::send( const Message& msg )
@@ -781,7 +969,7 @@ namespace gloox
     Tag* tag = msg.tag();
     addFrom( tag );
     addNamespace( tag );
-    send( tag );
+    send( tag, true, false );
   }
 
   void ClientBase::send( const Subscription& sub )
@@ -790,7 +978,7 @@ namespace gloox
     Tag* tag = sub.tag();
     addFrom( tag );
     addNamespace( tag );
-    send( tag );
+    send( tag, true, false );
   }
 
   void ClientBase::send( const Presence& pres )
@@ -802,13 +990,21 @@ namespace gloox
       tag->addChild( (*it)->tag() );
     addFrom( tag );
     addNamespace( tag );
-    send( tag );
+    send( tag, true, false );
   }
 
   void ClientBase::send( Tag* tag )
   {
     if( !tag )
       return;
+
+    send( tag, false, true );
+  }
+
+  void ClientBase::send( Tag* tag, bool queue, bool del )
+  {
+    if( !tag )
+    return;
 
     send( tag->xml() );
 
@@ -817,17 +1013,66 @@ namespace gloox
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
 
-    delete tag;
+    if( queue && m_smContext >= CtxSMEnabled )
+    {
+      m_queueMutex.lock();
+      m_smQueue.insert( std::make_pair( ++m_smSent, tag ) );
+      m_queueMutex.unlock();
+    }
+    else if( del || m_smContext < CtxSMEnabled )
+      delete tag;
   }
 
   void ClientBase::send( const std::string& xml )
   {
     if( m_connection && m_connection->state() == StateConnected )
     {
-      m_connection->send( xml );
+      if( m_compression && m_compressionActive )
+        m_compression->compress( xml );
+      else if( m_encryption && m_encryptionActive )
+        m_encryption->encrypt( xml );
+      else
+        m_connection->send( xml );
 
       logInstance().dbg( LogAreaXmlOutgoing, xml );
     }
+  }
+
+  void ClientBase::checkQueue( int handled, bool resend )
+  {
+    if( m_smContext < CtxSMEnabled || handled < 0 )
+      return;
+
+    util::MutexGuard mg( m_queueMutex );
+    SMQueueMap::iterator it = m_smQueue.begin();
+    while( it != m_smQueue.end() )
+    {
+      if( (*it).first <= handled )
+      {
+        delete (*it).second;
+        m_smQueue.erase( it++ );
+      }
+      else if( resend && (*it).first > handled )
+      {
+        send( (*it).second, false, false );
+        ++it;
+      }
+      else
+      {
+        ++it;
+      }
+    }
+  }
+
+  const TagList ClientBase::sendQueue()
+  {
+    TagList l;
+    util::MutexGuard mg( m_queueMutex );
+    SMQueueMap::iterator it = m_smQueue.begin();
+    for( ; it != m_smQueue.end(); ++it )
+      l.push_back( (*it).second->clone() );
+
+    return l;
   }
 
   void ClientBase::addFrom( Tag* tag )
@@ -914,11 +1159,14 @@ namespace gloox
 
   const std::string ClientBase::getID()
   {
-    static unsigned int uniqueBaseID = (unsigned int)time( 0 );
+#ifdef CLIENTBASE_TEST // to create predictable UIDs in test mode
+    return "uid" + util::int2string( m_nextId.increment() );
+#else
     char r[21+1];
-    sprintf( r, "uid:%08x:%08x", uniqueBaseID, rand() );
+    sprintf( r, "uid-%08x-%08x", m_uniqueBaseId, m_nextId.increment() );
     std::string ret( r, 21 );
     return ret;
+#endif
   }
 
   bool ClientBase::checkStreamVersion( const std::string& version )
@@ -927,26 +1175,42 @@ namespace gloox
       return false;
 
     int major = 0;
-    int minor = 0;
+//     int minor = 0;
     int myMajor = atoi( XMPP_STREAM_VERSION_MAJOR.c_str() );
 
     size_t dot = version.find( '.' );
     if( !version.empty() && dot && dot != std::string::npos )
     {
       major = atoi( version.substr( 0, dot ).c_str() );
-      minor = atoi( version.substr( dot ).c_str() );
+//       minor = atoi( version.substr( dot ).c_str() );
     }
 
     return myMajor >= major;
   }
 
-  void ClientBase::setConnectionImpl( ConnectionBase* cb )
+  void ClientBase::setConnectionImpl( ConnectionBase* connection )
   {
-    if( m_connection && m_connection->state() != StateDisconnected )
-      return;
+    ConnectionBase* old = m_connection;
+    m_connection = connection;
+    m_customConnection = true;
+    if( old )
+      delete old;
+  }
 
-    delete m_connection;
-    m_connection = cb;
+  void ClientBase::setEncryptionImpl( TLSBase* encryption )
+  {
+    TLSBase* old = m_encryption;
+    m_encryption = encryption;
+    if( old )
+      delete old;
+  }
+
+  void ClientBase::setCompressionImpl( CompressionBase* compression )
+  {
+    CompressionBase* old = m_compression;
+    m_compression = compression;
+    if( old )
+      delete old;
   }
 
   void ClientBase::handleStreamError( Tag* tag )
@@ -1019,7 +1283,7 @@ namespace gloox
       else
         m_streamErrorAppCondition = (*it);
 
-      if( err != StreamErrorUndefined && (*it)->xmlns() == XMLNS_XMPP_STREAM )
+      if( err != StreamErrorUndefined && (*it)->hasAttribute( XMLNS, XMLNS_XMPP_STREAM ) )
         m_streamError = err;
     }
   }
@@ -1091,7 +1355,8 @@ namespace gloox
     IqTrackMap::iterator it = m_iqIDHandlers.begin();
     while( it != m_iqIDHandlers.end() )
     {
-      t = it++;
+      t = it;
+      ++it;
       if( ih == (*t).second.ih )
         m_iqIDHandlers.erase( t );
     }
@@ -1103,7 +1368,7 @@ namespace gloox
     if( !ih )
       return;
 
-//     util::MutexGuard m( m_iqExtHandlerMapMutex );
+    util::MutexGuard m( m_iqExtHandlerMapMutex );
     typedef IqHandlerMap::const_iterator IQci;
     std::pair<IQci, IQci> g = m_iqExtHandlers.equal_range( exttype );
     for( IQci it = g.first; it != g.second; ++it )
@@ -1120,7 +1385,7 @@ namespace gloox
     if( !ih )
       return;
 
-//     util::MutexGuard m( m_iqExtHandlerMapMutex );
+    util::MutexGuard m( m_iqExtHandlerMapMutex );
     typedef IqHandlerMap::iterator IQi;
     std::pair<IQi, IQi> g = m_iqExtHandlers.equal_range( exttype );
     IQi it2;
@@ -1194,11 +1459,21 @@ namespace gloox
   {
     if( th )
     {
-      TagHandlerList::iterator it = m_tagHandlers.begin();
-      for( ; it != m_tagHandlers.end(); ++it )
+      for( TagHandlerList::iterator it = m_tagHandlers.begin(); it != m_tagHandlers.end(); )
       {
         if( (*it).th == th && (*it).tag == tag && (*it).xmlns == xmlns )
-          m_tagHandlers.erase( it );
+        {
+          // Normally we'd just assign it to the return value of the .erase() call,
+          // which is either the next element, or .end().  However,
+          // it's only since C++11 that this works; C++03 version returns void.
+          // So instead, we do a post-increment. this increments the iterator to point
+          // to the next element, then passes a copy of the old iterator (that is to the item to be deleted)
+          m_tagHandlers.erase( it++ );
+        }
+        else
+        {
+          ++it;
+        }
       }
     }
   }
@@ -1360,7 +1635,7 @@ namespace gloox
 //     }
 //     delete tag;
 
-//     m_iqExtHandlerMapMutex.lock();
+    m_iqExtHandlerMapMutex.lock();
     typedef IqHandlerMap::const_iterator IQci;
     const StanzaExtensionList& sel = iq.extensions();
     StanzaExtensionList::const_iterator itse = sel.begin();
@@ -1373,7 +1648,7 @@ namespace gloox
           handled = true;
       }
     }
-//     m_iqExtHandlerMapMutex.unlock();
+    m_iqExtHandlerMapMutex.unlock();
 
     if( !handled && ( iq.subtype() == IQ::Get || iq.subtype() == IQ::Set ) )
     {
@@ -1454,8 +1729,6 @@ namespace gloox
 
     if( msHandler )
     {
-      if( msg.subtype() == Message::Chat && msg.body().empty() )
-        return; // don't want a new MS for empty messages
       MessageSession* session = new MessageSession( this, msg.from(), true, msg.subtype() );
       msHandler->handleMessageSession( session );
       session->handleMessage( msg );
@@ -1506,6 +1779,44 @@ namespace gloox
     }
 
     return false;
+  }
+
+  std::string ClientBase::getRandom()
+  {
+    char cn[4*8+1];
+    for( int i = 0; i < 4; ++i )
+      sprintf( cn + i*8, "%08x", rand() );
+    return std::string( cn, 4*8 );;
+  }
+
+  CompressionBase* ClientBase::getDefaultCompression()
+  {
+    if( !m_compress )
+      return 0;
+
+#ifdef HAVE_ZLIB
+    CompressionBase* cmp = new CompressionZlib( this );
+    if( cmp->init() )
+      return cmp;
+
+    delete cmp;
+#endif
+    return 0;
+  }
+
+  TLSBase* ClientBase::getDefaultEncryption()
+  {
+    if( m_tls == TLSDisabled || !hasTls() )
+      return 0;
+
+    TLSDefault* tls = new TLSDefault( this, m_server );
+    if( tls->init( m_clientKey, m_clientCerts, m_cacerts ) )
+      return tls;
+    else
+    {
+      delete tls;
+      return 0;
+    }
   }
 
 }

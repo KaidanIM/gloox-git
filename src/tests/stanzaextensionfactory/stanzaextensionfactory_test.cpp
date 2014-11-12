@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../stanzaextension.h"
 #include "../../stanzaextensionfactory.h"
 #include "../../iq.h"
@@ -53,7 +65,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( se == 0 || se == set || se->tag() != b )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete f;
 
@@ -62,7 +74,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !sef.removeExtension( ExtUser + 1 ) )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -73,7 +85,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "StanzaExtensionFactory: %d test(s) failed\n", fail );
+    fprintf( stderr, "StanzaExtensionFactory: %d test(s) failed\n", fail );
     return 1;
   }
 

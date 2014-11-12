@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -58,7 +58,7 @@ namespace gloox
     : StanzaExtension( ExtS5BQuery ), m_type( TypeInvalid )
   {
     if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_BYTESTREAMS
-        || !tag->hasAttribute( "sid" ) )
+        /*|| !tag->hasAttribute( "sid" )*/ )
       return;
 
     m_sid = tag->findAttribute( "sid" );
@@ -103,7 +103,7 @@ namespace gloox
 
   Tag* SOCKS5BytestreamManager::Query::tag() const
   {
-    if( m_type == TypeInvalid || m_sid.empty() )
+    if( m_type == TypeInvalid /*|| m_sid.empty()*/ )
       return 0;
 
     Tag* t = new Tag( "query" );

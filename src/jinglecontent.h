@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2008-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2008-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -26,17 +26,17 @@ namespace gloox
   namespace Jingle
   {
 
-    class Description;
-    class Transport;
+    class PluginFactory;
 
     /**
-     * @brief An abstraction of a Jingle Content Type.
+     * @brief An abstraction of a Jingle Content Type. This is part of Jingle (@xep{0166}).
      *
-     * You should not need to use this class directly. See
-     * @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
+     * See @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
+     *
+     * XEP Version: 1.1
      *
      * @author Jakob Schroeter <js@camaya.net>
-     * @since 1.1
+     * @since 1.0.5
      */
     class GLOOX_API Content : public Plugin
     {
@@ -56,23 +56,55 @@ namespace gloox
          */
         enum Senders
         {
-          SInitiator,                /**< The initiator sends content. */
-          SResponder,                /**< The responder sends content. */
-          SBoth,                     /**< Both parties send content( default). */
-          InvalidSender             /**< Invalid value. */
+          SInitiator,                /**< The initiator generates/sends content. */
+          SResponder,                /**< The responder generates/sends content. */
+          SBoth,                     /**< Both parties generate/send content( default). */
+          SNone,                     /**< No party generates/sends content. */
+          InvalidSender              /**< Invalid value. */
         };
 
         /**
          * Creates a new Content wrapper.
+         * @param name A unique name for the content type.
+         * @param plugins A list of application formats, transport methods, security preconditions, ...
+         * @param creator Which party originally generated the content type; the defined values are "SInitiator" and "SResponder".
+         * @param senders Which parties in the session will be generating content.
+         * @param disposition How the content definition is to be interpreted by the recipient. The meaning of this attribute
+         * matches the "Content-Disposition" header as defined in RFC 2183 and applied to SIP by RFC 3261.
          */
-        Content( Description* desc, Transport* trans,
-                 const std::string& name, Creator creator = CInitiator,
-                 Senders senders = SBoth, const std::string& disposition = EmptyString );
+        Content( const std::string& name, const PluginList& plugins, Creator creator = CInitiator,
+                 Senders senders = SBoth, const std::string& disposition = "session" );
 
         /**
-         *
+         * Creates a new Content object from the given tag.
+         * @param tag The Tag to parse.
+         * @param factory A PluginFactory instance to use for embedding plugins.
          */
-        Content( const Tag* tag = 0 );
+        Content( const Tag* tag = 0, PluginFactory* factory = 0 );
+
+        /**
+         * Returns the content's creator.
+         * @return The content's creator.
+         */
+        Creator creator() const { return m_creator; }
+
+        /**
+         * Returns the senders.
+         * @return The senders.
+         */
+        Senders senders() const { return m_senders; }
+
+        /**
+         * Returns the disposition.
+         * @return The disposition.
+         */
+        const std::string& disposition() const { return m_disposition; }
+
+        /**
+         * Returns the content name.
+         * @return The content name.
+         */
+        const std::string& name() const { return m_name; }
 
         /**
          * Virtual destructor.
@@ -86,11 +118,12 @@ namespace gloox
         virtual Tag* tag() const;
 
         // reimplemented from Plugin
+        virtual Plugin* newInstance( const Tag* tag ) const { return new Content( tag, m_factory ); }
+
+        // reimplemented from Plugin
         virtual Plugin* clone() const;
 
       private:
-        Description* m_description;
-        Transport* m_transport;
         Creator m_creator;
         std::string m_disposition;
         std::string m_name;

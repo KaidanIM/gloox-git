@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2004-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -27,7 +27,7 @@ namespace gloox
 {
 
   /**
-   * @brief A virtual interface for an Ad-hoc Command Provider according to XEP-0050.
+   * @brief A virtual interface for an Ad-hoc Command Provider according to @xep{0050}.
    *
    * Derived classes can be registered as Command Providers with the Adhoc object.
    *

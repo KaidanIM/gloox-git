@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #define GLOOX_TESTS
 #include "../../iq.h"
 #include "../../iqhandler.h"
@@ -109,6 +121,8 @@ class RosterManagerTest : public ClientBase, public RosterListener
     {
       if( m_test == 1 && roster.size() == 3 )
         m_result2 = true;
+      else
+        printf("rostersize: %d\n", roster.size() );
     }
     virtual void handleRosterPresence( const RosterItem& /*item*/, const std::string& /*resource*/,
                                        Presence::PresenceType /*presence*/, const std::string& /*msg*/ ) {}
@@ -160,9 +174,9 @@ void RosterManagerTest::send( const IQ& iq, IqHandler*, int ctx )
       Tag* r = new Tag( "iq" );
       Tag* q = new Tag( r, "query" );
       q->setXmlns( XMLNS_ROSTER );
-      Tag* i = new Tag( q, "item", "jid", "jid1" );
-      i = new Tag( q, "item", "jid", "jid2" );
-      i = new Tag( q, "item", "jid", "jid3" );
+      Tag* i = new Tag( q, "item", "jid", "foo@bar" ); i->addAttribute( "subscription", "both" );
+      i = new Tag( q, "item", "jid", "bar@foo" ); i->addAttribute( "subscription", "both" );
+      i = new Tag( q, "item", "jid", "foobar" ); i->addAttribute( "subscription", "both" );
       re.addExtension( new RosterManager::Query( q ) );
       delete r;
       m_rm->handleIqID( re, ctx );
@@ -251,7 +265,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() || !rmt->checkResult2() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -263,7 +277,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -272,7 +286,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ri || ri->name() != "fooname" || ri->groups().size() != 1 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -289,7 +303,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ri || ri->name() != "foof" )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -300,7 +314,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -309,7 +323,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ri || ri->name() != "foof" || ri->groups().size() != 3 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -319,7 +333,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -328,7 +342,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ri )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), ri->jid().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
   }
 
   // -------
@@ -338,7 +352,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -347,7 +361,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !ri || ri->name() != "" || ri->groups().size() != 0 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -357,7 +371,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( !rmt->checkResult() )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
   // -------
@@ -366,7 +380,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ri )
   {
     ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), ri->jid().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
   }
 
   // -------
@@ -379,7 +393,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -393,7 +407,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -407,7 +421,7 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      fprintf( stderr, "test '%s' failed\n", name.c_str() );
     }
   }
 
@@ -429,7 +443,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "RosterManager: %d test(s) failed\n", fail );
+    fprintf( stderr, "RosterManager: %d test(s) failed\n", fail );
     return 1;
   }
 

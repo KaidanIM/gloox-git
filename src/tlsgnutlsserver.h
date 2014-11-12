@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -33,7 +33,7 @@ namespace gloox
    * You should not need to use this class directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 1.1
+   * @since 1.0
    */
   class GnuTLSServer : public GnuTLSBase
   {
@@ -58,7 +58,10 @@ namespace gloox
       virtual void cleanup();
 
     private:
+      // reimplemented from TLSBase
       virtual void setCACerts( const StringList& cacerts );
+
+      // reimplemented from TLSBase
       virtual void setClientCert( const std::string& clientKey,
                                   const std::string& clientCerts );
 

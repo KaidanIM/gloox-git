@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #define GLOOX_TESTS
 #define PRESENCE_TEST
 #include "../../tag.h"
@@ -31,7 +43,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -45,7 +57,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -59,7 +71,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -73,7 +85,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -87,7 +99,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -103,7 +115,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -118,7 +130,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -133,7 +145,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -148,7 +160,7 @@ int main( int /*argc*/, char** /*argv*/ )
       || i->status() != "the status" || i->priority() != 10 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete i;
   i = 0;
@@ -167,7 +179,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || i->hasAttribute( "type" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -185,7 +197,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -204,7 +216,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChildWithCData( "show", "chat" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -223,7 +235,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChildWithCData( "show", "away" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -242,7 +254,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChildWithCData( "show", "dnd" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -261,7 +273,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChildWithCData( "show", "xa" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -280,7 +292,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChildWithCData( "priority", "10" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -299,7 +311,7 @@ int main( int /*argc*/, char** /*argv*/ )
         || !i->hasChildWithCData( "priority", "10" ) )
     {
       ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+      fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
     }
     delete i;
   }
@@ -316,7 +328,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "Presence: %d test(s) failed\n", fail );
+    fprintf( stderr, "Presence: %d test(s) failed\n", fail );
     return 1;
   }
 

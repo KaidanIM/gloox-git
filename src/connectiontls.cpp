@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
+ * Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
  * This file is part of the gloox library. http://camaya.net/gloox
  *
  * This software is distributed under a license. The full license
@@ -13,6 +13,8 @@
 
 #include "connectiontls.h"
 #include "tlsdefault.h"
+
+#include <cstdio>
 
 namespace gloox
 {
@@ -65,10 +67,11 @@ namespace gloox
     if( !m_tls )
       return ConnTlsNotAvailable;
 
-    m_tls->setSubject( m_subject );
-
     if( !m_tls->init( m_clientKey, m_clientCerts, m_cacerts ) )
       return ConnTlsFailed;
+
+//     m_tls->setCACerts( m_cacerts );
+//     m_tls->setClientCert( m_clientKey, m_clientCerts );
 
     m_state = StateConnecting;
 
@@ -83,16 +86,7 @@ namespace gloox
 
   ConnectionError ConnectionTLS::recv( int timeout )
   {
-    if( m_connection->state() == StateConnected )
-    {
-      return m_connection->recv( timeout );
-    }
-    else
-    {
-      m_log.log( LogLevelWarning, LogAreaClassConnectionTLS,
-                 "Attempt to receive data on a connection that is not connected (or is connecting)" );
-      return ConnNotConnected;
-    }
+    return m_connection ? m_connection->recv( timeout ) : ConnNotConnected;
   }
 
   bool ConnectionTLS::send( const std::string& data )
@@ -197,6 +191,9 @@ namespace gloox
       m_log.log( LogLevelWarning, LogAreaClassConnectionTLS, "TLS handshake failed" );
       if( m_tlsHandler )
         m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
+      cleanup();
+      if( m_handler )
+        m_handler->handleDisconnect( this, ConnTlsFailed );
     }
   }
 

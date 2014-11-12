@@ -8,8 +8,15 @@
 /* Comment out if you don't want to use Win's native TLS functions */
 #define HAVE_WINTLS 1
 
+/* Uncomment if you are compiling for Windows 7 or above, or Windows Server 2008 R2 and above, and
+ * want to be able to use Channel Binding (with SASL SCRAM-SHA-1-PLUS). */
+// #define HAVE_WINTLS_CHANNEL_BINDING 1
+
 /* Uncomment if you have GnuTLS available and want to use it */
 // #define HAVE_GNUTLS 1
+
+/* Uncomment if you have GnuTLS 2.12.0 or above */
+// #define HAVE_GNUTLS_SESSION_CHANNEL_BINDING 1
 
 /* Uncomment if you have OpenSSL available and want to use it */
 // #define HAVE_OPENSSL 1

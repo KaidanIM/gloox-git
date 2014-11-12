@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006-2014 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -27,7 +27,7 @@ namespace gloox
   class Message;
 
   /**
-   * @brief An implementation of a single In-Band Bytestream (XEP-0047).
+   * @brief An implementation of a single In-Band Bytestream (@xep{0047}).
    *
    * One instance of this class handles a single byte stream.
    *

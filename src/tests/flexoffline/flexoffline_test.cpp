@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2004-2014 by Jakob Schröter <js@camaya.net>
+ *  This file is part of the gloox library. http://camaya.net/gloox
+ *
+ *  This software is distributed under a license. The full license
+ *  agreement can be found in the file LICENSE in this distribution.
+ *  This software may not be copied, modified, sold or distributed
+ *  other than expressed in the named license agreement.
+ *
+ *  This software is distributed without any warranty.
+ */
+
 #include "../../gloox.h"
 #include "../../jid.h"
 #include "../../tag.h"
@@ -47,11 +59,11 @@ namespace gloox
       void removeIqHandler( IqHandler* ih, const int ext );
       void removeIDHandler( IqHandler* ) {}
       void registerStanzaExtension( StanzaExtension* se );
-      void removeStanzaExtension( int ext ) {}
-      virtual void handleFlexibleOfflineSupport( bool support ) {}
-      virtual void handleFlexibleOfflineMsgNum( int num ) {}
-      virtual void handleFlexibleOfflineMessageHeaders( const Disco::ItemList& headers ) {}
-      virtual void handleFlexibleOfflineResult( FlexibleOfflineResult foResult ) {}
+      void removeStanzaExtension( int /*ext*/ ) {}
+      virtual void handleFlexibleOfflineSupport( bool /*support*/ ) {}
+      virtual void handleFlexibleOfflineMsgNum( int /*num*/ ) {}
+      virtual void handleFlexibleOfflineMessageHeaders( const Disco::ItemList& /*headers*/ ) {}
+      virtual void handleFlexibleOfflineResult( FlexibleOfflineResult /*foResult*/ ) {}
       const JID& jid() const { return g_jid; }
       void setTest( int test );
       bool ok();
@@ -106,7 +118,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( false )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
 
 
@@ -128,7 +140,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    fprintf( stderr, "%d test(s) failed\n", fail );
     return 1;
   }
 
