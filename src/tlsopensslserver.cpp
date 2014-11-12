@@ -36,7 +36,7 @@ namespace gloox
 
   bool OpenSSLServer::setType()
   {
-    m_ctx = SSL_CTX_new( SSLv23_server_method() );
+    m_ctx = SSL_CTX_new( TLSv1_server_method() );
     if( !m_ctx )
       return false;
 

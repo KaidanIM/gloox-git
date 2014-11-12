@@ -1,3 +1,9 @@
+v1.0.12 -- 12 Nov 2014
+----------------------
+- TLSOpenSSLClient/Server: disabled SSLv3, Google & co. finally support TLS
+
+
+
 v1.0.11 -- 13 Sep 2014
 ----------------------
 - GnuTLS: updated use of priority API
