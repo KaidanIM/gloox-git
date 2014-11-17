@@ -11,6 +11,7 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
 
 #include "mucinvitationhandler.h"
 #include "mucroom.h"
@@ -25,3 +26,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

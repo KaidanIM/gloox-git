@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_BYTESTREAM )
+
 #include "inbandbytestream.h"
 #include "base64.h"
 #include "bytestreamdatahandler.h"
@@ -297,3 +299,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

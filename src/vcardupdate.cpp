@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_VCARD )
+
 #include "vcardupdate.h"
 #include "tag.h"
 
@@ -77,3 +79,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

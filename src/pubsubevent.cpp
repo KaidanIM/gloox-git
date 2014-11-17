@@ -10,6 +10,9 @@
   This software is distributed without any warranty.
 */
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PUBSUB )
+
 #include "pubsubevent.h"
 #include "tag.h"
 #include "util.h"
@@ -276,3 +279,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

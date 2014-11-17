@@ -10,6 +10,9 @@
   This software is distributed without any warranty.
 */
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
+
 #include "messagesession.h"
 #include "messagefilter.h"
 #include "messagehandler.h"
@@ -113,3 +116,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_REGISTRATION )
+
 #ifndef REGISTRATION_H__
 #define REGISTRATION_H__
 
@@ -337,3 +339,5 @@ namespace gloox
 }
 
 #endif // REGISTRATION_H__
+
+#endif // GLOOX_MINIMAL

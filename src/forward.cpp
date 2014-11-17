@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_FORWARD )
+
 #include "forward.h"
 
 #include "delayeddelivery.h"
@@ -83,3 +85,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

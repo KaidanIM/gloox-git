@@ -100,10 +100,12 @@ namespace gloox
       m_priority = priority;
   }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CAPABILITIES )
   const Capabilities* Presence::capabilities() const
   {
     return findExtension<Capabilities>( ExtCaps );
   }
+#endif // GLOOX_MINIMAL
 
   Tag* Presence::tag() const
   {

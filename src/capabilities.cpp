@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CAPABILITIES )
+
 #include "capabilities.h"
 
 #include "base64.h"
@@ -181,3 +183,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

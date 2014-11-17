@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_JINGLE )
+
 #include "jinglecontent.h"
 #include "jinglepluginfactory.h"
 #include "util.h"
@@ -102,3 +104,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

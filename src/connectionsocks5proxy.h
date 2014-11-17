@@ -11,6 +11,9 @@
 */
 
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CONNECTIONSOCKS5PROXY )
+
 #ifndef CONNECTIONSOCKS5PROXY_H__
 #define CONNECTIONSOCKS5PROXY_H__
 
@@ -176,3 +179,5 @@ namespace gloox
 }
 
 #endif // CONNECTIONSOCKS5PROXY_H__
+
+#endif // GLOOX_MINIMAL

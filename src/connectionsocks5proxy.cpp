@@ -12,6 +12,8 @@
 
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CONNECTIONSOCKS5PROXY )
+
 #include "config.h"
 
 #include "gloox.h"
@@ -375,3 +377,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

@@ -11,6 +11,8 @@
  */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CARBONS )
+
 #include "carbons.h"
 
 #include "forward.h"
@@ -101,3 +103,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

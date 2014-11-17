@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_BYTESTREAM )
+
 #include "bytestreamhandler.h"
 #include "socks5bytestreammanager.h"
 #include "socks5bytestreamserver.h"
@@ -484,3 +486,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

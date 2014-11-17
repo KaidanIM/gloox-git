@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_SI )
+
 #include "siprofileft.h"
 
 #include "clientbase.h"
@@ -310,3 +312,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

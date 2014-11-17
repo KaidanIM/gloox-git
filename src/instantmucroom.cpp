@@ -12,6 +12,8 @@
 
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
+
 #include "instantmucroom.h"
 #include "clientbase.h"
 #include "jid.h"
@@ -29,3 +31,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

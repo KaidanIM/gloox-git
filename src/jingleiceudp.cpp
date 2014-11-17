@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_JINGLE )
+
 #include "jingleiceudp.h"
 
 #include "tag.h"
@@ -111,3 +113,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

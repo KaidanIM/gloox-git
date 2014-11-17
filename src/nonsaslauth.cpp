@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
+
 #include "nonsaslauth.h"
 #include "client.h"
 #include "error.h"
@@ -172,3 +174,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

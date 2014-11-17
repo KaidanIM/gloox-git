@@ -10,6 +10,9 @@
   This software is distributed without any warranty.
 */
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGEEVENT )
+
 #ifndef MESSAGEEVENT_H__
 #define MESSAGEEVENT_H__
 
@@ -86,3 +89,5 @@ namespace gloox
 }
 
 #endif // MESSAGEEVENT_H__
+
+#endif // GLOOX_MINIMAL

@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CAPABILITIES )
+
 #ifndef CAPABILITIES_H__
 #define CAPABILITIES_H__
 
@@ -130,3 +132,5 @@ namespace gloox
 }
 
 #endif // CAPABILITIES_H__
+
+#endif // GLOOX_MINIMAL

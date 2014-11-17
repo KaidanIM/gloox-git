@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_BYTESTREAM )
+
 #ifndef INBANDBYTESTREAM_H__
 #define INBANDBYTESTREAM_H__
 
@@ -212,3 +214,5 @@ namespace gloox
 }
 
 #endif // INBANDBYTESTREAM_H__
+
+#endif // GLOOX_MINIMAL

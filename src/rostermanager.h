@@ -29,7 +29,9 @@ namespace gloox
 
   class ClientBase;
   class Stanza;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
   class PrivateXML;
+#endif // GLOOX_MINIMAL
   class RosterItem;
 
   /**
@@ -44,8 +46,11 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-   class GLOOX_API RosterManager : public IqHandler, public PresenceHandler, public SubscriptionHandler,
-                                   public PrivateXMLHandler
+   class GLOOX_API RosterManager : public IqHandler, public PresenceHandler,
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
+                                   public PrivateXMLHandler,
+#endif // GLOOX_MINIMAL
+                                   public SubscriptionHandler
   {
     public:
       /**
@@ -133,6 +138,7 @@ namespace gloox
        */
       void ackSubscriptionRequest( const JID& to, bool ack );
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
       /**
        * Use this function to retrieve the delimiter of Nested Roster Groups (@xep{0083}).
        * @return The group delimiter.
@@ -146,6 +152,7 @@ namespace gloox
        * @since 0.7
        */
       void setDelimiter( const std::string& delimiter );
+#endif // GLOOX_MINIMAL
 
       /**
        * Lets you retrieve the RosterItem that belongs to the given JID.
@@ -182,11 +189,13 @@ namespace gloox
       // reimplemented from SubscriptionHandler.
       virtual void handleSubscription( const Subscription& subscription );
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXML( const Tag* xml );
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult );
+#endif // GLOOX_MINIMAL
 
     private:
 #ifdef ROSTERMANAGER_TEST
@@ -262,7 +271,9 @@ namespace gloox
       RosterListener* m_rosterListener;
       Roster m_roster;
       ClientBase* m_parent;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ )
       PrivateXML* m_privateXML;
+#endif // GLOOX_MINIMAL
       RosterItem* m_self;
 
       std::string m_delimiter;

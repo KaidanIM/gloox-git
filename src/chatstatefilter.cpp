@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CHATSTATE )
+
 #include "chatstatefilter.h"
 #include "chatstatehandler.h"
 #include "messageeventhandler.h"
@@ -63,3 +65,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

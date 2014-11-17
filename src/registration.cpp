@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_REGISTRATION )
+
 #include "registration.h"
 
 #include "clientbase.h"
@@ -389,3 +391,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

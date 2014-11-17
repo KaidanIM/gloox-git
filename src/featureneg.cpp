@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_FEATURENEG )
+
 #include "featureneg.h"
 #include "dataform.h"
 #include "tag.h"
@@ -58,3 +60,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

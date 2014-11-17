@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGEEVENT )
+
 #include "messageeventfilter.h"
 #include "messageeventhandler.h"
 #include "messagesession.h"
@@ -110,3 +112,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

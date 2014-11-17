@@ -11,6 +11,9 @@
 */
 
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CONNECTIONTCPSERVER )
+
 #ifndef CONNECTIONTCPSERVER_H__
 #define CONNECTIONTCPSERVER_H__
 
@@ -75,3 +78,5 @@ namespace gloox
 }
 
 #endif // CONNECTIONTCPSERVER_H__
+
+#endif // GLOOX_MINIMAL

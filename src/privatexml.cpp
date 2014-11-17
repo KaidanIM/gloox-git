@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
+
 #include "privatexml.h"
 #include "clientbase.h"
 #include "stanza.h"
@@ -127,3 +129,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

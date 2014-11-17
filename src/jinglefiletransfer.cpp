@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_JINGLE )
+
 #include "jinglefiletransfer.h"
 
 #include "tag.h"
@@ -171,3 +173,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

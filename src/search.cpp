@@ -11,6 +11,7 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_SEARCH )
 
 #include "search.h"
 
@@ -221,3 +222,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

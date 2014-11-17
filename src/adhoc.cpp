@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ADHOC )
+
 #include "adhoc.h"
 #include "adhochandler.h"
 #include "adhoccommandprovider.h"
@@ -502,3 +504,5 @@ namespace gloox
   }
 
 }
+
+#endif
