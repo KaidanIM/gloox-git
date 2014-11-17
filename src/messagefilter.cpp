@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
+
 #include "messagefilter.h"
 
 
@@ -40,3 +42,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_AMP )
+
 #include "amp.h"
 #include "tag.h"
 #include "util.h"
@@ -187,3 +189,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

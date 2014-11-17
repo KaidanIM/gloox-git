@@ -10,6 +10,8 @@
   This software is distributed without any warranty.
 */
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CHATSTATE )
+
 #include "chatstate.h"
 #include "tag.h"
 #include "util.h"
@@ -59,3 +61,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

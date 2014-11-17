@@ -92,13 +92,22 @@ namespace gloox
 
   // ---- ClientBase ----
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
-    : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
+    : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ),
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
+      m_disco( 0 ),
+#endif // GLOOX_MINIMAL
+      m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
       m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ), m_port( port ),
       m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
-      m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_statisticsHandler( 0 ),
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
+      m_mucInvitationHandler( 0 ),
+#endif // GLOOX_MINIMAL
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
+#endif // GLOOX_MINIMAL
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
@@ -110,14 +119,23 @@ namespace gloox
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
-    : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
+  : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ),
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
+      m_disco( 0 ),
+#endif // GLOOX_VERSION
+      m_namespace( ns ),
       m_password( password ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
       m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ),
       m_port( port ), m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
-      m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_statisticsHandler( 0 ),
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
+      m_mucInvitationHandler( 0 ),
+#endif // GLOOX_MINIMAL
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
+#endif // GLOOX_MINIMAL
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
@@ -131,12 +149,14 @@ namespace gloox
   {
     srand( time( 0 ) );
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
     if( !m_disco )
     {
       m_disco = new Disco( this );
       m_disco->setVersion( "based on gloox", GLOOX_VERSION );
       m_disco->addFeature( XMLNS_XMPP_PING );
     }
+#endif // GLOOX_MINIMAL
 
     registerStanzaExtension( new Error() );
     registerStanzaExtension( new Ping() );
@@ -166,10 +186,14 @@ namespace gloox
     setCompressionImpl( 0 );
     delete m_seFactory;
     m_seFactory = 0; // to avoid usage when Disco gets deleted below
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
     delete m_disco;
     m_disco = 0;
+#endif // GLOOX_MINIMAL
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
     util::clearList( m_messageSessions );
+#endif // GLOOX_MINIMAL
 
     PresenceJidHandlerList::const_iterator it1 = m_presenceJidHandlers.begin();
     for( ; it1 != m_presenceJidHandlers.end(); ++it1 )
@@ -1294,6 +1318,7 @@ namespace gloox
     return ( it != m_streamErrorText.end() ) ? (*it).second : EmptyString;
   }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
   void ClientBase::registerMessageSessionHandler( MessageSessionHandler* msh, int types )
   {
     if( types & Message::Chat || types == 0 )
@@ -1308,6 +1333,28 @@ namespace gloox
     if( types & Message::Headline || types == 0 )
       m_messageSessionHandlerHeadline = msh;
   }
+
+  void ClientBase::registerMessageSession( MessageSession* session )
+  {
+    if( session )
+      m_messageSessions.push_back( session );
+  }
+
+  void ClientBase::disposeMessageSession( MessageSession* session )
+  {
+    if( !session )
+      return;
+
+    MessageSessionList::iterator it = std::find( m_messageSessions.begin(),
+                                                 m_messageSessions.end(),
+                                                 session );
+    if( it != m_messageSessions.end() )
+    {
+      delete (*it);
+      m_messageSessions.erase( it );
+    }
+  }
+#endif // GLOOX_MINIMAL
 
   void ClientBase::registerPresenceHandler( PresenceHandler* ph )
   {
@@ -1398,27 +1445,6 @@ namespace gloox
     }
   }
 
-  void ClientBase::registerMessageSession( MessageSession* session )
-  {
-    if( session )
-      m_messageSessions.push_back( session );
-  }
-
-  void ClientBase::disposeMessageSession( MessageSession* session )
-  {
-    if( !session )
-      return;
-
-    MessageSessionList::iterator it = std::find( m_messageSessions.begin(),
-                                                 m_messageSessions.end(),
-                                                 session );
-    if( it != m_messageSessions.end() )
-    {
-      delete (*it);
-      m_messageSessions.erase( it );
-    }
-  }
-
   void ClientBase::registerMessageHandler( MessageHandler* mh )
   {
     if( mh )
@@ -1489,20 +1515,26 @@ namespace gloox
     m_statisticsHandler = 0;
   }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
   void ClientBase::registerMUCInvitationHandler( MUCInvitationHandler* mih )
   {
     if( mih )
     {
       m_mucInvitationHandler = mih;
+ #if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
       m_disco->addFeature( XMLNS_MUC );
+ #endif // GLOOX_MINIMAL
     }
   }
 
   void ClientBase::removeMUCInvitationHandler()
   {
     m_mucInvitationHandler = 0;
+ #if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
     m_disco->removeFeature( XMLNS_MUC );
+ #endif // GLOOX_MINIMAL
   }
+#endif // GLOOX_MINIMAL
 
   void ClientBase::registerConnectionListener( ConnectionListener* cl )
   {
@@ -1660,6 +1692,7 @@ namespace gloox
 
   void ClientBase::notifyMessageHandlers( Message& msg )
   {
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
     if( m_mucInvitationHandler )
     {
       const MUCRoom::MUCUser* mu = msg.findExtension<MUCRoom::MUCUser>( ExtMUCUser );
@@ -1676,7 +1709,9 @@ namespace gloox
         return;
       }
     }
+#endif // GLOOX_MINIMAL
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
     MessageSessionList::const_iterator it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
@@ -1735,6 +1770,7 @@ namespace gloox
     }
     else
     {
+#endif // GLOOX_MINIMAL
       // FIXME remove this for() for 1.1:
       MessageHandlerList::const_iterator it = m_messageHandlers.begin();
       for( ; it != m_messageHandlers.end(); ++it )
@@ -1743,7 +1779,9 @@ namespace gloox
       }
       // FIXME and reinstantiate this:
 //       util::ForEach( m_messageHandlers, &MessageHandler::handleMessage, msg ); // FIXME remove for 1.1
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
     }
+#endif // GLOOX_MINIMAL
   }
 
   void ClientBase::notifyTagHandlers( Tag* tag )

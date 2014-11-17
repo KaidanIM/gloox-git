@@ -11,6 +11,7 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_SOFTWAREVERSION )
 
 #include "softwareversion.h"
 #include "tag.h"
@@ -72,3 +73,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

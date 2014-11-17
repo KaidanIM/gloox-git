@@ -106,8 +106,11 @@ namespace gloox
 
   // ---- RosterManager ----
   RosterManager::RosterManager( ClientBase* parent )
-    : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ),
-      m_syncSubscribeReq( false )
+    : m_rosterListener( 0 ), m_parent( parent ),
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
+    m_privateXML( 0 ),
+#endif // GLOOX_MINIMAL
+    m_syncSubscribeReq( false )
   {
     if( m_parent )
     {
@@ -117,7 +120,9 @@ namespace gloox
       m_parent->registerStanzaExtension( new Query() );
 
       m_self = new RosterItem( m_parent->jid().bare() );
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
       m_privateXML = new PrivateXML( m_parent );
+#endif // GLOOX_MINIMAL
     }
   }
 
@@ -131,7 +136,9 @@ namespace gloox
       m_parent->removeSubscriptionHandler( this );
       m_parent->removeStanzaExtension( ExtRoster );
       delete m_self;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
       delete m_privateXML;
+#endif // GLOOX_MINIMAL
     }
 
     util::clearMap( m_roster );
@@ -148,7 +155,9 @@ namespace gloox
       return;
 
     util::clearMap( m_roster );
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
+#endif // GLOOX_MINIMAL
     IQ iq( IQ::Get, JID(), m_parent->getID() );
     iq.addExtension( new Query() );
     m_parent->send( iq, this, RequestRoster );
@@ -356,6 +365,7 @@ namespace gloox
     m_rosterListener = 0;
   }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
   void RosterManager::setDelimiter( const std::string& delimiter )
   {
     m_delimiter = delimiter;
@@ -373,6 +383,7 @@ namespace gloox
   void RosterManager::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult /*result*/ )
   {
   }
+#endif // GLOOX_MINIMAL
 
   RosterItem* RosterManager::getRosterItem( const JID& jid )
   {

@@ -51,13 +51,17 @@ namespace gloox
   class Message;
   class Presence;
   class Subscription;
-  class MessageSessionHandler;
   class ConnectionListener;
   class MessageHandler;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
   class MessageSession;
+  class MessageSessionHandler;
+#endif // GLOOX_MINIMAL
   class PresenceHandler;
   class SubscriptionHandler;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
   class MUCInvitationHandler;
+#endif // GLOOX_MINIMAL
   class TagHandler;
   class TLSBase;
   class ConnectionBase;
@@ -226,11 +230,13 @@ namespace gloox
        */
       virtual const std::string& password() const { return m_password; }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
       /**
        * This function gives access to the @c Disco object.
        * @return A pointer to the Disco object.
        */
       virtual Disco* disco() const { return m_disco; }
+#endif // GLOOX_MINIMAL
 
       /**
        * Creates a string which is unique in the current instance and
@@ -453,6 +459,7 @@ namespace gloox
        */
       void removeMessageHandler( MessageHandler* mh );
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
       /**
        * Registers the given MessageSession to receive Messages incoming from the session's
        * target JID.
@@ -469,6 +476,19 @@ namespace gloox
        * @param session The MessageSession to be deleted.
        */
       void disposeMessageSession( MessageSession* session );
+
+      /**
+       * Use this function to register a MessageSessionHandler with the Client.
+       * Optionally the MessageSessionHandler can receive only MessageSessions with a given
+       * message type. There can be only one handler per message type.<br>
+       * A MessageSession will be created for every incoming
+       * message stanza if there is no MessageHandler registered for the originating JID.
+       * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
+       * @param types ORed StanzaSubType's that describe the desired message types the handler
+       * shall receive. Only StanzaMessage* types are valid. A value of 0 means any type (default).
+       */
+      void registerMessageSessionHandler( MessageSessionHandler* msh, int types = 0 );
+#endif // GLOOX_MINIMAL
 
       /**
        * Registers @c ph as object that receives Presence stanza notifications.
@@ -581,18 +601,6 @@ namespace gloox
       void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
       /**
-       * Use this function to register a MessageSessionHandler with the Client.
-       * Optionally the MessageSessionHandler can receive only MessageSessions with a given
-       * message type. There can be only one handler per message type.<br>
-       * A MessageSession will be created for every incoming
-       * message stanza if there is no MessageHandler registered for the originating JID.
-       * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
-       * @param types ORed StanzaSubType's that describe the desired message types the handler
-       * shall receive. Only StanzaMessage* types are valid. A value of 0 means any type (default).
-       */
-      void registerMessageSessionHandler( MessageSessionHandler* msh, int types = 0 );
-
-      /**
        * Returns the LogSink instance for this ClientBase and all related objects.
        * @return The LogSink instance used in the current ClientBase.
        */
@@ -646,6 +654,7 @@ namespace gloox
        */
       StatisticsStruct getStatistics();
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
       /**
        * Registers a MUCInvitationHandler with the ClientBase.
        * @param mih The MUCInvitationHandler to register.
@@ -656,6 +665,7 @@ namespace gloox
        * Removes the currently registered MUCInvitationHandler.
        */
       void removeMUCInvitationHandler();
+#endif // GLOOX_MINIMAL
 
       /**
        * Adds a StanzaExtension that will be sent with every Presence stanza
@@ -871,7 +881,9 @@ namespace gloox
       ConnectionBase* m_connection;      /**< The transport connection. */
       TLSBase* m_encryption;             /**< Used for connection encryption. */
       CompressionBase* m_compression;    /**< Used for connection compression. */
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
       Disco* m_disco;                    /**< The local Service Discovery client. */
+#endif // GLOOX_MINIMAL
 
       /** A list of permanent presence extensions. */
       StanzaExtensionList m_presenceExtensions;
@@ -1044,7 +1056,9 @@ namespace gloox
       typedef std::map<const std::string, TrackStruct>     IqTrackMap;
       typedef std::map<const std::string, MessageHandler*> MessageHandlerMap;
       typedef std::map<int, Tag*>                          SMQueueMap;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGESESSION )
       typedef std::list<MessageSession*>                   MessageSessionList;
+#endif // GLOOX_MINIMAL
       typedef std::list<MessageHandler*>                   MessageHandlerList;
       typedef std::list<PresenceHandler*>                  PresenceHandlerList;
       typedef std::list<JidPresHandlerStruct>              PresenceJidHandlerList;
@@ -1056,7 +1070,6 @@ namespace gloox
       IqHandlerMap             m_iqExtHandlers;
       IqTrackMap               m_iqIDHandlers;
       SMQueueMap               m_smQueue;
-      MessageSessionList       m_messageSessions;
       MessageHandlerList       m_messageHandlers;
       PresenceHandlerList      m_presenceHandlers;
       PresenceJidHandlerList   m_presenceJidHandlers;
@@ -1064,11 +1077,16 @@ namespace gloox
       TagHandlerList           m_tagHandlers;
       StringList               m_cacerts;
       StatisticsHandler      * m_statisticsHandler;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
       MUCInvitationHandler   * m_mucInvitationHandler;
+#endif // GLOOX_MINIMAL
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ )
+      MessageSessionList       m_messageSessions;
       MessageSessionHandler  * m_messageSessionHandlerChat;
       MessageSessionHandler  * m_messageSessionHandlerGroupchat;
       MessageSessionHandler  * m_messageSessionHandlerHeadline;
       MessageSessionHandler  * m_messageSessionHandlerNormal;
+#endif // GLOOX_MINIMAL
 
       util::Mutex m_iqHandlerMapMutex;
       util::Mutex m_iqExtHandlerMapMutex;

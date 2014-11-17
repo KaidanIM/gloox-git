@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_VCARD )
+
 #include "vcardmanager.h"
 #include "vcardhandler.h"
 #include "vcard.h"
@@ -125,3 +127,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

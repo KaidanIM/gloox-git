@@ -10,6 +10,9 @@
   This software is distributed without any warranty.
 */
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NICKNAME )
+
 #include "nickname.h"
 #include "tag.h"
 
@@ -42,3 +45,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

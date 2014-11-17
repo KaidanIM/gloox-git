@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_SI )
+
 #ifndef SIMANAGER_H__
 #define SIMANAGER_H__
 
@@ -243,3 +245,5 @@ namespace gloox
 }
 
 #endif // SIMANAGER_H__
+
+#endif // GLOOX_MINIMAL

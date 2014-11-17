@@ -11,6 +11,7 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVACYLISTS )
 
 #include "privacymanager.h"
 #include "clientbase.h"
@@ -314,3 +315,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

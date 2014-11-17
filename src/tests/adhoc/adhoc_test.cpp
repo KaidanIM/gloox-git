@@ -10,6 +10,7 @@
   This software is distributed without any warranty.
 */
 
+
 #define GLOOX_TESTS
 #include "../../iq.h"
 #include "../../iqhandler.h"

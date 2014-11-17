@@ -10,6 +10,7 @@
  *  This software is distributed without any warranty.
  */
 
+
 #include "../../tag.h"
 #define ADHOC_COMMANDS_TEST
 #include "../../adhoc.h"

@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_FLEXOFF )
+
 #include "flexoff.h"
 #include "dataform.h"
 #include "disco.h"
@@ -205,3 +207,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

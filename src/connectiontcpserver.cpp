@@ -12,6 +12,8 @@
 
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CONNECTIONTCPSERVER )
+
 #include "gloox.h"
 
 #include "config.h"
@@ -178,3 +180,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

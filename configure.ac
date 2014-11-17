@@ -2,7 +2,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [1.0.12], [js@camaya.net])
+AC_INIT([gloox], [1.0.12-mini], [js@camaya.net])
 AC_CONFIG_SRCDIR(src/gloox.cpp)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -305,6 +305,18 @@ fi
 AC_MSG_CHECKING([whether to enable debug])
 AC_MSG_RESULT($debug)
 
+dnl Minimal build
+minimal="no"
+AC_ARG_ENABLE( minimal,
+               [AC_HELP_STRING([--enable-minimal],
+                               [build only the bare minimum, disables building of tests and examples [default=no]])],
+               [minimal="yes"] )
+if test "x$minimal" = "xyes"; then
+  CPPFLAGS="$CPPFLAGS -DGLOOX_MINIMAL"
+  fi
+  AC_MSG_CHECKING([whether to build only the bare minimum])
+  AC_MSG_RESULT($minimal)
+
 dnl getaddrinfo
 getaddrinfo="no"
 AC_ARG_ENABLE( getaddrinfo,
@@ -350,6 +362,10 @@ want_tests=yes
 AC_ARG_WITH(tests, AC_HELP_STRING([--with-tests],
       [Build unit tests (default=yes]),
       want_tests=$withval, want_tests=yes)
+  if test "$minimal" = "yes"
+  then
+    want_tests=no
+  fi
 AC_MSG_CHECKING([if unit tests should be built])
 AC_MSG_RESULT($want_tests)
 
@@ -366,7 +382,11 @@ want_examples=yes
 AC_ARG_WITH(examples, AC_HELP_STRING([--with-examples],
       [Build example programs (default=yes)]),
       want_examples=$withval, want_examples=yes)
-AC_MSG_CHECKING([if example programs should be built])
+if test "$minimal" = "yes"
+  then
+  want_examples=no
+  fi
+  AC_MSG_CHECKING([if example programs should be built])
 AC_MSG_RESULT($want_examples)
 
 if test "$want_examples" = yes;

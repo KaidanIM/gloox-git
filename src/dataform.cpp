@@ -11,6 +11,9 @@
 */
 
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
+
 #include "dataform.h"
 #include "dataformfield.h"
 #include "dataformitem.h"
@@ -135,3 +138,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

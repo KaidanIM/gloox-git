@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_VCARD )
+
 #include "vcard.h"
 #include "tag.h"
 #include "base64.h"
@@ -557,3 +559,5 @@ namespace gloox
     return v;
   }
 }
+
+#endif // GLOOX_MINIMAL

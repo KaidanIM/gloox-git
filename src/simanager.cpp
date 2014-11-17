@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_SI )
+
 #include "simanager.h"
 
 #include "siprofilehandler.h"
@@ -257,3 +259,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

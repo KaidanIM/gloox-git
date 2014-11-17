@@ -11,6 +11,7 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ANNOTATIONS )
 
 #include "annotations.h"
 #include "clientbase.h"
@@ -88,3 +89,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

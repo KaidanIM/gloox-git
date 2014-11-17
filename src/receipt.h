@@ -10,6 +10,9 @@
   This software is distributed without any warranty.
 */
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_RECEIPT )
+
 #ifndef RECEIPT_H__
 #define RECEIPT_H__
 
@@ -101,3 +104,5 @@ namespace gloox
 }
 
 #endif // RECEIPT_H__
+
+#endif // GLOOX_MINIMAL

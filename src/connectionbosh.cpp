@@ -10,6 +10,9 @@
  * This software is distributed without any warranty.
  */
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CONNECTIONBOSH )
+
 #include "config.h"
 
 #include "gloox.h"
@@ -641,3 +644,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

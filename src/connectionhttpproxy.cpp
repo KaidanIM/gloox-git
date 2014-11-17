@@ -12,6 +12,8 @@
 
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CONNECTIONHTTPPROXY )
+
 #include "gloox.h"
 
 #include "connectionhttpproxy.h"
@@ -213,3 +215,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

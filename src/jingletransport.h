@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_JINGLE )
+
 #ifndef JINGLETRANSPORT_H__
 #define JINGLETRANSPORT_H__
 
@@ -54,3 +56,5 @@ namespace gloox
 }
 
 #endif // JINGLETRANSPORT_H__
+
+#endif // GLOOX_MINIMAL

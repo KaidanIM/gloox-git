@@ -11,7 +11,6 @@
 */
 
 
-
 #include "compressionzlib.h"
 
 #ifdef HAVE_ZLIB

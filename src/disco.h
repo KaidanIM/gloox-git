@@ -11,6 +11,7 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
 
 #ifndef DISCO_H__
 #define DISCO_H__
@@ -634,3 +635,5 @@ namespace gloox
 }
 
 #endif // DISCO_H__
+
+#endif // GLOOX_MINIMAL

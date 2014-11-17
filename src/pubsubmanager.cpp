@@ -10,6 +10,9 @@
   This software is distributed without any warranty.
 */
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PUBSUB )
+
 #include "pubsubmanager.h"
 #include "clientbase.h"
 #include "dataform.h"
@@ -1241,3 +1244,4 @@ namespace gloox
 
 }
 
+#endif // GLOOX_MINIMAL

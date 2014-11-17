@@ -12,6 +12,8 @@
 
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_COMPONENT )
+
 #include "component.h"
 
 #include "disco.h"
@@ -60,3 +62,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

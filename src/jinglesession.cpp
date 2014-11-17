@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_JINGLE )
+
 #include "jinglesession.h"
 
 #include "clientbase.h"
@@ -499,3 +501,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

@@ -11,6 +11,9 @@
 */
 
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CONNECTIONHTTPPROXY )
+
 #ifndef CONNECTIONHTTPPROXY_H__
 #define CONNECTIONHTTPPROXY_H__
 
@@ -169,3 +172,5 @@ namespace gloox
 }
 
 #endif // CONNECTIONHTTPPROXY_H__
+
+#endif // GLOOX_MINIMAL

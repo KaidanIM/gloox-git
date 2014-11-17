@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
+
 #include "disco.h"
 #include "discohandler.h"
 #include "dataform.h"
@@ -533,3 +535,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

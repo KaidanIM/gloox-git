@@ -10,6 +10,9 @@
  * This software is distributed without any warranty.
  */
 
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_CONNECTIONBOSH )
+
 #ifndef CONNECTIONBOSH_H__
 #define CONNECTIONBOSH_H__
 
@@ -223,3 +226,5 @@ namespace gloox
 }
 
 #endif // CONNECTIONBOSH_H__
+
+#endif // GLOOX_MINIMAL

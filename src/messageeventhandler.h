@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_MESSAGEEVENT )
+
 #ifndef MESSAGEEVENTHANDLER_H__
 #define MESSAGEEVENTHANDLER_H__
 
@@ -49,3 +51,5 @@ namespace gloox
 }
 
 #endif // MESSAGEEVENTHANDLER_H__
+
+#endif // GLOOX_MINIMAL

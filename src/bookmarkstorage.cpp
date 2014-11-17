@@ -11,6 +11,7 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_BOOKMARKSTORAGE )
 
 #include "bookmarkstorage.h"
 #include "clientbase.h"
@@ -116,3 +117,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

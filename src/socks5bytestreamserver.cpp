@@ -11,6 +11,8 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_BYTESTREAM )
+
 #include "socks5bytestreamserver.h"
 #include "mutexguard.h"
 #include "util.h"
@@ -244,3 +246,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL

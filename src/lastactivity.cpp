@@ -11,6 +11,7 @@
 */
 
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_LASTACTIVITY )
 
 #include "lastactivity.h"
 #include "disco.h"
@@ -130,3 +131,5 @@ namespace gloox
   }
 
 }
+
+#endif // GLOOX_MINIMAL
