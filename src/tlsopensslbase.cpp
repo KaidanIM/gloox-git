@@ -22,6 +22,7 @@
 #include <cstdlib>
 
 #include <openssl/err.h>
+#include <openssl/comp.h>
 
 namespace gloox
 {
