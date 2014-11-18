@@ -1,3 +1,9 @@
+v1.0.13
+-------
+- fixed compilation with libressl (thanks to Heiko Becker)
+
+
+
 v1.0.12 -- 12 Nov 2014
 ----------------------
 - TLSOpenSSLClient/Server: disabled SSLv3, Google & co. finally support TLS
