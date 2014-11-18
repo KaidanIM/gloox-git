@@ -145,8 +145,6 @@ namespace gloox
     registerStanzaExtension( new ResourceBind( 0 ) );
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_CAPABILITIES )
     registerStanzaExtension( new Capabilities() );
-#endif // GLOOX_MINIMAL
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_DISCO )
     m_presenceExtensions.push_back( new Capabilities( m_disco ) );
     m_disco->setIdentity( "client", "bot" );
 #endif // GLOOX_MINIMAL

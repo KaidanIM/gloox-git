@@ -71,7 +71,10 @@ namespace gloox
 
   // ---- Disco::Info ----
   Disco::Info::Info( const std::string& node, bool defaultFeatures )
-    : StanzaExtension( ExtDiscoInfo ), m_node( node ), m_form( 0 )
+    : StanzaExtension( ExtDiscoInfo ), m_node( node )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
+    , m_form( 0 )
+#endif // GLOOX_MINIMAL
   {
     if( defaultFeatures )
     {
@@ -81,7 +84,10 @@ namespace gloox
   }
 
   Disco::Info::Info( const Tag* tag )
-    : StanzaExtension( ExtDiscoInfo ), m_form( 0 )
+    : StanzaExtension( ExtDiscoInfo )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
+    , m_form( 0 )
+#endif // GLOOX_MINIMAL
   {
     if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_DISCO_INFO )
       return;
@@ -97,28 +103,37 @@ namespace gloox
         m_identities.push_back( new Identity( (*it) ) );
       else if( name == "feature" && (*it)->hasAttribute( "var" ) )
         m_features.push_back( (*it)->findAttribute( "var" ) );
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
       else if( !m_form && name == "x" && (*it)->xmlns() == XMLNS_X_DATA )
         m_form = new DataForm( (*it) );
+#endif // GLOOX_MINIMAL
     }
   }
 
   Disco::Info::Info( const Info& info )
     : StanzaExtension( ExtDiscoInfo ), m_node( info.m_node ), m_features( info.m_features ),
-      m_identities( info.m_identities ),  m_form( info.m_form ? new DataForm( *(info.m_form) ) : 0 )
+      m_identities( info.m_identities )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
+      , m_form( info.m_form ? new DataForm( *(info.m_form) ) : 0 )
+#endif // GLOOX_MINIMAL
   {
   }
 
   Disco::Info::~Info()
   {
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
     delete m_form;
+#endif // GLOOX_MINIMAL
     util::clearList( m_identities );
   }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
   void Disco::Info::setForm( DataForm* form )
   {
     delete m_form;
     m_form = form;
   }
+#endif // GLOOX_MINIMAL
 
   bool Disco::Info::hasFeature( const std::string& feature ) const
   {
@@ -149,8 +164,10 @@ namespace gloox
     for( ; it_f != m_features.end(); ++it_f )
       new Tag( t, "feature", "var", (*it_f) );
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
     if( m_form )
       t->addChild( m_form->tag() );
+#endif // GLOOX_MINIMAL
 
     return t;
   }
@@ -243,7 +260,10 @@ namespace gloox
 
   // ---- Disco ----
   Disco::Disco( ClientBase* parent )
-    : m_parent( parent ), m_form( 0 )
+    : m_parent( parent )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
+    , m_form( 0 )
+#endif // GLOOX_MINIMAL
   {
     addFeature( XMLNS_VERSION );
 //     addFeature( XMLNS_DISCO_INFO ); //handled by Disco::Info now
@@ -255,14 +275,18 @@ namespace gloox
       m_parent->registerIqHandler( this, ExtVersion );
       m_parent->registerStanzaExtension( new Disco::Info() );
       m_parent->registerStanzaExtension( new Disco::Items() );
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_SOFTWAREVERSION )
       m_parent->registerStanzaExtension( new SoftwareVersion() );
+#endif // GLOOX_MINIMAL
     }
   }
 
   Disco::~Disco()
   {
     util::clearList( m_identities );
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
     delete m_form;
+#endif // GLOOX_MINIMAL
 
     if( m_parent )
     {
@@ -276,11 +300,13 @@ namespace gloox
     }
   }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
   void Disco::setForm( DataForm* form )
   {
     delete m_form;
     m_form = form;
   }
+#endif // GLOOX_MINIMAL
 
   bool Disco::handleIq( const IQ& iq )
   {
@@ -291,6 +317,7 @@ namespace gloox
         IQ re( IQ::Result, iq.from(), iq.id() );
         re.setFrom( iq.to() );
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_SOFTWAREVERSION )
         const SoftwareVersion* sv = iq.findExtension<SoftwareVersion>( ExtVersion );
         if( sv )
         {
@@ -298,6 +325,7 @@ namespace gloox
           m_parent->send( re );
           return true;
         }
+#endif // GLOOX_MINIMAL
 
         const Info *info = iq.findExtension<Info>( ExtDiscoInfo );
         if( info )
@@ -343,8 +371,10 @@ namespace gloox
             }
             i->setIdentities( il );
             i->setFeatures( m_features );
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
             if( m_form )
               i->setForm( new DataForm( *m_form ) );
+#endif // GLOOX_MINIMAL
           }
 
           re.addExtension( i );
