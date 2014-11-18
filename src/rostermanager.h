@@ -271,7 +271,7 @@ namespace gloox
       RosterListener* m_rosterListener;
       Roster m_roster;
       ClientBase* m_parent;
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_ )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
       PrivateXML* m_privateXML;
 #endif // GLOOX_MINIMAL
       RosterItem* m_self;

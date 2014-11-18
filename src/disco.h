@@ -29,7 +29,9 @@ namespace gloox
 {
 
   class ClientBase;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
   class DataForm;
+#endif // GLOOX_MINIMAL
   class DiscoHandler;
   class DiscoNodeHandler;
   class IQ;
@@ -93,6 +95,7 @@ namespace gloox
            */
           const IdentityList& identities() const { return m_identities; }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
           /**
            * Returns an optionally included data form. This is used by e.g. MUC (@xep{0045}).
            * @return An optional data form included in the disco#info. May be 0.
@@ -107,6 +110,7 @@ namespace gloox
            * @note If called more than once the previously set form will be deleted.
            */
           void setForm( DataForm* form );
+#endif // GLOOX_MINIMAL
 
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;
@@ -185,7 +189,10 @@ namespace gloox
           std::string m_node;
           StringList m_features;
           IdentityList m_identities;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
           DataForm* m_form;
+#endif // GLOOX_MINIMAL
+
       };
 
       /**
@@ -529,6 +536,7 @@ namespace gloox
        */
       const IdentityList& identities() const { return m_identities; }
 
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
       /**
        * Adds an optional DataForm to Disco:Info replies, e.g. for @xep{0232}.
        * Only one form can be added at this point.
@@ -543,6 +551,7 @@ namespace gloox
        * @return The DataForm, or 0.
        */
       const DataForm* form() const { return m_form; }
+#endif // GLOOX_MINIMAL
 
       /**
        * Use this function to register an @ref DiscoHandler with the Disco
@@ -624,7 +633,9 @@ namespace gloox
       IdentityList m_identities;
       StringList m_features;
       StringMap m_queryIDs;
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
       DataForm* m_form;
+#endif // GLOOX_MINIMAL
 
       std::string m_versionName;
       std::string m_versionVersion;
