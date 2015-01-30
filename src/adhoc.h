@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2014 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2004-2015 by Jakob Schröter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -77,7 +77,7 @@ namespace gloox
    * ...TBC...
    *
    * XEP version: 1.2
-   * @author Jakob Schroeter <js@camaya.net>
+   * @author Jakob Schröter <js@camaya.net>
    */
   class GLOOX_API Adhoc : public DiscoNodeHandler, public DiscoHandler, public IqHandler
   {
@@ -86,7 +86,7 @@ namespace gloox
        * @brief An abstraction of an Adhoc Command element (from Adhoc Commands, @xep{0050})
        * as a StanzaExtension.
        *
-       * @author Jakob Schroeter <js@camaya.net>
+       * @author Jakob Schröter <js@camaya.net>
        * @since 1.0
        */
       class GLOOX_API Command : public StanzaExtension
@@ -125,7 +125,7 @@ namespace gloox
           /**
            * An abstraction of a command note.
            *
-           * @author Jakob Schroeter <js@camaya.net>
+           * @author Jakob Schröter <js@camaya.net>
            * @since 1.0
            */
           class GLOOX_API Note

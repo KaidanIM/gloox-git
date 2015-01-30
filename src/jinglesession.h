@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2007-2014 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007-2015 by Jakob Schröter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -34,7 +34,7 @@ namespace gloox
    * See @link gloox::Jingle::SessionManager SessionManager @endlink for more information
    * about Jingle in gloox.
    *
-   * @author Jakob Schroeter <js@camaya.net>
+   * @author Jakob Schröter <js@camaya.net>
    * @since 1.0.5
    */
   namespace Jingle
@@ -76,7 +76,7 @@ namespace gloox
      *
      * XEP Version: 1.1
      *
-     * @author Jakob Schroeter <js@camaya.net>
+     * @author Jakob Schröter <js@camaya.net>
      * @since 1.0.5
      */
     class GLOOX_API Session : public IqHandler
@@ -100,7 +100,7 @@ namespace gloox
          *
          * XEP Version: 1.1
          *
-         * @author Jakob Schroeter <js@camaya.net>
+         * @author Jakob Schröter <js@camaya.net>
          * @since 1.0.5
          */
         class GLOOX_API Reason : public Plugin
@@ -194,7 +194,7 @@ namespace gloox
          * @brief This is an abstraction of Jingle's (@xep{0166}) &lt;jingle&gt; element as a StanzaExtension.
          *
          * XEP Version: 1.1
-         * @author Jakob Schroeter <js@camaya.net>
+         * @author Jakob Schröter <js@camaya.net>
          * @since 1.0.5
          */
         class Jingle : public StanzaExtension

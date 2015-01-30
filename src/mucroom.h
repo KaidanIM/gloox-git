@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2014 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006-2015 by Jakob Schröter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -80,7 +80,7 @@ namespace gloox
    * (room\@service/nick).
    *
    * XEP version: 1.21
-   * @author Jakob Schroeter <js@camaya.net>
+   * @author Jakob Schröter <js@camaya.net>
    * @since 0.9
    */
   class GLOOX_API MUCRoom : private DiscoHandler, private PresenceHandler,
@@ -122,7 +122,7 @@ namespace gloox
        *
        * You should not need to use this class directly.
        *
-       * @author Jakob Schroeter <js@camaya.net>
+       * @author Jakob Schröter <js@camaya.net>
        * @since 1.0
        */
       class MUC : public StanzaExtension
@@ -196,7 +196,7 @@ namespace gloox
        *
        * You should not need to use this class directly.
        *
-       * @author Jakob Schroeter <js@camaya.net>
+       * @author Jakob Schröter <js@camaya.net>
        * @since 1.0
        */
       class MUCUser : public StanzaExtension
@@ -790,7 +790,7 @@ namespace gloox
       /**
        * @brief An abstraction of a MUC owner query.
        *
-       * @author Jakob Schroeter <js@camaya.net>
+       * @author Jakob Schröter <js@camaya.net>
        * @since 1.0
        */
       class MUCOwner : public StanzaExtension
@@ -880,7 +880,7 @@ namespace gloox
       /**
        * @brief An abstraction of a MUC admin query.
        *
-       * @author Jakob Schroeter <js@camaya.net>
+       * @author Jakob Schröter <js@camaya.net>
        * @since 1.0
        */
       class MUCAdmin : public StanzaExtension
