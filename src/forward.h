@@ -73,25 +73,25 @@ namespace gloox
        */
       const DelayedDelivery* when() const { return m_delay; }
 
-      // reimplemented from Stanza
+      // reimplemented from StanzaExtension
       virtual Stanza* embeddedStanza() const { return m_stanza; }
       
-      // reimplemented from Stanza
+      // reimplemented from StanzaExtension
       virtual Tag* embeddedTag() const { return m_tag; }
       
-      // reimplemented from Stanza
+      // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
-      // reimplemented from Stanza
+      // reimplemented from StanzaExtension
       const std::string& filterString() const;
       
-      // reimplemented from Stanza
+      // reimplemented from StanzaExtension
       StanzaExtension* newInstance( const Tag* tag ) const
       {
         return new Forward( tag );
       }
 
-      // reimplemented from Stanza
+      // reimplemented from StanzaExtension
       StanzaExtension* clone() const;
 
     private:
