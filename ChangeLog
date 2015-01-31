@@ -1,6 +1,11 @@
-v1.0.13
--------
+v1.0.13 -- 31 Jan 2015
+----------------------
 - fixed compilation with libressl (thanks to Heiko Becker)
+- added IO Data (XEP-0244)
+- serialise access to compressionZlib::cleanup for thread safety (thanks to Stephen Hilliard)
+- prevent infinite loop in Tag::setCData() (thanks to Stephen Hilliard)
+- TLSOpenSSL: memory leak on every client connection attempt (thanks to Stephen Hilliard)
+- Client: initialize m_smWanted to avoid connection failures (thanks to Stephen Hilliard)
 
 
 
