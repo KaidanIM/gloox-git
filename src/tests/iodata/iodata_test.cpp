@@ -236,10 +236,10 @@ int main( int /*argc*/, char** /*argv*/ )
   t->addAttribute( "type", "io-schemata-result" );
   i = new IOData( IOData::TypeIoSchemataResult );
   f = new Tag( t, "in" );
-  new Tag( f, "foo" );
+  f = new Tag( f, "foo" );
   i->setIn( f->clone() );
   f = new Tag( t, "out" );
-  new Tag( f, "foobar" );
+  f = new Tag( f, "foobar" );
   i->setOut( f->clone() );
   f = new Tag( t, "desc", "some description" );
   i->setDesc( "some description" );
@@ -259,7 +259,7 @@ int main( int /*argc*/, char** /*argv*/ )
   t->addAttribute( "type", "output" );
   i = new IOData( IOData::TypeOutput );
   f = new Tag( t, "out" );
-  new Tag( f, "foobar" );
+  f = new Tag( f, "foobar" );
   i->setOut( f->clone() );
   if( i->tag()->xml() != t->xml() )
   {
@@ -277,9 +277,33 @@ int main( int /*argc*/, char** /*argv*/ )
   t->addAttribute( "type", "error" );
   i = new IOData( IOData::TypeError );
   f = new Tag( t, "error" );
-  new Tag( f, "foo" );
+  f = new Tag( f, "foo" );
   i->setError( f->clone() );
   if( i->tag()->xml() != t->xml() )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\ni: %s\ns: %s\n", name.c_str(), i->tag()->xml().c_str(), t->xml().c_str() );
+  }
+  delete i;
+  i = 0;
+  delete t;
+  t = 0;
+
+  // -------
+  name = "creating 'status' type";
+  t = s->clone();
+  t->addAttribute( "type", "status" );
+  i = new IOData( IOData::TypeStatus );
+  f = new Tag( t, "status" );
+  new Tag( f, "elapsed", "12" );
+  new Tag( f, "remaining", "34" );
+  new Tag( f, "percentage", "56" );
+  new Tag( f, "information", "some info" );
+  IOData::Status st = { 12, 34, 56, "some info" };
+  i->setStatus( st );
+  if( i->tag()->xml() != t->xml() || i->status().elapsed != st.elapsed
+      || i->status().remaining != st.remaining || i->status().percentage != st.percentage
+      || i->status().info != st.info )
   {
     ++fail;
     fprintf( stderr, "test '%s' failed\ni: %s\ns: %s\n", name.c_str(), i->tag()->xml().c_str(), t->xml().c_str() );
