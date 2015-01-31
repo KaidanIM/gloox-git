@@ -270,6 +270,8 @@ namespace gloox
 
       if( ASN1_UTCTIME_cmp_time_t( X509_get_notAfter( peer ), time( 0 ) ) != 1 )
         m_certInfo.status |= CertExpired;
+
+      X509_free( peer );
     }
     else
     {
