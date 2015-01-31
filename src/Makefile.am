@@ -37,7 +37,8 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         tlsopensslserver.cpp compressiondefault.cpp \
                         connectiontlsserver.cpp atomicrefcount.cpp linklocalmanager.cpp linklocalclient.cpp \
                         forward.cpp jinglesession.cpp jinglecontent.cpp jinglesessionmanager.cpp \
-                        carbons.cpp jinglepluginfactory.cpp jingleiceudp.cpp jinglefiletransfer.cpp
+                        carbons.cpp jinglepluginfactory.cpp jingleiceudp.cpp jinglefiletransfer.cpp \
+                        iodata.cpp
 
 libgloox_la_LDFLAGS = -version-info 12:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -98,7 +99,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             jinglesession.h           jinglecontent.h         jingleplugin.h \
                             jinglesessionhandler.h \
                             jinglesessionmanager.h    carbons.h               jinglepluginfactory.h \
-                            jingleiceudp.h            jinglefiletransfer.h
+                            jingleiceudp.h            jinglefiletransfer.h \
+                            iodata.h
 
 noinst_HEADERS = config.h prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h \
                    tlsgnutlsclient.h \

@@ -9,7 +9,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           error \
           featureneg flexoffline flexofflineoffline forward \
           gpgencrypted gpgsigned \
-          inbandbytestreamibb inbandbytestream iq \
+          inbandbytestreamibb inbandbytestream iodata iq \
           jid jingleiceudp jinglesession jinglesessionjingle jinglesessionmanager \
           lastactivity lastactivityquery \
           md5 message messageeventfilter \

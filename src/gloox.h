@@ -606,6 +606,9 @@ namespace gloox
   /** Use of Cryptographic Hash Functions in XMPP namespace (@xep{0300}) */
   GLOOX_API extern const std::string XMLNS_HASHES;
 
+  /** IO Data (@xep 0244) */
+  GLOOX_API extern const std::string XMLNS_IODATA;
+
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
 

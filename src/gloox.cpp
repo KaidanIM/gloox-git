@@ -111,6 +111,7 @@ namespace gloox
   const std::string XMLNS_MESSAGE_CARBONS   = "urn:xmpp:carbons:2";
 
   const std::string XMLNS_HASHES            = "urn:xmpp:hashes:1";
+  const std::string XMLNS_IODATA            = "urn:xmpp:tmp:io-data";
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";
