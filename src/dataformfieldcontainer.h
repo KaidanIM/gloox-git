@@ -11,7 +11,7 @@
 */
 
 
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM ) || defined( WANT_ADHOC )
 
 #ifndef DATAFORMFIELDCONTAINER_H__
 #define DATAFORMFIELDCONTAINER_H__

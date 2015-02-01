@@ -11,7 +11,7 @@
 */
 
 
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM ) || defined( WANT_ADHOC )
 
 #include "dataformfield.h"
 #include "util.h"

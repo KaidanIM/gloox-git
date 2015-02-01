@@ -467,6 +467,10 @@ namespace gloox
           delete (*t);
           m_nodes->erase( t );
         }
+        else
+        {
+           it++;
+        }
       }
     }
 

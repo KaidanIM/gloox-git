@@ -118,13 +118,17 @@ namespace gloox
 
   void CompressionZlib::cleanup()
   {
-    if( !m_valid )
-      return;
+    m_compressMutex.lock();
 
-    inflateEnd( &m_zinflate );
-    deflateEnd( &m_zdeflate );
+    if( m_valid )
+    {
+       inflateEnd( &m_zinflate );
+       deflateEnd( &m_zdeflate );
 
-    m_valid = false;
+       m_valid = false;
+    }
+
+    m_compressMutex.unlock();
   }
 
 }
