@@ -35,7 +35,8 @@ namespace gloox
   }
 
   IOData::IOData( Type type )
-    : m_in( 0 ), m_out( 0 ), m_error( 0 ),
+    : AdhocPlugin( ExtIOData ),
+      m_in( 0 ), m_out( 0 ), m_error( 0 ),
       m_type( type )
   {
     m_status.elapsed = -1;
@@ -44,8 +45,9 @@ namespace gloox
   }
 
   IOData::IOData( const Tag* tag )
-    : m_in( 0 ), m_out( 0 ), m_error( 0 ),
-      m_type( InvalidType )
+    : AdhocPlugin( ExtIOData ),
+      m_in( 0 ), m_out( 0 ), m_error( 0 ),
+      m_type( TypeInvalid )
   {
     if( !tag || !( tag->name() == "iodata" && tag->hasAttribute( XMLNS, XMLNS_IODATA ) ) )
       return;
@@ -125,7 +127,7 @@ namespace gloox
 
   Tag* IOData::tag() const
   {
-    if( m_type == InvalidType )
+    if( m_type == TypeInvalid )
       return 0;
 
     Tag* i = new Tag( "iodata" );
@@ -166,6 +168,22 @@ namespace gloox
       default:
         break;
     }
+
+    return i;
+  }
+
+  IOData* IOData::clone() const
+  {
+    IOData* i = new IOData( m_type );
+    i->m_status = m_status;
+    i->m_desc = m_desc;
+
+    if( m_in )
+      i->m_in = m_in->clone();
+    if( m_out )
+      i->m_out = m_out->clone();
+    if( m_error )
+      i->m_error = m_error->clone();
 
     return i;
   }

@@ -15,10 +15,12 @@
 #include "adhochandler.h"
 #include "adhoccommandprovider.h"
 #include "disco.h"
+#include "dataform.h"
 #include "error.h"
+#include "iodata.h"
 #include "discohandler.h"
 #include "clientbase.h"
-#include "dataform.h"
+#include "adhocplugin.h"
 #include "util.h"
 #include "mutexguard.h"
 
@@ -79,37 +81,37 @@ namespace gloox
 
   // ---- Adhoc::Command ----
   Adhoc::Command::Command( const std::string& node, Adhoc::Command::Action action,
-                           DataForm* form )
-    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_form( form ), m_action( action ),
+                           AdhocPlugin* plugin )
+    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_plugin( plugin ), m_action( action ),
       m_status( InvalidStatus ), m_actions( 0 )
   {
   }
 
   Adhoc::Command::Command( const std::string& node, const std::string& sessionid, Status status,
-                           DataForm* form )
+                           AdhocPlugin* plugin )
   : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_sessionid( sessionid ),
-    m_form( form ), m_action( InvalidAction ), m_status( status ), m_actions( 0 )
+    m_plugin( plugin ), m_action( InvalidAction ), m_status( status ), m_actions( 0 )
   {
   }
 
   Adhoc::Command::Command( const std::string& node, const std::string& sessionid,
                            Adhoc::Command::Action action,
-                           DataForm* form )
+                           AdhocPlugin* plugin )
     : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_sessionid( sessionid ),
-      m_form( form ), m_action( action ), m_actions( 0 )
+      m_plugin( plugin ), m_action( action ), m_actions( 0 )
   {
   }
 
   Adhoc::Command::Command( const std::string& node, const std::string& sessionid, Status status,
                            Action executeAction, int allowedActions,
-                           DataForm* form )
+                           AdhocPlugin* plugin )
     : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_sessionid( sessionid ),
-      m_form( form ), m_action( executeAction ), m_status( status ), m_actions( allowedActions )
+      m_plugin( plugin ), m_action( executeAction ), m_status( status ), m_actions( allowedActions )
   {
   }
 
   Adhoc::Command::Command( const Tag* tag )
-    : StanzaExtension( ExtAdhocCommand ), m_form( 0 ), m_actions( 0 )
+    : StanzaExtension( ExtAdhocCommand ), m_plugin( 0 ), m_actions( 0 )
   {
     if( !tag || tag->name() != "command" || tag->xmlns() != XMLNS_ADHOC_COMMANDS )
       return;
@@ -142,13 +144,19 @@ namespace gloox
 
     Tag* x = tag->findChild( "x", "xmlns", XMLNS_X_DATA );
     if( x )
-      m_form = new DataForm( x );
+      m_plugin = new DataForm( x );
+    else
+    {
+      Tag* x = tag->findChild( "iodata", "xmlns", XMLNS_IODATA );
+      if( x )
+        m_plugin = new IOData( x );
+    }
   }
 
   Adhoc::Command::~Command()
   {
     util::clearList( m_notes );
-    delete m_form;
+    delete m_plugin;
   }
 
   const std::string& Adhoc::Command::filterString() const
@@ -201,8 +209,8 @@ namespace gloox
     if ( !m_sessionid.empty() )
       c->addAttribute( "sessionid", m_sessionid );
 
-    if( m_form && *m_form )
-      c->addChild( m_form->tag() );
+    if( m_plugin && *m_plugin )
+      c->addChild( m_plugin->tag() );
 
     NoteList::const_iterator it = m_notes.begin();
     for( ; it != m_notes.end(); ++it )

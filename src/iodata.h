@@ -14,6 +14,8 @@
 #ifndef IODATA_H__
 #define IODATA_H__
 
+#include "adhocplugin.h"
+
 #include "gloox.h"
 #include "tag.h"
 
@@ -31,7 +33,7 @@ namespace gloox
    * @author Jakob Schröter <js@camaya.net>
    * @since 1.0.13
    */
-  class GLOOX_API IOData
+  class GLOOX_API IOData : public AdhocPlugin
   {
     public:
       /**
@@ -47,7 +49,7 @@ namespace gloox
         TypeOutput,                  /** To submit the output. */
         TypeError,                   /** To submit additional error information. */
         TypeStatus,                  /** To indicate the current status of the procedure. */
-        InvalidType                  /** Invalid type. */
+        TypeInvalid                  /** Invalid type. */
       };
 
       struct Status
@@ -149,11 +151,22 @@ namespace gloox
        */
       Status status() const { return m_status; }
 
+      // reimplemented from AdhocPlugin/StanzaExtension
+      virtual Tag* tag() const;
+
+      // reimplemented from AdhocPlugin/StanzaExtension
+      virtual IOData* clone() const;
+
+      // reimplemented from AdhocPlugin/StanzaExtension
+      virtual const std::string& filterString() const { return EmptyString; }
+
+      // reimplemented from AdhocPlugin/StanzaExtension
+      virtual StanzaExtension* newInstance( const Tag* /*tag*/ ) const { return 0; }
+
       /**
-       * Returns a Tag representation of the IOData object.
-       * @return A Tag representation of the IOData object.
+       * Converts to  @b true if the IOData is valid, @b false otherwise.
        */
-      Tag* tag() const;
+      operator bool() const { return m_type != TypeInvalid; }
 
   private:
     Tag* m_in;

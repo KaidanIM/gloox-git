@@ -15,7 +15,7 @@
 #define DATAFORM_H__
 
 #include "dataformfieldcontainer.h"
-#include "stanzaextension.h"
+#include "adhocplugin.h"
 
 #include <string>
 #include <list>
@@ -53,7 +53,7 @@ namespace gloox
    * @author Jakob Schröter <js@camaya.net>
    * @since 0.7
    */
-  class GLOOX_API DataForm : public StanzaExtension, public DataFormFieldContainer
+  class GLOOX_API DataForm : public AdhocPlugin, public DataFormFieldContainer
   {
     public:
       /**
