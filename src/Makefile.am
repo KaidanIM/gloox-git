@@ -100,7 +100,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             jinglesessionhandler.h \
                             jinglesessionmanager.h    carbons.h               jinglepluginfactory.h \
                             jingleiceudp.h            jinglefiletransfer.h \
-                            iodata.h
+                            iodata.h                  adhocplugin.h
 
 noinst_HEADERS = config.h prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h \
                    tlsgnutlsclient.h \

@@ -314,11 +314,21 @@ int main( int /*argc*/, char** /*argv*/ )
   t = 0;
 
 
-
-
-
-
-
+  // -------
+  name = "cloning";
+  i = new IOData( IOData::TypeStatus );
+  i->setStatus( st );
+  i->setOut( new Tag( "foo" ) );
+  IOData* j = i->clone();
+  if( !j || !j->out() || i->out()->name() != "out" || !j->out()->hasChild( "foo" ) || j->status().elapsed != st.elapsed )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+  }
+  delete i;
+  i = 0;
+  delete j;
+  j = 0;
 
 
 
