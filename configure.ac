@@ -435,6 +435,7 @@ src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
 src/tests/inbandbytestreamibb/Makefile
 src/tests/inbandbytestream/Makefile
+src/tests/iodata/Makefile
 src/tests/iq/Makefile
 src/tests/jid/Makefile
 src/tests/jingleiceudp/Makefile

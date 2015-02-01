@@ -11,8 +11,7 @@
 */
 
 
-
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_DATAFORM ) || defined( WANT_ADHOC )
 
 #include "dataform.h"
 #include "dataformfield.h"
@@ -25,26 +24,26 @@ namespace gloox
 {
 
   DataForm::DataForm( FormType type, const StringList& instructions, const std::string& title )
-    : StanzaExtension( ExtDataForm ),
+    : AdhocPlugin( ExtDataForm ),
       m_type( type ), m_instructions( instructions ), m_title( title ), m_reported( 0 )
   {
   }
 
   DataForm::DataForm( FormType type, const std::string& title )
-    : StanzaExtension( ExtDataForm ),
+    : AdhocPlugin( ExtDataForm ),
       m_type( type ), m_title( title ), m_reported( 0 )
   {
   }
 
   DataForm::DataForm( const Tag* tag )
-    : StanzaExtension( ExtDataForm ),
+    : AdhocPlugin( ExtDataForm ),
       m_type( TypeInvalid ), m_reported( 0 )
   {
     parse( tag );
   }
 
   DataForm::DataForm( const DataForm& form )
-    : StanzaExtension( ExtDataForm ), DataFormFieldContainer( form ),
+    : AdhocPlugin( ExtDataForm ), DataFormFieldContainer( form ),
       m_type( form.m_type ), m_instructions( form.m_instructions ),
       m_title( form.m_title ), m_reported( form.m_reported ? new DataFormReported( form.m_reported->tag() ) : 0 )
   {

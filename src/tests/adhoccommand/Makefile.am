@@ -18,5 +18,5 @@ adhoccommand_test_LDADD = ../../adhoc.o ../../connectiontcpclient.o ../../connec
 			../../sha.o ../../error.o ../../clientbase.o ../../jid.o \
 			../../dataform.o ../../dataformfieldcontainer.o ../../dataformreported.o \
 			../../dataformitem.o ../../dataformfield.o ../../eventdispatcher.o ../../softwareversion.o \
-			../../atomicrefcount.o
+			../../atomicrefcount.o ../../iodata.o
 adhoccommand_test_CFLAGS = $(CPPFLAGS)

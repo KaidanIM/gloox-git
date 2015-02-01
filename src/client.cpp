@@ -108,7 +108,7 @@ namespace gloox
 #endif // GLOOX_MINIMAL
       m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_manageRoster( true ),
-      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smMax( 0 ),
+      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smWanted( false ), m_smMax( 0 ),
       m_streamFeatures( 0 )
   {
     m_jid.setServer( server );
@@ -123,7 +123,7 @@ namespace gloox
 #endif // GLOOX_MINIMAL
       m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_manageRoster( true ),
-      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smMax( 0 ),
+      m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smWanted( false ), m_smMax( 0 ),
       m_streamFeatures( 0 )
   {
     m_jid = jid;
