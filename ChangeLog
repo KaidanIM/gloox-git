@@ -1,4 +1,4 @@
-v1.0.13 -- 31 Jan 2015
+v1.0.13 -- 01 Feb 2015
 ----------------------
 - fixed compilation with libressl (thanks to Heiko Becker)
 - added IO Data (XEP-0244)
