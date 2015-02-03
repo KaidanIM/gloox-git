@@ -197,8 +197,13 @@ namespace gloox
 
     delete m_in;
 
-    m_in = new Tag( "in" );
-    m_in->addChild( in );
+    if( in->name() == "in" && in->xmlns() == EmptyString )
+      m_in = in;
+    else
+    {
+      m_in = new Tag( "in" );
+      m_in->addChild( in );
+    }
   }
 
   void IOData::setOut( Tag* out )
@@ -208,8 +213,13 @@ namespace gloox
 
     delete m_out;
 
-    m_out = new Tag( "out" );
-    m_out->addChild( out );
+    if( out->name() == "out" && out->xmlns() == EmptyString )
+      m_out = out;
+    else
+    {
+      m_out = new Tag( "out" );
+      m_out->addChild( out );
+    }
   }
 
   void IOData::setError( Tag* error )
@@ -219,8 +229,13 @@ namespace gloox
 
     delete m_error;
 
-    m_error = new Tag( "error" );
-    m_error->addChild( error );
+    if( error->name() == "error" && error->xmlns() == EmptyString )
+      m_error = error;
+    else
+    {
+      m_error = new Tag( "error" );
+      m_error->addChild( error );
+    }
   }
 
 
