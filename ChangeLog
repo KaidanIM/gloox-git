@@ -4,6 +4,12 @@ v1.1-svn
 
 
 
+v1.0.14
+-------
+- IOData: make it possible to pass more than one element as in/out/error data
+
+
+
 v1.0.13 -- 01 Feb 2015
 ----------------------
 Note: This release is not binary compatible with previous releases. It is source compatible.
