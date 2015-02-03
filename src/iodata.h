@@ -27,7 +27,7 @@ namespace gloox
 {
 
   /**
-   * @brief This is an abstraction of the IO Data specification @xep{0153}.
+   * @brief This is an abstraction of the IO Data specification @xep{0244}.
    *
    * This abstraction can be used to implement IO Data on top of Data Forms.
    *
