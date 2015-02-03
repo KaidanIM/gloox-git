@@ -94,6 +94,8 @@ namespace gloox
 
       /**
        * Sets the 'input' tag. If an 'input' tag was previosuly set, it is deleted before the new one is set.
+       * Alternatively, if your input consists of more than one element, you can embed these into an
+       * &lt;in&gt; tag with no namespace.
        * @param in The new 'input' tag.
        * @note The @c in tag will be owned by this IOData instance. Clone it if you need it somewhere else.
        */
@@ -108,6 +110,8 @@ namespace gloox
 
       /**
        * Sets the 'output' tag. If an 'output' tag was previosuly set, it is deleted before the new one is set.
+       * Alternatively, if your output consists of more than one element, you can embed these into an
+       * &lt;out&gt; tag with no namespace.
        * @param out The new 'output' tag.
        * @note The @c out tag will be owned by this IOData instance. Clone it if you need it somewhere else.
        */
@@ -122,6 +126,8 @@ namespace gloox
 
       /**
        * Sets the 'error' tag. If an 'error' tag was previosuly set, it is deleted before the new one is set.
+       * Alternatively, if your error consists of more than one element, you can embed these into an
+       * &lt;error&gt; tag with no namespace.
        * @param out The new 'error' tag.
        * @note The @c error tag will be owned by this IOData instance. Clone it if you need it somewhere else.
        */
