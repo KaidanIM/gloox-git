@@ -1,6 +1,7 @@
 v1.0.14
 -------
 - IOData:  make it possible to pass more than one element as in/out/error data
+- Client: fix resetting of presence status text
 
 
 
