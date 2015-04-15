@@ -50,6 +50,12 @@ namespace gloox
       delete m_payload;
     }
 
+    void Item::setPayload( Tag* tag )
+    {
+      delete m_payload;
+      m_payload = tag;
+    }
+
     Tag* Item::tag() const
     {
       Tag* t = new Tag( "item" );
