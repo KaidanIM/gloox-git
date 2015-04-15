@@ -698,6 +698,7 @@ namespace gloox
   {
     m_presence.setPresence( pres );
     m_presence.setPriority( priority );
+    m_presence.resetStatus();
     m_presence.addStatus( status );
     sendPresence( m_presence );
   }

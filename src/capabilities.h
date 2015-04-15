@@ -31,7 +31,8 @@ namespace gloox
   /**
    * @brief This is an implementation of @xep{0115} (Entity Capabilities).
    *
-   * XEP Version: 1.5-15
+   * XEP Version: 1.5
+   *
    * @author Jakob Schröter <js@camaya.net>
    * @since 1.0
    */

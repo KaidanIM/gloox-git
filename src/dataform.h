@@ -50,7 +50,7 @@ namespace gloox
   /**
    * @brief An abstraction of a @xep{0004} Data Form.
    *
-   *
+   * XEP Version: 2.9
    *
    * @author Jakob Schröter <js@camaya.net>
    * @since 0.7

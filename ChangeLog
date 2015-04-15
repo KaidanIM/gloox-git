@@ -7,6 +7,8 @@ v1.1-svn
 v1.0.14
 -------
 - IOData: make it possible to pass more than one element as in/out/error data
+- Client: fix resetting of presence status text
+- TLSSChannel: fix memory leak (thanks to Alexander Weisner)
 
 
 
