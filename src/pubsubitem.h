@@ -68,10 +68,22 @@ namespace gloox
         const Tag* payload() const { return m_payload; }
 
         /**
+         * Sets the item's payload.
+         * @param tag A payload tag.
+         */
+        void setPayload( Tag* tag );
+
+        /**
          * Returns the item ID.
          * @return The item ID.
          */
         const std::string& id() const { return m_id; }
+
+        /**
+         * Sets the item's ID.
+         * @param id The item's ID.
+         */
+        void setID( const std::string& id ) { m_id = id; }
 
         /**
          * Creates and returns a Tag representation of the Item.

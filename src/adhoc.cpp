@@ -212,7 +212,7 @@ namespace gloox
       c->addAttribute( "sessionid", m_sessionid );
 
     if( m_plugin && *m_plugin )
-      c->addChild( m_plugin->tag() );
+      c->addChild( m_plugin->tag()->clone() );
 
     NoteList::const_iterator it = m_notes.begin();
     for( ; it != m_notes.end(); ++it )

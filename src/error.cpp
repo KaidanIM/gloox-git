@@ -136,4 +136,10 @@ namespace gloox
     return it != m_text.end() ? (*it).second : EmptyString;
   }
 
+  void Error::setAppError( Tag* appError )
+  {
+    delete m_appError;
+    m_appError = appError;
+  }
+
 }
