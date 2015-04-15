@@ -59,6 +59,12 @@ namespace gloox
        */
       int event() const { return m_event; }
 
+      /**
+       * Returns the event's ID.
+       * @return The event's ID.
+       */
+      std::string id() const { return m_id; }
+
       // reimplemented from StanzaExtension
       virtual const std::string& filterString() const;
 
