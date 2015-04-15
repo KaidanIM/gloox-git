@@ -632,7 +632,10 @@ namespace gloox
     }
     while( false );
     // cleanup
-    if( chainContext ) CertFreeCertificateChain( chainContext );
+    if( chainContext )
+      CertFreeCertificateChain( chainContext );
+    if( uServerName != 0 )
+      free( uServerName );
     m_certInfo.chain = valid;
   }
 
