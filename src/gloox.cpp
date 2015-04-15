@@ -112,10 +112,11 @@ namespace gloox
 
   const std::string XMLNS_HASHES            = "urn:xmpp:hashes:1";
   const std::string XMLNS_IODATA            = "urn:xmpp:tmp:io-data";
-
+  const std::string XMLNS_OPENLINK          = "http://xmpp.org/protocol/openlink:01:00:00";
+  
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";
-  const std::string GLOOX_VERSION           = "1.0.12-mini";
+  const std::string GLOOX_VERSION           = "1.0.14-mini6";
   const std::string GLOOX_CAPS_NODE         = "http://camaya.net/gloox";
 
   const std::string XMLNS = "xmlns";
