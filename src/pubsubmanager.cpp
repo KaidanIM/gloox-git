@@ -370,7 +370,7 @@ namespace gloox
         SubscriptionInfo si;
         si.jid.setJID( su->findAttribute( "jid" ) );
         si.subid = su->findAttribute( "subid" );
-        si.type = subscriptionType( su->findAttribute( "type" ) );
+        si.type = subscriptionType( su->findAttribute( "subscription" ) );
         SubscriptionList& lst = m_subscriptionMap[su->findAttribute( "node" )];
         lst.push_back( si );
         return;
