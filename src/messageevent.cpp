@@ -38,7 +38,11 @@ namespace gloox
     TagList::const_iterator it = l.begin();
     int event = 0;
     for( ; it != l.end(); ++it )
+    {
       event |= util::lookup2( (*it)->name(), eventValues );
+      if( (*it)->name() == "id" )
+        m_id = (*)->cdata();
+    }
     if( event )
       m_event = event;
   }

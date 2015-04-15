@@ -1,8 +1,14 @@
 v1.0.14
 -------
+Note: This release is not binary compatible with previous releases. It is source compatible.
+
 - IOData: make it possible to pass more than one element as in/out/error data
 - Client: fix resetting of presence status text
 - TLSSChannel: fix memory leak (thanks to Alexander Weisner)
+- PubSub::Manager: fix finding of subscription type (thanks to BillHoo)
+- ChatStateFilter: fix enable logic (thanks to Ivan Shmakov)
+- MessageEvent: added parsing of <id/> (thanks to Ivan Shmakov)
+- MessageEvent: added id() (thanks to Ivan Shmakov)
 
 
 
