@@ -417,7 +417,7 @@ namespace gloox
        * @param remote The requester's JID.
        * @param command The response. The Adhoc object will own and delete the
        * command object pointed to.
-       * @param error An optional Error obejct to include.
+       * @param error An optional Error object to include.
        */
       void respond( const JID& remote, const Adhoc::Command* command, const Error* error = 0 );
 
