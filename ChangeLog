@@ -6,6 +6,7 @@ v1.0.14
 - Error: added setAppError() to set application-specific error message
 - PubSub::Item: added setPayload(), setID()
 - Adhoc: return clone of plugin
+- PubSub::Manager: fix finding of subscription type (thanks to BillHoo)
 
 
 
