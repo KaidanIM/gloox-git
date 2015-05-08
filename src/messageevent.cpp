@@ -41,7 +41,7 @@ namespace gloox
     {
       event |= util::lookup2( (*it)->name(), eventValues );
       if( (*it)->name() == "id" )
-        m_id = (*)->cdata();
+        m_id = (*it)->cdata();
     }
     if( event )
       m_event = event;
