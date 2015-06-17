@@ -18,6 +18,7 @@ Note: This release is not binary compatible with previous releases. It is source
 - ChatStateFilter: fix enable logic (thanks to Ivan Shmakov)
 - MessageEvent: added parsing of <id/> (thanks to Ivan Shmakov)
 - MessageEvent: added id() (thanks to Ivan Shmakov)
+- ClientBase: handle MUC invitation declines properly (thanks to Matias Snellingen)
 
 
 
