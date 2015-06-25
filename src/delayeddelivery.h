@@ -122,7 +122,7 @@ namespace gloox
       JID m_from;
       std::string m_stamp;
       std::string m_reason;
-      bool m_valid;
+      
   };
 
 }
