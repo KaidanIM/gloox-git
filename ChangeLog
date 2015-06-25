@@ -10,7 +10,8 @@ Note: This release is not binary compatible with previous releases. It is source
 - MessageEvent: added parsing of <id/> (thanks to Ivan Shmakov)
 - MessageEvent: added id() (thanks to Ivan Shmakov)
 - ClientBase: handle MUC invitation declines properly (thanks to Matias Snellingen)
-- DNS: IPv6 fix (thanks to garimacoe)
+- DNS: IPv6 fix (thanks to garimacoe) (#249)
+- DelayedDelivery: propagate internal state properly (#251)
 
 
 
