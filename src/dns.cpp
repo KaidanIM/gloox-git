@@ -282,7 +282,7 @@ namespace gloox
       char ip[NI_MAXHOST];
       char port[NI_MAXSERV];
 
-      if( getnameinfo( res->ai_addr, sizeof( sockaddr ),
+      if( getnameinfo( res->ai_addr, res->ai_addrlen,
                        ip, sizeof( ip ),
                        port, sizeof( port ),
                        NI_NUMERICHOST | NI_NUMERICSERV ) )
