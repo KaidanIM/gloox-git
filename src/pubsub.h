@@ -238,7 +238,7 @@ namespace gloox
     };
 
     typedef std::list<SubscriptionInfo> SubscriptionList;
-    typedef std::map<std::string, SubscriptionList> SubscriptionMap;
+    typedef std::map<const std::string, SubscriptionList> SubscriptionMap;
     typedef std::map<std::string, AffiliationType> AffiliationMap;
     typedef std::list<Item*> ItemList;
 
