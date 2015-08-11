@@ -173,7 +173,7 @@ namespace gloox
         m_ctx = GetAffiliateList;
         m_node = a->findAttribute( "node" );
         const TagList& l = a->children();
-        TagList::const_iterator it =l.begin();
+        TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
           if( (*it)->name() == "affiliation" )
@@ -295,26 +295,31 @@ namespace gloox
       if( !tag )
         return;
 
-      ConstTagList l = tag->findTagList( "pubsub/subscriptions/subscription" );
-      if( l.size() )
+      const Tag* sl = tag->findTag( "pubsub/subscriptions" );
+      if( sl )
       {
-        m_ctx = GetSubscriptionList;
-        ConstTagList::const_iterator it = l.begin();
-        for( ; it != l.end(); ++it )
+        TagList l = sl->children();
+        if( l.size() )
         {
-          const std::string& node = (*it)->findAttribute( "node" );
-          const std::string& sub  = (*it)->findAttribute( "subscription" );
-          const std::string& subid = (*it)->findAttribute( "subid" );
-          SubscriptionInfo si;
-          si.jid.setJID( (*it)->findAttribute( "jid" ) );
-          si.type = subscriptionType( sub );
-          si.subid = subid;
-          SubscriptionList& lst = m_subscriptionMap[node];
-          lst.push_back( si );
+          m_ctx = GetSubscriptionList;
+          SubscriptionList lst;
+          m_node = sl->findAttribute( "node" );
+          m_subscriptionMap.insert( std::make_pair( m_node, lst ) );
+          TagList::const_iterator it = l.begin();
+          for( ; it != l.end(); ++it )
+          {
+            const std::string& sub  = (*it)->findAttribute( "subscription" );
+            const std::string& subid = (*it)->findAttribute( "subid" );
+            SubscriptionInfo si;
+            si.jid.setJID( (*it)->findAttribute( "jid" ) );
+            si.type = subscriptionType( sub );
+            si.subid = subid;
+            lst.push_back( si );
+          }
+          return;
         }
-        return;
       }
-      l = tag->findTagList( "pubsub/affiliations/affiliation" );
+      ConstTagList l = tag->findTagList( "pubsub/affiliations/affiliation" );
       if( l.size() )
       {
         m_ctx = GetAffiliationList;
@@ -904,6 +909,7 @@ namespace gloox
       iq.addExtension( pso );
 
       m_trackMapMutex.lock();
+      m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
       m_trackMapMutex.unlock();
       m_parent->send( iq, this, config ? SetNodeConfig : GetNodeConfig );
@@ -1131,15 +1137,18 @@ namespace gloox
                   }
                   break;
                 }
-//                 case GetSubscriberList:
-//                 {
-//                   const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
-//                   if( ps )
-//                   {
-//                     rh->handleSubscribers( service, ps->node(), ps->subscriptions() );
-//                   }
-//                   break;
-//                 }
+                case GetSubscriberList:
+                {
+                  const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+                  if( ps )
+                  {
+                    const SubscriptionMap& sm = ps->subscriptions();
+                    SubscriptionMap::const_iterator itsm = sm.find( ps->node() );
+                    if( itsm != sm.end() )
+                      rh->handleSubscribers( iq.id(), service, ps->node(), (*itsm).second, 0 );
+                  }
+                  break;
+                }
                 case SetSubscriptionOptions:
                 case SetSubscriberList:
                 case SetAffiliateList:
@@ -1198,19 +1207,11 @@ namespace gloox
                 }
                 case GetAffiliateList:
                 {
-//                   const PubSub
-
-                 /* const TagList& affiliates = query->children();
-                  AffiliateList affList;
-                  TagList::const_iterator it = affiliates.begin();
-                  for( ; it != affiliates.end(); ++it )
+                  const PubSubOwner* pso = iq.findExtension<PubSubOwner>( ExtPubSubOwner );
+                  if( pso )
                   {
-                    Affiliate aff( (*it)->findAttribute( "jid" ),
-                                   affiliationType( (*it)->findAttribute( "affiliation" ) ) );
-                    affList.push_back( aff );
+                    rh->handleAffiliates( id, service, pso->node(), pso->affiliateList(), error );
                   }
-                  rh->handleAffiliates( service, query->findAttribute( "node" ), &affList );
-                 */
                   break;
                 }
                 case GetNodeConfig:

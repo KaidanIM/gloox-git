@@ -53,7 +53,7 @@ class RH : public PubSub::ResultHandler
                                                       const Error* ) {}
     void handleSubscribers( const std::string&,
                             const JID&, const std::string&,
-                                        const PubSub::SubscriberList*,
+                                        const PubSub::SubscriptionList&,
                                         const Error* ) {}
     void handleSubscribersResult( const std::string&,
                                   const JID&, const std::string&,

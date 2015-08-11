@@ -4,8 +4,8 @@ v1.1-svn
 
 
 
-v1.0.14
--------
+v1.0.14 -- 11 Aug 2015
+----------------------
 Note: This release is not binary compatible with previous releases. It is source compatible.
 
 - IOData: make it possible to pass more than one element as in/out/error data
@@ -21,6 +21,7 @@ Note: This release is not binary compatible with previous releases. It is source
 - ClientBase: handle MUC invitation declines properly (thanks to Matias Snellingen)
 - DNS: IPv6 fix (thanks to garimacoe) (#249)
 - DelayedDelivery: propagate internal state properly (#251)
+- PubSub::Manager: fix GetSubscriberList and GetAffiliateList
 
 
 

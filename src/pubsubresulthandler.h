@@ -210,7 +210,7 @@ namespace gloox
         virtual void handleSubscribers( const std::string& id,
                                         const JID& service,
                                         const std::string& node,
-                                        const SubscriberList* list,
+                                        const SubscriptionList& list,
                                         const Error* error = 0 ) = 0;
 
         /**
@@ -239,7 +239,7 @@ namespace gloox
          * @param list Affiliation list.
          * @param error Affiliation list retrieval Error.
          *
-         * @see Manager::getAffiliations
+         * @see Manager::getAffiliates
          */
         virtual void handleAffiliates( const std::string& id,
                                        const JID& service,
