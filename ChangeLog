@@ -1,6 +1,6 @@
 v1.0.15
 -------
-
+- Error: fix copy ctor (thanks to Olivier Tchilinguirian)
 
 
 
