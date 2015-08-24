@@ -89,7 +89,7 @@ namespace gloox
 
   Error::Error( const Error& error )
     : StanzaExtension( ExtError ), m_type( error.m_type ),
-      m_error( error.m_error ), m_appError( error.m_appError ? m_appError->clone() : 0 )
+      m_error( error.m_error ), m_appError( error.m_appError ? error.m_appError->clone() : 0 )
   {}
 
   Error::~Error()

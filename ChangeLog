@@ -1,6 +1,7 @@
 v1.1-svn
 --------
 - added minimal build option
+- Error: fix copy ctor (thanks to Olivier Tchilinguirian)
 
 
 
