@@ -1,7 +1,13 @@
 v1.1-svn
 --------
 - added minimal build option
+
+
+
+v1.0.15
+-------
 - Error: fix copy ctor (thanks to Olivier Tchilinguirian)
+- ClientBase: properly fix handling of MUC invitation declines (wrong in 1.0.14) (thanks to Martin Hillmeier and Matias Snellingen) (#248)
 
 
 
