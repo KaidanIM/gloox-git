@@ -79,9 +79,7 @@ int main( int /*argc*/, char** /*argv*/ )
     fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
   delete d;
-  delete t;
   d = 0;
-  t = 0;
 
   // -------
   name = "from Tag/tag()";

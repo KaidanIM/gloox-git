@@ -144,8 +144,6 @@ int main( int /*argc*/, char** /*argv*/ )
     ++fail;
     fprintf( stderr, "test '%s' failed\n", name.c_str() );
   }
-  delete c;
-  c = 0;
 
   //-------
   name = "util::escape";
