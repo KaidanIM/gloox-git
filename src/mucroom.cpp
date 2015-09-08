@@ -1129,6 +1129,7 @@ namespace gloox
       case SetOwner:
       case CreateInstantRoom:
       case CancelRoomCreation:
+      case SendRoomConfig:
       case DestroyRoom:
       case StoreVoiceList:
       case StoreBanList:
@@ -1182,6 +1183,7 @@ namespace gloox
       case CreateInstantRoom:
       case CancelRoomCreation:
       case RequestRoomConfig:
+      case SendRoomConfig:
       case DestroyRoom:
       case RequestVoiceList:
       case StoreVoiceList:
