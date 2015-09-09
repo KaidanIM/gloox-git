@@ -109,7 +109,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       for( ; it != roster.end(); ++it )
       {
         printf( "jid: %s, name: %s, subscription: %d\n",
-                (*it).second->jidJID().full().c_str(), (*it).second->name().c_str(),
+                (*it).second->jid().full().c_str(), (*it).second->name().c_str(),
                 (*it).second->subscription() );
         StringList g = (*it).second->groups();
         StringList::const_iterator it_g = g.begin();
@@ -129,13 +129,13 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
     virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
                                        Presence::PresenceType presence, const std::string& /*msg*/ )
     {
-      printf( "presence received: %s/%s -- %d\n", item.jidJID().full().c_str(), resource.c_str(), presence );
+      printf( "presence received: %s/%s -- %d\n", item.jid().full().c_str(), resource.c_str(), presence );
     }
 
     virtual void handleSelfPresence( const RosterItem& item, const std::string& resource,
                                        Presence::PresenceType presence, const std::string& /*msg*/ )
     {
-      printf( "self presence received: %s/%s -- %d\n", item.jidJID().full().c_str(), resource.c_str(), presence );
+      printf( "self presence received: %s/%s -- %d\n", item.jid().full().c_str(), resource.c_str(), presence );
     }
 
     virtual bool handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ )

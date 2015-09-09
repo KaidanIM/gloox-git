@@ -27,7 +27,12 @@ gloox::JID g_jid( "foof" );
 
 namespace gloox
 {
-  class Disco;
+  class Disco
+  {
+    public:
+      void addFeature( const std::string ) {};
+      void removeFeature( const std::string ) {};
+  };
   class Capabilities : public StanzaExtension
   {
     public:
@@ -58,8 +63,10 @@ namespace gloox
       void removeSubscriptionHandler( SubscriptionHandler* /*ph*/ ) {}
       void registerStanzaExtension( StanzaExtension* ext );
       void removeStanzaExtension( int ext );
+      Disco* disco() { return &m_disco; }
     private:
       JID m_jid;
+      Disco m_disco;
   };
   void ClientBase::removeIqHandler( IqHandler*, int ) {}
   void ClientBase::removeIDHandler( IqHandler* ) {}
@@ -72,6 +79,7 @@ using namespace gloox;
 
 #define CLIENTBASE_H__
 #define CAPABILITIES_H__
+#define DISCO_H__
 #define ROSTERMANAGER_TEST
 #include "../../privatexml.h"
 #include "../../privatexml.cpp"
@@ -342,7 +350,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ri )
   {
     ++fail;
-    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), ri->jid().full().c_str() );
   }
 
   // -------
@@ -380,7 +388,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( ri )
   {
     ++fail;
-    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), ri->jidJID().full().c_str() );
+    fprintf( stderr, "test '%s' failed: %s\n", name.c_str(), ri->jid().full().c_str() );
   }
 
   // -------
