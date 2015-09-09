@@ -3,6 +3,7 @@ v1.0.15
 - Error: fix copy ctor (thanks to Olivier Tchilinguirian)
 - ClientBase: properly fix handling of MUC invitation declines (wrong in 1.0.14) (thanks to Martin Hillmeier and Matias Snellingen) (#248)
 - MUCRoom: handle SendRoomConfig (thanks to Matias Snellingen) (#253)
+- soversion bump, missed that for 1.0.14 (thanks to Vincent Cheng)
 
 
 
