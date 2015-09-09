@@ -142,4 +142,4 @@ namespace gloox
 
 }
 
-#endif /* ERROR_H__ */
+#endif // ERROR_H__
