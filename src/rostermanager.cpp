@@ -212,7 +212,7 @@ namespace gloox
 
     bool self = false;
     Roster::iterator it = m_roster.find( presence.from().bare() );
-    if( it != m_roster.end() || ( self = ( presence.from().bareJID() == m_self->jidJID() ) ) )
+    if( it != m_roster.end() || ( self = ( presence.from().bareJID() == m_self->jid() ) ) )
     {
       RosterItem* ri = self ? m_self : (*it).second;
       const std::string& resource = presence.from().resource();
@@ -297,7 +297,7 @@ namespace gloox
         continue;
 
       IQ iq( IQ::Set, JID(), m_parent->getID() );
-      iq.addExtension( new Query( (*it).second->jidJID(), (*it).second->name(), (*it).second->groups() ) );
+      iq.addExtension( new Query( (*it).second->jid(), (*it).second->name(), (*it).second->groups() ) );
       m_parent->send( iq, this, SynchronizeRoster );
     }
   }
@@ -396,13 +396,13 @@ namespace gloox
     RosterData::const_iterator it = data.begin();
     for( ; it != data.end(); ++it )
     {
-      Roster::iterator itr = m_roster.find( (*it)->jidJID().full() );
+      Roster::iterator itr = m_roster.find( (*it)->jid().full() );
       if( itr != m_roster.end() )
       {
         if( (*it)->remove() )
         {
           if( m_rosterListener )
-            m_rosterListener->handleItemRemoved( (*it)->jidJID().full() );
+            m_rosterListener->handleItemRemoved( (*it)->jid().full() );
           delete (*itr).second;
           m_roster.erase( itr );
         }
@@ -410,14 +410,14 @@ namespace gloox
         {
           (*itr).second->setData( *(*it) );
           if( m_rosterListener )
-            m_rosterListener->handleItemUpdated( (*it)->jidJID().full() );
+            m_rosterListener->handleItemUpdated( (*it)->jid().full() );
         }
       }
       else if( !(*it)->remove() )
       {
-        m_roster.insert( std::make_pair( (*it)->jidJID().full(), new RosterItem( *(*it) ) ) );
+        m_roster.insert( std::make_pair( (*it)->jid().full(), new RosterItem( *(*it) ) ) );
         if( m_rosterListener )
-          m_rosterListener->handleItemAdded( (*it)->jidJID().full() );
+          m_rosterListener->handleItemAdded( (*it)->jid().full() );
       }
     }
   }
@@ -426,7 +426,7 @@ namespace gloox
   {
     RosterData::const_iterator it = data.begin();
     for( ; it != data.end(); ++it )
-      m_roster.insert( std::make_pair( (*it)->jidJID().full(), new RosterItem( *(*it) ) ) );
+      m_roster.insert( std::make_pair( (*it)->jid().full(), new RosterItem( *(*it) ) ) );
   }
 
 }

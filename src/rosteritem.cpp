@@ -51,20 +51,12 @@ namespace gloox
       return EmptyString;
   }
 
-  const JID& RosterItem::jidJID() const
-  {
-    if( m_data )
-      return m_data->jidJID();
-    else
-      return EmptyJID;
-  }
-
-  const std::string& RosterItem::jid() const
+  const JID& RosterItem::jid() const
   {
     if( m_data )
       return m_data->jid();
     else
-      return EmptyString;
+      return EmptyJID;
   }
 
   void RosterItem::setSubscription( const std::string& subscription, const std::string& ask )

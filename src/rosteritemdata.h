@@ -45,7 +45,7 @@ namespace gloox
        */
       RosterItemData( const JID& jid, const std::string& name,
                       const StringList& groups )
-        : m_jid( jid.full() ), m_jidJID( jid ), m_name( name ), m_groups( groups ),
+        : m_jid( jid ), m_name( name ), m_groups( groups ),
           m_subscription( S10nNone ), m_changed( false ), m_remove( false )
       {}
 
@@ -54,7 +54,7 @@ namespace gloox
        * @param jid The JID of the contact to remove.
        */
       RosterItemData( const JID& jid )
-        : m_jid( jid.full() ), m_jidJID( jid ), m_subscription( S10nNone ), m_changed( false ),
+        : m_jid( jid ), m_subscription( S10nNone ), m_changed( false ),
           m_remove( true )
       {}
 
@@ -63,32 +63,9 @@ namespace gloox
        * @param right The RosterItemData to copy.
        */
       RosterItemData( const RosterItemData& right )
-        : m_jid( right.m_jid ), m_jidJID( right.m_jidJID ), m_name( right.m_name ),
+        : m_jid( right.m_jid ), m_name( right.m_name ),
           m_groups( right.m_groups ), m_subscription( right.m_subscription ),
           m_changed( right.m_changed ), m_remove( right.m_remove )
-      {}
-
-      /**
-       * Constructs a new item of the roster.
-       * @param jid The JID of the contact.
-       * @param name The displayed name of the contact.
-       * @param groups A list of groups the contact belongs to.
-       * @deprecated Will be removed for 1.1.
-       */
-      GLOOX_DEPRECATED_CTOR RosterItemData( const std::string& jid, const std::string& name,
-                      const StringList& groups )
-        : m_jid( jid ), m_jidJID( jid), m_name( name ), m_groups( groups ),
-          m_subscription( S10nNone ), m_changed( false ), m_remove( false )
-      {}
-
-      /**
-       * Constructs a new item of the roster, scheduled for removal.
-       * @param jid The JID of the contact to remove.
-       * @deprecated Will be removed for 1.1.
-       */
-      GLOOX_DEPRECATED_CTOR RosterItemData( const std::string& jid )
-        : m_jid( jid ), m_jidJID( jid), m_subscription( S10nNone ), m_changed( false ),
-          m_remove( true )
       {}
 
       /**
@@ -99,16 +76,8 @@ namespace gloox
       /**
        * Returns the contact's bare JID.
        * @return The contact's bare JID.
-       * @deprecated Will be removed for 1.1.
        */
-      GLOOX_DEPRECATED const std::string& jid() const { return m_jid; }
-
-      /**
-       * Returns the contact's bare JID.
-       * @return The contact's bare JID.
-       * @todo Rename to jid() for 1.1.
-       */
-      const JID& jidJID() const { return m_jidJID; }
+      const JID& jid() const { return m_jid; }
 
       /**
        * Sets the displayed name of a contact/roster item.
@@ -199,7 +168,7 @@ namespace gloox
       Tag* tag() const
       {
         Tag* i = new Tag( "item" );
-        i->addAttribute( "jid", m_jidJID.full() );
+        i->addAttribute( "jid", m_jid.full() );
         if( m_remove )
           i->addAttribute( "subscription", "remove" );
         else
@@ -215,8 +184,7 @@ namespace gloox
       }
 
     protected:
-      GLOOX_DEPRECATED std::string m_jid; /**< @deprecated Will be removed for 1.1. */
-      JID m_jidJID; /**< @todo Rename to m_jid for 1.1. */
+      JID m_jid;
       std::string m_name;
       StringList m_groups;
       SubscriptionType m_subscription;
