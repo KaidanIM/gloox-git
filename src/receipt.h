@@ -49,7 +49,7 @@ namespace gloox
        * Constructs a new object from the given Tag.
        * @param tag A Tag to parse.
        */
-      Receipt( const Tag* tag );
+      Receipt( const Tag* tag = 0 );
 
       /**
        * Constructs a new object of the given type.

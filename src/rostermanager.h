@@ -19,6 +19,8 @@
 #include "iqhandler.h"
 #include "presencehandler.h"
 #include "rosterlistener.h"
+#include "messagehandler.h"
+#include "message.h"
 
 #include <map>
 #include <string>
@@ -31,6 +33,10 @@ namespace gloox
   class Stanza;
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
   class PrivateXML;
+#endif // GLOOX_MINIMAL
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ROSTER_ITEM_EXCHANGE )
+  class Message;
+  class MessageSession;
 #endif // GLOOX_MINIMAL
   class RosterItem;
 
@@ -50,6 +56,9 @@ namespace gloox
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
                                    public PrivateXMLHandler,
 #endif // GLOOX_MINIMAL
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ROSTER_ITEM_EXCHANGE )
+                                   public MessageHandler,
+#endif
                                    public SubscriptionHandler
   {
     public:
@@ -196,6 +205,11 @@ namespace gloox
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult );
 #endif // GLOOX_MINIMAL
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ROSTER_ITEM_EXCHANGE )
+      // reimplemented from MessageHandler
+      virtual void handleMessage( const Message& msg, MessageSession* session = 0 );
+#endif
 
     private:
 #ifdef ROSTERMANAGER_TEST

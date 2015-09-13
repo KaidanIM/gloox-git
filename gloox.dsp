@@ -358,6 +358,14 @@ SOURCE=.\src\rostermanager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\rosterx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rosterxitemdata.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\search.cpp
 # End Source File
 # Begin Source File
@@ -894,6 +902,10 @@ SOURCE=.\src\rosteritem.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\rosteritembase.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\rosteritemdata.h
 # End Source File
 # Begin Source File
@@ -903,6 +915,14 @@ SOURCE=.\src\rosterlistener.h
 # Begin Source File
 
 SOURCE=.\src\rostermanager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rosterx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rosterxitemdata.h
 # End Source File
 # Begin Source File
 

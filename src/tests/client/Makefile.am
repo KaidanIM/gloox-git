@@ -14,7 +14,7 @@ client_test_LDADD = ../../client.o ../../connectiontcpbase.o ../../connectiontcp
 			../../dns.o ../../stanzaextensionfactory.o \
 			../../rostermanager.o ../../nonsaslauth.o ../../sha.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
-			../../dataformfield.o \
+			../../dataformfield.o ../../rosterx.o ../../rosterxitemdata.o \
 			../../rosteritem.o ../../privatexml.o ../../gloox.o ../../tlsgnutlsbase.o \
 			../../tlsdefault.o ../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o \
 			../../mutex.o ../../iq.o ../../presence.o ../../message.o ../../subscription.o \

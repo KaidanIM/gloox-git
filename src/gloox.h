@@ -311,6 +311,7 @@
  * @li @xep{0131} @link gloox::SHIM Stanza Headers and Internet Metadata @endlink
  * @li @xep{0138} Stream Compression (used automatically if gloox is compiled with zlib and if the server
  * supports it)
+ * @li @xep{0144} @link gloox::RosterX Roster Item Exchange @endlink
  * @li @xep{0145} @link gloox::Annotations Annotations @endlink
  * @li @xep{0153} @link gloox::VCardUpdate vCard-based Avatars @endlink
  * @li @xep{0166} @link gloox::Jingle::SessionManager Jingle @endlink
@@ -608,6 +609,9 @@ namespace gloox
 
   /** IO Data (@xep 0244) */
   GLOOX_API extern const std::string XMLNS_IODATA;
+
+  /** Roster Item Exchange (@xep 0144) */
+  GLOOX_API extern const std::string XMLNS_ROSTER_X;
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;

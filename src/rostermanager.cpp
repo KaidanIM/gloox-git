@@ -21,6 +21,7 @@
 #include "util.h"
 #include "stanzaextension.h"
 #include "capabilities.h"
+#include "rosterx.h"
 
 
 namespace gloox
@@ -118,6 +119,11 @@ namespace gloox
       m_parent->registerPresenceHandler( this );
       m_parent->registerSubscriptionHandler( this );
       m_parent->registerStanzaExtension( new Query() );
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ROSTER_ITEM_EXCHANGE )
+      m_parent->registerStanzaExtension( new RosterX() );
+      m_parent->registerIqHandler( this, ExtRosterX );
+      m_parent->disco()->addFeature( XMLNS_ROSTER_X );
+      #endif // GLOOX_MINIMAL
 
       m_self = new RosterItem( m_parent->jid().bare() );
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
@@ -135,6 +141,11 @@ namespace gloox
       m_parent->removePresenceHandler( this );
       m_parent->removeSubscriptionHandler( this );
       m_parent->removeStanzaExtension( ExtRoster );
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ROSTER_ITEM_EXCHANGE )
+      m_parent->disco()->removeFeature( XMLNS_ROSTER_X );
+      m_parent->removeStanzaExtension( ExtRosterX );
+      m_parent->removeIqHandler( this, ExtRosterX );
+      #endif // GLOOX_MINIMAL
       delete m_self;
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_PRIVATEXML )
       delete m_privateXML;
@@ -173,10 +184,25 @@ namespace gloox
     if( q && q->roster().size() )
       mergePush( q->roster() );
 
+    // Roster Item Exchange
+    const RosterX* r = iq.findExtension<RosterX>( ExtRosterX );
+    if( r && m_rosterListener )
+      m_rosterListener->handleRosterItemExchange( iq.from(), r );
+
     IQ re( IQ::Result, JID(), iq.id() );
     m_parent->send( re );
     return true;
   }
+
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_ROSTER_ITEM_EXCHANGE )
+  void RosterManager::handleMessage( const Message& msg, MessageSession* )
+  {
+    // Roster Item Exchange
+    const RosterX* r = msg.findExtension<RosterX>( ExtRosterX );
+    if( r && m_rosterListener )
+      m_rosterListener->handleRosterItemExchange( msg.from(), r );
+  }
+#endif
 
   void RosterManager::handleIqID( const IQ& iq, int context )
   {

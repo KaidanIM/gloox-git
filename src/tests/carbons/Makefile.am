@@ -19,6 +19,7 @@ carbons_test_LDADD = ../../jid.o ../../tag.o \
                         ../../messagesession.o ../../compressionzlib.o \
                         ../../dns.o ../../stanzaextensionfactory.o \
                         ../../rostermanager.o ../../nonsaslauth.o ../../sha.o ../../dataform.o \
+                        ../../rosterx.o ../../rosterxitemdata.o \
                         ../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
                         ../../dataformfield.o \
                         ../../rosteritem.o ../../privatexml.o ../../tlsgnutlsbase.o \

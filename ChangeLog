@@ -1,6 +1,9 @@
 v1.1-svn
 --------
+Note: This release is not completely source compatible with previous versions.
+
 - added minimal build option
+- added Roster Item Exchange (XEP-0144)
 
 
 

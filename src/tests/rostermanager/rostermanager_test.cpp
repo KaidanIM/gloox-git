@@ -161,7 +161,8 @@ class RosterManagerTest : public ClientBase, public RosterListener
     }
     virtual void handleNonrosterPresence( const Presence& /*presence*/ ) {}
     virtual void handleRosterError( const IQ& /*iq*/ ) {}
-  private:
+    virtual void handleRosterItemExchange( const JID&, const RosterX* ) {}
+private:
     RosterManager* m_rm;
     int m_test;
     bool m_result;

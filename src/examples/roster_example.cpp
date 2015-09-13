@@ -158,6 +158,19 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf( "received presence from entity not in the roster: %s\n", presence.from().full().c_str() );
     }
 
+    virtual void handleRosterItemExchange( const JID& from, const RosterX* items )
+    {
+      if( !items )
+        return;
+
+      const RosterXItemList& list = items->items();
+      printf( "received %d Roster Item Exchange items from %s\n", list.size(), from.full().c_str() );
+
+      RosterXItemList::const_iterator it = list.begin();
+      for( ; it != list.end(); ++it )
+        printf( "Item name: %s, jid: %s\n", (*it)->name().c_str(), (*it)->jid().full().c_str() );
+    }
+
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );

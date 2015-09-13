@@ -91,6 +91,7 @@ namespace gloox
     ExtCarbons,                     /**< An extension dealing with Message Carbons (@xep{0280}). */
     ExtIOData,                      /**< An extension dealing with IO Data (@xep{0244}) (though the IOData extension
                                      * is not actually used as/meant to be a StanzaExtension. */
+    ExtRosterX,                     /**< An extension dealing with Roster Item Exchange (@yep{0144}). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */

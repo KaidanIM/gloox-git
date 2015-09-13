@@ -472,6 +472,14 @@
 				>
 			</File>
 			<File
+				RelativePath="src\rosterx.cpp"
+				>
+			</File>
+			<File
+				RelativePath="src\rosterxitemdata.cpp"
+				>
+			</File>
+			<File
 				RelativePath="src\search.cpp"
 				>
 			</File>
@@ -1054,6 +1062,10 @@
 				>
 			</File>
 			<File
+				RelativePath="src\rosteritembase.h"
+				>
+			</File>
+			<File
 				RelativePath="src\rosteritemdata.h"
 				>
 			</File>
@@ -1063,6 +1075,14 @@
 			</File>
 			<File
 				RelativePath="src\rostermanager.h"
+				>
+			</File>
+			<File
+				RelativePath="src\rosterx.h"
+				>
+			</File>
+			<File
+				RelativePath="src\rosterxitemdata.h"
 				>
 			</File>
 			<File
