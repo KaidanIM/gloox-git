@@ -405,6 +405,56 @@ namespace gloox
 
   int DNS::connect( const std::string& host, int port, const LogSink& logInstance )
   {
+    struct addrinfo hints, *servinfo, *p;
+    int rv = 0;
+    int fd = 0;
+
+    memset( &hints, 0, sizeof( hints ) );
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+
+    if( ( rv = getaddrinfo( host.c_str(), util::int2string( port ).c_str(), &hints, &servinfo ) ) != 0 )
+    {
+      logInstance.dbg( LogAreaClassDns, "getaddrinfo() failed for " + host + "." );
+      return -ConnDnsError;
+    }
+
+    for( p = servinfo; p != 0; p = p->ai_next )
+    {
+      if( ( fd = getSocket( p->ai_family, p->ai_socktype, p->ai_protocol, logInstance ) ) == -1 )
+      {
+        continue;
+      }
+
+      if( ::connect( fd, p->ai_addr, p->ai_addrlen ) == -1 )
+      {
+        closeSocket( fd, logInstance );
+        continue;
+      }
+
+      break;
+    }
+
+    if( p == 0 )
+    {
+      freeaddrinfo( servinfo );
+      std::string message = "Connection to " + host + ":" + util::int2string( port ) + " failed. "
+#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+      "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
+#else
+      "errno: " + util::int2string( errno ) + ": " + strerror( errno );
+#endif
+      logInstance.dbg( LogAreaClassDns, message );
+      return -ConnConnectionRefused;
+    }
+
+    freeaddrinfo( servinfo );
+    return fd;
+  }
+
+/*
+  int DNS::connect( const std::string& host, int port, const LogSink& logInstance )
+  {
     int fd = getSocket( logInstance );
     if( fd < 0 )
       return fd;
@@ -457,6 +507,7 @@ namespace gloox
     closeSocket( fd, logInstance );
     return -ConnConnectionRefused;
   }
+*/
 
   void DNS::closeSocket( int fd, const LogSink& logInstance )
   {

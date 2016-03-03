@@ -5,6 +5,7 @@ v1.0.15
 - MUCRoom: handle SendRoomConfig (thanks to Matias Snellingen) (#253)
 - soversion bump, missed that for 1.0.14 (thanks to Vincent Cheng)
 - TLSGNUTLSClient: fixed off-by-one error in certificate verification
+- IPv6 fixes
 
 
 
