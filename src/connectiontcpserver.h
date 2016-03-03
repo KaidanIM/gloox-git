@@ -71,6 +71,9 @@ namespace gloox
     private:
       ConnectionTCPServer &operator=( const ConnectionTCPServer & );
 
+      // remove for 1.1
+      static int getSocket( int af, int socktype, int proto, const LogSink& logInstance );
+      
       ConnectionHandler* m_connectionHandler;
 
   };

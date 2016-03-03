@@ -13,6 +13,7 @@ v1.0.15
 - ClientBase: properly fix handling of MUC invitation declines (wrong in 1.0.14) (thanks to Martin Hillmeier and Matias Snellingen) (#248)
 - MUCRoom: handle SendRoomConfig (thanks to Matias Snellingen) (#253)
 - TLSGNUTLSClient: fixed off-by-one error in certificate verification
+- IPv6 fixes
 
 
 
