@@ -7,8 +7,8 @@ Note: This release is not completely source compatible with previous versions.
 
 
 
-v1.0.15
--------
+v1.0.15 -- 25 Apr 2016
+----------------------
 - Error: fix copy ctor (thanks to Olivier Tchilinguirian)
 - ClientBase: properly fix handling of MUC invitation declines (wrong in 1.0.14) (thanks to Martin Hillmeier and Matias Snellingen) (#248)
 - MUCRoom: handle SendRoomConfig (thanks to Matias Snellingen) (#253)
