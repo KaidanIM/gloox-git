@@ -526,7 +526,7 @@ namespace gloox
           p->addChild( (*it)->tag() );
         if( m_options.df )
         {
-          Tag* po = new Tag( "publish-options" );
+          Tag* po = new Tag( p, "publish-options" );
           po->addChild( m_options.df->tag() );
         }
       }

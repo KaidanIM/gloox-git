@@ -7,6 +7,12 @@ Note: This release is not completely source compatible with previous versions.
 
 
 
+v1.0.16
+-------
+- PubSubManager: properly include publish options (thanks to Iban Ulov)
+
+
+
 v1.0.15 -- 25 Apr 2016
 ----------------------
 - Error: fix copy ctor (thanks to Olivier Tchilinguirian)
