@@ -299,18 +299,24 @@ namespace gloox
         if( l.size() )
         {
           m_ctx = GetSubscriptionList;
-          SubscriptionList lst;
-          m_node = sl->findAttribute( "node" );
-          m_subscriptionMap.insert( std::make_pair( m_node, lst ) );
           TagList::const_iterator it = l.begin();
           for( ; it != l.end(); ++it )
           {
+            const std::string& node = (*it)->findAttribute( "node" );
             const std::string& sub  = (*it)->findAttribute( "subscription" );
             const std::string& subid = (*it)->findAttribute( "subid" );
             SubscriptionInfo si;
             si.jid.setJID( (*it)->findAttribute( "jid" ) );
             si.type = subscriptionType( sub );
             si.subid = subid;
+
+            SubscriptionMap::iterator iter = m_subscriptionMap.find( node );
+            if( iter == m_subscriptionMap.end() )
+            {
+              iter = m_subscriptionMap.insert( std::make_pair( node, SubscriptionList() ) ).first;
+            }
+
+            SubscriptionList& lst = iter->second;
             lst.push_back( si );
           }
           return;

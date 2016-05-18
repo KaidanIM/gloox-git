@@ -1,6 +1,7 @@
 v1.0.16
 -------
 - PubSubManager: properly include publish options (thanks to Iban Ulov)
+- PubSubManager: properly parse subscriptions in ctor (thanks to Joe Best)
 
 
 
