@@ -10,4 +10,4 @@
   This software is distributed without any warranty.
 */
 
-#define GLOOXVERSION 0x010015
+#define GLOOXVERSION 0x010016
