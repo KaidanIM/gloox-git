@@ -86,6 +86,7 @@ namespace gloox
       void setStatus( Presence::PresenceType presence ) { m_presence = presence; }
       void setExtensions( const StanzaExtensionList& exts )
       {
+        util::clearList( m_extensions );
         StanzaExtensionList::const_iterator it = exts.begin();
         for( ; it != exts.end(); ++it )
         {
