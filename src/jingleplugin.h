@@ -33,6 +33,9 @@ namespace gloox
     class Plugin;
     class PluginFactory;
 
+    /**
+     * The type of Jingle plugin.
+     */
     enum JinglePluginType
     {
       PluginNone,                   /**< Invalid plugin type. */

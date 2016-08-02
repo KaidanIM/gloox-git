@@ -130,7 +130,7 @@ namespace gloox
        * Sets the 'error' tag. If an 'error' tag was previosuly set, it is deleted before the new one is set.
        * Alternatively, if your error consists of more than one element, you can embed these into an
        * &lt;error&gt; tag with no namespace.
-       * @param out The new 'error' tag.
+       * @param error The new 'error' tag.
        * @note The @c error tag will be owned by this IOData instance. Clone it if you need it somewhere else.
        */
       void setError( Tag* error );
