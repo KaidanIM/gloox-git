@@ -432,7 +432,7 @@ namespace gloox
 
         /**
          * Accepts an incoming session with the given list of contents.
-         * @param content A list of Content objects that describe the accepted session parameters.
+         * @param plugins A list of Content objects that describe the accepted session parameters.
          * These objects will be owned and deleted by this Session instance.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
