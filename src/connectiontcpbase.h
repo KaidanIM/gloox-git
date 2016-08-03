@@ -19,6 +19,10 @@
 #include "logsink.h"
 #include "mutex.h"
 
+#ifdef __MINGW32__
+#include <ws2tcpip.h>
+#endif
+
 #include <string>
 
 namespace gloox
