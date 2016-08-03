@@ -403,6 +403,7 @@ namespace gloox
     return (int)fd;
   }
 
+#ifdef HAVE_GETADDRINFO
   int DNS::connect( const std::string& host, int port, const LogSink& logInstance )
   {
     struct addrinfo hints, *servinfo, *p;
@@ -452,7 +453,7 @@ namespace gloox
     return fd;
   }
 
-/*
+#else // HAVE_GETADDRINFO
   int DNS::connect( const std::string& host, int port, const LogSink& logInstance )
   {
     int fd = getSocket( logInstance );
@@ -507,7 +508,7 @@ namespace gloox
     closeSocket( fd, logInstance );
     return -ConnConnectionRefused;
   }
-*/
+#endif // HAVE_GETADDRINFO
 
   void DNS::closeSocket( int fd, const LogSink& logInstance )
   {

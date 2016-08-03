@@ -227,7 +227,7 @@ namespace gloox
     struct sockaddr_storage they;
     int addr_size = sizeof( struct sockaddr_storage );
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-    int newfd = static_cast<int>( accept( static_cast<SOCKET>( m_socket ), (struct sockaddr_storage*)&they, &addr_size ) );
+    int newfd = static_cast<int>( accept( static_cast<SOCKET>( m_socket ), (struct sockaddr*)&they, &addr_size ) );
 #else
     int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&addr_size );
 #endif
