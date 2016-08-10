@@ -36,7 +36,8 @@
 #endif
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-# include <winsock.h>
+# include <winsock2.h>
+# include <ws2tcpip.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>
 #endif
