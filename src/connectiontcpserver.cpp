@@ -26,7 +26,8 @@
 #include "util.h"
 
 #ifdef __MINGW32__
-# include <winsock.h>
+# include <winsock2.h>
+# include <ws2tcpip.h>
 #endif
 
 #if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
@@ -43,7 +44,8 @@
 #endif
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-# include <winsock.h>
+# include <winsock2.h>
+# include <ws2tcpip.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>
 #endif
