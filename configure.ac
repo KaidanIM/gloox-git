@@ -3,8 +3,8 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
 AC_INIT([gloox], [1.1-svn], [js@camaya.net])
-AC_CONFIG_SRCDIR(src/gloox.cpp)
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+AC_CONFIG_SRCDIR([src/gloox.cpp])
+AM_INIT_AUTOMAKE
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h.unix)
