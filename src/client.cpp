@@ -547,7 +547,6 @@ namespace gloox
 
   bool Client::selectResource( const std::string& resource )
   {
-    m_selectedResource = resource; // TODO: remove for 1.1
     m_jid.setResource( resource );
 
     if( !( m_streamFeatures & StreamFeatureUnbind ) )
@@ -571,7 +570,6 @@ namespace gloox
 
         m_jid = rb->jid();
         m_resourceBound = true;
-        m_selectedResource = m_jid.resource(); // TODO: remove for 1.1
         notifyOnResourceBind( m_jid.resource() );
 
         if( m_streamFeatures & StreamFeatureStreamManagement && m_smWanted )

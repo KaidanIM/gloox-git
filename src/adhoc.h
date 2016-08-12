@@ -310,13 +310,6 @@ namespace gloox
           /**
            * Returns the command's embedded AdhocPlugin (e.g. DataForm).
            * @return The command's embedded AdhocPlugin (e.g. DataForm). May be 0.
-           * @note This will be removed in 1.1. Use plugin() instead.
-           */
-          GLOOX_DEPRECATED const AdhocPlugin* form() const { return m_plugin; }
-
-          /**
-           * Returns the command's embedded AdhocPlugin (e.g. DataForm).
-           * @return The command's embedded AdhocPlugin (e.g. DataForm). May be 0.
            */
           const AdhocPlugin* plugin() const { return m_plugin; }
 
