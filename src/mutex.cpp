@@ -15,7 +15,7 @@
 
 #include "config.h"
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
 # include <windows.h>
 #endif
 
@@ -45,7 +45,7 @@ namespace gloox
         MutexImpl( const MutexImpl& );
         MutexImpl& operator=( const MutexImpl& );
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
         CRITICAL_SECTION m_cs;
 #elif defined( HAVE_PTHREAD )
         pthread_mutex_t m_mutex;
@@ -55,7 +55,7 @@ namespace gloox
 
     Mutex::MutexImpl::MutexImpl()
     {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       // NOTE: Critical sections by nature allow "recursive"
       //  (the same thread can get it again, and just bump the ref count).
       InitializeCriticalSection( &m_cs );
@@ -72,7 +72,7 @@ namespace gloox
 
     Mutex::MutexImpl::~MutexImpl()
     {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       DeleteCriticalSection( &m_cs );
 #elif defined( HAVE_PTHREAD )
       pthread_mutex_destroy( &m_mutex );
@@ -81,7 +81,7 @@ namespace gloox
 
     void Mutex::MutexImpl::lock()
     {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       EnterCriticalSection( &m_cs );
 #elif defined( HAVE_PTHREAD )
       pthread_mutex_lock( &m_mutex );
@@ -90,7 +90,7 @@ namespace gloox
 
     bool Mutex::MutexImpl::trylock()
     {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       return TryEnterCriticalSection( &m_cs ) ? true : false;
 #elif defined( HAVE_PTHREAD )
       return !( pthread_mutex_trylock( &m_mutex ) );
@@ -101,7 +101,7 @@ namespace gloox
 
     void Mutex::MutexImpl::unlock()
     {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       LeaveCriticalSection( &m_cs );
 #elif defined( HAVE_PTHREAD )
       pthread_mutex_unlock( &m_mutex );

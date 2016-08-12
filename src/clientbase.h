@@ -34,7 +34,7 @@
 #include <list>
 #include <map>
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
 #include <windows.h>
 #define SECURITY_WIN32
 #include <security.h>
@@ -1118,7 +1118,7 @@ namespace gloox
 
       int m_smSent;
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       CredHandle m_credHandle;
       CtxtHandle m_ctxtHandle;
 #endif

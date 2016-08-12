@@ -15,7 +15,7 @@
 
 #include "config.h"
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
 # include <windows.h>
 #elif defined( __APPLE__ )
 # include <libkern/OSAtomic.h>
@@ -41,7 +41,7 @@ namespace gloox
 
     int AtomicRefCount::increment()
     {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       return (int) ::InterlockedIncrement( (volatile LONG*)&m_count );
 #elif defined( __APPLE__ )
       return (int) OSAtomicIncrement32Barrier( (volatile int32_t*)&m_count );
@@ -57,7 +57,7 @@ namespace gloox
 
     int AtomicRefCount::decrement()
     {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       return (int) ::InterlockedDecrement( (volatile LONG*)&m_count );
 #elif defined( __APPLE__ )
       return (int) OSAtomicDecrement32Barrier( (volatile int32_t*)&m_count );
@@ -73,7 +73,7 @@ namespace gloox
 
     void AtomicRefCount::reset()
     {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       ::InterlockedExchange( (volatile LONG*)&m_count, (volatile LONG)0 );
 #elif defined( __APPLE__ )
       OSAtomicAnd32Barrier( (uint32_t)0, (volatile uint32_t*)&m_count );

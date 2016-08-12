@@ -16,8 +16,6 @@
 
 #ifdef HAVE_OPENSSL
 
-#ifndef __SYMBIAN32__
-
 #ifndef HEADER_DH_H
 #include <openssl/dh.h>
 #endif
@@ -259,7 +257,5 @@ namespace gloox
   }
 
 }
-
-#endif // __SYMBIAN32__
 
 #endif // HAVE_OPENSSL

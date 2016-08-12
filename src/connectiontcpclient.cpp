@@ -20,19 +20,18 @@
 #include "mutexguard.h"
 #include "util.h"
 
-#ifdef __MINGW32__
-# include <winsock.h>
-#endif
-
-#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <sys/select.h>
 # include <unistd.h>
 # include <string.h>
 # include <errno.h>
-#elif ( defined( _WIN32 ) || defined( _WIN32_WCE ) ) && !defined( __SYMBIAN32__ )
-# include <winsock.h>
+#endif
+
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+# include <winsock2.h>
+# include <ws2tcpip.h>
 #endif
 
 #include <cstdlib>
@@ -149,7 +148,7 @@ namespace gloox
       {
         // recv() failed for an unexpected reason
         std::string message = "recv() failed. "
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
           "errno: " + util::int2string( errno ) + ": " + strerror( errno );

@@ -24,13 +24,11 @@
 
 #include <cstdio>
 
-#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <arpa/inet.h>
 #endif
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-# include <winsock.h>
-#elif defined( _WIN32_WCE )
+#if defined( _WIN32 ) || defined( _WIN32_WCE )
 # include <winsock2.h>
 #endif
 

@@ -27,12 +27,7 @@
 #include "mutexguard.h"
 #include "util.h"
 
-#ifdef __MINGW32__
-# include <winsock2.h>
-# include <ws2tcpip.h>
-#endif
-
-#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <netinet/in.h>
 # include <arpa/nameser.h>
 # include <resolv.h>
@@ -45,7 +40,7 @@
 # include <errno.h>
 #endif
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 ) || defined( __MINGW32__ )
 # include <winsock2.h>
 # include <ws2tcpip.h>
 #elif defined( _WIN32_WCE )
@@ -86,7 +81,7 @@ namespace gloox
   // remove for 1.1
   int ConnectionTCPServer::getSocket( int af, int socktype, int proto, const LogSink& logInstance )
   {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
     SOCKET fd;
 #else
     int fd;
@@ -98,14 +93,14 @@ namespace gloox
       + util::int2string( socktype ) + ", "
       + util::int2string( proto )
       + " ) failed. "
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
       "errno: " + util::int2string( errno ) + ": " + strerror( errno );
 #endif
       logInstance.dbg( LogAreaClassDns, message );
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       if( WSACleanup() != 0 )
       {
         logInstance.dbg( LogAreaClassDns, "WSACleanup() failed. WSAGetLastError: "
@@ -143,7 +138,7 @@ namespace gloox
 
 #ifdef HAVE_SETSOCKOPT
     int buf = 0;
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
     int bufbytes = sizeof( int );
 #else
     socklen_t bufbytes = sizeof( int );
@@ -170,7 +165,7 @@ namespace gloox
     {
       std::string message = "getaddrinfo() for " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + util::int2string( m_port ) + ") failed. "
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
       "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
       "errno: " + util::int2string( errno );
@@ -184,7 +179,7 @@ namespace gloox
     {
       std::string message = "bind() to " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + /*inet_ntoa( local.sin_addr ) + ":" +*/ util::int2string( m_port ) + ") failed. "
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
           "errno: " + util::int2string( errno );
@@ -198,7 +193,7 @@ namespace gloox
     {
       std::string message = "listen on " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + /*inet_ntoa( local.sin_addr ) +*/ ":" + util::int2string( m_port ) + ") failed. "
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
           "errno: " + util::int2string( errno );
@@ -230,7 +225,7 @@ namespace gloox
 
     struct sockaddr_storage they;
     int addr_size = sizeof( struct sockaddr_storage );
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
     int newfd = static_cast<int>( accept( static_cast<SOCKET>( m_socket ), (struct sockaddr*)&they, &addr_size ) );
 #else
     int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&addr_size );

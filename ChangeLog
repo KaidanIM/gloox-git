@@ -4,6 +4,7 @@ Note: This release is not completely source compatible with previous versions.
 
 - added minimal build option
 - added Roster Item Exchange (XEP-0144)
+- dropped Symbian support
 
 
 

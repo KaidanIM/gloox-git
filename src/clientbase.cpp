@@ -61,7 +61,7 @@
 
 #include <string.h> // for memset()
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
 #include <tchar.h>
 # ifdef __MINGW32__
 #  ifndef SecureZeroMemory
@@ -574,7 +574,7 @@ namespace gloox
        break;
       case SaslMechGssapi:
       {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
         a->addAttribute( "mechanism", "GSSAPI" );
 // The client calls GSS_Init_sec_context, passing in 0 for
 // input_context_handle (initially) and a targ_name equal to output_name
@@ -595,7 +595,7 @@ namespace gloox
       }
       case SaslMechNTLM:
       {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
         a->addAttribute( "mechanism", "NTLM" );
         SEC_WINNT_AUTH_IDENTITY_W identity, *ident = 0;
         memset( &identity, 0, sizeof( identity ) );
@@ -855,7 +855,7 @@ namespace gloox
         break;
       }
       case SaslMechGssapi:
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
         // see gssapi-sasl-draft.txt
 #else
         m_logInstance.err( LogAreaClassClientbase,
@@ -864,7 +864,7 @@ namespace gloox
         break;
       case SaslMechNTLM:
       {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
         bool type1 = ( decoded.length() < 7 ) ? true : false;
 
         SecBuffer bufferIn = { type1 ? 0 : (unsigned long)decoded.length(),
@@ -931,7 +931,7 @@ namespace gloox
     else if( tag->hasChild( "temporary-auth-failure" ) )
       m_authError = SaslTemporaryAuthFailure;
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
     if( m_selectedSaslMech == SaslMechNTLM )
     {
       FreeCredentialsHandle( &m_credHandle );
@@ -942,7 +942,7 @@ namespace gloox
 
   bool ClientBase::processSASLSuccess( const std::string& payload )
   {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
     if( m_selectedSaslMech == SaslMechNTLM )
     {
       FreeCredentialsHandle( &m_credHandle );

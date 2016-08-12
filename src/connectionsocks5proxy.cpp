@@ -30,13 +30,11 @@
 
 #include <string.h>
 
-#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <netinet/in.h>
 #endif
 
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-# include <winsock.h>
-#elif defined( _WIN32_WCE )
+#if defined( _WIN32 ) || defined( _WIN32_WCE ) || defined( __MINGW32__ )
 # include <winsock2.h>
 #endif
 

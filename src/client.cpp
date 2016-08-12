@@ -211,7 +211,7 @@ namespace gloox
           notifyStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechExternal );
         }
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
         else if( m_streamFeatures & SaslMechGssapi && m_availableSaslMechs & SaslMechGssapi )
         {
           notifyStreamEvent( StreamEventAuthentication );

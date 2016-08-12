@@ -21,12 +21,7 @@
 #include "mutexguard.h"
 #include "util.h"
 
-#ifdef __MINGW32__
-# include <winsock2.h>
-# include <ws2tcpip.h>
-#endif
-
-#if ( !defined( _WIN32 ) && !defined( _WIN32_WCE ) ) || defined( __SYMBIAN32__ )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <arpa/inet.h>
 # include <sys/types.h>
 # include <sys/socket.h>
@@ -36,7 +31,9 @@
 # include <string.h>
 # include <errno.h>
 # include <netdb.h>
-#elif ( defined( _WIN32 ) || defined( _WIN32_WCE ) ) && !defined( __SYMBIAN32__ )
+#endif
+
+#if defined( _WIN32 ) || defined( __MINGW32__ )
 # include <winsock2.h>
 # include <ws2tcpip.h>
 typedef int socklen_t;
@@ -144,7 +141,7 @@ namespace gloox
     {
         // send() failed for an unexpected reason
         std::string message = "send() failed. "
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
+#if defined( _WIN32 )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
           "errno: " + util::int2string( errno ) + ": " + strerror( errno );
