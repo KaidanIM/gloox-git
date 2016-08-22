@@ -73,7 +73,7 @@ int main( int /*argc*/, char** /*argv*/ )
     f->setXmlns( XMLNS_X_DATA );
     Adhoc::Command ac( t );
     if( ac.node() != "somecmd" || ac.sessionID() != "somesession"
-        || ac.action() != Adhoc::Command::Execute || ac.form() == 0 )
+        || ac.action() != Adhoc::Command::Execute || ac.plugin() == 0 )
     {
       ++fail;
       fprintf( stderr, "test '%s' failed\n", name.c_str() );
