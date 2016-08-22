@@ -1,7 +1,10 @@
 v1.0.17
 -------
+Note: This release is not binary compatible with previous releases. It is source compatible.
+
 - MingW compile fixes (thanks to Florian Niebel)
 - properly use winsock2 (thanks to Kau)
+- a few fixes for uclic++ compatibility (thanks to Erik Horemans)
 
 
 
