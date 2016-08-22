@@ -539,12 +539,12 @@ namespace gloox
     }
   }
 
-  const std::string& Tag::xmlns() const
+  const std::string Tag::xmlns() const
   {
     return xmlns( m_prefix );
   }
 
-  const std::string& Tag::xmlns( const std::string& prefix ) const
+  const std::string Tag::xmlns( const std::string& prefix ) const
   {
     if( prefix.empty() )
     {
