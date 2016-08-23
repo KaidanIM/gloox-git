@@ -121,7 +121,7 @@ namespace gloox
            * Returns the attribute's namespace.
            * @return The attribute's namespace.
            */
-          const std::string& xmlns() const;
+          const std::string xmlns() const;
 
           /**
            * Sets the attribute's namespace.
