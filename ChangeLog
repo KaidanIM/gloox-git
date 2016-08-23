@@ -1,5 +1,5 @@
-v1.0.17
--------
+v1.0.17 -- 23 Aug 2016
+----------------------
 Note: This release is not binary compatible with previous releases. It is source compatible.
 
 - MingW compile fixes (thanks to Florian Niebel)
