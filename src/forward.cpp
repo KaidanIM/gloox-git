@@ -69,7 +69,13 @@ namespace gloox
     if( m_delay )
       f->addChild( m_delay->tag() );
     if( m_stanza )
-      f->addChild( m_stanza->tag() );
+    {
+      Tag* tmp = m_stanza->tag();
+      if( tmp->name() == "message" )
+        tmp->setXmlns( XMLNS_CLIENT );
+
+      f->addChild( tmp );
+    }
 
     return f;
   }
