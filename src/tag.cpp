@@ -91,7 +91,7 @@ namespace gloox
     return true;
   }
 
-  const std::string& Tag::Attribute::xmlns() const
+  const std::string Tag::Attribute::xmlns() const
   {
     if( !m_xmlns.empty() )
       return m_xmlns;
