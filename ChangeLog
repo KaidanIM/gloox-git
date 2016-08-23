@@ -4,7 +4,7 @@ Note: This release is not binary compatible with previous releases. It is source
 
 - MingW compile fixes (thanks to Florian Niebel)
 - properly use winsock2 (thanks to Kau)
-- a few fixes for uclic++ compatibility (thanks to Erik Horemans)
+- a few fixes for uclibc++ compatibility (thanks to Erik Horemans)
 - Message: removed bogus hard-coded namespace to fix component use
 
 
