@@ -3,7 +3,8 @@
 ##
 
 SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
-          capabilities carbons chatstatefilter client clientbase connectionbosh \
+          capabilities carbons chatstatefilter client clientbase \
+          connectionbosh connectiontcpserver \
           dataform dataformfield \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
           error \

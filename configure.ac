@@ -418,6 +418,7 @@ src/tests/chatstatefilter/Makefile
 src/tests/client/Makefile
 src/tests/clientbase/Makefile
 src/tests/connectionbosh/Makefile
+src/tests/connectiontcpserver/Makefile
 src/tests/dataform/Makefile
 src/tests/dataformfield/Makefile
 src/tests/dataformitem/Makefile
