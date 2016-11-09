@@ -96,7 +96,7 @@ namespace gloox
       case 1:
       {
         if( iq.subtype() == IQ::Set
-            && tag && *(tag->findChild( "foo", "xmlns", "test" )) == *t1 )
+            && tag && tag->hasChild( "foo", "xmlns", "test" ) && *(tag->findChild( "foo", "xmlns", "test" )) == *t1 )
         {
           IQ re( IQ::Result, iq.from(), iq.id() );
           re.addExtension( new PrivateXML::Query() );

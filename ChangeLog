@@ -1,4 +1,5 @@
 v1.1-svn
+--------
 Note: This release is not completely source compatible with previous versions.
 
 - added minimal build option
@@ -10,8 +11,8 @@ Note: This release is not completely source compatible with previous versions.
 
 v1.0.18 -- 09 Nov 2016
 ----------------------
-- fixed wildcard certificate support (#262)
-
+- TLSOpenSSL: fixed wildcard certificate support (#262)
+- Pubsub::Event: fixed potential NULL dereference (#257)
 
 
 
