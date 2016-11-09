@@ -1,5 +1,4 @@
 v1.1-svn
---------
 Note: This release is not completely source compatible with previous versions.
 
 - added minimal build option
@@ -7,6 +6,12 @@ Note: This release is not completely source compatible with previous versions.
 - dropped Symbian support
 - ClientBase: removed deprecated m_selectedResource
 - Adhoc::Command: removed deprecated form()
+
+
+v1.0.18 -- 09 Nov 2016
+----------------------
+- fixed wildcard certificate support (#262)
+
 
 
 
