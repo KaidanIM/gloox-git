@@ -153,6 +153,7 @@ namespace gloox
 #endif
 
     int status = 0;
+    int err = 0;
     struct addrinfo hints;
     struct addrinfo *res;
 
@@ -163,13 +164,16 @@ namespace gloox
     status = getaddrinfo( m_server.c_str(), util::int2string( m_port ).c_str(), &hints, &res );
     if( status != 0 )
     {
+      err = errno;
       std::string message = "getaddrinfo() for " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + util::int2string( m_port ) + ") failed. "
 #if defined( _WIN32 )
-      "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
+          "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
-      "errno: " + util::int2string( errno );
+          + strerror( err ) + " (errno: " + util::int2string( err ) + ")";
 #endif
+      m_logInstance.dbg( LogAreaClassConnectionTCPServer, message );
+
       return ConnIoError;
     }
 
@@ -177,29 +181,33 @@ namespace gloox
 
     if( bind( m_socket, res->ai_addr, res->ai_addrlen ) < 0 )
     {
+      err = errno;
       std::string message = "bind() to " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + /*inet_ntoa( local.sin_addr ) + ":" +*/ util::int2string( m_port ) + ") failed. "
 #if defined( _WIN32 )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
-          "errno: " + util::int2string( errno );
+          + strerror( err ) + " (errno: " + util::int2string( err ) + ")";
 #endif
       m_logInstance.dbg( LogAreaClassConnectionTCPServer, message );
 
+      close( m_socket );
       return ConnIoError;
     }
 
     if( listen( m_socket, 10 ) < 0 )
     {
+      err = errno;
       std::string message = "listen on " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + /*inet_ntoa( local.sin_addr ) +*/ ":" + util::int2string( m_port ) + ") failed. "
 #if defined( _WIN32 )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
 #else
-          "errno: " + util::int2string( errno );
+          + strerror( err ) + " (errno: " + util::int2string( err ) + ")";
 #endif
       m_logInstance.dbg( LogAreaClassConnectionTCPServer, message );
 
+      close( m_socket );
       return ConnIoError;
     }
 
