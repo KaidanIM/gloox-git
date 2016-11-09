@@ -1,5 +1,6 @@
-v1.0.18
--------
+v1.0.18 -- 09 Nov 2016
+----------------------
+- fixed wildcard certificate support (#262)
 
 
 
