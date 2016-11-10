@@ -106,7 +106,7 @@ namespace gloox
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
       m_auth( 0 ), m_forceNonSasl( false ),
 #endif // GLOOX_MINIMAL
-      m_presence( Presence::Available, JID() ), m_resourceBound( false ),
+      m_presence( Presence::Available, JID() ),
       m_manageRoster( true ),
       m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smWanted( false ), m_smMax( 0 ),
       m_streamFeatures( 0 )
@@ -121,7 +121,7 @@ namespace gloox
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
       m_auth( 0 ), m_forceNonSasl( false ),
 #endif // GLOOX_MINIMAL
-      m_presence( Presence::Available, JID() ), m_resourceBound( false ),
+      m_presence( Presence::Available, JID() ),
       m_manageRoster( true ),
       m_smId( EmptyString ), m_smLocation( EmptyString ), m_smResume( false ), m_smWanted( false ), m_smMax( 0 ),
       m_streamFeatures( 0 )

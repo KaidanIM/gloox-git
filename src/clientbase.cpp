@@ -98,7 +98,8 @@ namespace gloox
 #endif // GLOOX_MINIMAL
       m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
-      m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ), m_port( port ),
+      m_compress( true ), m_authed( false ), m_resourceBound( false ), m_block( false ), m_sasl( true ),
+      m_tls( TLSOptional ), m_port( port ),
       m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
       m_statisticsHandler( 0 ),
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
@@ -126,8 +127,9 @@ namespace gloox
       m_namespace( ns ),
       m_password( password ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
-      m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ),
-      m_port( port ), m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
+      m_compress( true ), m_authed( false ), m_resourceBound( false ), m_block( false ), m_sasl( true ),
+      m_tls( TLSOptional ), m_port( port ),
+      m_availableSaslMechs( SaslMechAll ), m_smContext( CtxSMInvalid ), m_smHandled( 0 ),
       m_statisticsHandler( 0 ),
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_MUC )
       m_mucInvitationHandler( 0 ),
@@ -1101,7 +1103,7 @@ namespace gloox
 
   void ClientBase::addFrom( Tag* tag )
   {
-    if( !m_authed /*for IQ Auth */ || !tag || tag->hasAttribute( "from" ) )
+    if( !m_authed /* for IQ Auth */ || !m_resourceBound /* for resource binding */ || !tag || tag->hasAttribute( "from" ) )
       return;
 
     tag->addAttribute( "from", m_jid.full() );

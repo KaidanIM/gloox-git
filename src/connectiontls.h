@@ -113,7 +113,8 @@ namespace gloox
 
       /**
        * Sets the transport connection.
-       * @param connection The transport connection to use.
+       * @param connection The transport connection to use. A potentially previously set connection
+       * will be deleted.
        */
       void setConnectionImpl( ConnectionBase* connection );
 

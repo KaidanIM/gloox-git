@@ -495,7 +495,6 @@ namespace gloox
 
       Presence m_presence;
 
-      bool m_resourceBound;
 #if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
       bool m_forceNonSasl;
 #endif // GLOOX_MINIMAL

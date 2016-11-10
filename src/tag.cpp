@@ -14,6 +14,7 @@
 #include "tag.h"
 #include "util.h"
 
+#include <ctype.h>
 #include <stdlib.h>
 
 #include <algorithm>

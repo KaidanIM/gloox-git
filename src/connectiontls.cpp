@@ -45,7 +45,10 @@ namespace gloox
   void ConnectionTLS::setConnectionImpl( ConnectionBase* connection )
   {
     if( m_connection )
+    {
       m_connection->registerConnectionDataHandler( 0 );
+      delete m_connection;
+    }
 
     m_connection = connection;
 

@@ -1081,7 +1081,7 @@ namespace gloox
       {
         m_roomHandler->handleMUCSubject( this, msg.from().resource(), msg.subject() );
       }
-      else if( !msg.body().empty() )
+      else if( !msg.body().empty() || !msg.extensions().empty() )
       {
         std::string when;
         bool privMsg = false;
