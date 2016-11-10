@@ -37,7 +37,7 @@ namespace gloox
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ), m_parser( this ), m_boshHost( boshHost ), m_path( "/http-bind/" ),
       m_rid( 0 ), m_initialStreamSent( false ), m_openRequests( 0 ),
-      m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ),
+      m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 1 ), m_streamRestart( false ),
       m_lastRequestTime( std::time( 0 ) ), m_minTimePerRequest( 0 ), m_bufferContentLength( 0 ),
       m_connMode( ModePipelining )
   {
@@ -50,7 +50,7 @@ namespace gloox
     : ConnectionBase( cdh ),
       m_logInstance( logInstance ), m_parser( this ), m_boshHost( boshHost ), m_path( "/http-bind/" ),
       m_rid( 0 ),  m_initialStreamSent( false ), m_openRequests( 0 ),
-      m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ),
+      m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 1 ), m_streamRestart( false ),
       m_lastRequestTime( std::time( 0 ) ), m_minTimePerRequest( 0 ), m_bufferContentLength( 0 ),
       m_connMode( ModePipelining )
   {

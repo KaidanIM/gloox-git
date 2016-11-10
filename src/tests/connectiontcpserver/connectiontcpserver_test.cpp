@@ -11,7 +11,9 @@
  */
 
 #include "../../connectiontcpserver.h"
+#include "../../connectiontcpclient.h"
 #include "../../connectiontcpbase.h"
+#include "../../connectiondatahandler.h"
 #include "../../connectionhandler.h"
 #include "../../logsink.h"
 #include "../../loghandler.h"
@@ -22,24 +24,42 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 #include <cstdio> // [s]print[f]
-class TestHandler : public gloox::ConnectionHandler, public gloox::LogHandler
+class TestHandler : public gloox::ConnectionHandler, public gloox::LogHandler, public gloox::ConnectionDataHandler
 {
   public:
     TestHandler() : m_test( 0 ) {}
 
-    virtual void handleIncomingConnection( ConnectionBase* /*server*/, ConnectionBase* /*connection*/ )
+    virtual void handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
+    {
+//       printf( "handleReceivedData: %s\n", data.c_str() );
+    }
+
+    virtual void handleConnect( const ConnectionBase* connection )
+    {
+//       printf( "handleConnect: %s:%d\n", connection->server().c_str(), connection->port() );
+    }
+
+    virtual void handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
+    {
+//       printf( "handleDisconnect(): %d\n", reason );
+    }
+
+    virtual void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection )
     {
       switch( m_test )
       {
-        case 1:
-//           printf( "
+        case 3:
+//           printf( "Incoming connection from %s:%d to %s:%d\n", connection->server().c_str(), connection->port(),
+//                                                                server->server().c_str(), server->port() );
+          break;
+        default:
           break;
       }
     }
 
     virtual void handleLog( LogLevel /*level*/, LogArea /*area*/, const std::string& message )
     {
-      printf( "Test %d says: %s\n", m_test, message.c_str() );
+//       printf( "Test %d says: %s\n", m_test, message.c_str() );
     }
 
     void setTest( int test ) { m_test = test; }
@@ -58,7 +78,7 @@ int main( int /*argc*/, char** /*argv*/ )
   log.registerLogHandler( LogLevelDebug, LogAreaAll, h );
   ConnectionTCPServer server( h, log, gloox::EmptyString, 54321 );
 
-  std::string name = "connect";
+  std::string name = "listen";
   h->setTest( 1 );
   ConnectionError ret = server.connect();
 
@@ -70,6 +90,28 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   // -------
 
+  name = "connect";
+  h->setTest( 2 );
+  ConnectionTCPClient c( h, log, "127.0.0.1", 54321 );
+  ret = c.connect();
+  if( ret != ConnNoError )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+    printf( "connect() returned: %d\n", ret );
+  }
+  // -------
+
+  name = "accept";
+  h->setTest( 3 );
+  ret = server.recv();
+  if( ret != ConnNoError )
+  {
+    ++fail;
+    fprintf( stderr, "test '%s' failed\n", name.c_str() );
+    printf( "connect() returned: %d\n", ret );
+  }
+  // -------
 
   if( fail == 0 )
   {
