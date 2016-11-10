@@ -248,7 +248,7 @@ namespace gloox
     char portstr[NI_MAXSERV];
     int err = getnameinfo( (struct sockaddr*)&they, addr_size, buffer, sizeof( buffer ),
                            portstr, sizeof( portstr ), NI_NUMERICHOST | NI_NUMERICSERV );
-    if( !err )
+    if( err )
       return ConnIoError;
 
     ConnectionTCPClient* conn = new ConnectionTCPClient( m_logInstance, buffer,
