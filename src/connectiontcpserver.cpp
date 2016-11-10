@@ -201,7 +201,7 @@ namespace gloox
     if( listen( m_socket, 10 ) < 0 )
     {
       err = errno;
-      std::string message = "listen on " + ( m_server.empty() ? std::string( "*" ) : m_server )
+      std::string message = "listen() on " + ( m_server.empty() ? std::string( "*" ) : m_server )
           + " (" + /*inet_ntoa( local.sin_addr ) +*/ ":" + util::int2string( m_port ) + ") failed. "
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
           "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
