@@ -15,6 +15,7 @@ v1.0.18 -- 10 Nov 2016
 - ConnectionTCPServer: actually accept incoming connections
 
 
+
 v1.0.17 -- 23 Aug 2016
 ----------------------
 Note: This release is not binary compatible with previous releases. It is source compatible.
