@@ -895,6 +895,7 @@ namespace gloox
       bool m_compress;                   /**< Whether stream compression
                                           * is desired at all. */
       bool m_authed;                     /**< Whether authentication has been completed successfully. */
+      bool m_resourceBound;              /**< Whether resource binding has been completed successfully. */
       bool m_block;                      /**< Whether blocking connection is wanted. */
       bool m_sasl;                       /**< Whether SASL authentication is wanted. */
       TLSPolicy m_tls;                   /**< The current TLS policy. */

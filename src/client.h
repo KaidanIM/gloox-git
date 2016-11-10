@@ -483,7 +483,6 @@ namespace gloox
 
       Presence m_presence;
 
-      bool m_resourceBound;
       bool m_forceNonSasl;
       bool m_manageRoster;
 
