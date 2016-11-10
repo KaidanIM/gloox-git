@@ -164,7 +164,7 @@ namespace gloox
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
-    status = getaddrinfo( m_server.c_str(), util::int2string( m_port ).c_str(), &hints, &res );
+    status = getaddrinfo( m_server.empty() ? 0 : m_server.c_str(), util::int2string( m_port ).c_str(), &hints, &res );
     if( status != 0 )
     {
       err = errno;
@@ -194,7 +194,7 @@ namespace gloox
 #endif
       m_logInstance.dbg( LogAreaClassConnectionTCPServer, message );
 
-      close( m_socket );
+      DNS::closeSocket( m_socket, m_logInstance );
       return ConnIoError;
     }
 
@@ -210,7 +210,7 @@ namespace gloox
 #endif
       m_logInstance.dbg( LogAreaClassConnectionTCPServer, message );
 
-      close( m_socket );
+      DNS::closeSocket( m_socket, m_logInstance );
       return ConnIoError;
     }
 

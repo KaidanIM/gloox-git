@@ -60,7 +60,6 @@ int main( int /*argc*/, char** /*argv*/ )
 
   std::string name = "connect";
   h->setTest( 1 );
-  log.dbg( LogAreaClassConnectionTCPServer, "foo" );
   ConnectionError ret = server.connect();
 
   if( ret != ConnNoError )
@@ -74,12 +73,12 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Error: OK\n" );
+    printf( "ConnectionTCPServer: OK\n" );
     return 0;
   }
   else
   {
-    fprintf( stderr, "Error: %d test(s) failed\n", fail );
+    fprintf( stderr, "ConnectionTCPServer: %d test(s) failed\n", fail );
     return 1;
   }
 
