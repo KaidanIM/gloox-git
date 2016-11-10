@@ -2,11 +2,12 @@ v1.0.18 -- 09 Nov 2016
 ----------------------
 - TLSOpenSSL: fixed wildcard certificate support (#262)
 - Pubsub::Event: fixed potential NULL dereference (#257)
-- ConnectionTCPServer: fixed listen on local socket
+- ConnectionTCPServer: fixed listening on local socket
 - Adhoc: fixed memory leak (thanks to Erik Horemans)
 - documentation fixes (Adhoc::Plugin, StanzaExtension)
 - ConnectionTLS: delete old connection in setConnectionImpl() (thanks to Erik Horemans) and clarify this in the documentation
 - Tag: Android compilation fix (thanks to Erik Horemans)
+- ConnectionSOCKS5Proxy: improved compatibility (thanks to Erik Horemans)
 
 
 
