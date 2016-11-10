@@ -12,7 +12,7 @@ v1.0.18 -- 10 Nov 2016
 - Client, ClientBase: avoid 'from' attribute when doing resource binding (#265)
 - MUCRoom: allow empty message body if extension is present (#264) (thanks to Tom Quackenbush)
 - ConnectionBOSH: initialize 'hold' to 1 to improve compatibility (#238)
-
+- ConnectionTCPServer: actually accept incoming connections
 
 
 v1.0.17 -- 23 Aug 2016
