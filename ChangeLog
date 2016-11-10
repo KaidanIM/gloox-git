@@ -6,6 +6,7 @@ v1.0.18 -- 09 Nov 2016
 - Adhoc: fixed memory leak (thanks to Erik Horemans)
 - documentation fixes (Adhoc::Plugin, StanzaExtension)
 - ConnectionTLS: delete old connection in setConnectionImpl() (thanks to Erik Horemans) and clarify this in the documentation
+- Tag: Android compilation fix (thanks to Erik Horemans)
 
 
 
