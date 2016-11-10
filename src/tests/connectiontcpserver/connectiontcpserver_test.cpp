@@ -31,17 +31,17 @@ class TestHandler : public gloox::ConnectionHandler, public gloox::LogHandler, p
 
     virtual void handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
     {
-      printf( "handleReceivedData: %s\n", data.c_str() );
+//       printf( "handleReceivedData: %s\n", data.c_str() );
     }
 
     virtual void handleConnect( const ConnectionBase* connection )
     {
-      printf( "handleConnect: %s:%d\n", connection->server().c_str(), connection->port() );
+//       printf( "handleConnect: %s:%d\n", connection->server().c_str(), connection->port() );
     }
 
     virtual void handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
     {
-      printf( "handleDisconnect(): %d\n", reason );
+//       printf( "handleDisconnect(): %d\n", reason );
     }
 
     virtual void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection )
@@ -49,8 +49,8 @@ class TestHandler : public gloox::ConnectionHandler, public gloox::LogHandler, p
       switch( m_test )
       {
         case 3:
-          printf( "Incoming connection from %s:%d to %s:%d\n", connection->server().c_str(), connection->port(),
-                                                               server->server().c_str(), server->port() );
+//           printf( "Incoming connection from %s:%d to %s:%d\n", connection->server().c_str(), connection->port(),
+//                                                                server->server().c_str(), server->port() );
           break;
         default:
           break;
@@ -59,7 +59,7 @@ class TestHandler : public gloox::ConnectionHandler, public gloox::LogHandler, p
 
     virtual void handleLog( LogLevel /*level*/, LogArea /*area*/, const std::string& message )
     {
-      printf( "Test %d says: %s\n", m_test, message.c_str() );
+//       printf( "Test %d says: %s\n", m_test, message.c_str() );
     }
 
     void setTest( int test ) { m_test = test; }
