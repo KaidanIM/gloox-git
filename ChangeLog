@@ -1,4 +1,4 @@
-v1.0.18 -- 09 Nov 2016
+v1.0.18 -- 10 Nov 2016
 ----------------------
 - TLSOpenSSL: fixed wildcard certificate support (#262)
 - Pubsub::Event: fixed potential NULL dereference (#257)
@@ -11,6 +11,7 @@ v1.0.18 -- 09 Nov 2016
 - util: Android compilation fix (thanks to Erik Horemans)
 - Client, ClientBase: avoid 'from' attribute when doing resource binding (#265)
 - MUCRoom: allow empty message body if extension is present (#264) (thanks to Tom Quackenbush)
+- ConnectionBOSH: initialize 'hold' to 1 to improve compatibility (#238)
 
 
 
