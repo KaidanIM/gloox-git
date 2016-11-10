@@ -8,6 +8,7 @@ v1.0.18 -- 09 Nov 2016
 - ConnectionTLS: delete old connection in setConnectionImpl() (thanks to Erik Horemans) and clarify this in the documentation
 - Tag: Android compilation fix (thanks to Erik Horemans)
 - ConnectionSOCKS5Proxy: improved compatibility (thanks to Erik Horemans)
+- util: Android compilation fix (thanks to Erik Horemans)
 
 
 
