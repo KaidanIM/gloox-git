@@ -13,6 +13,7 @@ v1.0.18 -- 09 Nov 2016
 ----------------------
 - TLSOpenSSL: fixed wildcard certificate support (#262)
 - Pubsub::Event: fixed potential NULL dereference (#257)
+- ConnectionTCPServer: fixed listen on local socket
 
 
 
