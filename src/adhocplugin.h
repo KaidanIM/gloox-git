@@ -40,7 +40,9 @@ namespace gloox
     public:
 
       /**
-       *
+       * Creazes a new Adhoc Plugin of the given type.
+       * @param type This should be a StanzaExtension type, i.e. the type of StanzaExtension the plugin will
+       * hold.
        */
       AdhocPlugin( int type ) : StanzaExtension( type ) {}
 
