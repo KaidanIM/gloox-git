@@ -268,7 +268,6 @@ namespace gloox
       res = X509_check_host( peer, p.c_str(), p.length(), X509_CHECK_FLAG_MULTI_LABEL_WILDCARDS, 0 );
       if( res <= 0 ) // 0: verification failed; -1: internal error; -2 input is malformed
         m_certInfo.status |= CertWrongPeer;
-}
 #else
       if( p != m_server )
         m_certInfo.status |= CertWrongPeer;
