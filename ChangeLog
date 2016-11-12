@@ -10,6 +10,12 @@ Note: This release is not completely source compatible with previous versions.
 
 
 
+v1.0.19
+-------
+- ConnectionTCPServer: cleanup
+
+
+
 v1.0.18 -- 10 Nov 2016
 ----------------------
 - TLSOpenSSL: fixed wildcard certificate support (#262)
