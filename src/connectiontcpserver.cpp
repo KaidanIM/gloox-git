@@ -81,49 +81,6 @@ namespace gloox
     return new ConnectionTCPServer( m_connectionHandler, m_logInstance, m_server, m_port );
   }
 
-  // remove for 1.1
-  int ConnectionTCPServer::getSocket( int af, int socktype, int proto, const LogSink& logInstance )
-  {
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-    SOCKET fd;
-#else
-    int fd;
-#endif
-    if( ( fd = ::socket( af, socktype, proto ) ) == INVALID_SOCKET )
-    {
-      std::string message = "getSocket( "
-      + util::int2string( af ) + ", "
-      + util::int2string( socktype ) + ", "
-      + util::int2string( proto )
-      + " ) failed. "
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-      "WSAGetLastError: " + util::int2string( ::WSAGetLastError() );
-#else
-      "errno: " + util::int2string( errno ) + ": " + strerror( errno );
-#endif
-      logInstance.dbg( LogAreaClassDns, message );
-
-#if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-      if( WSACleanup() != 0 )
-      {
-        logInstance.dbg( LogAreaClassDns, "WSACleanup() failed. WSAGetLastError: "
-        + util::int2string( ::WSAGetLastError() ) );
-      }
-#endif
-
-      return -ConnConnectionRefused;
-    }
-
-#ifdef HAVE_SETSOCKOPT
-    int timeout = 5000;
-    int reuseaddr = 1;
-    setsockopt( fd, SOL_SOCKET, SO_SNDTIMEO, (char*)&timeout, sizeof( timeout ) );
-    setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, (char*)&reuseaddr, sizeof( reuseaddr ) );
-#endif
-
-    return (int)fd;
-  }
-
   ConnectionError ConnectionTCPServer::connect()
   {
     util::MutexGuard mg( &m_sendMutex );
@@ -146,13 +103,11 @@ namespace gloox
 #else
     socklen_t bufbytes = sizeof( int );
 #endif
-    if( ( getsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, (char*)&buf, &bufbytes ) != -1 ) &&
-        ( m_bufsize > buf ) )
-      setsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, (char*)&m_bufsize, sizeof( m_bufsize ) );
+    if( ( getsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, (char*)&buf, &bufbytes ) != -1 ) && ( m_bufsize > buf ) )
+      setsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, (const char*)&m_bufsize, sizeof( m_bufsize ) );
 
-    if( ( getsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, (char*)&buf, &bufbytes ) != -1 ) &&
-        ( m_bufsize > buf ) )
-      setsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, (char*)&m_bufsize, sizeof( m_bufsize ) );
+    if( ( getsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, (char*)&buf, &bufbytes ) != -1 ) && ( m_bufsize > buf ) )
+      setsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, (const char*)&m_bufsize, sizeof( m_bufsize ) );
 #endif
 
     int status = 0;
@@ -177,10 +132,9 @@ namespace gloox
 #endif
       m_logInstance.dbg( LogAreaClassConnectionTCPServer, message );
 
+      DNS::closeSocket( m_socket, m_logInstance );
       return ConnIoError;
     }
-
-    m_socket = ::socket( res->ai_family, res->ai_socktype, res->ai_protocol );
 
     if( bind( m_socket, res->ai_addr, res->ai_addrlen ) < 0 )
     {
