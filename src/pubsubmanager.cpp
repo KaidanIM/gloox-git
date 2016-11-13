@@ -82,7 +82,7 @@ namespace gloox
 
     static inline SubscriptionType subscriptionType( const std::string& subscription )
     {
-      return (SubscriptionType)util::lookup( subscription, subscriptionValues );
+      return static_cast<SubscriptionType>( util::lookup( subscription, subscriptionValues ) );
     }
 
     static inline const std::string subscriptionValue( SubscriptionType subscription )
@@ -96,7 +96,7 @@ namespace gloox
 
     static inline AffiliationType affiliationType( const std::string& affiliation )
     {
-      return (AffiliationType)util::lookup( affiliation, affiliationValues );
+      return static_cast<AffiliationType>( util::lookup( affiliation, affiliationValues ) );
     }
 
     static inline const std::string affiliationValue( AffiliationType affiliation )

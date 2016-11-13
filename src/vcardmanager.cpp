@@ -110,7 +110,7 @@ namespace gloox
         break;
         case IQ::Error:
         {
-          (*it).second->handleVCardResult( (VCardHandler::VCardContext)context,
+          (*it).second->handleVCardResult( static_cast<VCardHandler::VCardContext>( context ),
                                            iq.from(),
                                            iq.error() ? iq.error()->error()
                                                        : StanzaErrorUndefined );

@@ -73,7 +73,7 @@ namespace gloox
 // FIXME check return value?
     prep::idna( server, m_server );
     m_port = port;
-    m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+    m_buf = static_cast<char*>( calloc( m_bufsize + 1, sizeof( char ) ) );
   }
 
   ConnectionTCPBase::~ConnectionTCPBase()
@@ -133,10 +133,10 @@ namespace gloox
     int sent = 0;
     for( size_t num = 0, len = data.length(); sent != -1 && num < len; num += sent )
     {
-      sent = static_cast<int>( ::send( m_socket, (data.c_str()+num), (int)(len - num), 0 ) );
+      sent = static_cast<int>( ::send( m_socket, (data.c_str()+num), static_cast<int>( len - num ), 0 ) );
     }
 
-    m_totalBytesOut += (int)data.length();
+    m_totalBytesOut += data.length();
 
     m_sendMutex.unlock();
 
@@ -193,23 +193,23 @@ namespace gloox
   int ConnectionTCPBase::localPort() const
   {
     struct sockaddr local;
-    socklen_t len = (socklen_t)sizeof( local );
+    socklen_t len = static_cast<socklen_t>( sizeof( local ) );
     if( getsockname ( m_socket, &local, &len ) < 0 )
       return -1;
     else
-      return ntohs( ((struct sockaddr_in *)&local)->sin_port );
+      return ntohs( (reinterpret_cast<struct sockaddr_in*>( &local ) )->sin_port );
   }
 
   const std::string ConnectionTCPBase::localInterface() const
   {
     struct sockaddr_storage local;
-    socklen_t len = (socklen_t)sizeof( local );
-    if( getsockname ( m_socket, (reinterpret_cast<struct sockaddr*>( &local )), &len ) < 0 )
+    socklen_t len = static_cast<socklen_t>( sizeof( local ) );
+    if( getsockname( m_socket, reinterpret_cast<struct sockaddr*>( &local ), &len ) < 0 )
       return EmptyString;
     else
     {
       char buffer[INET6_ADDRSTRLEN];
-      int err = getnameinfo( (struct sockaddr*)&local, len, buffer, sizeof( buffer ),
+      int err = getnameinfo( reinterpret_cast<struct sockaddr*>( &local ), len, buffer, sizeof( buffer ),
                              0, 0, NI_NUMERICHOST );
       if( !err )
         return buffer;

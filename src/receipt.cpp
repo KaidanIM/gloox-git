@@ -25,7 +25,7 @@ namespace gloox
 
   static inline Receipt::ReceiptType receiptType( const std::string& type )
   {
-    return (Receipt::ReceiptType)util::lookup( type, receiptValues );
+    return static_cast<Receipt::ReceiptType>( util::lookup( type, receiptValues ) );
   }
 
   Receipt::Receipt( const Tag* tag )

@@ -90,7 +90,7 @@ namespace gloox
 #undef BYTE_ORDER
 #define BYTE_ORDER 0
 
-#define T_MASK ((unsigned int)~0)
+#define T_MASK (static_cast<unsigned int>(~0))
 #define T1 /* 0xd76aa478 */ (T_MASK ^ 0x28955b87)
 #define T2 /* 0xe8c7b756 */ (T_MASK ^ 0x173848a9)
 #define T3    0x242070db
@@ -200,7 +200,7 @@ namespace gloox
       */
       static const int w = 1;
 
-      if( *((const unsigned char *)&w) ) /* dynamic little-endian */
+      if( *(reinterpret_cast<const unsigned char *>( &w )) ) /* dynamic little-endian */
 #endif
 #if BYTE_ORDER <= 0		/* little-endian */
       {
@@ -208,10 +208,10 @@ namespace gloox
         * On little-endian machines, we can process properly aligned
         * data without copying it.
         */
-        if( !((data - (const unsigned char*)0) & 3) )
+        if( !((data - reinterpret_cast<const unsigned char*>( 0 )) & 3) )
         {
           /* data are properly aligned */
-          X = (const unsigned int*)data;
+          X = reinterpret_cast<const unsigned int*>( data );
         }
         else
         {
@@ -372,7 +372,7 @@ namespace gloox
 
   void MD5::feed( const std::string& data )
   {
-    feed( (const unsigned char*)data.c_str(), (int)data.length() );
+    feed( reinterpret_cast<const unsigned char*>( data.c_str() ), static_cast<int>( data.length() ) );
   }
 
   void MD5::feed( const unsigned char* data, int bytes )
@@ -380,7 +380,7 @@ namespace gloox
     const unsigned char* p = data;
     int left = bytes;
     int offset = ( m_state.count[0] >> 3 ) & 63;
-    unsigned int nbits = (unsigned int)( bytes << 3 );
+    unsigned int nbits = static_cast<unsigned int>( bytes << 3 );
 
     if( bytes <= 0 )
       return;
@@ -422,7 +422,7 @@ namespace gloox
 
     /* Save the length before padding. */
     for( int i = 0; i < 8; ++i )
-      data[i] = (unsigned char)( m_state.count[i >> 2] >> ( ( i & 3 ) << 3 ) );
+      data[i] = static_cast<unsigned char>( m_state.count[i >> 2] >> ( ( i & 3 ) << 3 ) );
 
     /* Pad to 56 bytes mod 64. */
     feed( pad, ( ( 55 - ( m_state.count[0] >> 3 ) ) & 63 ) + 1 );
@@ -441,7 +441,7 @@ namespace gloox
     char buf[33];
 
     for( int i = 0; i < 16; ++i )
-      sprintf( buf + i * 2, "%02x", (unsigned char)( m_state.abcd[i >> 2] >> ( ( i & 3 ) << 3 ) ) );
+      sprintf( buf + i * 2, "%02x", static_cast<unsigned char>( m_state.abcd[i >> 2] >> ( ( i & 3 ) << 3 ) ) );
 
     return std::string( buf, 32 );
   }
@@ -453,9 +453,9 @@ namespace gloox
 
     unsigned char digest[16];
     for( int i = 0; i < 16; ++i )
-      digest[i] = (unsigned char)( m_state.abcd[i >> 2] >> ( ( i & 3 ) << 3 ) );
+      digest[i] = static_cast<unsigned char>( m_state.abcd[i >> 2] >> ( ( i & 3 ) << 3 ) );
 
-    return std::string( (char*)digest, 16 );
+    return std::string( reinterpret_cast<char*>( digest ), 16 );
   }
 
   void MD5::reset()

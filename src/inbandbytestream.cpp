@@ -55,7 +55,7 @@ namespace gloox
     if( !tag || tag->xmlns() != XMLNS_IBB )
       return;
 
-    m_type = (IBBType)util::lookup( tag->name(), typeValues );
+    m_type = static_cast<IBBType>( util::lookup( tag->name(), typeValues ) );
     m_blockSize = atoi( tag->findAttribute( "block-size" ).c_str() );
     m_seq = atoi( tag->findAttribute( "seq" ).c_str() );
     m_sid = tag->findAttribute( "sid" );

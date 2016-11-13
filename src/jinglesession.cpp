@@ -46,7 +46,7 @@ namespace gloox
 
     static inline Action actionType( const std::string& type )
     {
-      return (Action)util::lookup( type, actionValues );
+      return static_cast<Action>( util::lookup( type, actionValues ) );
     }
 
     // ---- Session::Reason ----
@@ -72,7 +72,7 @@ namespace gloox
 
     static inline Session::Reason::Reasons reasonType( const std::string& type )
     {
-      return (Session::Reason::Reasons)util::lookup( type, reasonValues );
+      return static_cast<Session::Reason::Reasons>( util::lookup( type, reasonValues ) );
     }
 
     Session::Reason::Reason( Reasons reason,
@@ -455,7 +455,7 @@ namespace gloox
       {
 
         const Error* e = iq.findExtension<Error>( ExtError );
-        m_handler->handleSessionActionError( (Action)context, this, e );
+        m_handler->handleSessionActionError( static_cast<Action>( context ), this, e );
 
         switch( context )
         {

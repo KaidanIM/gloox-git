@@ -128,7 +128,7 @@ namespace gloox
     {
       ++m_rid;
 
-      std::string requestBody = "<body rid='" + util::int2string( m_rid ) + "' ";
+      std::string requestBody = "<body rid='" + util::long2string( m_rid ) + "' ";
       requestBody += "sid='" + m_sid + "' ";
       requestBody += "type='terminal' ";
       requestBody += "xml:lang='en' ";
@@ -225,10 +225,10 @@ namespace gloox
     if( m_sendBuffer.empty() )
     {
       time_t now = time( 0 );
-      unsigned int delta = (int)(now - m_lastRequestTime);
+      unsigned long delta = now - m_lastRequestTime;
       if( delta < m_minTimePerRequest && m_openRequests > 0 )
       {
-        m_logInstance.dbg( LogAreaClassConnectionBOSH, "Too little time between requests: " + util::int2string( delta ) + " seconds" );
+        m_logInstance.dbg( LogAreaClassConnectionBOSH, "Too little time between requests: " + util::long2string( delta ) + " seconds" );
         return false;
       }
       m_logInstance.dbg( LogAreaClassConnectionBOSH, "Send buffer is empty, sending empty request" );
@@ -236,7 +236,7 @@ namespace gloox
 
     ++m_rid;
 
-    std::string requestBody = "<body rid='" + util::int2string( m_rid ) + "' ";
+    std::string requestBody = "<body rid='" + util::long2string( m_rid ) + "' ";
     requestBody += "sid='" + m_sid + "' ";
     requestBody += "xmlns='" + XMLNS_HTTPBIND + "'";
 
@@ -286,7 +286,7 @@ namespace gloox
 
     request += "Host: " + m_boshedHost + "\r\n";
     request += "Content-Type: text/xml; charset=utf-8\r\n";
-    request += "Content-Length: " + util::int2string( xml.length() ) + "\r\n";
+    request += "Content-Length: " + util::long2string( xml.length() ) + "\r\n";
     request += "User-Agent: gloox/" + GLOOX_VERSION + "\r\n\r\n";
     request += xml;
 
@@ -305,7 +305,7 @@ namespace gloox
 
   bool ci_equal( char ch1, char ch2 )
   {
-    return std::toupper( (unsigned char)ch1 ) == std::toupper( (unsigned char)ch2 );
+    return std::toupper( ch1 ) == std::toupper( ch2 );
   }
 
   std::string::size_type ci_find( const std::string& str1, const std::string& str2 )
@@ -416,10 +416,10 @@ namespace gloox
       requestBody.setXmlns( XMLNS_XMPP_BOSH, "xmpp" );
 
       requestBody.addAttribute( "content", "text/xml; charset=utf-8" );
-      requestBody.addAttribute( "hold", (long)m_hold );
-      requestBody.addAttribute( "rid", (long)m_rid );
+      requestBody.addAttribute( "hold", m_hold );
+      requestBody.addAttribute( "rid", static_cast<long>( m_rid ) );
       requestBody.addAttribute( "ver", "1.6" );
-      requestBody.addAttribute( "wait", (long)m_wait );
+      requestBody.addAttribute( "wait", m_wait );
       requestBody.addAttribute( "ack", 0 );
       requestBody.addAttribute( "secure", "false" );
       requestBody.addAttribute( "route", "xmpp:" + m_server + ":5222" );

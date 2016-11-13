@@ -204,10 +204,10 @@ namespace gloox
           char* d = new char[3 + m_proxyUser.length() + m_proxyPwd.length()];
           size_t pos = 0;
           d[pos++] = 0x01;
-          d[pos++] = (char)m_proxyUser.length();
+          d[pos++] = static_cast<char>( m_proxyUser.length() );
           strncpy( d + pos, m_proxyUser.c_str(), m_proxyUser.length() );
           pos += m_proxyUser.length();
-          d[pos++] = (char)m_proxyPwd.length();
+          d[pos++] = static_cast<char>( m_proxyPwd.length() );
           strncpy( d + pos, m_proxyPwd.c_str(), m_proxyPwd.length() );
           pos += m_proxyPwd.length();
 
@@ -220,7 +220,7 @@ namespace gloox
         }
         else
         {
-          if( m_proxyHandshakeBuffer[1] == (char)(unsigned char)0xFF && !m_proxyUser.empty() && !m_proxyPwd.empty() )
+          if( m_proxyHandshakeBuffer[1] == static_cast<char>( 0xFF ) && !m_proxyUser.empty() && !m_proxyPwd.empty() )
             connError = ConnProxyNoSupportedAuth;
           else
             connError = ConnProxyAuthRequired;
@@ -316,7 +316,7 @@ namespace gloox
         }
       }
       d[pos++] = 0x03; // hostname
-      d[pos++] = (char)m_server.length();
+      d[pos++] = static_cast<char>( m_server.length() );
       strncpy( d + pos, m_server.c_str(), m_server.length() );
       pos += m_server.length();
     }

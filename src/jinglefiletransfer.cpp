@@ -59,7 +59,7 @@ namespace gloox
         parseFileList( tag->findChildren( "file" ) );
       }
 
-      m_type = (Type)util::lookup( name, typeValues );
+      m_type = static_cast<Type>( util::lookup( name, typeValues ) );
     }
 
     void FileTransfer::parseFileList( const TagList& files )

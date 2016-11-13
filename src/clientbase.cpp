@@ -103,7 +103,6 @@ namespace gloox
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
-      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long) & m_nextId ) & 0xFFFF ) ),
       m_smSent( 0 )
   {
     init();
@@ -123,7 +122,6 @@ namespace gloox
       m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
       m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
       m_selectedSaslMech( SaslMechNone ), m_customConnection( false ),
-      m_uniqueBaseId( (unsigned int)( ( (unsigned long long)time( 0 ) & 0xFFFF ) << 16 ) | ( ( (unsigned long long) & m_nextId ) & 0xFFFF ) ),
       m_smSent( 0 )
   {
     init();
@@ -131,7 +129,11 @@ namespace gloox
 
   void ClientBase::init()
   {
-    srand( time( 0 ) );
+    srand( static_cast<unsigned int>( time( 0 ) ) );
+    SHA sha;
+    sha.feed( util::long2string( time( 0 ) ) );
+    sha.feed( util::int2string( rand() ) );
+    m_uniqueBaseId = sha.hex();
 
     if( !m_disco )
     {
@@ -685,7 +687,7 @@ namespace gloox
 
   std::string ClientBase::hi( const std::string& str, const std::string& salt, int iter )
   {
-    unsigned char xored[20];
+    int xored[20];
     memset( xored, '\0', sizeof( xored ) );
     std::string tmp = salt;
     tmp.append( "\0\0\0\1", 4 );
@@ -695,7 +697,11 @@ namespace gloox
       for( int j = 0; j < 20; ++j )
         xored[j] ^= tmp.c_str()[j];
     }
-    return std::string( (char*)xored, 20 );
+    std::string n;
+    for( int i=0; i < 20 ;++i )
+      n.push_back( static_cast<char>( xored[i] ) );
+
+    return n;
   }
 
   void ClientBase::processSASLChallenge( const std::string& challenge )
@@ -747,7 +753,7 @@ namespace gloox
         m_serverSignature = hmac( serverKey, authMessage );
 
         tmp += ",p=";
-        tmp.append( Base64::encode64( std::string( (char*)clientProof, 20 ) ) );
+        tmp.append( Base64::encode64( std::string( reinterpret_cast<const char*>( clientProof ), 20 ) ) );
 
         t->setCData( Base64::encode64( tmp ) );
 
@@ -1164,9 +1170,9 @@ namespace gloox
 #ifdef CLIENTBASE_TEST // to create predictable UIDs in test mode
     return "uid" + util::int2string( m_nextId.increment() );
 #else
-    char r[21+1];
-    sprintf( r, "uid-%08x-%08x", m_uniqueBaseId, m_nextId.increment() );
-    std::string ret( r, 21 );
+    char r[48+1];
+    sprintf( r, "%s%08x", m_uniqueBaseId.c_str(), m_nextId.increment() );
+    std::string ret( r, 48 );
     return ret;
 #endif
   }

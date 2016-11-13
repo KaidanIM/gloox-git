@@ -31,7 +31,7 @@ namespace gloox
   OpenSSLBase::OpenSSLBase( TLSHandler* th, const std::string& server )
     : TLSBase( th, server ), m_ssl( 0 ), m_ctx( 0 ), m_buf( 0 ), m_bufsize( 17000 )
   {
-    m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+    m_buf = static_cast<char*>( calloc( m_bufsize + 1, sizeof( char ) ) );
   }
 
   OpenSSLBase::~OpenSSLBase()
@@ -172,7 +172,7 @@ namespace gloox
           ret = handshakeFunction();
           break;
         case TLSWrite:
-          ret = SSL_write( m_ssl, m_sendBuffer.c_str(), m_sendBuffer.length() );
+          ret = SSL_write( m_ssl, m_sendBuffer.c_str(), static_cast<int>( m_sendBuffer.length() ) );
           break;
         case TLSRead:
           ret = SSL_read( m_ssl, m_buf, m_bufsize );
@@ -209,7 +209,7 @@ namespace gloox
            || ( ( op == TLSWrite ) && ( ret > 0 ) ));
   }
 
-  int OpenSSLBase::openSSLTime2UnixTime( const char* time_string )
+  int OpenSSLBase::openSSLTime2UnixTime( const unsigned char* time_string )
   {
     char tstring[19];
 
@@ -234,7 +234,7 @@ namespace gloox
     time_st.tm_sec = atoi( &tstring[3 * 5] );
 
     time_t unixt = mktime( &time_st );
-    return unixt;
+    return static_cast<int>( unixt );
   }
 
   bool OpenSSLBase::handshake()
@@ -245,7 +245,7 @@ namespace gloox
     if( !m_secure )
       return true;
 
-    int res = SSL_get_verify_result( m_ssl );
+    long res = SSL_get_verify_result( m_ssl );
     if( res != X509_V_OK )
       m_certInfo.status = CertInvalid;
     else
@@ -259,8 +259,8 @@ namespace gloox
       m_certInfo.issuer = peer_CN;
       X509_NAME_get_text_by_NID( X509_get_subject_name( peer ), NID_commonName, peer_CN, sizeof( peer_CN ) );
       m_certInfo.server = peer_CN;
-      m_certInfo.date_from = openSSLTime2UnixTime( (char*) (peer->cert_info->validity->notBefore->data) );
-      m_certInfo.date_to = openSSLTime2UnixTime( (char*) (peer->cert_info->validity->notAfter->data) );
+      m_certInfo.date_from = openSSLTime2UnixTime( peer->cert_info->validity->notBefore->data );
+      m_certInfo.date_to = openSSLTime2UnixTime( peer->cert_info->validity->notAfter->data );
       std::string p( peer_CN );
       std::transform( p.begin(), p.end(), p.begin(), tolower );
 
@@ -309,10 +309,10 @@ namespace gloox
   {
     int wantwrite;
     size_t wantread;
-    int frombio;
-    int tobio;
+    long frombio;
+    long tobio;
 
-    while( ( wantwrite = BIO_ctrl_pending( m_nbio ) ) > 0 )
+    while( ( wantwrite = BIO_pending( m_nbio ) ) > 0 )
     {
       if( wantwrite > m_bufsize )
         wantwrite = m_bufsize;
@@ -334,7 +334,7 @@ namespace gloox
       if( !wantread )
         break;
 
-      tobio = BIO_write( m_nbio, m_recvBuffer.c_str(), wantread );
+      tobio = BIO_write( m_nbio, m_recvBuffer.c_str(), static_cast<int>( wantread ) );
       m_recvBuffer.erase( 0, tobio );
     }
   }

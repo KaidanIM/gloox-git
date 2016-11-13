@@ -48,7 +48,7 @@ namespace gloox
 
       char* p = static_cast<char*>( calloc( JID_PORTION_SIZE, sizeof( char ) ) );
       strncpy( p, s.c_str(), s.length() );
-      int rc = stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile );
+      int rc = stringprep( p, JID_PORTION_SIZE, static_cast<Stringprep_profile_flags>( 0 ), profile );
       if( rc == STRINGPREP_OK )
         out = p;
       free( p );
@@ -111,7 +111,7 @@ namespace gloox
         return false;
 
       char* prepped;
-      int rc = idna_to_ascii_8z( domain.c_str(), &prepped, (Idna_flags)IDNA_USE_STD3_ASCII_RULES );
+      int rc = idna_to_ascii_8z( domain.c_str(), &prepped, static_cast<Idna_flags>( IDNA_USE_STD3_ASCII_RULES ) );
       if( rc == IDNA_SUCCESS )
       {
         out = prepped;

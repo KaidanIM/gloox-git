@@ -28,7 +28,7 @@ namespace gloox
 
   static inline ChatStateType chatStateType( const std::string& type )
   {
-    return (ChatStateType)util::lookup2( type, stateValues );
+    return static_cast<ChatStateType>( util::lookup2( type, stateValues ) );
   }
 
   ChatState::ChatState( const Tag* tag )

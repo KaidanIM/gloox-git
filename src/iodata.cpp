@@ -31,7 +31,7 @@ namespace gloox
 
   static inline IOData::Type ioType( const std::string& type )
   {
-    return (IOData::Type)util::lookup( type, ioTypes );
+    return static_cast<IOData::Type>( util::lookup( type, ioTypes ) );
   }
 
   IOData::IOData( Type type )

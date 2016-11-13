@@ -49,7 +49,7 @@ namespace gloox
       for( ; it != events.end(); ++it )
       {
         tag = (*it);
-        PubSub::EventType type = (PubSub::EventType)util::lookup( tag->name(), eventTypeValues );
+        PubSub::EventType type = static_cast<PubSub::EventType>( util::lookup( tag->name(), eventTypeValues ) );
 
         switch( type )
         {

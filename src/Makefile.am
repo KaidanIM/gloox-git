@@ -5,9 +5,15 @@
 SUBDIRS = . $(MAYBE_TESTS) $(MAYBE_EXAMPLES)
 DIST_SUBDIRS = . tests examples
 
-AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith \
-                -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual \
-                -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wno-long-long
+AM_CPPFLAGS = -Wall -pedantic -pipe -Wfloat-equal -Wcast-align \
+              -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas \
+              -Wconversion -Wcast-qual -ansi -Wformat-security \
+              -Wundef -Wmissing-format-attribute -Wshadow -Wwrite-strings \
+              -Wformat-nonliteral -Wformat-security -Wredundant-decls \
+              -Wformat=2 -Wold-style-cast -Wno-long-long \
+              -Wnon-virtual-dtor -Wno-overloaded-virtual \
+              -Wno-deprecated-declarations -Wno-shadow
+              #-Werror
 
 lib_LTLIBRARIES = libgloox.la
 

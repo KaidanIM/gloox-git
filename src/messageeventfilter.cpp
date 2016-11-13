@@ -53,7 +53,7 @@ namespace gloox
     }
 
     if( msg.body().empty() )
-      m_messageEventHandler->handleMessageEvent( msg.from(), (MessageEventType)me->event() );
+      m_messageEventHandler->handleMessageEvent( msg.from(), static_cast<MessageEventType>( me->event() ) );
     else
     {
       m_lastID = msg.id();

@@ -32,7 +32,7 @@ namespace gloox
     if( !tag || tag->name() != "presence" )
       return;
 
-    m_subtype = (S10nType)util::lookup( tag->findAttribute( TYPE ), msgTypeStringValues );
+    m_subtype = static_cast<S10nType>( util::lookup( tag->findAttribute( TYPE ), msgTypeStringValues ) );
 
     const ConstTagList& c = tag->findTagList( "/presence/status" );
     ConstTagList::const_iterator it = c.begin();

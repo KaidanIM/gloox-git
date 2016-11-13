@@ -37,7 +37,7 @@ namespace gloox
       unsigned i = 0;
       for( ; i < size && str != values[i]; ++i )
         ;
-      return ( i == size && def >= 0 ) ? (unsigned)def : i;
+      return ( i == size && def >= 0 ) ? static_cast<unsigned int>( def ) : i;
     }
 
     const std::string _lookup( unsigned code, const char* values[], unsigned size, const std::string& def )
@@ -48,12 +48,12 @@ namespace gloox
     unsigned _lookup2( const std::string& str, const char* values[],
                        unsigned size, int def )
     {
-      return 1 << _lookup( str, values, size, def <= 0 ? def : (int)internalLog2( def ) );
+      return 1 << _lookup( str, values, size, def <= 0 ? def : static_cast<int>( internalLog2( def ) ) );
     }
 
     const std::string _lookup2( unsigned code, const char* values[], unsigned size, const std::string& def )
     {
-      const unsigned i = (unsigned)internalLog2( code );
+      const unsigned i = static_cast<unsigned int>( internalLog2( code ) );
       return i < size ? std::string( values[i] ) : def;
     }
 
@@ -62,7 +62,7 @@ namespace gloox
       const char* H = input.c_str();
       char* buf = new char[input.length() * 2 + 1];
       for( unsigned int i = 0; i < input.length(); ++i )
-        sprintf( buf + i * 2, "%02x", (unsigned char)( H[i] ) );
+        sprintf( buf + i * 2, "%02x", static_cast<unsigned char>( H[i] ) );
       return std::string( buf, 40 );
     }
 
@@ -147,7 +147,7 @@ namespace gloox
       const char* end = dataPtr + data.length();
       for( ; dataPtr != end; ++dataPtr )
       {
-        unsigned char current = (unsigned char) *dataPtr;
+        unsigned char current = static_cast<unsigned char>( *dataPtr );
         if( current < 0x20 )
         {
           if( current == 0x09

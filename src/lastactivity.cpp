@@ -101,7 +101,7 @@ namespace gloox
       return false;
 
     IQ re( IQ::Result, iq.from(), iq.id() );
-    re.addExtension( new Query( EmptyString, (long)( time( 0 ) - m_active ) ) );
+    re.addExtension( new Query( EmptyString, static_cast<long>( time( 0 ) - m_active ) ) );
     m_parent->send( re );
 
     return true;

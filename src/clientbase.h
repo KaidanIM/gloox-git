@@ -1096,7 +1096,7 @@ namespace gloox
       std::string m_ntlmDomain;
       bool m_customConnection;
 
-      int m_uniqueBaseId;
+      std::string m_uniqueBaseId;
       util::AtomicRefCount m_nextId;
 
       int m_smSent;

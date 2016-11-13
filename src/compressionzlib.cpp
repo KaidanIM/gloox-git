@@ -69,15 +69,15 @@ namespace gloox
     m_compressMutex.lock();
 
     m_zdeflate.avail_in = static_cast<uInt>( data.length() );
-    m_zdeflate.next_in = (Bytef*)in;
+    m_zdeflate.next_in = reinterpret_cast<Bytef*>( in );
 
     std::string result;
     do {
       m_zdeflate.avail_out = static_cast<uInt>( CHUNK );
-      m_zdeflate.next_out = (Bytef*)out;
+      m_zdeflate.next_out = reinterpret_cast<Bytef*>( out );
 
       deflate( &m_zdeflate, Z_SYNC_FLUSH );
-      result.append( (char*)out, CHUNK - m_zdeflate.avail_out );
+      result.append( reinterpret_cast<char*>( out ), CHUNK - m_zdeflate.avail_out );
     } while( m_zdeflate.avail_out == 0 );
 
     m_compressMutex.unlock();
@@ -100,13 +100,13 @@ namespace gloox
     char* in = const_cast<char*>( data.c_str() );
 
     m_zinflate.avail_in = static_cast<uInt>( data.length() );
-    m_zinflate.next_in = (Bytef*)in;
+    m_zinflate.next_in = reinterpret_cast<Bytef*>( in );
 
     std::string result;
     do
     {
       m_zinflate.avail_out = CHUNK;
-      m_zinflate.next_out = (Bytef*)out;
+      m_zinflate.next_out = reinterpret_cast<Bytef*>( out );
 
       inflate( &m_zinflate, Z_SYNC_FLUSH );
       result.append( out, CHUNK - m_zinflate.avail_out );
