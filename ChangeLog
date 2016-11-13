@@ -1,6 +1,7 @@
 v1.0.19
 -------
 - ConnectionTCPServer: cleanup
+- lots of compile-time warnings removed
 
 
 
