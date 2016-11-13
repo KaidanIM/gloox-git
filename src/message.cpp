@@ -36,7 +36,7 @@ namespace gloox
     if( typestring.empty() )
       m_subtype = Normal;
     else
-      m_subtype = (MessageType)util::lookup2( typestring, msgTypeStringValues );
+      m_subtype = static_cast<MessageType>( util::lookup2( typestring, msgTypeStringValues ) );
 
     const TagList& c = tag->children();
     TagList::const_iterator it = c.begin();

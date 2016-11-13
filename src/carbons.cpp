@@ -41,7 +41,7 @@ namespace gloox
       return;
 
     const std::string& name = tag->name();
-    m_type = (Type)util::lookup( name, typeValues );
+    m_type = static_cast<Type>( util::lookup( name, typeValues ) );
 
     switch( m_type )
     {

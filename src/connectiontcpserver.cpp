@@ -100,11 +100,11 @@ namespace gloox
 #else
     socklen_t bufbytes = sizeof( int );
 #endif
-    if( ( getsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, (char*)&buf, &bufbytes ) != -1 ) && ( m_bufsize > buf ) )
-      setsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, (const char*)&m_bufsize, sizeof( m_bufsize ) );
+    if( ( getsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<char*>( &buf ), &bufbytes ) != -1 ) && ( m_bufsize > buf ) )
+      setsockopt( m_socket, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char*>( &m_bufsize ), sizeof( m_bufsize ) );
 
-    if( ( getsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, (char*)&buf, &bufbytes ) != -1 ) && ( m_bufsize > buf ) )
-      setsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, (const char*)&m_bufsize, sizeof( m_bufsize ) );
+    if( ( getsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<char*>( &buf ), &bufbytes ) != -1 ) && ( m_bufsize > buf ) )
+      setsockopt( m_socket, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char*>( &m_bufsize ), sizeof( m_bufsize ) );
 #endif
 
     int status = 0;
@@ -188,16 +188,16 @@ namespace gloox
     struct sockaddr_storage they;
     int addr_size = sizeof( struct sockaddr_storage );
 #if defined( _WIN32 )
-    int newfd = static_cast<int>( accept( static_cast<SOCKET>( m_socket ), (struct sockaddr*)&they, &addr_size ) );
+    int newfd = static_cast<int>( accept( static_cast<SOCKET>( m_socket ), reinterpret_cast<struct sockaddr*>( &they ), &addr_size ) );
 #else
-    int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&addr_size );
+    int newfd = accept( m_socket, reinterpret_cast<struct sockaddr*>( &they ), reinterpret_cast<socklen_t*>( &addr_size ) );
 #endif
 
     m_recvMutex.unlock();
 
     char buffer[INET6_ADDRSTRLEN];
     char portstr[NI_MAXSERV];
-    int err = getnameinfo( (struct sockaddr*)&they, addr_size, buffer, sizeof( buffer ),
+    int err = getnameinfo( reinterpret_cast<struct sockaddr*>( &they ), addr_size, buffer, sizeof( buffer ),
                            portstr, sizeof( portstr ), NI_NUMERICHOST | NI_NUMERICSERV );
     if( err )
       return ConnIoError;

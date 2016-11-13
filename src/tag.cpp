@@ -836,7 +836,7 @@ namespace gloox
 //     printf( "evaluateTagList called in Tag %s and Token %s (type: %s)\n", name().c_str(),
 //             token->name().c_str(), token->findAttribute( TYPE ).c_str() );
 
-    TokenType tokenType = (TokenType)atoi( token->findAttribute( TYPE ).c_str() );
+    TokenType tokenType = static_cast<TokenType>( atoi( token->findAttribute( TYPE ).c_str() ) );
     switch( tokenType )
     {
       case XTUnion:
@@ -968,7 +968,7 @@ namespace gloox
 
         int pos = atoi( token->name().c_str() );
 //         printf( "checking index %d\n", pos );
-        if( pos > 0 && pos <= (int)res.size() )
+        if( pos > 0 && pos <= static_cast<int>( res.size() ) )
         {
           ConstTagList::const_iterator it = res.begin();
           while ( --pos )
@@ -991,7 +991,7 @@ namespace gloox
       return false;
 
     bool result = false;
-    TokenType tokenType = (TokenType)atoi( token->findAttribute( TYPE ).c_str() );
+    TokenType tokenType = static_cast<TokenType>( atoi( token->findAttribute( TYPE ).c_str() ) );
     switch( tokenType )
     {
       case XTAttribute:
@@ -1039,8 +1039,8 @@ namespace gloox
     Tag* ch1 = (*it);
     Tag* ch2 = (*++it);
 
-    TokenType tt1 = (TokenType)atoi( ch1->findAttribute( TYPE ).c_str() );
-    TokenType tt2 = (TokenType)atoi( ch2->findAttribute( TYPE ).c_str() );
+    TokenType tt1 = static_cast<TokenType>( atoi( ch1->findAttribute( TYPE ).c_str() ) );
+    TokenType tt2 = static_cast<TokenType>( atoi( ch2->findAttribute( TYPE ).c_str() ) );
     switch( tt1 )
     {
       case XTAttribute:

@@ -47,7 +47,7 @@ namespace gloox
       return (int) OSAtomicIncrement32Barrier( (volatile int32_t*)&m_count );
 #elif defined( HAVE_GCC_ATOMIC_BUILTINS )
       // Use the gcc intrinsic for atomic increment if supported.
-      return (int) __sync_add_and_fetch( &m_count, 1 );
+      return static_cast<int>( __sync_add_and_fetch( &m_count, 1 ) );
 #else
       // Fallback to using a lock
       MutexGuard m( m_lock );
@@ -63,7 +63,7 @@ namespace gloox
       return (int) OSAtomicDecrement32Barrier( (volatile int32_t*)&m_count );
 #elif defined( HAVE_GCC_ATOMIC_BUILTINS )
       // Use the gcc intrinsic for atomic decrement if supported.
-      return (int) __sync_sub_and_fetch( &m_count, 1 );
+      return static_cast<int>( __sync_sub_and_fetch( &m_count, 1 ) );
 #else
       // Fallback to using a lock
       MutexGuard m( m_lock );

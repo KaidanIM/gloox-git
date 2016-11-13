@@ -51,7 +51,7 @@ namespace gloox
         m_type = TypeNone;
     }
     else
-      m_type = (FieldType)util::lookup( type, fieldTypeValues );
+      m_type = static_cast<FieldType>( util::lookup( type, fieldTypeValues ) );
 
     if( tag->hasAttribute( "var" ) )
       m_name = tag->findAttribute( "var" );

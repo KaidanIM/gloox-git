@@ -57,12 +57,12 @@ namespace gloox
 
   static inline StanzaErrorType stanzaErrorType( const std::string& type )
   {
-    return (StanzaErrorType)util::lookup( type, errValues );
+    return static_cast<StanzaErrorType>( util::lookup( type, errValues ) );
   }
 
   static inline StanzaError stanzaError( const std::string& type )
   {
-    return (StanzaError)util::lookup( type, stanzaErrValues );
+    return static_cast<StanzaError>( util::lookup( type, stanzaErrValues ) );
   }
 
   Error::Error( const Tag* tag )

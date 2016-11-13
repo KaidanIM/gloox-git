@@ -30,7 +30,7 @@ namespace gloox
 
     static inline Content::Creator creatorType( const std::string& type )
     {
-      return (Content::Creator)util::lookup( type, creatorValues );
+      return static_cast<Content::Creator>( util::lookup( type, creatorValues ) );
     }
 
     static const char* sendersValues [] = {
@@ -42,7 +42,7 @@ namespace gloox
 
     static inline Content::Senders sendersType( const std::string& type )
     {
-      return (Content::Senders)util::lookup( type, sendersValues );
+      return static_cast<Content::Senders>( util::lookup( type, sendersValues ) );
     }
 
     Content::Content( const std::string& name, const PluginList& plugins, Creator creator,
@@ -60,8 +60,8 @@ namespace gloox
         return;
 
       m_name = tag->findAttribute( "name" );
-      m_creator = (Creator)util::lookup( tag->findAttribute( "creator" ), creatorValues );
-      m_senders = (Senders)util::lookup( tag->findAttribute( "senders" ), sendersValues );
+      m_creator = static_cast<Creator>( util::lookup( tag->findAttribute( "creator" ), creatorValues ) );
+      m_senders = static_cast<Senders>( util::lookup( tag->findAttribute( "senders" ), sendersValues ) );
       m_disposition = tag->findAttribute( "disposition" );
 
       if( factory )

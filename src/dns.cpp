@@ -94,7 +94,7 @@ namespace gloox
     if( srvbuf.len < 0 )
       return defaultHostMap( domain, logInstance );
 
-    HEADER* hdr = (HEADER*)srvbuf.buf;
+    HEADER* hdr = reinterpret_cast<HEADER*>( srvbuf.buf );
     unsigned char* here = srvbuf.buf + NS_HFIXEDSZ;
 
     if( srvbuf.len < NS_HFIXEDSZ )
@@ -146,7 +146,7 @@ namespace gloox
         continue;
 
       unsigned char* c = srv[cnt] + SRV_PORT;
-      servers.insert( std::make_pair( (char*)srvname, ntohs( c[1] << 8 | c[0] ) ) );
+      servers.insert( std::make_pair( static_cast<char*>( srvname ), ntohs( c[1] << 8 | c[0] ) ) );
     }
 
     if( !servers.size() )
@@ -395,11 +395,11 @@ namespace gloox
 #ifdef HAVE_SETSOCKOPT
     int timeout = 5000;
     int reuseaddr = 1;
-    setsockopt( fd, SOL_SOCKET, SO_SNDTIMEO, (char*)&timeout, sizeof( timeout ) );
-    setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, (char*)&reuseaddr, sizeof( reuseaddr ) );
+    setsockopt( fd, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<char*>( &timeout ), sizeof( timeout ) );
+    setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<char*>( &reuseaddr ), sizeof( reuseaddr ) );
 #endif
 
-    return (int)fd;
+    return static_cast<int>( fd );
   }
 
 #ifdef HAVE_GETADDRINFO
@@ -488,7 +488,7 @@ namespace gloox
         + " (" + inet_ntoa( target.sin_addr ) + ":" + util::int2string( port ) + ")" );
 
     memset( target.sin_zero, '\0', 8 );
-    if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
+    if( ::connect( fd, reinterpret_cast<struct sockaddr *>( &target ), sizeof( struct sockaddr ) ) == 0 )
     {
       logInstance.dbg( LogAreaClassDns, "Connected to " + host + " ("
           + inet_ntoa( target.sin_addr ) + ":" + util::int2string( port ) + ")" );

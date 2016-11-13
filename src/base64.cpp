@@ -21,7 +21,7 @@ namespace gloox
 
     static const std::string alphabet64( "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" );
     static const char pad = '=';
-    static const char np  = (char)std::string::npos;
+    static const char np  = static_cast<char>( std::string::npos );
     static char table64vals[] =
     {
       62, np, np, np, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, np, np, np, np, np,

@@ -60,7 +60,7 @@ namespace gloox
 
     char buf[41];
     for( int i = 0; i < 20; ++i )
-      sprintf( buf + i * 2, "%02x", (unsigned char)( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) ) );
+      sprintf( buf + i * 2, "%02x", static_cast<unsigned char>( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) ) );
 
     return std::string( buf, 40 );
   }
@@ -72,9 +72,9 @@ namespace gloox
 
     unsigned char digest[20];
     for( int i = 0; i < 20; ++i )
-      digest[i] = (unsigned char)( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) );
+      digest[i] = static_cast<unsigned char>( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) );
 
-    return std::string( (char*)digest, 20 );
+    return std::string( reinterpret_cast<char*>( digest ), 20 );
   }
 
   void SHA::finalize()
@@ -124,7 +124,7 @@ namespace gloox
 
   void SHA::feed( const std::string& data )
   {
-    feed( (const unsigned char*)data.c_str(), (int)data.length() );
+    feed( reinterpret_cast<const unsigned char*>( data.c_str() ), static_cast<int>( data.length() ) );
   }
 
   void SHA::process()
@@ -141,10 +141,10 @@ namespace gloox
 
     for( t = 0; t < 16; t++ )
     {
-      W[t] =  ((unsigned) Message_Block[t * 4]) << 24;
-      W[t] |= ((unsigned) Message_Block[t * 4 + 1]) << 16;
-      W[t] |= ((unsigned) Message_Block[t * 4 + 2]) << 8;
-      W[t] |= ((unsigned) Message_Block[t * 4 + 3]);
+      W[t] =  static_cast<unsigned int>( Message_Block[t * 4] ) << 24;
+      W[t] |= static_cast<unsigned int>( Message_Block[t * 4 + 1] ) << 16;
+      W[t] |= static_cast<unsigned int>( Message_Block[t * 4 + 2] ) << 8;
+      W[t] |= static_cast<unsigned int>( Message_Block[t * 4 + 3] );
     }
 
     for( t = 16; t < 80; ++t )

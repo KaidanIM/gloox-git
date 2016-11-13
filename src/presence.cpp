@@ -49,13 +49,13 @@ namespace gloox
     if( type.empty() )
       m_subtype = Available;
     else
-      m_subtype = (PresenceType)util::lookup( type, msgTypeStringValues );
+      m_subtype = static_cast<PresenceType>( util::lookup( type, msgTypeStringValues ) );
 
     if( m_subtype == Available )
     {
       Tag* t = tag->findChild( "show" );
       if( t )
-        m_subtype = (PresenceType)util::lookup( t->cdata(), msgShowStringValues );
+        m_subtype = static_cast<PresenceType>( util::lookup( t->cdata(), msgShowStringValues ) );
     }
 
     const TagList& c = tag->children();

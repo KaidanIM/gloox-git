@@ -53,12 +53,12 @@ namespace gloox
 
   static inline MUCRoomAffiliation affiliationType( const std::string& type )
   {
-    return (MUCRoomAffiliation)util::lookup( type, affiliationValues );
+    return static_cast<MUCRoomAffiliation>( util::lookup( type, affiliationValues ) );
   }
 
   static inline MUCRoomRole roleType( const std::string& type )
   {
-    return (MUCRoomRole)util::lookup( type, roleValues );
+    return static_cast<MUCRoomRole>( util::lookup( type, roleValues ) );
   }
 
   MUCRoom::MUCAdmin::MUCAdmin( MUCRoomRole role, const std::string& nick,
@@ -1136,7 +1136,7 @@ namespace gloox
       case StoreMemberList:
       case StoreModeratorList:
       case StoreAdminList:
-        m_roomConfigHandler->handleMUCConfigResult( this, true, (MUCOperation)context );
+        m_roomConfigHandler->handleMUCConfigResult( this, true, static_cast<MUCOperation>( context ) );
         break;
       case RequestRoomConfig:
       {
@@ -1159,7 +1159,7 @@ namespace gloox
         if( !ma )
           break;
 
-        m_roomConfigHandler->handleMUCConfigList( this, ma->list(), (MUCOperation)context );
+        m_roomConfigHandler->handleMUCConfigList( this, ma->list(), static_cast<MUCOperation>( context ) );
         break;
       }
       default:
@@ -1197,7 +1197,7 @@ namespace gloox
       case StoreOwnerList:
       case RequestAdminList:
       case StoreAdminList:
-        m_roomConfigHandler->handleMUCConfigResult( this, false, (MUCOperation)context );
+        m_roomConfigHandler->handleMUCConfigResult( this, false, static_cast<MUCOperation>( context ) );
         break;
     }
   }

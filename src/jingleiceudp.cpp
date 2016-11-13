@@ -60,7 +60,7 @@ namespace gloox
         c.protocol = (*it)->findAttribute( "protocol" );
         c.rel_addr = (*it)->findAttribute( "rel-addr" );
         c.rel_port = atoi( (*it)->findAttribute( "rel-port" ).c_str() );
-        c.type = (Type)util::lookup( (*it)->findAttribute( "type" ), typeValues );
+        c.type = static_cast<Type>( util::lookup( (*it)->findAttribute( "type" ), typeValues ) );
         m_candidates.push_back( c );
       }
     }

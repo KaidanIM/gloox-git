@@ -107,8 +107,8 @@ namespace gloox
                              "Unknown error condition" );
           break;
       }
-      m_handler->handleDisconnect( this, (ConnectionError)-m_socket );
-      return (ConnectionError)-m_socket;
+      m_handler->handleDisconnect( this, static_cast<ConnectionError>( -m_socket ) );
+      return static_cast<ConnectionError>( -m_socket );
     }
     else
     {

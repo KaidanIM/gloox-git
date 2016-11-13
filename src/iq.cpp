@@ -32,7 +32,7 @@ namespace gloox
     if( !tag || tag->name() != "iq" )
       return;
 
-    m_subtype = (IQ::IqType)util::lookup( tag->findAttribute( TYPE ), iqTypeStringValues );
+    m_subtype = static_cast<IQ::IqType>( util::lookup( tag->findAttribute( TYPE ), iqTypeStringValues ) );
   }
 
   IQ::IQ( IqType type, const JID& to, const std::string& id )

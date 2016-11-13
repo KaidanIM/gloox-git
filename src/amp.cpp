@@ -64,18 +64,18 @@ namespace gloox
   AMP::Rule::Rule( const std::string& condition, const std::string& action,
                    const std::string& value )
   {
-    m_condition = (ConditionType)util::lookup( condition, conditionValues );
-    m_action = (ActionType)util::lookup( action, actionValues );
+    m_condition = static_cast<ConditionType>( util::lookup( condition, conditionValues ) );
+    m_action = static_cast<ActionType>( util::lookup( action, actionValues ) );
     switch( m_condition )
     {
       case ConditionDeliver:
-        m_deliver = (DeliverType)util::lookup( value, deliverValues );
+        m_deliver = static_cast<DeliverType>( util::lookup( value, deliverValues ) );
         break;
       case ConditionExpireAt:
         m_expireat = new std::string( value );
         break;
       case ConditionMatchResource:
-        m_matchresource = (MatchResourceType)util::lookup( value, matchResourceValues );
+        m_matchresource = static_cast<MatchResourceType>( util::lookup( value, matchResourceValues ) );
         break;
       default:
       case ConditionInvalid: // shouldn't happen
@@ -143,7 +143,7 @@ namespace gloox
 
     m_from = tag->findAttribute( "from" );
     m_to = tag->findAttribute( "to" );
-    m_status = (Status)util::lookup( tag->findAttribute( "status" ), statusValues );
+    m_status = static_cast<Status>( util::lookup( tag->findAttribute( "status" ), statusValues ) );
     if( tag->hasAttribute( "per-hop", "true" ) || tag->hasAttribute( "per-hop", "1" ) )
       m_perhop = true;
     m_valid = true;

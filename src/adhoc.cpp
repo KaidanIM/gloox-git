@@ -66,7 +66,7 @@ namespace gloox
     if( !tag || tag->name() != "note" )
       return;
 
-    m_severity = (Severity)util::deflookup( tag->findAttribute( "type" ), cmdNoteStringValues, Info );
+    m_severity = static_cast<Severity>( util::deflookup( tag->findAttribute( "type" ), cmdNoteStringValues, Info ) );
     m_note = tag->cdata();
   }
 
@@ -120,13 +120,13 @@ namespace gloox
 
     m_node = tag->findAttribute( "node" );
     m_sessionid = tag->findAttribute( "sessionid" );
-    m_status = (Status)util::lookup( tag->findAttribute( "status" ), cmdStatusStringValues );
+    m_status = static_cast<Status>( util::lookup( tag->findAttribute( "status" ), cmdStatusStringValues ) );
 
     Tag* a = tag->findChild( "actions" );
     if( a )
     {
       // Multi-stage response
-      m_action = (Action)util::deflookup2( a->findAttribute( "action" ), cmdActionStringValues, Complete );
+      m_action = static_cast<Action>( util::deflookup2( a->findAttribute( "action" ), cmdActionStringValues, Complete ) );
       if( a->hasChild( "prev" ) )
         m_actions |= Previous;
       if( a->hasChild( "next" ) )
@@ -136,7 +136,7 @@ namespace gloox
     }
     else
     {
-      m_action = (Action)util::deflookup2( tag->findAttribute( "action" ), cmdActionStringValues, Execute );
+      m_action = static_cast<Action>( util::deflookup2( tag->findAttribute( "action" ), cmdActionStringValues, Execute ) );
     }
 
     const ConstTagList& l = tag->findTagList( "/command/note" );

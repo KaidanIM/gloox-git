@@ -755,8 +755,8 @@ namespace gloox
   enum SaslMechanism
   {
     SaslMechNone          =      0, /**< Invalid SASL Mechanism. */
-    SaslMechScramSha1     =   2048, /**< SASL SCRAM-SHA-1-PLUS accroding to RFC 5801 */
-    SaslMechScramSha1Plus =   1024, /**< SASL SCRAM-SHA-1 accroding to RFC 5801 */
+    SaslMechScramSha1     =   1024, /**< SASL SCRAM-SHA-1 accroding to RFC 5801 */
+    SaslMechScramSha1Plus =   2048, /**< SASL SCRAM-SHA-1-PLUS accroding to RFC 5801 */
     SaslMechDigestMd5     =   4096, /**< SASL Digest-MD5 according to RFC 2831. */
     SaslMechPlain         =   8192, /**< SASL PLAIN according to RFC 2595 Section 6. */
     SaslMechAnonymous     =  16384, /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
@@ -768,7 +768,7 @@ namespace gloox
   };
 
   /**
-   * This decribes stream error conditions as defined in RFC 3920 Sec. 4.7.3.
+   * This describes stream error conditions as defined in RFC 3920 Sec. 4.7.3.
    */
   enum StreamError
   {

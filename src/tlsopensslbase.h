@@ -92,7 +92,7 @@ namespace gloox
       };
 
       void doTLSOperation( TLSOperation op );
-      int openSSLTime2UnixTime( const char* time_string );
+      int openSSLTime2UnixTime( const unsigned char* time_string );
 
       std::string m_recvBuffer;
       std::string m_sendBuffer;

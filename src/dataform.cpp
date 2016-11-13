@@ -71,7 +71,7 @@ namespace gloox
       m_type = TypeForm;
     else
     {
-      m_type = (FormType)util::lookup( type, dfTypeValues );
+      m_type = static_cast<FormType>( util::lookup( type, dfTypeValues ) );
       if( m_type == TypeInvalid )
         return false;
     }
