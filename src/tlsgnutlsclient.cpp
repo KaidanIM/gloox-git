@@ -78,7 +78,7 @@ namespace gloox
 
     gnutls_credentials_set( *m_session, GNUTLS_CRD_CERTIFICATE, m_credentials );
 
-    gnutls_transport_set_ptr( *m_session, (gnutls_transport_ptr_t)this );
+    gnutls_transport_set_ptr( *m_session, static_cast<gnutls_transport_ptr_t>( this ) );
     gnutls_transport_set_push_function( *m_session, pushFunc );
     gnutls_transport_set_pull_function( *m_session, pullFunc );
 
@@ -156,19 +156,19 @@ namespace gloox
 
     m_certInfo.chain = verifyAgainstCAs( cert[certListSize-1], 0 /*CAList*/, 0 /*CAListSize*/ );
 
-    int t = (int)gnutls_x509_crt_get_activation_time( cert[0] );
+    time_t t = gnutls_x509_crt_get_activation_time( cert[0] );
     if( t == -1 )
       error = true;
     else if( t > time( 0 ) )
       m_certInfo.status |= CertNotActive;
-    m_certInfo.date_from = t;
+    m_certInfo.date_from = static_cast<int>( t );
 
-    t = (int)gnutls_x509_crt_get_expiration_time( cert[0] );
+    t = gnutls_x509_crt_get_expiration_time( cert[0] );
     if( t == -1 )
       error = true;
     else if( t < time( 0 ) )
       m_certInfo.status |= CertExpired;
-    m_certInfo.date_to = t;
+    m_certInfo.date_to = static_cast<int>( t );
 
     char name[64];
     size_t nameSize = sizeof( name );

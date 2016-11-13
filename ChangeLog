@@ -13,6 +13,7 @@ Note: This release is not completely source compatible with previous versions.
 v1.0.19
 -------
 - ConnectionTCPServer: cleanup
+- lots of compile-time warnings removed
 
 
 

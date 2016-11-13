@@ -75,7 +75,7 @@ namespace gloox
 
     gnutls_credentials_set( *m_session, GNUTLS_CRD_ANON, m_anoncred );
 
-    gnutls_transport_set_ptr( *m_session, (gnutls_transport_ptr_t)this );
+    gnutls_transport_set_ptr( *m_session, static_cast<gnutls_transport_ptr_t>( this ) );
     gnutls_transport_set_push_function( *m_session, pushFunc );
     gnutls_transport_set_pull_function( *m_session, pullFunc );
 
