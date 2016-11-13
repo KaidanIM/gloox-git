@@ -489,15 +489,13 @@ namespace gloox
       };
 
       RosterManager* m_rosterManager;
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+
+      #if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
       NonSaslAuth* m_auth;
+      bool m_forceNonSasl;
 #endif // GLOOX_MINIMAL
 
       Presence m_presence;
-
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
-      bool m_forceNonSasl;
-#endif // GLOOX_MINIMAL
       bool m_manageRoster;
 
       std::string m_smId;

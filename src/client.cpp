@@ -103,7 +103,7 @@ namespace gloox
   Client::Client( const std::string& server )
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ),
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
       m_auth( 0 ), m_forceNonSasl( false ),
 #endif // GLOOX_MINIMAL
       m_presence( Presence::Available, JID() ),
@@ -118,7 +118,7 @@ namespace gloox
   Client::Client( const JID& jid, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, EmptyString, port ),
       m_rosterManager( 0 ),
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
       m_auth( 0 ), m_forceNonSasl( false ),
 #endif // GLOOX_MINIMAL
       m_presence( Presence::Available, JID() ),
@@ -134,7 +134,7 @@ namespace gloox
   Client::~Client()
   {
     delete m_rosterManager;
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
     delete m_auth;
 #endif // GLOOX_MINIMAL
   }
@@ -246,7 +246,7 @@ namespace gloox
 //       {
 //         negotiateCompression( StreamFeatureCompressDclz );
 //       }
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
       else if( m_streamFeatures & StreamFeatureIqAuth )
       {
         notifyStreamEvent( StreamEventAuthentication );
@@ -465,7 +465,7 @@ namespace gloox
 
     if( ( m_streamFeatures & SaslMechScramSha1Plus && m_availableSaslMechs & SaslMechScramSha1Plus
           && m_encryption && m_encryptionActive && m_encryption->hasChannelBinding() )
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
       && !m_forceNonSasl
 #endif // GLOOX_MINIMAL
       )
@@ -474,7 +474,7 @@ namespace gloox
       startSASL( SaslMechScramSha1Plus );
     }
     else if( m_streamFeatures & SaslMechScramSha1 && m_availableSaslMechs & SaslMechScramSha1
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
              && !m_forceNonSasl
 #endif // GLOOX_MINIMAL
            )
@@ -483,7 +483,7 @@ namespace gloox
       startSASL( SaslMechScramSha1 );
     }
     else if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
              && !m_forceNonSasl
 #endif // GLOOX_MINIMAL
            )
@@ -492,7 +492,7 @@ namespace gloox
       startSASL( SaslMechDigestMd5 );
     }
     else if( m_streamFeatures & SaslMechPlain && m_availableSaslMechs & SaslMechPlain
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
              && !m_forceNonSasl
 #endif // GLOOX_MINIMAL
            )
@@ -500,7 +500,7 @@ namespace gloox
       notifyStreamEvent( StreamEventAuthentication );
       startSASL( SaslMechPlain );
     }
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
     else if( m_streamFeatures & StreamFeatureIqAuth
              || m_forceNonSasl
            )
@@ -723,7 +723,7 @@ namespace gloox
     m_rosterManager = 0;
   }
 
-#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUH )
+#if !defined( GLOOX_MINIMAL ) || defined( WANT_NONSASLAUTH )
   void Client::nonSaslLogin()
   {
     if( !m_auth )
