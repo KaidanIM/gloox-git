@@ -30,9 +30,11 @@ namespace gloox
 
   bool OpenSSLClient::setType()
   {
-    m_ctx = SSL_CTX_new( TLSv1_client_method() );
+    m_ctx = SSL_CTX_new( SSLv23_client_method() );
     if( !m_ctx )
       return false;
+
+    SSL_CTX_set_options( m_ctx, SSL_OP_NO_SSLv3 );
 
     return true;
   }

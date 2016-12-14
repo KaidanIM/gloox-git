@@ -14,6 +14,7 @@ v1.0.19
 -------
 - ConnectionTCPServer: cleanup
 - lots of compile-time warnings removed
+- TLSOpenSSL: made it speak TLSv1.1 and 1.2 again (thanks to Nicolas Belouin)
 
 
 
