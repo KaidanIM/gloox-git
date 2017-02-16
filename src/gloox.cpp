@@ -113,6 +113,7 @@ namespace gloox
   const std::string XMLNS_HASHES            = "urn:xmpp:hashes:1";
   const std::string XMLNS_IODATA            = "urn:xmpp:tmp:io-data";
   const std::string XMLNS_ROSTER_X          = "http://jabber.org/protocol/rosterx";
+  const std::string XMLNS_CLIENT_STATE_INDICATION = "urn:xmpp:csi:0";
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";

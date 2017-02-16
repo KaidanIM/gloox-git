@@ -407,6 +407,9 @@ namespace gloox
     if( tag->hasChild( "sm", XMLNS, XMLNS_STREAM_MANAGEMENT ) )
       features |= StreamFeatureStreamManagement;
 
+    if( tag->hasChild( "csi", XMLNS, XMLNS_CLIENT_STATE_INDICATION ) )
+      features |= StreamFeatureClientStateIndication;
+
     if( features == 0 )
       features = StreamFeatureIqAuth;
 

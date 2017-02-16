@@ -328,6 +328,7 @@
  * @li @xep{0256} @link gloox::LastActivity::Query Last Activity in Presence @endlink
  * @li @xep{0280} @link gloox::Carbons Message Carbons @endlink
  * @li @xep{0297} @link gloox::Forward Stanza Forwarding @endlink
+ * @li @xep{0352} @link gloox::Client::hasClientStateIndication() Client State Indication @endlink
  *
  * Further extensions can easily be implemented using
  * @link gloox::StanzaExtension StanzaExtensions @endlink.
@@ -604,6 +605,9 @@ namespace gloox
   /** Message Carbons namespace (@xep{0280}) */
   GLOOX_API extern const std::string XMLNS_MESSAGE_CARBONS;
 
+  /** Client State Indication namespace (@xep{0352}) */
+  GLOOX_API extern const std::string XMLNS_CLIENT_STATE_INDICATION;
+
   /** Use of Cryptographic Hash Functions in XMPP namespace (@xep{0300}) */
   GLOOX_API extern const std::string XMLNS_HASHES;
 
@@ -732,19 +736,20 @@ namespace gloox
    */
   enum StreamFeature
   {
-    StreamFeatureBind             =    1, /**< The server supports resource binding. */
-    StreamFeatureUnbind           =    2, /**< The server supports binding multiple resources. */
-    StreamFeatureSession          =    4, /**< The server supports sessions. */
-    StreamFeatureStartTls         =    8, /**< The server supports &lt;starttls&gt;. */
-    StreamFeatureIqRegister       =   16, /**< The server supports @xep{0077} (In-Band
-                                           * Registration). */
-    StreamFeatureIqAuth           =   32, /**< The server supports @xep{0078} (Non-SASL
-                                           * Authentication). */
-    StreamFeatureCompressZlib     =   64, /**< The server supports @xep{0138} (Stream
-                                           * Compression) (Zlib). */
-    StreamFeatureCompressDclz     =  128, /**< The server supports @xep{0138} (Stream
-                                           * Compression) (LZW/DCLZ). */
-    StreamFeatureStreamManagement =  256  /**< The server supports @xep{0198} (Stream Management). */
+    StreamFeatureBind                  =    1, /**< The server supports resource binding. */
+    StreamFeatureUnbind                =    2, /**< The server supports binding multiple resources. */
+    StreamFeatureSession               =    4, /**< The server supports sessions. */
+    StreamFeatureStartTls              =    8, /**< The server supports &lt;starttls&gt;. */
+    StreamFeatureIqRegister            =   16, /**< The server supports @xep{0077} (In-Band
+                                                * Registration). */
+    StreamFeatureIqAuth                =   32, /**< The server supports @xep{0078} (Non-SASL
+                                                * Authentication). */
+    StreamFeatureCompressZlib          =   64, /**< The server supports @xep{0138} (Stream
+                                                * Compression) (Zlib). */
+    StreamFeatureCompressDclz          =  128, /**< The server supports @xep{0138} (Stream
+                                                * Compression) (LZW/DCLZ). */
+    StreamFeatureStreamManagement      =  256, /**< The server supports @xep{0198} (Stream Management). */
+    StreamFeatureClientStateIndication =  512  /**< The server supports @xep{0352} (Client State Indication). */
     // SaslMechanism below must be adjusted accordingly.
   };
 
