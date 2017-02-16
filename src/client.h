@@ -293,6 +293,35 @@ namespace gloox
       void setPresence() { sendPresence( m_presence ); }
 
       /**
+       * Use this function to indicate a client state of 'active' to the Server.
+       * See @xep{0352} for more information.
+       * This function is a no-op if the server does not support Client State Indication (i.e. nothing is sent).
+       * Use hasClientStateIndication() to find out.
+       * @since 1.0.19
+       */
+      void setActive() { if( hasClientStateIndication() )
+                           send( new Tag( "active", XMLNS, XMLNS_CLIENT_STATE_INDICATION ) ); }
+
+      /**
+       * Use this function to indicate a client state of 'inactive' to the Server.
+       * See @xep{0352} for more information.
+       * This function is a no-op if the server does not support Client State Indication (i.e. nothing is sent).
+       * Use hasClientStateIndication() to find out.
+       * @since 1.0.19
+       */
+      void setInactive() { if( hasClientStateIndication() )
+                             send( new Tag( "inactive", XMLNS, XMLNS_CLIENT_STATE_INDICATION ) ); }
+
+      /**
+       * Use this function to find out whether the server supports Client State Indication (@xep{0352}).
+       * @return @b True if the server supports @xep{0352}, @b false if not.
+       * XEP Version: 0.2
+       * @since 1.0.19
+       */
+      bool hasClientStateIndication() const {
+        return ((m_streamFeatures & StreamFeatureClientStateIndication) == StreamFeatureClientStateIndication); }
+
+      /**
        * Returns the current presence.
        * @return The current presence.
        */

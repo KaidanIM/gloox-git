@@ -46,7 +46,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         carbons.cpp jinglepluginfactory.cpp jingleiceudp.cpp jinglefiletransfer.cpp \
                         iodata.cpp
 
-libgloox_la_LDFLAGS = -version-info 15:0:0 -no-undefined -no-allow-shlib-undefined
+libgloox_la_LDFLAGS = -version-info 16:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS)
 
