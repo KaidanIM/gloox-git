@@ -159,6 +159,12 @@ if test "$ssl" = "no"; then
     AC_CHECK_LIB(ssl, SSL_library_init,
             [openssl=yes], openssl=no),
             [openssl=no LIBS=${LIBS_TMP}])
+    if test "$openssl" != "yes"; then
+      AC_CHECK_HEADER(openssl/ssl.h,
+      AC_CHECK_LIB(ssl, OPENSSL_init_ssl,
+              [openssl=yes], openssl=no),
+              [openssl=no LIBS=${LIBS_TMP}])
+    fi
   fi
   if test "$openssl" != "no" ; then
     AC_DEFINE(HAVE_OPENSSL, 1, [Define to 1 if you want TLS support (OpenSSL). Undefine HAVE_GNUTLS.])

@@ -50,6 +50,42 @@ namespace gloox
     return SSL_accept( m_ssl );
   }
 
+#if defined OPENSSL_VERSION_NUMBER && ( OPENSSL_VERSION_NUMBER < 0x10100000 )
+  int DH_set0_pqg( DH* dh, BIGNUM* p, BIGNUM* q, BIGNUM* g )
+  {
+    /* If the fields p and g in d are NULL, the corresponding input
+     * parameters MUST be non-NULL.  q may remain NULL.
+     */
+    if( ( dh->p == 0 && p == 0 ) || ( dh->g == 0 && g == 0 ) )
+      return 0;
+
+    if( p != 0 )
+    {
+      BN_free( dh->p );
+      dh->p = p;
+    }
+
+    if( q != 0 )
+    {
+      BN_free( dh->q );
+      dh->q = q;
+    }
+
+    if( g != 0 )
+    {
+      BN_free( dh->g );
+      dh->g = g;
+    }
+
+    if( q != 0 )
+    {
+      dh->length = BN_num_bits( q );
+    }
+
+    return 1;
+  }
+#endif //   OPENSSL_VERSION_NUMBER < 0x10100000
+
   DH* getDH512()
   {
     static unsigned char dh512_p[] =
@@ -70,9 +106,9 @@ namespace gloox
     if( !dh )
       return 0;
 
-    dh->p = BN_bin2bn( dh512_p, sizeof( dh512_p ), 0 );
-    dh->g = BN_bin2bn( dh512_g, sizeof( dh512_g ), 0 );
-    if( ( dh->p == 0 ) || ( dh->g == 0 ) )
+    int ret = DH_set0_pqg( dh, BN_bin2bn( dh512_p, sizeof( dh512_p ), 0 ), 0,
+                     BN_bin2bn( dh512_g, sizeof( dh512_g ), 0 ) );
+    if( !ret )
     {
       DH_free( dh );
       return 0;
@@ -103,9 +139,9 @@ namespace gloox
     if( !dh )
       return 0;
 
-    dh->p = BN_bin2bn( dh1024_p, sizeof( dh1024_p ), 0 );
-    dh->g = BN_bin2bn( dh1024_g, sizeof( dh1024_g ), 0 );
-    if( ( dh->p == 0 ) || ( dh->g == 0 ) )
+    int ret = DH_set0_pqg( dh, BN_bin2bn( dh1024_p, sizeof( dh1024_p ), 0 ), 0,
+                               BN_bin2bn( dh1024_g, sizeof( dh1024_g ), 0 ) );
+    if( !ret )
     {
       DH_free( dh );
       return 0;
@@ -147,9 +183,9 @@ namespace gloox
     if( !dh )
       return 0;
 
-    dh->p = BN_bin2bn( dh2048_p, sizeof( dh2048_p ), 0 );
-    dh->g = BN_bin2bn( dh2048_g, sizeof( dh2048_g ), 0 );
-    if( ( dh->p == 0 ) || ( dh->g == 0 ) )
+    int ret = DH_set0_pqg( dh, BN_bin2bn( dh2048_p, sizeof( dh2048_p ), 0 ), 0,
+                               BN_bin2bn( dh2048_g, sizeof( dh2048_g ), 0 ) );
+    if( !ret )
     {
       DH_free( dh );
       return 0;
@@ -213,9 +249,9 @@ namespace gloox
     if( !dh )
       return 0;
 
-    dh->p = BN_bin2bn( dh4096_p, sizeof( dh4096_p ), 0 );
-    dh->g = BN_bin2bn( dh4096_g, sizeof( dh4096_g ), 0 );
-    if( ( dh->p == 0 ) || ( dh->g == 0 ) )
+    int ret = DH_set0_pqg( dh, BN_bin2bn( dh4096_p, sizeof( dh4096_p ), 0 ), 0,
+                               BN_bin2bn( dh4096_g, sizeof( dh4096_g ), 0 ) );
+    if( !ret )
     {
       DH_free( dh );
       return 0;
