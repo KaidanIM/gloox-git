@@ -10,8 +10,8 @@ Note: This release is not completely source compatible with previous versions.
 
 
 
-v1.0.19
--------
+v1.0.19 -- 21 Feb 2017
+----------------------
 Note: This release is not binary compatible with previous releases. It is source compatible.
 
 - ConnectionTCPServer: cleanup
