@@ -8,6 +8,7 @@ Note: This release is not binary compatible with previous releases. It is source
 - added Client State Indication (XEP-0352)
 - CertInfo struct: fixed protocol version when using OpenSSL
 - TLSOpenSSL: fixed compilation with OpenSSL 1.1.0
+- Registration: added Resource Constraint error condition (thanks to elexis1987) (#267)
 
 
 

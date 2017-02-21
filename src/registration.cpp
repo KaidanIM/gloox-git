@@ -379,6 +379,9 @@ namespace gloox
         case StanzaErrorNotAllowed:
           m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationNotAllowed );
           break;
+        case StanzaErrorResourceConstraint:
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationConstraint );
+          break;
         default:
           m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationUnknownError );
           break;
