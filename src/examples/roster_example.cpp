@@ -60,10 +60,15 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
+      time_t from( info.date_from );
+      time_t to( info.date_to );
+
       printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
+      printf( "from: %s", ctime( &from ) );
+      printf( "to:   %s", ctime( &to ) );
       return true;
     }
 

@@ -98,11 +98,12 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
       time_t from( info.date_from );
       time_t to( info.date_to );
 
-      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n"
-              "from: %s\nto: %s\n",
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
-              info.compression.c_str(), ctime( &from ), ctime( &to ) );
+              info.compression.c_str() );
+      printf( "from: %s", ctime( &from ) );
+      printf( "to:   %s", ctime( &to ) );
       return true;
     }
 
