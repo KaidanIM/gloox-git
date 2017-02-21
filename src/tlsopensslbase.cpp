@@ -25,6 +25,8 @@
 #include <openssl/comp.h>
 #include <openssl/x509v3.h>
 
+#include <string.h>
+
 namespace gloox
 {
 
