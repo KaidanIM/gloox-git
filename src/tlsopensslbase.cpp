@@ -309,7 +309,7 @@ namespace gloox
     SSL_SESSION* sess = SSL_get_session( m_ssl );
     if( sess )
     {
-      switch( sess->ssl_version )
+      switch( SSL_SESSION_get_protocol_version( sess ) )
       {
         case TLS1_VERSION:
           m_certInfo.protocol = "TLSv1";
