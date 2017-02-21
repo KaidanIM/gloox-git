@@ -211,32 +211,43 @@ namespace gloox
            || ( ( op == TLSWrite ) && ( ret > 0 ) ));
   }
 
-  int OpenSSLBase::openSSLTime2UnixTime( const unsigned char* time_string )
+  int OpenSSLBase::ASN1Time2UnixTime( ASN1_TIME* time )
   {
-    char tstring[19];
+    struct tm t;
+    const char* str = reinterpret_cast<const char*>( time->data );
+    size_t i = 0;
 
-    // making seperate c string out of time string
-    int m = 0;
-    for( int n = 0; n < 12; n += 2 )
+    memset( &t, 0, sizeof(t) );
+
+    if( time->type == V_ASN1_UTCTIME ) /* two digit year */
     {
-      tstring[m] = time_string[n];
-      tstring[m + 1] = time_string[n + 1];
-      tstring[m + 2] = 0;
-      m += 3;
+      t.tm_year = ( str[i++] - '0' ) * 10;
+      t.tm_year += ( str[i++] - '0' );
+
+      if( t.tm_year < 70 )
+        t.tm_year += 100;
+    }
+    else if( time->type == V_ASN1_GENERALIZEDTIME ) /* four digit year */
+    {
+      t.tm_year = ( str[i++] - '0' ) * 1000;
+      t.tm_year += ( str[i++] - '0' ) * 100;
+      t.tm_year += ( str[i++] - '0' ) * 10;
+      t.tm_year += ( str[i++] - '0' );
+      t.tm_year -= 1900;
     }
 
-    // converting to struct tm
-    tm time_st;
-    time_st.tm_year = ( atoi( &tstring[3 * 0] ) >= 70 ) ? atoi( &tstring[3 * 0] )
-                                                        : atoi( &tstring[3 * 0] ) + 100;
-    time_st.tm_mon = atoi( &tstring[3 * 1] ) - 1;
-    time_st.tm_mday = atoi( &tstring[3 * 2] );
-    time_st.tm_hour = atoi( &tstring[3 * 3] );
-    time_st.tm_min = atoi( &tstring[3 * 4] );
-    time_st.tm_sec = atoi( &tstring[3 * 5] );
+    t.tm_mon = ( str[i++] - '0' ) * 10;
+    t.tm_mon += ( str[i++] - '0' ) - 1; // -1 since January is 0 not 1.
+    t.tm_mday = ( str[i++] - '0' ) * 10;
+    t.tm_mday += ( str[i++] - '0' );
+    t.tm_hour = ( str[i++] - '0' ) * 10;
+    t.tm_hour += ( str[i++] - '0' );
+    t.tm_min = ( str[i++] - '0' ) * 10;
+    t.tm_min += ( str[i++] - '0' );
+    t.tm_sec = ( str[i++] - '0' ) * 10;
+    t.tm_sec += ( str[i++] - '0' );
 
-    time_t unixt = mktime( &time_st );
-    return static_cast<int>( unixt );
+    return static_cast<int>( mktime( &t ) );
   }
 
   bool OpenSSLBase::handshake()
@@ -261,8 +272,8 @@ namespace gloox
       m_certInfo.issuer = peer_CN;
       X509_NAME_get_text_by_NID( X509_get_subject_name( peer ), NID_commonName, peer_CN, sizeof( peer_CN ) );
       m_certInfo.server = peer_CN;
-      m_certInfo.date_from = openSSLTime2UnixTime( peer->cert_info->validity->notBefore->data );
-      m_certInfo.date_to = openSSLTime2UnixTime( peer->cert_info->validity->notAfter->data );
+      m_certInfo.date_from = ASN1Time2UnixTime( X509_get_notBefore( peer ) );
+      m_certInfo.date_to = ASN1Time2UnixTime( X509_get_notAfter( peer ) );
       std::string p( peer_CN );
       std::transform( p.begin(), p.end(), p.begin(), tolower );
 
