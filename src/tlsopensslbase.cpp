@@ -252,6 +252,13 @@ namespace gloox
     return static_cast<int>( mktime( &t ) );
   }
 
+#if defined OPENSSL_VERSION_NUMBER && ( OPENSSL_VERSION_NUMBER < 0x10100000 )
+  int SSL_SESSION_get_protocol_version( const SSL_SESSION* s )
+  {
+    return s->ssl_version;
+  }
+#endif // OPENSSL_VERSION_NUMBER < 0x10100000
+
   bool OpenSSLBase::handshake()
   {
 
