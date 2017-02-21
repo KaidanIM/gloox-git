@@ -62,6 +62,9 @@ namespace gloox
                                         * the server. */
     RegistrationNotAllowed,            /**< Password change: The server or service does not allow
                                         * password changes. */
+    RegistrationConstraint,            /**< Resource constraint: The server or recipient lacks the
+                                        * system resources necessary to service the request,for
+                                        * example if users are not allowed to register accounts so quickly. */
     RegistrationUnknownError           /**< An unknown error condition occured. */
   };
 
