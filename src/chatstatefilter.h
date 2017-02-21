@@ -46,7 +46,7 @@ namespace gloox
   {
     public:
       /**
-       * Contstructs a new Chat State filter for a MessageSession.
+       * Constructs a new Chat State filter for a MessageSession.
        * @param parent The MessageSession to decorate.
        */
       ChatStateFilter( MessageSession* parent );

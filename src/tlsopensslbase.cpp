@@ -49,8 +49,10 @@ namespace gloox
                           const std::string& clientCerts,
                           const StringList& cacerts )
   {
+#if defined OPENSSL_VERSION_NUMBER && ( OPENSSL_VERSION_NUMBER < 0x10100000 )
     if( m_initLib )
       SSL_library_init();
+#endif // OPENSSL_VERSION_NUMBER < 0x10100000
 
     SSL_COMP_add_compression_method( 193, COMP_zlib() );
 
@@ -291,9 +293,30 @@ namespace gloox
     if( tmp )
       m_certInfo.cipher = tmp;
 
-    tmp = SSL_get_cipher_version( m_ssl );
-    if( tmp )
-      m_certInfo.protocol = tmp;
+    SSL_SESSION* sess = SSL_get_session( m_ssl );
+    if( sess )
+    {
+      switch( sess->ssl_version )
+      {
+        case TLS1_VERSION:
+          m_certInfo.protocol = "TLSv1";
+          break;
+        case TLS1_1_VERSION:
+          m_certInfo.protocol = "TLSv1.1";
+          break;
+        case TLS1_2_VERSION:
+          m_certInfo.protocol = "TLSv1.2";
+          break;
+#ifdef TLS1_3_VERSION
+        case TLS1_3_VERSION:
+          m_certInfo.protocol = "TLSv1.3";
+          break;
+#endif // TLS1_3_VERSION
+        default:
+          m_certInfo.protocol = "Unknown TLS version";
+          break;
+      }
+    }
 
     tmp = SSL_COMP_get_name( SSL_get_current_compression( m_ssl ) );
     if( tmp )

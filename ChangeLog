@@ -18,6 +18,9 @@ Note: This release is not binary compatible with previous releases. It is source
 - lots of compile-time warnings removed
 - TLSOpenSSL: made it speak TLSv1.1 and 1.2 again (thanks to Nicolas Belouin)
 - added Client State Indication (XEP-0352)
+- CertInfo struct: fixed protocol version when using OpenSSL
+- TLSOpenSSL: fixed compilation with OpenSSL 1.1.0
+
 
 
 v1.0.18 -- 10 Nov 2016
