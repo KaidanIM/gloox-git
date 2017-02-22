@@ -62,7 +62,7 @@ namespace gloox
        * @param bs The bytestream.
        * @since 1.0.20
        */
-      virtual void handleBytreamDataAck( Bytestream* bs ) {}
+      virtual void handleBytestreamDataAck( Bytestream* bs ) {}
       
       /**
        * Notifies about an error occuring while using a bytestream.
