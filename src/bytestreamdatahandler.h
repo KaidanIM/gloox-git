@@ -54,6 +54,16 @@ namespace gloox
       virtual void handleBytestreamData( Bytestream* bs, const std::string& data ) = 0;
 
       /**
+       * Reimplement this function to be notified when the remote end has
+       * received and acknowledged a single data packet. This packet may be
+       * smaller than the chunk that was fed into Bytream::send() due to internal
+       * chunk size limits. so this callback may be called multiple times for
+       * each call to Bytestream::send(). it can be used to implement burst limits.
+       * @param bs The bytestream.
+       */
+      virtual void handleBytreamDataAck( Bytestream* bs ) {}
+      
+      /**
        * Notifies about an error occuring while using a bytestream.
        * When this handler is called the stream has already been closed.
        * @param bs The bytestream.

@@ -151,6 +151,10 @@ namespace gloox
           m_handler->handleBytestreamOpen( this );
           m_open = true;
         }
+        else if( context == IBBData && m_handler )
+        {
+          m_handler->handleBytestreamDataAck( this );
+        }
         break;
       case IQ::Error:
         closed();
