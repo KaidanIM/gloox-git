@@ -1,5 +1,7 @@
 v1.0.20
 -------
+Note: This release is not binary compatible with previous releases. It is source compatible.
+
 - BytestreamDataHandler: added callback for acknowledged packets
 
 

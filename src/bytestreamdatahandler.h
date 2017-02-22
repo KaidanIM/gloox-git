@@ -60,6 +60,7 @@ namespace gloox
        * chunk size limits. so this callback may be called multiple times for
        * each call to Bytestream::send(). it can be used to implement burst limits.
        * @param bs The bytestream.
+       * @since 1.0.20
        */
       virtual void handleBytreamDataAck( Bytestream* bs ) {}
       
