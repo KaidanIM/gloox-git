@@ -189,12 +189,15 @@ namespace gloox
       return true;
     }
 
-    if( ( m_lastChunkReceived + 1 ) != i->seq() )
+    if( ++m_lastChunkReceived != i->seq() )
     {
       m_open = false;
       returnError( iq.from(), iq.id(), StanzaErrorTypeModify, StanzaErrorItemNotFound );
       return false;
     }
+
+    if( m_lastChunkReceived == 65535 )
+      m_lastChunkReceived = -1;
 
     if( i->data().empty() )
     {
@@ -205,7 +208,7 @@ namespace gloox
 
     returnResult( iq.from(), iq.id() );
     m_handler->handleBytestreamData( this, i->data() );
-    m_lastChunkReceived++;
+
     return true;
   }
 
