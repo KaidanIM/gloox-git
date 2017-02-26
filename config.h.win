@@ -49,5 +49,5 @@
 #pragma warning( disable : 4996 )
 #endif
 
-/* It seem sit is necessary to include this to properly use getnameinfo() */
+/* It seems it is necessary to include this to properly use getnameinfo() */
 #define _WIN32_WINNT 0x501
