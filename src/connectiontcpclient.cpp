@@ -138,9 +138,9 @@ namespace gloox
     }
 
 #if defined( _WIN32 ) && !defined( __SYMBIAN32__ )
-    int size = static_cast<int>( ::recv( m_socket, m_buf, m_bufsize ) );
-#else
     int size = static_cast<int>( ::recv( m_socket, m_buf, m_bufsize, 0 ) );
+#else
+    int size = static_cast<int>( ::recv( m_socket, m_buf, m_bufsize, MSG_DONTWAIT ) );
 #endif
     if( size > 0 )
       m_totalBytesIn += size;
