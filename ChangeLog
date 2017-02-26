@@ -10,6 +10,16 @@ Note: This release is not completely source compatible with previous versions.
 
 
 
+v1.0.20 -- 26 Feb 2017
+----------------------
+Note: This release is not binary compatible with previous releases. It is source compatible.
+
+- BytestreamDataHandler: added callback for acknowledged packets
+- ConnectionTCPClient: compile fix for Win32 (broken in 1.0.19)
+- ConnectionTCPClient: no-block fix
+
+
+
 v1.0.19 -- 21 Feb 2017
 ----------------------
 Note: This release is not binary compatible with previous releases. It is source compatible.
