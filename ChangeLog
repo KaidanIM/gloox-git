@@ -17,6 +17,7 @@ Note: This release is not binary compatible with previous releases. It is source
 - BytestreamDataHandler: added callback for acknowledged packets
 - ConnectionTCPClient: compile fix for Win32 (broken in 1.0.19)
 - ConnectionTCPClient: no-block fix
+- use ws2_32.lib instead of ws_32.lib on Win32
 
 
 

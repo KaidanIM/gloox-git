@@ -23,7 +23,7 @@
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
-			<Add library="ws_32" />
+			<Add library="ws2_32" />
 			<Add library="dnsapi" />
 			<Add library="gdi32" />
 			<Add library="crypt32" />
@@ -129,7 +129,9 @@
 		<Unit filename="src/inbandbytestream.h" />
 		<Unit filename="src/instantmucroom.cpp" />
 		<Unit filename="src/instantmucroom.h" />
-		<Unit filename="src/iq.cpp" />
+        <Unit filename="src/iodata.cpp" />
+        <Unit filename="src/iodata.h" />
+        <Unit filename="src/iq.cpp" />
 		<Unit filename="src/iq.h" />
 		<Unit filename="src/iqhandler.h" />
 		<Unit filename="src/jid.cpp" />
